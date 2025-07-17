@@ -144,8 +144,8 @@
                             <tr data-id="{{ $lawyer->id }}">
                                 <td>{{ $lawyer->nombre }}</td>
                                 <td>{{ $lawyer->apellido }}</td>
-                                <td>{{ $lawyer->tipoDocumento }}</td>
-                                <td>{{ $lawyer->numeroDocumento }}</td>
+                                <td>{{ $lawyer->tipo_documento }}</td>
+                                <td>{{ $lawyer->numero_documento }}</td>
                                 <td>{{ $lawyer->correo }}</td>
                                 <td>
                                     <button class="btn-edit">Editar</button>

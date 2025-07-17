@@ -60,7 +60,7 @@
 
         // Manejar envío del formulario
         createLawyerForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+            e.preventDefaulnumeroDocumentot();
 
             // Obtener datos del formulario
             const formData = new FormData(this);
@@ -68,7 +68,7 @@
                 nombre: formData.get('nombre'),
                 apellido: formData.get('apellido'),
                 tipoDocumento: formData.get('tipoDocumento'),
-                numeroDocumento: formData.get('numeroDocumento'),
+                numeroDocumento: formData.get(''),
                 correo: formData.get('correo'),
                 telefono: formData.get('telefono'),
                 especialidad: formData.get('especialidad')
@@ -85,23 +85,6 @@
             alert('Abogado creado exitosamente');
         });
 
-        // Función para agregar abogado a la tabla (temporal)
-        function addLawyerToTable(lawyerData) {
-            const tableBody = document.getElementById('tableBody');
-            const newRow = document.createElement('tr');
-
-            newRow.innerHTML = `
-                <td>${lawyerData.nombre}</td>
-                <td>${lawyerData.apellido}</td>
-                <td>${lawyerData.tipoDocumento}</td>
-                <td>${lawyerData.numeroDocumento}</td>
-                <td>${lawyerData.correo}</td>
-                <td>
-                    <button class="btn-edit">Editar</button>
-                    <button class="btn-delete">Eliminar</button>
-                </td>
-            `;
-
             tableBody.appendChild(newRow);
 
             // Agregar event listeners a los nuevos botones
@@ -117,7 +100,6 @@
                     newRow.remove();
                 }
             });
-        }
 
         // Funcionalidad de navegación
         document.querySelectorAll('.nav-btn').forEach(btn => {
@@ -155,14 +137,6 @@
                 }
             });
         }
-
-        // Funcionalidad de botones de acción existentes
-        document.querySelectorAll('.btn-edit').forEach(btn => {
-            btn.addEventListener('click', function() {
-                alert('Función de editar - En desarrollo');
-            });
-        });
-
         document.querySelectorAll('.btn-delete').forEach(btn => {
             btn.addEventListener('click', function() {
                 if (confirm('¿Estás seguro de que deseas eliminar este registro?')) {
