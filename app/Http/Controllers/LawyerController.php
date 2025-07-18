@@ -31,4 +31,12 @@ class LawyerController extends Controller
 
         return redirect()->back()->with('success', 'Abogado creado correctamente.');
     }
+    public function destroy(Lawyer $lawyer)
+{
+    $lawyer->delete();
+    return redirect()->back()->with('success', 'Abogado eliminado exitosamente.');
+
+}
+
+
 }

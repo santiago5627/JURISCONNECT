@@ -41,7 +41,6 @@
                                 <option value="">Seleccione...</option>
                                 <option value="CC">Cédula de Ciudadanía</option>
                                 <option value="CE">Cédula de Extranjería</option>
-                                <option value="TI">Tarjeta de Identidad</option>
                                 <option value="PAS">Pasaporte</option>
                             </select>
                         </div>
@@ -87,19 +86,19 @@
                 <button class="nav-btn">Consultas</button>
                 <button class="nav-btn active">Procesos</button>
                 <button class="nav-btn">Casos</button>
+            </div>
 
-                <!-- Botón de Cerrar Sesión -->
+            <div class="sena-logo">
+                <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
+            </div>
+
+             <!-- Botón de Cerrar Sesión -->
                 <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
                     @csrf
                     <button type="submit" class="logout-btn">
                         Cerrar Sesión
                     </button>
                 </form>
-            </div>
-
-            <div class="sena-logo">
-                <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo SENA" width="100" height="100">
-            </div>
         </div>
 
         <!-- Contenido Principal -->
@@ -112,7 +111,7 @@
                 </div>
 
                 <div class="logo-container">
-                    <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo Empresa" width="100px" height="70" class="logo">
+                    <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo Empresa" width="100px" height="70" class="logo">
                 </div>
             </div>
 
@@ -139,21 +138,27 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody">
-                            @foreach($lawyers ?? [] as $lawyer)
-                            <tr data-id="{{ $lawyer->id }}">
-                                <td>{{ $lawyer->nombre }}</td>
-                                <td>{{ $lawyer->apellido }}</td>
-                                <td>{{ $lawyer->tipo_documento }}</td>
-                                <td>{{ $lawyer->numero_documento }}</td>
-                                <td>{{ $lawyer->correo }}</td>
-                                <td>
-                                    <button class="btn-edit">Editar</button>
-                                    <button class="btn-delete">Eliminar</button>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
+               <tbody id="tableBody">
+    @foreach($lawyers ?? [] as $lawyer)
+    <tr data-id="{{ $lawyer->id }}">
+        <td>{{ $lawyer->nombre }}</td>
+        <td>{{ $lawyer->apellido }}</td>
+        <td>{{ $lawyer->tipo_documento }}</td>
+        <td>{{ $lawyer->numero_documento }}</td>
+        <td>{{ $lawyer->correo }}</td>
+        <td>
+            <a href="#" class="btn-edit">Editar</a>
+
+            <form action="{{ route('lawyers.destroy', $lawyer->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar este abogado?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-delete">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+    @endforeach
+</tbody>
+
                     </table>
                 </div>
             </div>

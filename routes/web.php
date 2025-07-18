@@ -22,3 +22,4 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::post('/lawyers', [App\Http\Controllers\LawyerController::class, 'store'])->name('lawyers.store');
 
+Route::delete('/lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('lawyers.destroy');
