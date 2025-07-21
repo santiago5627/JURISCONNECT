@@ -74,6 +74,57 @@
             </div>
         </div>
 
+<!-- Modal para editar abogado -->
+<div class="modal" id="editLawyerModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Editar Abogado</h2>
+            <button class="modal-close" id="closeEditModal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="editLawyerForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="form-group">
+                    <label for="editNombre">Nombre:</label>
+                    <input type="text" id="editNombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label for="editApellido">Apellido:</label>
+                    <input type="text" id="editApellido" name="apellido" required>
+                </div>
+                <div class="form-group">
+                    <label for="editTipoDocumento">Tipo de Documento:</label>
+                    <select id="editTipoDocumento" name="tipoDocumento" required>
+                        <option value="">Seleccione...</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PAS">Pasaporte</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editNumeroDocumento">Número de Documento:</label>
+                    <input type="text" id="editNumeroDocumento" name="numeroDocumento" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCorreo">Correo:</label>
+                    <input type="email" id="editCorreo" name="correo" required>
+                </div>
+                <div class="form-group">
+                    <label for="editTelefono">Teléfono:</label>
+                    <input type="tel" id="editTelefono" name="telefono">
+                </div>
+                <div class="form-group">
+                    <label for="editEspecialidad">Especialidad:</label>
+                    <input type="text" id="editEspecialidad" name="especialidad">
+                </div>
+                <button type="submit" class="btn-primary">Guardar Cambios</button>
+                <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="profile">
@@ -147,7 +198,17 @@
         <td>{{ $lawyer->numero_documento }}</td>
         <td>{{ $lawyer->correo }}</td>
         <td>
-            <a href="#" class="btn-edit">Editar</a>
+            <button class="btn-edit" 
+                    data-id="{{ $lawyer->id }}"
+                    data-nombre="{{ $lawyer->nombre }}"
+                    data-apellido="{{ $lawyer->apellido }}"
+                    data-tipo_documento="{{ $lawyer->tipo_documento }}"
+                    data-numero_documento="{{ $lawyer->numero_documento }}"
+                    data-correo="{{ $lawyer->correo }}"
+                    data-telefono="{{ $lawyer->telefono ?? '' }}"
+                    data-especialidad="{{ $lawyer->especialidad ?? '' }}">
+                Editar
+            </button>
 
             <form action="{{ route('lawyers.destroy', $lawyer->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar este abogado?');">
                 @csrf
