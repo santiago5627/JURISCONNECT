@@ -186,6 +186,8 @@
                                 <th>Tipo de Documento</th>
                                 <th>Numero de Documento</th>
                                 <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Especialidad</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -197,6 +199,8 @@
         <td>{{ $lawyer->tipo_documento }}</td>
         <td>{{ $lawyer->numero_documento }}</td>
         <td>{{ $lawyer->correo }}</td>
+        <td>{{ $lawyer->telefono ?? 'N/A' }}</td>
+        <td>{{ $lawyer->especialidad ?? 'N/A' }}</td>
         <td>
             <button class="btn-edit" 
                     data-id="{{ $lawyer->id }}"
@@ -205,8 +209,8 @@
                     data-tipo_documento="{{ $lawyer->tipo_documento }}"
                     data-numero_documento="{{ $lawyer->numero_documento }}"
                     data-correo="{{ $lawyer->correo }}"
-                    data-telefono="{{ $lawyer->telefono ?? '' }}"
-                    data-especialidad="{{ $lawyer->especialidad ?? '' }}">
+                    data-telefono="{{ $lawyer->telefono }}"
+                    data-especialidad="{{ $lawyer->especialidad }}">
                 Editar
             </button>
 

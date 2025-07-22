@@ -76,6 +76,8 @@ function updateRowInTable(id, updatedData) {
     row.children[2].textContent = updatedData.tipo_documento;
     row.children[3].textContent = updatedData.numero_documento;
     row.children[4].textContent = updatedData.correo;
+    row.children[5].textContent = updatedData.telefono;
+    row.children[6].textContent = updatedData.especialidad;
 }
 
 // Event listeners para el hamburger y overlay
@@ -124,8 +126,8 @@ document.addEventListener('click', function(e) {
             tipo_documento: row.children[2].textContent,
             numero_documento: row.children[3].textContent,
             correo: row.children[4].textContent,
-            telefono: '', // Estos datos no están visibles en la tabla
-            especialidad: ''
+            telefono: row.children[5].textContent, // Estos datos no están visibles en la tabla
+            especialidad: row.children[6].textContent
         };
         
         openEditModal(lawyerData);
