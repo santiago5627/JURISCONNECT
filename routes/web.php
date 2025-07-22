@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LawyerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -25,3 +26,4 @@ Route::post('/lawyers', [App\Http\Controllers\LawyerController::class, 'store'])
 Route::delete('/lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('lawyers.destroy');
 Route::get('/lawyers/{lawyer}/edit', [LawyerController::class, 'edit'])->name('lawyers.edit');
 Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])->name('lawyers.update');
+Route::get('/exportar-usuarios', [ExportController::class, 'exportUsers'])->name('exportar.usuarios');
