@@ -125,15 +125,6 @@
     </div>
 </div>
 
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="profile">
-                <div class="profile-icon">👤</div>
-                <h3>{{ Auth::user()->name }}</h3>
-                <p>{{ Auth::user()->email }}</p>
-            </div>
-
-            
 
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
