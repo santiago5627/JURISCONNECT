@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
 
 class NewPasswordController extends Controller
 {
     /**
-     * Display the password reset view.
+     * Mostrar la vista para restablecer la contraseña.
      */
     public function create(Request $request): View
     {
@@ -21,19 +24,30 @@ class NewPasswordController extends Controller
     }
 
     /**
-     * Handle an incoming new password request.
+     * Procesar la solicitud para restablecer la contraseña.
      */
     public function store(Request $request)
     {
-        // Lógica para procesar el restablecimiento de contraseña
-        // Este método procesará el formulario cuando el usuario envíe la nueva contraseña
-        // Aquí puedes validar la solicitud y actualizar la contraseña del usuario
-        // Por ejemplo:
-        // $request->valient 
-        // $request->validate({})
-        // $user = User::where('email', $request->email)
+        $request->validate([
+            'token' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+        ]);
 
+        $status = Password::reset(
+            $request->only('email', 'password', 'password_confirmation', 'token'),
+            function ($user, $password) {
+                $user->forceFill([
+                    'password' => Hash::make($password),
+                ])->save();
 
+                // Si quieres iniciar sesión automáticamente después de restablecer:
+                // Auth::login($user);
+            }
+        );
 
+        return $status === Password::PASSWORD_RESET
+            ? redirect()->route('login')->with('status', __($status))
+            : back()->withErrors(['email' => [__($status)]]);
     }
 }
