@@ -2,151 +2,84 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restablecimiento de Contraseña</title>
+    <title>Restablecer Contraseña</title>
     <style>
         body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-        }
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            font-family: sans-serif;
+            background-color: #f0f2f5;
             padding: 30px;
-            text-align: center;
         }
-        .header h1 {
-            margin: 0;
-            font-size: 28px;
-            font-weight: 300;
+        .card {
+            background-color: white;
+            max-width: 400px;
+            margin: auto;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .content {
-            padding: 40px 30px;
+        .form-group {
+            margin-bottom: 15px;
         }
-        .greeting {
-            font-size: 24px;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            font-weight: 400;
-        }
-        .message {
-            color: #555;
-            font-size: 16px;
-            margin-bottom: 30px;
-        }
-        .button-container {
-            text-align: center;
-            margin: 40px 0;
-        }
-        .reset-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            text-decoration: none;
-            padding: 15px 30px;
-            border-radius: 25px;
+        label {
+            display: block;
+            margin-bottom: 5px;
             font-weight: 600;
-            font-size: 16px;
-            transition: transform 0.2s;
         }
-        .reset-button:hover {
-            transform: translateY(-2px);
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
-        .expiry-notice {
-            background-color: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
-            color: #856404;
-        }
-        .security-notice {
-            background-color: #e8f4f8;
-            border: 1px solid #bee5eb;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
-            color: #0c5460;
-        }
-        .footer {
-            background-color: #f8f9fa;
-            padding: 30px;
-            text-align: center;
-            border-top: 1px solid #e9ecef;
-        }
-        .footer p {
-            margin: 0;
-            color: #6c757d;
-            font-size: 14px;
-        }
-        .manual-link {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px 0;
-            word-break: break-all;
-            font-size: 14px;
-            color: #6c757d;
-        }
-        .icon {
-            font-size: 48px;
-            margin-bottom: 20px;
+        button {
+            background-color: #8e44ad;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="icon">🔐</div>
-            <h1>{{ config('app.name') }}</h1>
-        </div>
-        
-        <div class="content">
-            <div class="greeting">¡Hola!</div>
-            
-            <div class="message">
-                Has recibido este correo porque hemos recibido una solicitud de restablecimiento de contraseña para tu cuenta en <strong>{{ config('app.name') }}</strong>.
+    <div class="card">
+        <h2 style="text-align: center;">🔒 Restablecer Contraseña</h2>
+
+        @if ($errors->any())
+            <div style="color: red; margin-bottom: 15px;">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
             </div>
-            
-            <div class="button-container">
-                <a href="{{ route('password.reset', ['token' => $token, 'email' => $email]) }}" class="reset-button">
-                    Restablecer mi Contraseña
-                </a>
+        @endif
+
+        <form method="POST" action="{{ route('password.store') }}">
+            @csrf
+
+            <input type="hidden" name="token" value="{{ request()->route('token') }}">
+
+            <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input id="email" type="email" name="email" value="{{ request()->email }}" required autofocus>
             </div>
-            
-            <div class="expiry-notice">
-                <strong>⏰ Tiempo límite:</strong> Este enlace de restablecimiento expirará en <strong>60 minutos</strong>.
+
+            <div class="form-group">
+                <label for="password">Nueva contraseña</label>
+                <input id="password" type="password" name="password" required>
             </div>
-            
-            <div class="security-notice">
-                <strong>🛡️ Seguridad:</strong> Si no solicitaste un restablecimiento de contraseña, puedes ignorar este correo de forma segura. Tu contraseña no será cambiada.
+
+            <div class="form-group">
+                <label for="password_confirmation">Confirmar contraseña</label>
+                <input id="password_confirmation" type="password" name="password_confirmation" required>
             </div>
-            
-            <div class="message">
-                Si tienes problemas al hacer clic en el botón "Restablecer mi Contraseña", copia y pega el siguiente enlace en tu navegador:
-            </div>
-            
-            <div class="manual-link">
-                {{ route('password.reset', ['token' => $token, 'email' => $email]) }}
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>© {{ date('Y') }} {{ config('app.name') }}. Todos los derechos reservados.</p>
-            <p>Este es un correo automático, por favor no respondas a este mensaje.</p>
-        </div>
+
+            <button type="submit">Restablecer contraseña</button>
+        </form>
     </div>
 </body>
 </html>
