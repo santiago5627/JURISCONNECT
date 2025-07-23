@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class RegisteredUserController extends Controller
 {
@@ -46,5 +47,28 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(route('dashboard', absolute: false));
+            $request->validate([
+        'avatar' => 'required|image|max:2048', // Máx 2MB
+    ]);
+
+    $user = Auth::user();
+
+    // Elimina el avatar anterior si existe
+    if ($user->avatar) {
+        Storage::disk('public')->delete('avatars/' . $user->avatar);
+    }
+
+    // Guarda el nuevo
+    $file = $request->file('avatar');
+    $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+    $file->storeAs('public/avatars', $filename);
+
+    $user->avatar = $filename;
+    $user->save();
+
+    return back()->with('success', 'Avatar actualizado');
+
     }
 }
+
+

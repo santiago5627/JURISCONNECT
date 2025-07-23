@@ -1,72 +1,161 @@
 // Variables principales
-const hamburgerBtn = document.getElementById('hamburgerBtn');
-const sidebar = document.getElementById('sidebar');
-const overlay = document.getElementById('overlay');
-const mainContent = document.getElementById('mainContent');
-const createLawyerModal = document.getElementById('createLawyerModal');
-const createBtn = document.getElementById('createBtn');
-const closeModal = document.getElementById('closeModal');
-const cancelBtn = document.getElementById('cancelBtn');
+const hamburgerBtn = document.getElementById("hamburgerBtn");
+const sidebar = document.getElementById("sidebar");
+const overlay = document.getElementById("overlay");
+const mainContent = document.getElementById("mainContent");
+const createLawyerModal = document.getElementById("createLawyerModal");
+const createBtn = document.getElementById("createBtn");
+const closeModal = document.getElementById("closeModal");
+const cancelBtn = document.getElementById("cancelBtn");
 
 // Variables para modal de edición
-const editLawyerModal = document.getElementById('editLawyerModal');
-const editLawyerForm = document.getElementById('editLawyerForm');
-const closeEditModalBtn = document.getElementById('closeEditModal');
-const cancelEditBtn = document.getElementById('cancelEditBtn');
+const editLawyerModal = document.getElementById("editLawyerModal");
+const editLawyerForm = document.getElementById("editLawyerForm");
+const closeEditModalBtn = document.getElementById("closeEditModal");
+const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-// Función para alternar el sidebar
-function toggleSidebar() {
-    sidebar.classList.toggle('active');
-    overlay.classList.toggle('active');
-}
+// ===== SISTEMA DE ALERTAS PERSONALIZADAS =====
+// ===== SISTEMA DE ALERTAS PERSONALIZADAS CORREGIDO =====
+function showCustomAlert(type, title = '', message = '', showCancel = false, confirmText = 'Aceptar', cancelText = 'Cancelar') {
+    // Crear overlay si no existe
+    let overlay = document.getElementById('alertOverlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'alertOverlay';
+        overlay.className = 'alert-overlay';
+        
+        const buttonsHTML = showCancel 
+            ? `<div class="alert-buttons">
+                  <button class="alert-button secondary" id="cancelAlertBtn">${cancelText}</button>
+                  <button class="alert-button ${type}" id="confirmAlertBtn">${confirmText}</button>
+               </div>`
+            : `<button class="alert-button ${type}" id="confirmAlertBtn">${confirmText}</button>`;
+        
+        overlay.innerHTML = `
+            <div class="custom-alert" id="customAlert">
+                <div class="alert-icon" id="alertIcon"></div>
+                <div class="alert-title" id="alertTitle"></div>
+                <div class="alert-message" id="alertMessage"></div>
+                ${buttonsHTML}
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        
+        // Agregar estilos CSS si no existen
+        if (!document.getElementById('customAlertStyles')) {
+            const style = document.createElement('style');
+            style.id = 'customAlertStyles';
+            document.head.appendChild(style);
+        }
+    }
 
-// Función para cerrar el sidebar
-function closeSidebar() {
-    sidebar.classList.remove('active');
-    overlay.classList.remove('active');
-}
+    const alert = document.getElementById('customAlert');
+    const icon = document.getElementById('alertIcon');
+    const titleEl = document.getElementById('alertTitle');
+    const messageEl = document.getElementById('alertMessage');
 
-// Función para abrir el modal de creación
-function openModal() {
-    createLawyerModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-// Función para cerrar el modal de creación
-function closeModalFunction() {
-    createLawyerModal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-    const form = document.querySelector('#createLawyerModal form');
-    if (form) form.reset();
-}
-
-// Función para abrir el modal de edición
-function openEditModal(lawyerData) {
-    // Rellenar los campos del modal de edición
-    document.getElementById('editNombre').value = lawyerData.nombre || '';
-    document.getElementById('editApellido').value = lawyerData.apellido || '';
-    document.getElementById('editTipoDocumento').value = lawyerData.tipo_documento || '';
-    document.getElementById('editNumeroDocumento').value = lawyerData.numero_documento || '';
-    document.getElementById('editCorreo').value = lawyerData.correo || '';
-    document.getElementById('editTelefono').value = lawyerData.telefono || '';
-    document.getElementById('editEspecialidad').value = lawyerData.especialidad || '';
-
-    // Establecer la acción del formulario
-    editLawyerForm.action = '/lawyers/' + lawyerData.id;
+    // Configurar según el tipo
+    alert.className = `custom-alert alert-${type}`;
     
-    // Mostrar el modal
-    editLawyerModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    switch(type) {
+        case 'success':
+            icon.innerHTML = '✓';
+            titleEl.textContent = title || '¡Éxito!';
+            messageEl.textContent = message || 'Operación completada exitosamente';
+            break;
+        case 'error':
+            icon.innerHTML = '❌';
+            titleEl.textContent = title || '¡Error!';
+            messageEl.textContent = message || 'Algo salió mal. Inténtalo de nuevo.';
+            break;
+        case 'warning':
+            icon.innerHTML = '⚠️';
+            titleEl.textContent = title || '¡Atención!';
+            messageEl.textContent = message || 'Verifica la información antes de continuar.';
+            break;
+        case 'info':
+            icon.innerHTML = 'ℹ';
+            titleEl.textContent = title || 'Información';
+            messageEl.textContent = message || 'Proceso en desarrollo.';
+            break;
+    }
+
+    overlay.classList.add('show');
+
+    // SIEMPRE retornar una promesa
+    return new Promise((resolve) => {
+        document.getElementById('confirmAlertBtn').onclick = () => {
+            hideCustomAlert();
+            resolve(true);
+        };
+        
+        // Solo agregar el botón cancelar si existe
+        const cancelBtn = document.getElementById('cancelAlertBtn');
+        if (cancelBtn) {
+            cancelBtn.onclick = () => {
+                hideCustomAlert();
+                resolve(false);
+            };
+        }
+    });
 }
 
-// Función para cerrar el modal de edición
+function hideCustomAlert() {
+    const overlay = document.getElementById('alertOverlay');
+    if (overlay) {
+        overlay.classList.remove('show');
+        setTimeout(() => {
+            if (overlay.parentNode) {
+                overlay.parentNode.removeChild(overlay);
+            }
+        }, 300);
+    }
+}
+
+// ===== FUNCIONALIDAD PRINCIPAL =====
+
+// Sidebar y modales
+function toggleSidebar() {
+    sidebar.classList.toggle("active");
+    overlay.classList.toggle("active");
+}
+
+function closeSidebar() {
+    sidebar.classList.remove("active");
+    overlay.classList.remove("active");
+}
+
+function openModal() {
+    createLawyerModal.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+
+function closeModalFunction() {
+    createLawyerModal.classList.remove("active");
+    document.body.style.overflow = "auto";
+    document.querySelector("#createLawyerModal form").reset();
+}
+
+function openEditModal(lawyerData) {
+    document.getElementById("editNombre").value = lawyerData.nombre || "";
+    document.getElementById("editApellido").value = lawyerData.apellido || "";
+    document.getElementById("editTipoDocumento").value = lawyerData.tipo_documento || "";
+    document.getElementById("editNumeroDocumento").value = lawyerData.numero_documento || "";
+    document.getElementById("editCorreo").value = lawyerData.correo || "";
+    document.getElementById("editTelefono").value = lawyerData.telefono || "";
+    document.getElementById("editEspecialidad").value = lawyerData.especialidad || "";
+
+    editLawyerForm.action = "/lawyers/" + lawyerData.id;
+    editLawyerModal.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+
 function closeEditModal() {
-    editLawyerModal.classList.remove('active');
-    document.body.style.overflow = 'auto';
+    editLawyerModal.classList.remove("active");
+    document.body.style.overflow = "auto";
     editLawyerForm.reset();
 }
 
-// Función para actualizar fila en la tabla
 function updateRowInTable(id, updatedData) {
     const row = document.querySelector(`tr[data-id='${id}']`);
     if (!row) return;
@@ -78,45 +167,54 @@ function updateRowInTable(id, updatedData) {
     row.children[4].textContent = updatedData.correo;
 }
 
-// Event listeners para el hamburger y overlay
-hamburgerBtn.addEventListener('click', toggleSidebar);
-overlay.addEventListener('click', closeSidebar);
+// Event listeners básicos
+hamburgerBtn.addEventListener("click", toggleSidebar);
+overlay.addEventListener("click", closeSidebar);
 
-// Event listeners para el modal de creación
-createBtn.addEventListener('click', openModal);
-closeModal.addEventListener('click', closeModalFunction);
-cancelBtn.addEventListener('click', closeModalFunction);
+createBtn.addEventListener("click", openModal);
+closeModal.addEventListener("click", closeModalFunction);
+cancelBtn.addEventListener("click", closeModalFunction);
 
-// Event listeners para el modal de edición
-closeEditModalBtn.addEventListener('click', closeEditModal);
-cancelEditBtn.addEventListener('click', closeEditModal);
+closeEditModalBtn.addEventListener("click", closeEditModal);
+cancelEditBtn.addEventListener("click", closeEditModal);
 
-// Cerrar modales al hacer clic fuera de ellos
-createLawyerModal.addEventListener('click', function(e) {
-    if (e.target === createLawyerModal) {
-        closeModalFunction();
-    }
-});
-
-editLawyerModal.addEventListener('click', function(e) {
-    if (e.target === editLawyerModal) {
-        closeEditModal();
-    }
-});
-
-// Cerrar sidebar y modales con ESC
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
+// Cerrar con ESC
+document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
         closeSidebar();
         closeModalFunction();
         closeEditModal();
+        hideCustomAlert();
     }
 });
 
-// Event delegation para botones de editar (funciona con contenido dinámico)
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('btn-edit')) {
-        const row = e.target.closest('tr');
+// Manejo de formularios de eliminación
+document.addEventListener('submit', async function(e) {
+    if (e.target.classList.contains('delete-lawyer-form')) {
+        e.preventDefault();
+        
+        const form = e.target;
+        const lawyerName = form.dataset.name;
+        
+        const confirmed = await showCustomAlert(
+            'warning', 
+            'Confirmar Eliminación', 
+            `¿Estás seguro de eliminar al abogado ${lawyerName}? Esta acción no se puede deshacer.`,
+            true,
+            'Eliminar',
+            'Cancelar'
+        );
+        
+        if (confirmed) {
+            form.submit();
+        }
+    }
+});
+
+// Edición de abogados
+document.addEventListener("click", function(e) {
+    if (e.target.classList.contains("btn-edit")) {
+        const row = e.target.closest("tr");
         const lawyerData = {
             id: row.dataset.id,
             nombre: row.children[0].textContent,
@@ -124,131 +222,207 @@ document.addEventListener('click', function(e) {
             tipo_documento: row.children[2].textContent,
             numero_documento: row.children[3].textContent,
             correo: row.children[4].textContent,
-            telefono: '', // Estos datos no están visibles en la tabla
-            especialidad: ''
+            telefono: "",
+            especialidad: "",
         };
-        
         openEditModal(lawyerData);
     }
 });
 
-// Manejar envío del formulario de edición
-editLawyerForm.addEventListener('submit', async function(e) {
+editLawyerForm.addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const form = e.target;
     const data = new FormData(form);
-    const lawyerId = form.action.split('/').pop();
+    const lawyerId = form.action.split("/").pop();
 
     try {
         const response = await fetch(form.action, {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
             },
-            body: data
+            body: data,
         });
 
         if (response.ok) {
-            // Obtener datos actualizados desde el form
             const updatedLawyer = {
-                nombre: data.get('nombre'),
-                apellido: data.get('apellido'),
-                tipo_documento: data.get('tipoDocumento'),
-                numero_documento: data.get('numeroDocumento'),
-                correo: data.get('correo'),
-                telefono: data.get('telefono'),
-                especialidad: data.get('especialidad'),
+                nombre: data.get("nombre"),
+                apellido: data.get("apellido"),
+                tipo_documento: data.get("tipoDocumento"),
+                numero_documento: data.get("numeroDocumento"),
+                correo: data.get("correo"),
+                telefono: data.get("telefono"),
+                especialidad: data.get("especialidad"),
             };
 
             updateRowInTable(lawyerId, updatedLawyer);
-            alert('Abogado actualizado exitosamente');
+            showCustomAlert('success', '¡Perfecto!', `El abogado ${updatedLawyer.nombre} ${updatedLawyer.apellido} ha sido actualizado exitosamente.`);
             closeEditModal();
         } else {
             const error = await response.json();
-            alert('Error al actualizar: ' + (error.message || 'Verifica los campos.'));
+            showCustomAlert('error', 'Error de Actualización', "Error al actualizar: " + (error.message || "Verifica que todos los campos estén correctos."));
         }
     } catch (error) {
         console.error(error);
-        alert('Error inesperado al actualizar.');
+        showCustomAlert('error', 'Error Inesperado', 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo o contacta al soporte técnico.');
     }
 });
 
-// Manejar envío del formulario de creación
-document.getElementById('createLawyerModal').querySelector('form').addEventListener('submit', async function(e) {
+// Creación de abogados 
+document.getElementById("createLawyerModal").querySelector("form").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const form = e.target;
     const data = new FormData(form);
 
     try {
-        const response = await fetch('/lawyers', {
-            method: 'POST',
+        const response = await fetch("/lawyers", {
+            method: "POST",
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
             },
-            body: data
+            body: data,
         });
 
         if (response.ok) {
-            alert('Abogado creado exitosamente.');
+            // Mostrar la alerta y esperar a que el usuario haga clic en "Aceptar"
+            await showCustomAlert('success', '¡Excelente!', `El abogado ${data.get('nombre')} ${data.get('apellido')} ha sido registrado exitosamente.`);
+            
+            // Solo después de que el usuario haga clic en "Aceptar", hacer la limpieza y recarga
             form.reset();
             closeModalFunction();
-            location.reload(); // Recargar la página para mostrar el nuevo registro
+            location.reload();
         } else {
             const error = await response.json();
-            alert('Error al guardar: ' + (error.message || 'verifica los campos.'));
+            showCustomAlert('error', 'Error al Crear', "Error al guardar: " + (error.message || "Verifica que todos los campos estén completos y correctos."));
         }
     } catch (error) {
         console.error(error);
-        alert('Error inesperado al crear el abogado.');
+        showCustomAlert('error', 'Error de Conexión', 'No se pudo crear el abogado. Verifica tu conexión a internet e inténtalo de nuevo.');
     }
 });
 
-// Funcionalidad de navegación
-document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        this.classList.add('active');
-        closeSidebar();
-    });
-});
+// Búsqueda y filtrado - CÓDIGO CORREGIDO
+document.getElementById("searchBtn").addEventListener("click", searchLawyersWithAlert);
+document.getElementById("searchInput").addEventListener("input", searchLawyersWithoutAlert);
 
-// Funcionalidad del buscador
-document.getElementById('searchBtn').addEventListener('click', function() {
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    filterTable(searchTerm);
-});
-
-// Búsqueda en tiempo real
-document.getElementById('searchInput').addEventListener('input', function() {
-    const searchTerm = this.value.toLowerCase();
-    filterTable(searchTerm);
-});
-
-// Función para filtrar tabla
-function filterTable(searchTerm) {
-    const rows = document.querySelectorAll('#tableBody tr');
-    rows.forEach(row => {
+// Función para buscar sin mostrar alerta (cuando el usuario está escribiendo)
+function searchLawyersWithoutAlert() {
+    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+    const rows = document.querySelectorAll("#tableBody tr");
+    
+    rows.forEach((row) => {
         const text = row.textContent.toLowerCase();
         if (text.includes(searchTerm)) {
-            row.style.display = '';
+            row.style.display = "";
         } else {
-            row.style.display = 'none';
+            row.style.display = "none";
         }
     });
 }
 
-// Funcionalidad del botón exportar
-document.getElementById('exportBtn').addEventListener('click', function() {
-    alert('Exportar a Excel - En desarrollo');
+// Función para buscar con alerta (cuando presiona el botón buscar)
+function searchLawyersWithAlert() {
+    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+    const rows = document.querySelectorAll("#tableBody tr");
+    let visibleRows = 0;
+    
+    rows.forEach((row) => {
+        const text = row.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+            row.style.display = "";
+            visibleRows++;
+        } else {
+            row.style.display = "none";
+        }
+    });
+    
+    // Solo mostrar alerta cuando se presiona el botón y no hay resultados
+    if (searchTerm && visibleRows === 0) {
+        showCustomAlert('info', 'Sin resultados', `No se encontraron abogados para "${searchTerm}"`);
+    }
+}
+
+// Función original (ya no se usa, pero mantengo por compatibilidad)
+function searchLawyers() {
+    searchLawyersWithoutAlert();
+}
+
+// Exportar
+document.getElementById("exportBtn").addEventListener("click", function() {
+    showCustomAlert('info', 'Funcionalidad en Desarrollo', 'La exportación a Excel estará disponible próximamente.');
 });
 
-// Prevenir zoom en iOS para inputs
+// iOS: Prevenir zoom en inputs
 if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-    document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('focus', function() {
-            this.style.fontSize = '16px';
+    document.querySelectorAll("input").forEach((input) => {
+        input.addEventListener("focus", function() {
+            this.style.fontSize = "16px";
         });
     });
+}
+
+// Hacer funciones disponibles globalmente
+window.showCustomAlert = showCustomAlert;
+window.hideCustomAlert = hideCustomAlert;
+
+
+//Imagen de perfil
+document.getElementById('fileInput').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        document.getElementById('avatarPreview').src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+
+
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Mostrar vista previa
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        document.getElementById('avatarPreview').src = e.target.result;
+        
+        // Crear FormData y enviar la imagen
+        const formData = new FormData();
+        formData.append('avatar', file);
+        formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
+        formData.append('_method', 'PUT');
+
+        // Enviar la imagen al servidor
+        uploadAvatar(formData);
+    };
+    reader.readAsDataURL(file);
+});
+
+async function uploadAvatar(formData) {
+    try {
+        const response = await fetch("{{ route('profile.avatar.update') }}", {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            showCustomAlert('success', '¡Perfecto!', 'Tu imagen de perfil se ha actualizado correctamente.');
+            
+            // Actualizar la imagen en caso de que el servidor devuelva una nueva ruta
+            if (data.avatar_url) {
+                document.getElementById('avatarPreview').src = data.avatar_url;
+            }
+        } else {
+            const error = await response.json();
+            showCustomAlert('error', 'Error', error.message || 'Error al actualizar la imagen');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        showCustomAlert('error', 'Error', 'Error de conexión al subir la imagen');
+    }
 }
