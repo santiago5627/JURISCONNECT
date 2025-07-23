@@ -22,3 +22,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 
 Route::post('/lawyers', [App\Http\Controllers\LawyerController::class, 'store'])->name('lawyers.store');
+
+Route::delete('/lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('lawyers.destroy');
+Route::get('/lawyers/{lawyer}/edit', [LawyerController::class, 'edit'])->name('lawyers.edit');
+Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])->name('lawyers.update');
+Route::get('/exportar-usuarios', [ExportController::class, 'exportUsers'])->name('exportar.usuarios');

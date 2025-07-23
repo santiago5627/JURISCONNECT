@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class UsersExport implements FromCollection, WithHeadings, withStyles
+class UsersExport implements FromCollection, WithHeadings, withStyles, WithColumnWidths
 {
     public function collection()// Exporta todos los abogados
     {
@@ -20,6 +20,13 @@ class UsersExport implements FromCollection, WithHeadings, withStyles
     {
         return [
             'ID',
+            'nombre',
+            'apellido',
+            'tipo C.C',
+            'N. C.C',
+            'Correo Electrónico',
+            'Fecha Creación',
+            'Fecha Actualización',
             'telefono',
             'especialidad'
         ];
@@ -51,10 +58,22 @@ class UsersExport implements FromCollection, WithHeadings, withStyles
         return [];
     }
 
-
-
+    public function columnWidths(): array // Ancho de las columnas
+    {
+        return [
+            'A' => 5, //  (ID)
+            'B' => 10, // (Nombre)
+            'C' => 10, // (Apellido)
+            'D' => 8, // (Tipo de Documento)
+            'E' => 10, // (Numero de Documento)
+            'F' => 15, // (Correo Electrónico)
+            'G' => 15, // (Fecha de Creación)
+            'H' => 15, // (FEcha de Actualización)
+            'I' => 10, // (Telefono)
+            'J' => 15, // (Especialidad)
+        ];
+    }
 
 }
-
 
 
