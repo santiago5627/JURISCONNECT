@@ -229,17 +229,17 @@ document.getElementById('searchInput').addEventListener('input', function() {
 });
 
 // Función para filtrar tabla
-function filterTable(searchTerm) {
-    const rows = document.querySelectorAll('#tableBody tr');
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(searchTerm)) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
-    });
-}
+//function filterTable(searchTerm) {
+  //  const rows = document.querySelectorAll('#tableBody tr');
+  //  rows.forEach(row => {
+    //    const text = row.textContent.toLowerCase();
+   //     if (text.includes(searchTerm)) {
+      //      row.style.display = '';
+    //    } else {
+        //    row.style.display = 'none';
+      //  }
+  //  });
+//}
 
 // Funcionalidad del botón exportar
 document.getElementById('exportBtn').addEventListener('click', function() {
