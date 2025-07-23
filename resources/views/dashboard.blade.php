@@ -133,11 +133,7 @@
                 <p>{{ Auth::user()->email }}</p>
             </div>
 
-            <div class="nav-menu">
-                <button class="nav-btn">Consultas</button>
-                <button class="nav-btn active">Procesos</button>
-                <button class="nav-btn">Casos</button>
-            </div>
+            
 
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
