@@ -13,7 +13,11 @@ class User extends Authenticatable
 
     /**
      * The attributes that are mass assignable.
+
+     *
+     * @var array<int, string>
      */
+     
     protected $fillable = [
         'name',
         'email',
@@ -42,8 +46,20 @@ class User extends Authenticatable
     }
 
     /**
-     * Relación: Un usuario pertenece a un rol
+
+     * Get the full URL for the user's avatar.
      */
+    public function getAvatarUrlAttribute()
+    {
+        if ($this->avatar) {
+            return asset('storage/avatars/' . $this->avatar);
+        }
+        
+        return null; // o una imagen por defecto
+    }
+     /* Relación: Un usuario pertenece a un rol
+     */
+
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);

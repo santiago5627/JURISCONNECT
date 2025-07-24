@@ -128,10 +128,15 @@
 <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="profile">
-                <div class="profile-icon">👤</div>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+                 <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
+        <img 
+            src="{{ $user->avatar ? asset('storage/avatars/' . $user->avatar) : 'https://cdn-icons-png.flaticon.com/512/847/847969.png' }}" 
+            class="rounded-full w-24 h-24 object-cover border-2 border-green-800 cursor-pointer" alt="Avatar">            
+        </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
-            </div>
+        </div>
 
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
@@ -208,11 +213,17 @@
                 Editar
             </button>
 
-            <form action="{{ route('lawyers.destroy', $lawyer->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar este abogado?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn-delete">Eliminar</button>
-            </form>
+            <form action="{{ route('lawyers.destroy', $lawyer->id) }}" 
+                    method="POST"
+                    class="delete-lawyer-form"
+                    data-id="{{ $lawyer->id }}"
+                    data-name="{{ $lawyer->nombre }} {{ $lawyer->apellido }}"
+                    style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn-delete">
+                        Eliminar</button>
+                </form>
         </td>
     </tr>
     @endforeach
