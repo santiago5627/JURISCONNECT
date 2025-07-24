@@ -47,6 +47,7 @@ class User extends Authenticatable
 
     /**
 
+     * Relación: Un usuario pertenece a un rol
      * Get the full URL for the user's avatar.
      */
     public function getAvatarUrlAttribute()
@@ -58,6 +59,7 @@ class User extends Authenticatable
         return null; // o una imagen por defecto
     }
      /* Relación: Un usuario pertenece a un rol
+
      */
 
     public function role(): BelongsTo

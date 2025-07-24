@@ -131,12 +131,17 @@
                 <input type="file" id="fileInput" accept="image/*" hidden>
                  <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
         <img 
+            id="avatarPreview"
             src="{{ $user->avatar ? asset('storage/avatars/' . $user->avatar) : 'https://cdn-icons-png.flaticon.com/512/847/847969.png' }}" 
             class="rounded-full w-24 h-24 object-cover border-2 border-green-800 cursor-pointer" alt="Avatar">            
         </div>
+
+        
+                
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
-        </div>
+            </div>
+
 
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
