@@ -192,6 +192,8 @@
                                 <th>Tipo de Documento</th>
                                 <th>Numero de Documento</th>
                                 <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Especialidad</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -203,6 +205,8 @@
         <td>{{ $lawyer->tipo_documento }}</td>
         <td>{{ $lawyer->numero_documento }}</td>
         <td>{{ $lawyer->correo }}</td>
+        <td>{{ $lawyer->telefono}}</td>
+        <td>{{ $lawyer->especialidad}}</td>
         <td>
             <button class="btn-edit" 
                     data-id="{{ $lawyer->id }}"

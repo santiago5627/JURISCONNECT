@@ -14,9 +14,9 @@ const editLawyerForm = document.getElementById("editLawyerForm");
 const closeEditModalBtn = document.getElementById("closeEditModal");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-// ===== SISTEMA DE ALERTAS PERSONALIZADAS =====
-// ===== SISTEMA DE ALERTAS PERSONALIZADAS CORREGIDO =====
+// ===== SISTEMA DE ALERTAS PERSONALIZADAS=====
 function showCustomAlert(type, title = '', message = '', showCancel = false, confirmText = 'Aceptar', cancelText = 'Cancelar') {
+    
     // Crear overlay si no existe
     let overlay = document.getElementById('alertOverlay');
     if (!overlay) {
@@ -112,6 +112,91 @@ function hideCustomAlert() {
     }
 }
 
+// ===== FUNCIONES DE VALIDACIÓN =====
+function validateForm(formData) {
+    const errors = [];
+    
+    // Validar campos requeridos
+    if (!formData.get('nombre') || formData.get('nombre').trim() === '') {
+        errors.push('El nombre es obligatorio');
+    }
+    
+    if (!formData.get('apellido') || formData.get('apellido').trim() === '') {
+        errors.push('El apellido es obligatorio');
+    }
+    
+    if (!formData.get('tipoDocumento') || formData.get('tipoDocumento').trim() === '') {
+        errors.push('El tipo de documento es obligatorio');
+    }
+    
+    if (!formData.get('numeroDocumento') || formData.get('numeroDocumento').trim() === '') {
+        errors.push('El número de documento es obligatorio');
+    }
+    
+    if (!formData.get('correo') || formData.get('correo').trim() === '') {
+        errors.push('El correo electrónico es obligatorio');
+    }
+    
+    // NUEVAS VALIDACIONES - Campos ahora obligatorios
+    if (!formData.get('telefono') || formData.get('telefono').trim() === '') {
+        errors.push('El teléfono es obligatorio');
+    }
+    
+    if (!formData.get('especialidad') || formData.get('especialidad').trim() === '') {
+        errors.push('La especialidad es obligatoria');
+    }
+    
+    // Validar formato de correo
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.get('correo') && !emailRegex.test(formData.get('correo'))) {
+        errors.push('El formato del correo electrónico no es válido');
+    }
+    
+    return errors;
+}
+
+function validateEditForm(formData) {
+    const errors = [];
+    
+    // Validar campos requeridos para edición
+    if (!formData.get('nombre') || formData.get('nombre').trim() === '') {
+        errors.push('El nombre es obligatorio');
+    }
+    
+    if (!formData.get('apellido') || formData.get('apellido').trim() === '') {
+        errors.push('El apellido es obligatorio');
+    }
+    
+    if (!formData.get('tipoDocumento') || formData.get('tipoDocumento').trim() === '') {
+        errors.push('El tipo de documento es obligatorio');
+    }
+    
+    if (!formData.get('numeroDocumento') || formData.get('numeroDocumento').trim() === '') {
+        errors.push('El número de documento es obligatorio');
+    }
+    
+    if (!formData.get('correo') || formData.get('correo').trim() === '') {
+        errors.push('El correo electrónico es obligatorio');
+    }
+    
+    // NUEVAS VALIDACIONES PARA EDICIÓN - Campos ahora obligatorios
+    if (!formData.get('telefono') || formData.get('telefono').trim() === '') {
+        errors.push('El teléfono es obligatorio');
+    }
+    
+    if (!formData.get('especialidad') || formData.get('especialidad').trim() === '') {
+        errors.push('La especialidad es obligatoria');
+    }
+    
+    // Validar formato de correo
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.get('correo') && !emailRegex.test(formData.get('correo'))) {
+        errors.push('El formato del correo electrónico no es válido');
+    }
+    
+    return errors;
+}
+
 // ===== FUNCIONALIDAD PRINCIPAL =====
 
 // Sidebar y modales
@@ -165,6 +250,8 @@ function updateRowInTable(id, updatedData) {
     row.children[2].textContent = updatedData.tipo_documento;
     row.children[3].textContent = updatedData.numero_documento;
     row.children[4].textContent = updatedData.correo;
+    row.children[5].textContent = updatedData.telefono || "";
+    row.children[6].textContent = updatedData.especialidad || "";
 }
 
 // Event listeners básicos
@@ -222,8 +309,8 @@ document.addEventListener("click", function(e) {
             tipo_documento: row.children[2].textContent,
             numero_documento: row.children[3].textContent,
             correo: row.children[4].textContent,
-            telefono: "",
-            especialidad: "",
+            telefono: row.children[5].textContent,
+            especialidad: row.children[6].textContent,
         };
         openEditModal(lawyerData);
     }
@@ -235,6 +322,13 @@ editLawyerForm.addEventListener("submit", async function(e) {
     const form = e.target;
     const data = new FormData(form);
     const lawyerId = form.action.split("/").pop();
+
+    // NUEVA VALIDACIÓN - Verificar campos obligatorios
+    const validationErrors = validateEditForm(data);
+    if (validationErrors.length > 0) {
+        await showCustomAlert('warning', 'Campos Incompletos', validationErrors.join('\n'));
+        return;
+    }
 
     try {
         const response = await fetch(form.action, {
@@ -261,7 +355,17 @@ editLawyerForm.addEventListener("submit", async function(e) {
             closeEditModal();
         } else {
             const error = await response.json();
-            showCustomAlert('error', 'Error de Actualización', "Error al actualizar: " + (error.message || "Verifica que todos los campos estén correctos."));
+            
+            // MANEJO MEJORADO DE ERRORES DE DUPLICADOS
+            if (response.status === 422) {
+                if (error.message && (error.message.includes('ya existe') || error.message.includes('duplicado'))) {
+                    showCustomAlert('error', 'Información Duplicada', 'Ya existe un abogado con este número de documento o correo electrónico. Por favor, verifica los datos.');
+                } else {
+                    showCustomAlert('error', 'Error de Validación', error.message || "Los datos ingresados no son válidos. Verifica que todos los campos estén correctos y no duplicados.");
+                }
+            } else {
+                showCustomAlert('error', 'Error de Actualización', "Error al actualizar: " + (error.message || "Verifica que todos los campos estén correctos."));
+            }
         }
     } catch (error) {
         console.error(error);
@@ -269,12 +373,19 @@ editLawyerForm.addEventListener("submit", async function(e) {
     }
 });
 
-// Creación de abogados 
+// CREACIÓN DE ABOGADOS CON VALIDACIONES MEJORADAS
 document.getElementById("createLawyerModal").querySelector("form").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const form = e.target;
     const data = new FormData(form);
+
+    // NUEVA VALIDACIÓN - Verificar campos obligatorios
+    const validationErrors = validateForm(data);
+    if (validationErrors.length > 0) {
+        await showCustomAlert('warning', 'Campos Incompletos', 'Por favor, completa todos los campos obligatorios:\n\n' + validationErrors.join('\n'));
+        return;
+    }
 
     try {
         const response = await fetch("/lawyers", {
@@ -295,7 +406,17 @@ document.getElementById("createLawyerModal").querySelector("form").addEventListe
             location.reload();
         } else {
             const error = await response.json();
-            showCustomAlert('error', 'Error al Crear', "Error al guardar: " + (error.message || "Verifica que todos los campos estén completos y correctos."));
+            
+            // MANEJO MEJORADO DE ERRORES ESPECÍFICOS
+            if (response.status === 422) {
+                if (error.message && (error.message.includes('ya existe') || error.message.includes('duplicado') || error.message.includes('unique'))) {
+                    showCustomAlert('error', 'Abogado Ya Registrado', 'Ya existe un abogado registrado con este número de documento o correo electrónico. Por favor, verifica la información antes de continuar.');
+                } else {
+                    showCustomAlert('error', 'Error de Validación', error.message || "Los datos ingresados no son válidos. Verifica que todos los campos estén completos y correctos.");
+                }
+            } else {
+                showCustomAlert('error', 'Error al Crear', "Error al guardar: " + (error.message || "Verifica que todos los campos estén completos y correctos."));
+            }
         }
     } catch (error) {
         console.error(error);
@@ -303,11 +424,11 @@ document.getElementById("createLawyerModal").querySelector("form").addEventListe
     }
 });
 
-// Búsqueda y filtrado - CÓDIGO CORREGIDO
+// Búsqueda y filtrado 
 document.getElementById("searchBtn").addEventListener("click", searchLawyersWithAlert);
 document.getElementById("searchInput").addEventListener("input", searchLawyersWithoutAlert);
 
-// Función para buscar sin mostrar alerta (cuando el usuario está escribiendo)
+//FUNCION DE BÚSQUEDA SIN ALERTA
 function searchLawyersWithoutAlert() {
     const searchTerm = document.getElementById("searchInput").value.toLowerCase();
     const rows = document.querySelectorAll("#tableBody tr");
@@ -344,11 +465,6 @@ function searchLawyersWithAlert() {
     }
 }
 
-// Función original (ya no se usa, pero mantengo por compatibilidad)
-function searchLawyers() {
-    searchLawyersWithoutAlert();
-}
-
 // Exportar
 document.getElementById("exportBtn").addEventListener("click", function() {
     showCustomAlert('info', 'Funcionalidad en Desarrollo', 'La exportación a Excel estará disponible próximamente.');
@@ -366,63 +482,3 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
 // Hacer funciones disponibles globalmente
 window.showCustomAlert = showCustomAlert;
 window.hideCustomAlert = hideCustomAlert;
-
-
-//Imagen de perfil
-document.getElementById('fileInput').addEventListener('change', function (e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        document.getElementById('avatarPreview').src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-});
-
-
-document.getElementById('fileInput').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Mostrar vista previa
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        document.getElementById('avatarPreview').src = e.target.result;
-        
-        // Crear FormData y enviar la imagen
-        const formData = new FormData();
-        formData.append('avatar', file);
-        formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
-        formData.append('_method', 'PUT');
-
-        // Enviar la imagen al servidor
-        uploadAvatar(formData);
-    };
-    reader.readAsDataURL(file);
-});
-
-async function uploadAvatar(formData) {
-    try {
-        const response = await fetch("{{ route('profile.avatar.update') }}", {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            showCustomAlert('success', '¡Perfecto!', 'Tu imagen de perfil se ha actualizado correctamente.');
-            
-            // Actualizar la imagen en caso de que el servidor devuelva una nueva ruta
-            if (data.avatar_url) {
-                document.getElementById('avatarPreview').src = data.avatar_url;
-            }
-        } else {
-            const error = await response.json();
-            showCustomAlert('error', 'Error', error.message || 'Error al actualizar la imagen');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        showCustomAlert('error', 'Error', 'Error de conexión al subir la imagen');
-    }
-}
