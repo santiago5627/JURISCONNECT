@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LawyerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
+
+Route::get('/perfil/foto', [ProfileController::class, 'editPhoto'])->name('profile.photo');
+Route::post('/perfil/foto', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
 
 Route::get('/', function () {
     return redirect()->route('login');
