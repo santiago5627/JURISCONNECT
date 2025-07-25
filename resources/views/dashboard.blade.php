@@ -22,9 +22,8 @@
                     <button class="modal-close" id="closeModal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="{{ route('lawyers.store') }}">
+                    <form action="{{ route('lawyers.store') }}" method="POST">
                        @csrf
-
                         <div class="form-group">
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" name="nombre" required>
@@ -136,12 +135,13 @@
             class="rounded-full w-24 h-24 object-cover border-2 border-green-800 cursor-pointer" alt="Avatar">            
         </div>
 
-        
-                
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
-            </div>
+        </div>
+ 
+            <div class="nav-menu">
 
+            </div>
 
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
@@ -203,8 +203,8 @@
         <td>{{ $lawyer->tipo_documento }}</td>
         <td>{{ $lawyer->numero_documento }}</td>
         <td>{{ $lawyer->correo }}</td>
-        <td>{{ $lawyer->telefono ?? 'N/A' }}</td>
-        <td>{{ $lawyer->especialidad ?? 'N/A' }}</td>
+        <td>{{ $lawyer->telefono}}</td>
+        <td>{{ $lawyer->especialidad}}</td>
         <td>
             <button class="btn-edit" 
                     data-id="{{ $lawyer->id }}"
@@ -218,7 +218,7 @@
                 Editar
             </button>
 
-            <form action="{{ route('lawyers.destroy', $lawyer->id) }}" 
+                <form action="{{ route('lawyers.destroy', $lawyer->id) }}" 
                     method="POST"
                     class="delete-lawyer-form"
                     data-id="{{ $lawyer->id }}"

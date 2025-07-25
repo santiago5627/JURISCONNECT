@@ -5,25 +5,55 @@ use App\Http\Controllers\LawyerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 
+
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::post('/lawyers', [LawyerController::class, 'store'])->name('lawyers.store');
 require __DIR__.'/auth.php';
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+// Rutas resource para lawyers (incluye store, destroy, edit, update, etc.)
+Route::resource('lawyers', LawyerController::class);
 
-Route::post('/lawyers', [App\Http\Controllers\LawyerController::class, 'store'])->name('lawyers.store');
+// Ruta personalizada para actualizar el avatar del usuario
+Route::middleware('auth')->group(function() {
 
 Route::delete('/lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('lawyers.destroy');
 Route::get('/lawyers/{lawyer}/edit', [LawyerController::class, 'edit'])->name('lawyers.edit');
 Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])->name('lawyers.update');
 Route::get('/exportar-usuarios', [ExportController::class, 'exportUsers'])->name('exportar.usuarios');
+
+    Route::get('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::put('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+});
+
+// Agregar estas rutas a tu archivo routes/web.php existente
+
+use App\Http\Controllers\ProfileController;
+
+// Rutas para manejo de avatares (agregar después de las rutas existentes)
+Route::middleware(['auth'])->group(function () {
+    // Ruta para subir avatar
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    
+    // Ruta para eliminar avatar
+    Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
+});
+
+// Si necesitas una ruta para servir las imágenes (opcional, solo si tienes problemas con storage:link)
+Route::get('/avatars/{filename}', function ($filename) {
+    $path = storage_path('app/public/avatars/' . $filename);
+    
+    if (!file_exists($path)) {
+        abort(404);
+    }
+    
+    return response()->file($path);
+})->where('filename', '.*')->name('avatar.serve');
+
