@@ -125,19 +125,23 @@
     </div>
 </div>
 
-        <!-- Sidebar -->
+<!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="profile">
-                <div class="profile-icon">👤</div>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+                 <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
+        <img 
+            id="avatarPreview"
+            src="{{ $user->avatar ? asset('storage/avatars/' . $user->avatar) : 'https://cdn-icons-png.flaticon.com/512/847/847969.png' }}" 
+            class="rounded-full w-24 h-24 object-cover border-2 border-green-800 cursor-pointer" alt="Avatar">            
+        </div>
+
+        
+                
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
             </div>
 
-            <div class="nav-menu">
-                <button class="nav-btn">Consultas</button>
-                <button class="nav-btn active">Procesos</button>
-                <button class="nav-btn">Casos</button>
-            </div>
 
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
@@ -174,7 +178,7 @@
 
                 <div class="action-buttons">
                     <button class="btn-primary" id="createBtn">CREAR NUEVO ABOGADO</button>
-                    <button class="btn-success" id="exportBtn">EXPORTAR EXCEL</button>
+                    <a href="{{ route('exportar.usuarios') }}" class="btn btn-success" id="exportBtn">Exportar Usuarios a Excel</a>
                 </div>
 
                 <div class="table-container">
@@ -186,6 +190,8 @@
                                 <th>Tipo de Documento</th>
                                 <th>Numero de Documento</th>
                                 <th>Correo</th>
+                                <th>Teléfono</th>
+                                <th>Especialidad</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -197,6 +203,8 @@
         <td>{{ $lawyer->tipo_documento }}</td>
         <td>{{ $lawyer->numero_documento }}</td>
         <td>{{ $lawyer->correo }}</td>
+        <td>{{ $lawyer->telefono ?? 'N/A' }}</td>
+        <td>{{ $lawyer->especialidad ?? 'N/A' }}</td>
         <td>
             <button class="btn-edit" 
                     data-id="{{ $lawyer->id }}"
@@ -205,16 +213,22 @@
                     data-tipo_documento="{{ $lawyer->tipo_documento }}"
                     data-numero_documento="{{ $lawyer->numero_documento }}"
                     data-correo="{{ $lawyer->correo }}"
-                    data-telefono="{{ $lawyer->telefono ?? '' }}"
-                    data-especialidad="{{ $lawyer->especialidad ?? '' }}">
+                    data-telefono="{{ $lawyer->telefono }}"
+                    data-especialidad="{{ $lawyer->especialidad }}">
                 Editar
             </button>
 
-            <form action="{{ route('lawyers.destroy', $lawyer->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar este abogado?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn-delete">Eliminar</button>
-            </form>
+            <form action="{{ route('lawyers.destroy', $lawyer->id) }}" 
+                    method="POST"
+                    class="delete-lawyer-form"
+                    data-id="{{ $lawyer->id }}"
+                    data-name="{{ $lawyer->nombre }} {{ $lawyer->apellido }}"
+                    style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn-delete">
+                        Eliminar</button>
+                </form>
         </td>
     </tr>
     @endforeach

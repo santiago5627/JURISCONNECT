@@ -243,7 +243,7 @@
             margin: 5px 0;
         }
 
-        .nav-menu {
+        .nav-menu { 
             display: flex;
             flex-direction: column;
             gap: 20px;

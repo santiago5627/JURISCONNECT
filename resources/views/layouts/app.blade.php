@@ -18,6 +18,7 @@
     'resources/css/dashboard.css',
     'resources/js/app.js',
     'resources/js/dash.js'
+    
 ])
 
         </head>
