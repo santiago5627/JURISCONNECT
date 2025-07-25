@@ -14,144 +14,8 @@ const editLawyerForm = document.getElementById("editLawyerForm");
 const closeEditModalBtn = document.getElementById("closeEditModal");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-// ===== SISTEMA DE ALERTAS PERSONALIZADAS CORREGIDO =====
+// ===== SISTEMA DE ALERTAS PERSONALIZADAS=====
 function showCustomAlert(type, title = '', message = '', showCancel = false, confirmText = 'Aceptar', cancelText = 'Cancelar') {
-    // Crear overlay si no existe
-    let overlay = document.getElementById('alertOverlay');
-    if (!overlay) {
-        overlay = document.createElement('div');
-        overlay.id = 'alertOverlay';
-        overlay.className = 'alert-overlay';
-        
-        const buttonsHTML = showCancel 
-            ? `<div class="alert-buttons">
-                  <button class="alert-button secondary" id="cancelAlertBtn">${cancelText}</button>
-                  <button class="alert-button ${type}" id="confirmAlertBtn">${confirmText}</button>
-               </div>`
-            : `<button class="alert-button ${type}" id="confirmAlertBtn">${confirmText}</button>`;
-        
-        overlay.innerHTML = `
-            <div class="custom-alert" id="customAlert">
-                <div class="alert-icon" id="alertIcon"></div>
-                <div class="alert-title" id="alertTitle"></div>
-                <div class="alert-message" id="alertMessage"></div>
-                ${buttonsHTML}
-            </div>
-        `;
-        document.body.appendChild(overlay);
-        
-        // Agregar estilos CSS si no existen
-        if (!document.getElementById('customAlertStyles')) {
-            const style = document.createElement('style');
-            style.id = 'customAlertStyles';
-            document.head.appendChild(style);
-        }
-    }
-
-    const alert = document.getElementById('customAlert');
-    const icon = document.getElementById('alertIcon');
-    const titleEl = document.getElementById('alertTitle');
-    const messageEl = document.getElementById('alertMessage');
-
-    // Configurar según el tipo
-    alert.className = `custom-alert alert-${type}`;
-    
-    switch(type) {
-        case 'success':
-            icon.innerHTML = '✓';
-            titleEl.textContent = title || '¡Éxito!';
-            messageEl.textContent = message || 'Operación completada exitosamente';
-            break;
-        case 'error':
-            icon.innerHTML = '❌';
-            titleEl.textContent = title || '¡Error!';
-            messageEl.textContent = message || 'Algo salió mal. Inténtalo de nuevo.';
-            break;
-        case 'warning':
-            icon.innerHTML = '⚠️';
-            titleEl.textContent = title || '¡Atención!';
-            messageEl.textContent = message || 'Verifica la información antes de continuar.';
-            break;
-        case 'info':
-            icon.innerHTML = 'ℹ';
-            titleEl.textContent = title || 'Información';
-            messageEl.textContent = message || 'Proceso en desarrollo.';
-            break;
-    }
-
-    overlay.classList.add('show');
-
-    // SIEMPRE retornar una promesa
-    return new Promise((resolve) => {
-        document.getElementById('confirmAlertBtn').onclick = () => {
-            hideCustomAlert();
-            resolve(true);
-        };
-        
-        // Solo agregar el botón cancelar si existe
-        const cancelBtn = document.getElementById('cancelAlertBtn');
-        if (cancelBtn) {
-            cancelBtn.onclick = () => {
-                hideCustomAlert();
-                resolve(false);
-            };
-        }
-    });
-}
-
-function hideCustomAlert() {
-    const overlay = document.getElementById('alertOverlay');
-    if (overlay) {
-        overlay.classList.remove('show');
-        setTimeout(() => {
-            if (overlay.parentNode) {
-                overlay.parentNode.removeChild(overlay);
-            }
-        }, 300);
-    }
-}
-
-// ===== FUNCIONALIDAD PRINCIPAL =====
-
-// Sidebar y modales
-function toggleSidebar() {
-    sidebar.classList.toggle('active');
-    overlay.classList.toggle('active');
-}
-
-// Función para cerrar el sidebar
-function closeSidebar() {
-    sidebar.classList.remove('active');
-    overlay.classList.remove('active');
-}
-
-// Función para abrir el modal de creación
-function openModal() {
-    createLawyerModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-// Función para cerrar el modal de creación
-function closeModalFunction() {
-    createLawyerModal.classList.remove('active');
-    document.body.style.overflow = 'auto';
-    const form = document.querySelector('#createLawyerModal form');
-    if (form) form.reset();
-}
-
-// Función para abrir el modal de edición
-function openEditModal(lawyerData) {
-    // Rellenar los campos del modal de edición
-    document.getElementById('editNombre').value = lawyerData.nombre || '';
-    document.getElementById('editApellido').value = lawyerData.apellido || '';
-    document.getElementById('editTipoDocumento').value = lawyerData.tipo_documento || '';
-    document.getElementById('editNumeroDocumento').value = lawyerData.numero_documento || '';
-    document.getElementById('editCorreo').value = lawyerData.correo || '';
-    document.getElementById('editTelefono').value = lawyerData.telefono || '';
-    document.getElementById('editEspecialidad').value = lawyerData.especialidad || '';
-
-    // Establecer la acción del formulario
-    editLawyerForm.action = '/lawyers/' + lawyerData.id;
     
     // Crear overlay si no existe
     let overlay = document.getElementById('alertOverlay');
@@ -386,9 +250,8 @@ function updateRowInTable(id, updatedData) {
     row.children[2].textContent = updatedData.tipo_documento;
     row.children[3].textContent = updatedData.numero_documento;
     row.children[4].textContent = updatedData.correo;
-    row.children[5].textContent = updatedData.telefono;
-    row.children[6].textContent = updatedData.especialidad;
-
+    row.children[5].textContent = updatedData.telefono || "";
+    row.children[6].textContent = updatedData.especialidad || "";
 }
 
 // Event listeners básicos
@@ -618,54 +481,4 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
 
 // Hacer funciones disponibles globalmente
 window.showCustomAlert = showCustomAlert;
-
-//Imagen de perfil
-
-document.getElementById('fileInput').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // Mostrar vista previa
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        document.getElementById('avatarPreview').src = e.target.result;
-        
-        // Crear FormData y enviar la imagen
-        const formData = new FormData();
-        formData.append('avatar', file);
-        formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
-        formData.append('_method', 'PUT');
-
-        // Enviar la imagen al servidor
-        uploadAvatar(formData);
-    };
-    reader.readAsDataURL(file);
-});
-
-async function uploadAvatar(formData) {
-    try {
-        const response = await fetch("{{ route('profile.avatar.update') }}", {
-            method: 'POST',
-            body: formData
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            showCustomAlert('success', '¡Perfecto!', 'Tu imagen de perfil se ha actualizado correctamente.');
-            
-            // Actualizar la imagen en caso de que el servidor devuelva una nueva ruta
-            if (data.avatar_url) {
-                document.getElementById('avatarPreview').src = data.avatar_url;
-            }
-        } else {
-            const error = await response.json();
-            showCustomAlert('error', 'Error', error.message || 'Error al actualizar la imagen');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        showCustomAlert('error', 'Error', 'Error de conexión al subir la imagen');
-    }
-}
-
 window.hideCustomAlert = hideCustomAlert;
-
