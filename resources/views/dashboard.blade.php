@@ -8,6 +8,7 @@
 
     <!-- Contenido sin contenedores restrictivos -->
     <div class="dashboard-wrapper">
+        
         <!-- Overlay para móviles -->
         <div class="overlay" id="overlay"></div>
 
@@ -242,4 +243,5 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/dashboard.js') }}"></script>
+    
 </x-app-layout>

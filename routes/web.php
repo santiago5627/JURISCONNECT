@@ -27,10 +27,12 @@ Route::get('/lawyers/{lawyer}/edit', [LawyerController::class, 'edit'])->name('l
 Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])->name('lawyers.update');
 Route::get('/exportar-usuarios', [ExportController::class, 'exportUsers'])->name('exportar.usuarios');
 
-    Route::get('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::get('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+Route::patch('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+Route::delete('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
 Route::put('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+
+
 });
 
 // Agregar estas rutas a tu archivo routes/web.php existente
