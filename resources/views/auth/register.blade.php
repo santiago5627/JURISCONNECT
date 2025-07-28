@@ -16,6 +16,10 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+ <!-- Número de documento -->
+<label for="numero_documento">Número de Documento</label>
+<input id="numero_documento" type="text" name="numero_documento" required>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />

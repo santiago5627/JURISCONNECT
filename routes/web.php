@@ -29,3 +29,7 @@ Route::post('/lawyers', [App\Http\Controllers\LawyerController::class, 'store'])
 Route::delete('/lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('lawyers.destroy');
 Route::get('/lawyers/{lawyer}/edit', [LawyerController::class, 'edit'])->name('lawyers.edit');
 Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])->name('lawyers.update');
+
+Route::get('/dashboard/abogado', function () {
+    return view('dashboard-abogado'); // Crea esa vista
+})->middleware(['auth'])->name('dashboard.abogado');

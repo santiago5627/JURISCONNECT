@@ -2,20 +2,17 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
+     * Los atributos que se pueden asignar en masa.
      */
     protected $fillable = [
         'name',
@@ -25,9 +22,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
+     * Los atributos que deben ocultarse al serializar.
      */
     protected $hidden = [
         'password',
@@ -35,9 +30,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Los atributos que deben convertirse automáticamente.
      */
     protected function casts(): array
     {
@@ -48,10 +41,15 @@ class User extends Authenticatable
     }
 
     /**
-     * Send the password reset notification.
-     *
-     * @param  string  $token
-     * @return void
+     * Relación con la tabla de roles.
+     */
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Notificación personalizada para restablecer contraseña.
      */
     public function sendPasswordResetNotification($token)
     {
