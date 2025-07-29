@@ -4,6 +4,22 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LawyerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Exports\LawyersExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Lawyer;
+
+Route::get('/lawyers/export-pdf', function () {
+    $lawyers = Lawyer::all();
+    $pdf = Pdf::loadView('exports.lawyers-pdf', compact('lawyers'));
+    return $pdf->download('abogados.pdf');
+})->name('lawyers.export.pdf');
+
+
+Route::get('/lawyers/export-excel', function () {
+    return Excel::download(new LawyersExport, 'abogados.xlsx');
+})->name('lawyers.export.excel');
+
 
 Route::get('/perfil/foto', [ProfileController::class, 'editPhoto'])->name('profile.photo');
 Route::post('/perfil/foto', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');

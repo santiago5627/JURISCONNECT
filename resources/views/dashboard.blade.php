@@ -174,7 +174,8 @@
 
                 <div class="action-buttons">
                     <button class="btn-primary" id="createBtn">CREAR NUEVO ABOGADO</button>
-                    <button class="btn-success" id="exportBtn">EXPORTAR EXCEL</button>
+                    <a href="{{ route('lawyers.export.excel') }}" class="btn-success">Exportar Excel</a>
+                    <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">Exportar PDF</a>
                 </div>
 
                 <div class="table-container">

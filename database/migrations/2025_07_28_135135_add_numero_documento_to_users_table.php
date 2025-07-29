@@ -12,8 +12,9 @@ return new class extends Migration
 public function up()
 {
     Schema::table('users', function (Blueprint $table) {
-        $table->string('numero_documento')->unique()->nullable();
+        $table->string('numero_documento')->nullable();
     });
+
 }
 
 public function down()
