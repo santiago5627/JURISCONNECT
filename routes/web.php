@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LawyerController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\ImageController; // Asegúrate de que esta línea esté presente
+use App\Http\Controllers\ProfileController; // Asegúrate de que esta línea esté presente si usas ProfileController
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -16,37 +17,15 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 // Rutas resource para lawyers (incluye store, destroy, edit, update, etc.)
-Route::resource('lawyers', LawyerController::class);
+Route::resource('lawyers', LawyerController::class)->middleware('auth'); // Añade middleware 'auth' si todas las rutas de lawyers lo requieren
 
-// Ruta personalizada para actualizar el avatar del usuario
+// Grupo de rutas protegidas por autenticación
 Route::middleware('auth')->group(function() {
+    // Rutas de perfil (si las usas)
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit'); // Ruta de perfil estándar
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update'); // Ruta de perfil estándar
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy'); // Ruta de perfil estándar
+    Route::patch('/upload-image', [ImageController::class, 'subirimage'])->name('image'); //Ruta de subir imagen
+    
 
-    Route::get('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'destroy'])->name('profile.destroy');
-Route::put('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
 });
-
-// Agregar estas rutas a tu archivo routes/web.php existente
-
-use App\Http\Controllers\ProfileController;
-
-// Rutas para manejo de avatares (agregar después de las rutas existentes)
-Route::middleware(['auth'])->group(function () {
-    // Ruta para subir avatar
-    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
-    
-    // Ruta para eliminar avatar
-    Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
-});
-
-// Si necesitas una ruta para servir las imágenes (opcional, solo si tienes problemas con storage:link)
-Route::get('/avatars/{filename}', function ($filename) {
-    $path = storage_path('app/public/avatars/' . $filename);
-    
-    if (!file_exists($path)) {
-        abort(404);
-    }
-    
-    return response()->file($path);
-})->where('filename', '.*')->name('avatar.serve');
