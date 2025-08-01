@@ -221,34 +221,51 @@
 
     <div class="login-container">
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('register.validate') }}">
         @csrf
 
         <!-- Título -->
-            <h2>antes de registrarse confirme que su usuario no haya sido creado</h2>
-            
-            <!-- Numero de documento -->
-            <div class="form-group">
-                <label for="numeroDocumento">Número de Documento:</label>
-                <input id="numeroDocumento" type="text" name="numeroDocumento" value="{{ old('numeroDocumento') }}" required>
-                @if ($errors->has('numeroDocumento'))
-                    <span class="error-message">{{ $errors->first('numeroDocumento') }}</span>
-                @endif
-            </div>
+            <h3>ingrese el correo electronico y su contraseña que le fue enviado</h3>
 
-            <!-- Tipo de Documento -->
-            <div class="form-group">
-                            <label for="tipoDocumento">Tipo de Documento:</label>
-                            <select id="tipoDocumento" name="tipoDocumento" required>
-                                <option value="">Seleccione...</option>
-                                <option value="CC">Cédula de Ciudadanía</option>
-                                <option value="CE">Cédula de Extranjería</option>
-                                <option value="PAS">Pasaporte</option>
-                            </select>
-                            @if ($errors->has('tipoDocumento'))
-                            <span class="error-message">{{ $errors->first('tipoDocumento') }}</span>
-                            @endif
-                        </div>
+            <!-- Email Address -->
+                <label for="email">{{ __('Correo Electrico') }}</label>
+                <input 
+                    id="email" 
+                    type="email" 
+                    name="email" 
+                    value="{{ old('email') }}" 
+                    required 
+                    autofocus 
+                    autocomplete="username"
+                    class="{{ $errors->get('email') ? 'error-input' : '' }}"
+                >
+                @if ($errors->get('email'))
+                    <div class="error-message">
+                        @foreach ($errors->get('email') as $error)
+                            {{ $error }}
+                        @endforeach
+                    </div>
+                @endif
+
+                <!-- Password -->
+                <label for="password">{{ __('Contraseña') }}</label>
+                <input 
+                    id="password" 
+                    type="password" 
+                    name="password" 
+                    required 
+                    autocomplete="current-password"
+                    class="{{ $errors->get('password') ? 'error-input' : '' }}"
+                >
+                @if ($errors->get('password'))
+                    <div class="error-message">
+                        @foreach ($errors->get('password') as $error)
+                            {{ $error }}
+                        @endforeach
+                    </div>
+                @endif
+
+      
 
                 <x-primary-button class="ms-4" type="submit">
                     {{ __('Validar') }}

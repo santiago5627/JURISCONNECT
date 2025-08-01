@@ -100,7 +100,7 @@
             <p>Este enlace es válido durante los próximos <strong>30 minutos</strong>.</p>
 
             <div class="warning">
-                ⚠️ Si no solicitaste este cambio, puedes ignorar este mensaje. Tu cuenta está segura.
+                 Si no solicitaste este cambio, puedes ignorar este mensaje. Tu cuenta está segura.
             </div>
 
             <p>Si el botón anterior no funciona, copia y pega el siguiente enlace en tu navegador:</p>

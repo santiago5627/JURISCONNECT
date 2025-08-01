@@ -13,6 +13,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
 
+
 class RegisteredUserController extends Controller
 {
     /**
@@ -71,8 +72,40 @@ class RegisteredUserController extends Controller
     $user->save();
 
     return back()->with('success', 'Avatar actualizado');
-
+    
+    // Verificar si el usuario ya existe por correo
+    $existingUser = User::where('email', $request->email)->first();
     }
+
+    public function validarRegistro(Request $request)
+{
+    // Validar el formato
+    $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required'],
+    ]);
+
+    // Buscar al usuario
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user) {
+        return back()->withErrors(['email' => 'Este correo no está registrado.'])->withInput();
+    }
+
+    // Verificar contraseña
+    if (!Hash::check($request->password, $user->password)) {
+        return back()->withErrors(['password' => 'Contraseña incorrecta.'])->withInput();
+    }
+
+    // Todo bien, loguear
+    Auth::login($user);
+
+    return redirect()->route('dashboard')->with('success', 'Bienvenido de nuevo');
 }
+
+
+}
+
+
 
 

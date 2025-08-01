@@ -25,3 +25,4 @@ class RestrictLoginAccess
         return $next($request);
     }
 }
+

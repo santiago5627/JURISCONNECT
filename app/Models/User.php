@@ -23,8 +23,23 @@ class User extends Authenticatable implements MustVerifyEmail
             'name',
             'email',
             'password',
+            'password_changed',
             'avatar', // Agregar esta línea
     ];
+
+    protected $casts = [
+    'password_changed' => 'boolean',
+    'password_changed_at' => 'datetime',
+];
+
+// Método para marcar contraseña como cambiada
+public function markPasswordAsChanged()
+{
+    $this->update([
+        'password_changed' => true,
+        'password_changed_at' => now()
+    ]);
+}
 
     /**
      * The attributes that should be hidden for serialization.
@@ -60,4 +75,8 @@ class User extends Authenticatable implements MustVerifyEmail
         
         return null; // o una imagen por defecto
     }
+
+
+
+    
 }
