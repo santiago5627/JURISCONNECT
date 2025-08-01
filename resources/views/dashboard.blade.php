@@ -13,7 +13,7 @@
         <div class="overlay" id="overlay"></div>
 
         <!-- Enlace a CSS -->
-        <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+        <link rel="stylesheet" href="{{ asset('/css/dashboard.css') }}">
 
         <!-- Modal para crear nuevo abogado -->
         <div class="modal" id="createLawyerModal">
@@ -126,18 +126,20 @@
 </div>
 
 <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="profile">
-                <input type="file" id="fileInput" accept="image/*" hidden>
-                 <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
-        <img 
-            id="avatarPreview"
-            src="{{ $user->avatar ? asset('storage/avatars/' . $user->avatar) : 'https://cdn-icons-png.flaticon.com/512/847/847969.png' }}" 
-            class="rounded-full w-24 h-24 object-cover border-2 border-green-800 cursor-pointer" alt="Avatar">            
-        </div>
-
+    <div class="sidebar" id="sidebar">
+    <div class="profile">
+    <input type="file" id="fileInput" accept="image/*" hidden>
+    <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
+        {{-- Muestra la foto del usuario si existe, de lo contrario muestra una por defecto --}}
+        <img src="{{ Auth::user()->photo ? asset('storage/' . Auth::user()->photo) : asset('img/f4a614740649d8c495ddc7a55a2cf0d9.jpg') }}"
+     alt="Foto de Perfil"
+     width="100px"
+     height="70"
+     class="logo">
+    </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
+
         </div>
  
             <div class="nav-menu">
@@ -207,7 +209,7 @@
         <td>{{ $lawyer->telefono}}</td>
         <td>{{ $lawyer->especialidad}}</td>
         <td>
-            <button class="btn-edit" 
+            <button class="btn-edit"
                     data-id="{{ $lawyer->id }}"
                     data-nombre="{{ $lawyer->nombre }}"
                     data-apellido="{{ $lawyer->apellido }}"
@@ -219,7 +221,7 @@
                 Editar
             </button>
 
-                <form action="{{ route('lawyers.destroy', $lawyer->id) }}" 
+                <form action="{{ route('lawyers.destroy', $lawyer->id) }}"
                     method="POST"
                     class="delete-lawyer-form"
                     data-id="{{ $lawyer->id }}"
@@ -242,6 +244,5 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/dashboard.js') }}"></script>
-    
+    <script src="{{ asset('js/dash.js') }}"></script>
 </x-app-layout>

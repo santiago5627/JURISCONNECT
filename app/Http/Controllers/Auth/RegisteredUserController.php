@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Mail\PasswordGenerated;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
 
 
 class RegisteredUserController extends Controller
@@ -34,20 +37,26 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'numeroDocumento' => ['required', 'string', 'max:50', 'unique:users,numeroDocumento'],
             'tipoDocumento' => ['required', 'string', 'in:CC,CE,PAS'],
         
         ]);
+        // Generar una contraseña aleatoria de 4 caracteres
+        $password = Str::random(4);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'numeroDocumento' => $request->numeroDocumento,
+            'tipoDocumento' => $request->tipoDocumento,
+            'password' => Hash::make($password),
             
         ]);
 
         event(new Registered($user));
+
+         // Enviar correo con la contraseña
+        Mail::to($user->email)->send(new PasswordGenerated($user, $password));
 
         Auth::login($user);
 

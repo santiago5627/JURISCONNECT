@@ -19,13 +19,13 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 // Rutas resource para lawyers (incluye store, destroy, edit, update, etc.)
-Route::resource('lawyers', LawyerController::class);
+Route::resource('lawyers', LawyerController::class)->middleware('auth');
 Route::delete('/lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('lawyers.destroy');
 Route::get('/lawyers/{lawyer}/edit', [LawyerController::class, 'edit'])->name('lawyers.edit');
 Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])->name('lawyers.update');
 Route::get('/exportar-usuarios', [ExportController::class, 'exportUsers'])->name('exportar.usuarios');
 
-// Ruta personalizada para actualizar el avatar del usuario
+// Grupo de rutas protegidas por autenticación
 Route::middleware('auth')->group(function() {
 Route::get('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
@@ -34,7 +34,6 @@ Route::put('/profile/avatar', [App\Http\Controllers\ProfileController::class, 'u
 });
 
 Route::post('/validar-registro', [RegisteredUserController::class, 'validarRegistro'])->name('register.validate');
-
 
 
 
