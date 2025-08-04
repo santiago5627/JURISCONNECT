@@ -18,7 +18,7 @@ class RestrictLoginAccess
     public function handle(Request $request, Closure $next): Response
     {
         if (!in_array($request->ip(), ['127.0.0.1', '::1'])) {
-             abort(403, 'Acceso Denegado.');
+            abort(403, 'Acceso Denegado.');
         }
 
 

@@ -308,7 +308,7 @@
             justify-content: center;
             width: 100%;
             margin-top: auto;
-            padding: 50px ;
+            padding: 50px;
         }
 
         .sena-logo img {
@@ -451,6 +451,19 @@
             background: #26b139;
             color: #ffffff;
             border: 2px solid #1D6D32;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-danger {
+            padding: 12px 25px;
+            background: #C0392B;
+            color: #ffffff;
+            border: 2px solid #A93226;
             border-radius: 5px;
             font-size: 12px;
             font-weight: bold;

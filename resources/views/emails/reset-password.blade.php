@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 640px;
             margin: 30px auto;
@@ -20,28 +22,34 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
             padding: 40px;
         }
+
         .header {
             text-align: center;
         }
+
         .logo {
             width: 120px;
             margin-bottom: 10px;
         }
+
         .title {
             font-size: 24px;
             font-weight: 600;
             margin-top: 10px;
             color: #00471b;
         }
+
         .content {
             font-size: 16px;
             line-height: 1.8;
             margin-top: 30px;
         }
+
         .button-container {
             text-align: center;
             margin: 35px 0;
         }
+
         .button {
             background-color: #007a33;
             color: white;
@@ -52,9 +60,11 @@
             text-decoration: none;
             display: inline-block;
         }
+
         .button:hover {
             background-color: #006124;
         }
+
         .warning {
             background-color: #fffbea;
             border-left: 5px solid #f59e0b;
@@ -64,12 +74,14 @@
             font-size: 14px;
             color: #92400e;
         }
+
         .alternative-link {
             font-size: 14px;
             margin-top: 15px;
             color: #007a33;
             word-break: break-word;
         }
+
         .footer {
             font-size: 13px;
             color: #6b7280;
@@ -78,6 +90,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -90,11 +103,11 @@
 
             <p>Recibiste este correo porque solicitaste restablecer tu contraseña en el <strong>Sistema Legal del SENA</strong>.</p>
 
-<div class="button-container">
-    <a href="{{ $url }}" class="button" style="color: #ffffff !important; text-decoration: none !important;">
-        Restablecer Contraseña
-    </a>
-</div>
+            <div class="button-container">
+                <a href="{{ $url }}" class="button" style="color: #ffffff !important; text-decoration: none !important;">
+                    Restablecer Contraseña
+                </a>
+            </div>
 
 
             <p>Este enlace es válido durante los próximos <strong>30 minutos</strong>.</p>
@@ -114,4 +127,5 @@
         </div>
     </div>
 </body>
+
 </html>

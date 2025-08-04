@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Restablecer Contraseña - JurisConnect SENA</title>
+    
+    <!-- Enlace a CSS -->
+        <link rel="stylesheet" href="{{ asset('css/resetPassword.css') }}">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,7 +22,7 @@
         .card {
             background-color: #fff;
             border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
             max-width: 420px;
             width: 100%;
             padding: 40px 30px;
@@ -100,6 +104,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="card">
         <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo JurisConnect" class="logo">
@@ -107,13 +112,13 @@
         <h2>🔒 Restablecer Contraseña</h2>
 
         @if ($errors->any())
-            <div class="errors">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+        <div class="errors">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
         @endif
 
         <form method="POST" action="{{ route('password.store') }}">
@@ -143,4 +148,5 @@
         </div>
     </div>
 </body>
+
 </html>

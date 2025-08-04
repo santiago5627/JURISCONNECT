@@ -53,7 +53,7 @@ function openEditModal(lawyerData) {
 
     // Establecer la acción del formulario
     editLawyerForm.action = '/lawyers/' + lawyerData.id;
-    
+
     // Mostrar el modal
     editLawyerModal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -92,20 +92,20 @@ closeEditModalBtn.addEventListener('click', closeEditModal);
 cancelEditBtn.addEventListener('click', closeEditModal);
 
 // Cerrar modales al hacer clic fuera de ellos
-createLawyerModal.addEventListener('click', function(e) {
+createLawyerModal.addEventListener('click', function (e) {
     if (e.target === createLawyerModal) {
         closeModalFunction();
     }
 });
 
-editLawyerModal.addEventListener('click', function(e) {
+editLawyerModal.addEventListener('click', function (e) {
     if (e.target === editLawyerModal) {
         closeEditModal();
     }
 });
 
 // Cerrar sidebar y modales con ESC
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
         closeSidebar();
         closeModalFunction();
@@ -114,7 +114,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 // Event delegation para botones de editar (funciona con contenido dinámico)
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     if (e.target.classList.contains('btn-edit')) {
         const row = e.target.closest('tr');
         const lawyerData = {
@@ -127,13 +127,13 @@ document.addEventListener('click', function(e) {
             telefono: '', // Estos datos no están visibles en la tabla
             especialidad: ''
         };
-        
+
         openEditModal(lawyerData);
     }
 });
 
 // Manejar envío del formulario de edición
-editLawyerForm.addEventListener('submit', async function(e) {
+editLawyerForm.addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const form = e.target;
@@ -175,7 +175,7 @@ editLawyerForm.addEventListener('submit', async function(e) {
 });
 
 // Manejar envío del formulario de creación
-document.getElementById('createLawyerModal').querySelector('form').addEventListener('submit', async function(e) {
+document.getElementById('createLawyerModal').querySelector('form').addEventListener('submit', async function (e) {
     e.preventDefault();
 
     const form = e.target;
@@ -207,7 +207,7 @@ document.getElementById('createLawyerModal').querySelector('form').addEventListe
 
 // Funcionalidad de navegación
 document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
+    btn.addEventListener('click', function () {
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         closeSidebar();
@@ -215,13 +215,13 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 });
 
 // Funcionalidad del buscador
-document.getElementById('searchBtn').addEventListener('click', function() {
+document.getElementById('searchBtn').addEventListener('click', function () {
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     filterTable(searchTerm);
 });
 
 // Búsqueda en tiempo real
-document.getElementById('searchInput').addEventListener('input', function() {
+document.getElementById('searchInput').addEventListener('input', function () {
     const searchTerm = this.value.toLowerCase();
     filterTable(searchTerm);
 });
@@ -240,15 +240,21 @@ function filterTable(searchTerm) {
 }
 
 // Funcionalidad del botón exportar
-document.getElementById('exportBtn').addEventListener('click', function() {
+document.getElementById('exportBtn').addEventListener('click', function () {
     alert('Exportar a Excel - En desarrollo');
+});
+
+document.getElementById('exportPdfBtn').addEventListener('click', function () {
+    alert('Exportar a PDF - En desarrollo');
 });
 
 // Prevenir zoom en iOS para inputs
 if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
     document.querySelectorAll('input').forEach(input => {
-        input.addEventListener('focus', function() {
+        input.addEventListener('focus', function () {
             this.style.fontSize = '16px';
         });
     });
-}
+
+
+}   

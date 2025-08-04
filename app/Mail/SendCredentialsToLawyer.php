@@ -28,6 +28,6 @@ class SendCredentialsToLawyer extends Mailable
     public function build()
     {
         return $this->subject('Credenciales de acceso al sistema jurídico')
-                    ->view('emails.credentials');
+            ->view('emails.credentials');
     }
 }

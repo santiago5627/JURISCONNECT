@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Credenciales de Acceso</title>
 </head>
+
 <body>
     <h2>Hola {{ $user->name }},</h2>
     <p>Has sido registrado como abogado en el sistema jurídico.</p>
@@ -17,4 +19,5 @@
 
     <p>Gracias,<br>El equipo del sistema jurídico</p>
 </body>
+
 </html>

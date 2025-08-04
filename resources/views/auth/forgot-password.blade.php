@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <title>JurisConnect SENA - Recuperar Contraseña</title>
   <link rel="stylesheet" href="{{ asset('styles.css') }}">
 </head>
+
 <body>
-    <style>
-        * {
+  <style>
+    * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -170,6 +172,7 @@
         opacity: 0;
         transform: translateY(-20px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -281,7 +284,7 @@
         margin: 0 10px;
         padding: 20px;
       }
-      
+
       .Titulo_Sena h2 {
         font-size: 1.5rem;
       }
@@ -301,69 +304,70 @@
         margin-left: 20px;
       }
     }
-        </style>
+  </style>
   <!-- Ondas del fondo -->
   <div class="wave1"></div>
   <div class="wave2"></div>
   <div class="wave3"></div>
-  
+
   <!-- Logo institucional arriba -->
   <div class="logo-arriba">
-    <img src="{{ asset('img/LogoInsti.png') }}" width="100px"> 
+    <img src="{{ asset('img/LogoInsti.png') }}" width="100px">
   </div>
-  
+
   <!-- Título -->
   <div class="Titulo_Sena">
     <h2>JURISCONNECT SENA</h2>
   </div>
-  
+
   <div class="login-container">
     <!-- Mostrar estado de la sesión (éxito o error) -->
     @if (session('status'))
-        <div class="alert alert-success">
-            <p>Hemos enviado un enlace de restablecimiento de contraseña a tu correo electrónico.</p>
-        </div>
+    <div class="alert alert-success">
+      <p>Hemos enviado un enlace de restablecimiento de contraseña a tu correo electrónico.</p>
+    </div>
     @endif
 
     <!-- Mostrar errores de validación -->
     @if ($errors->any())
-        <div class="alert alert-danger">
-            @foreach ($errors->all() as $error)
-                <p>{{ $error }}</p>
-            @endforeach
-        </div>
+    <div class="alert alert-danger">
+      @foreach ($errors->all() as $error)
+      <p>{{ $error }}</p>
+      @endforeach
+    </div>
     @endif
 
     <!-- Formulario -->
     <form method="POST" action="{{ route('password.email') }}">
       @csrf
-      
+
       <div class="p">
         Ingresa tu correo electrónico y te enviaremos un enlace para que puedas restablecerla de forma segura.
-      </div>           
-      
+      </div>
+
       <div class="Correo">
         <label for="email">Correo Electrónico</label>
       </div>
-      
-      <input type="email" 
-             name="email" 
-             id="email" 
-             value="{{ old('email') }}" 
-             required 
-             autofocus>
-      
+
+      <input type="email"
+        name="email"
+        id="email"
+        value="{{ old('email') }}"
+        required
+        autofocus>
+
       <button type="submit">Enviar</button>
-      
+
       <a href="{{ route('login') }}" class="btn-link">
         Volver al Login
       </a>
     </form>
-    
+
     <!-- Logo del SENA abajo -->
     <div class="logo_container">
-      <img src="{{ asset('img/LogoSena_Verde.png') }}" width="100px"> 
+      <img src="{{ asset('img/LogoSena_Verde.png') }}" width="100px">
     </div>
   </div>
 </body>
+
 </html>

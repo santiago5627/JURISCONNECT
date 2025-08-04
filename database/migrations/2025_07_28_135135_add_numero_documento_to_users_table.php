@@ -9,18 +9,17 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-public function up()
-{
-    Schema::table('users', function (Blueprint $table) {
-        $table->string('numero_documento')->nullable();
-    });
+    public function up()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('numero_documento')->nullable();
+        });
+    }
 
-}
-
-public function down()
-{
-    Schema::table('users', function (Blueprint $table) {
-        $table->dropColumn('numero_documento');
-    });
-}
+    public function down()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('numero_documento');
+        });
+    }
 };
