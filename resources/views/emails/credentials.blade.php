@@ -6,18 +6,17 @@
 </head>
 
 <body>
-    <h2>Hola {{ $user->name }},</h2>
-    <p>Has sido registrado como abogado en el sistema jurídico.</p>
-    <p>Estas son tus credenciales de acceso:</p>
+    <h1>Hola {{ $user->name }},</h1>
 
-    <ul>
-        <li><strong>Correo:</strong> {{ $user->email }}</li>
-        <li><strong>Contraseña:</strong> {{ $plainPassword }}</li>
-    </ul>
+<p>Se te ha creado una cuenta en el sistema <strong>JustConnect SENA</strong>.</p>
 
-    <p>Por favor inicia sesión y cambia tu contraseña lo antes posible.</p>
+<p><strong>Correo:</strong> {{ $user->email }}<br>
+<strong>Contraseña:</strong> {{ $plainPassword }}</p>
 
-    <p>Gracias,<br>El equipo del sistema jurídico</p>
+<p>Ingresa al sistema y cambia tu contraseña desde tu perfil si lo deseas.</p>
+
+<p>Saludos,<br>El equipo de soporte</p>
+
 </body>
 
 </html>

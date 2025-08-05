@@ -13,21 +13,15 @@ class SendCredentialsToLawyer extends Mailable
     public $user;
     public $plainPassword;
 
-    /**
-     * Create a new message instance.
-     */
     public function __construct($user, $plainPassword)
     {
         $this->user = $user;
         $this->plainPassword = $plainPassword;
     }
 
-    /**
-     * Build the message.
-     */
     public function build()
     {
-        return $this->subject('Credenciales de acceso al sistema jurídico')
-            ->view('emails.credentials');
+        return $this->subject('Tus credenciales de acceso')
+                    ->view('emails.credentials');
     }
 }

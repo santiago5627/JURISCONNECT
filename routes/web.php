@@ -13,6 +13,8 @@ use App\Exports\LawyersExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\LegalProcessController;
 // rutas/web.php
+Route::resource('lawyers', LawyerController::class);
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/mis-procesos', [App\Http\Controllers\AbogadoController::class, 'misProcesos'])->name('mis.procesos');
     Route::get('/conceptos/create', [App\Http\Controllers\AbogadoController::class, 'crearConcepto'])->name('conceptos.create');

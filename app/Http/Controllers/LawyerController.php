@@ -11,6 +11,12 @@ use App\Mail\SendCredentialsToLawyer;
 
 class LawyerController extends Controller
 {
+    public function index()
+    {
+        $lawyers = Lawyer::with('user')->get(); // Carga con usuario relacionado si existe
+        return view('lawyers.index', compact('lawyers'));
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -34,12 +40,12 @@ class LawyerController extends Controller
             'especialidad' => $validated['especialidad'] ?? null,
         ]);
 
-        // Crear usuario con mismo correo y contraseña = número de documento
+        // Crear usuario
         $user = User::create([
             'name' => $validated['nombre'] . ' ' . $validated['apellido'],
             'email' => $validated['correo'],
             'password' => Hash::make($validated['numeroDocumento']),
-            'role_id' => 2, // Abogado
+            'role_id' => 2, // Rol de abogado
             'numero_documento' => $validated['numeroDocumento'],
         ]);
 
@@ -50,13 +56,7 @@ class LawyerController extends Controller
         // Enviar correo con credenciales
         Mail::to($validated['correo'])->send(new SendCredentialsToLawyer($user, $validated['numeroDocumento']));
 
-        return redirect()->back()->with('success', 'Abogado creado y credenciales enviadas.');
-    }
-
-    public function destroy(Lawyer $lawyer)
-    {
-        $lawyer->delete();
-        return redirect()->back()->with('success', 'Abogado eliminado exitosamente.');
+        return redirect()->route('dashboard')->with('success', 'Abogado creado y credenciales enviadas.');
     }
 
     public function edit(Lawyer $lawyer)
@@ -86,6 +86,20 @@ class LawyerController extends Controller
             'especialidad' => $validated['especialidad'] ?? null,
         ]);
 
-        return redirect()->back()->with('success', 'Abogado actualizado correctamente.');
+        return redirect()->route('lawyers.index')->with('success', 'Abogado actualizado correctamente.');
+    }
+
+    public function destroy(Lawyer $lawyer)
+    {
+        // Elimina también el usuario asociado si deseas
+        if ($lawyer->user_id) {
+            $user = User::find($lawyer->user_id);
+            if ($user) {
+                $user->delete();
+            }
+        }
+
+        $lawyer->delete();
+        return redirect()->route('lawyers.index')->with('success', 'Abogado eliminado exitosamente.');
     }
 }

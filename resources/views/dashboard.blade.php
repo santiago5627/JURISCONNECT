@@ -195,36 +195,36 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody">
-                            @foreach($lawyers ?? [] as $lawyer)
-                            <tr data-id="{{ $lawyer->id }}">
-                                <td>{{ $lawyer->nombre }}</td>
-                                <td>{{ $lawyer->apellido }}</td>
-                                <td>{{ $lawyer->tipo_documento }}</td>
-                                <td>{{ $lawyer->numero_documento }}</td>
-                                <td>{{ $lawyer->correo }}</td>
-                                <td>
-                                    <button class="btn-edit"
-                                        data-id="{{ $lawyer->id }}"
-                                        data-nombre="{{ $lawyer->nombre }}"
-                                        data-apellido="{{ $lawyer->apellido }}"
-                                        data-tipo_documento="{{ $lawyer->tipo_documento }}"
-                                        data-numero_documento="{{ $lawyer->numero_documento }}"
-                                        data-correo="{{ $lawyer->correo }}"
-                                        data-telefono="{{ $lawyer->telefono ?? '' }}"
-                                        data-especialidad="{{ $lawyer->especialidad ?? '' }}">
-                                        Editar
-                                    </button>
+<tbody id="tableBody">
+    @foreach($lawyers ?? [] as $lawyer)
+    <tr data-id="{{ $lawyer->id }}">
+        <td>{{ $lawyer->nombre }}</td>
+        <td>{{ $lawyer->apellido }}</td>
+        <td>{{ $lawyer->tipo_documento }}</td>
+        <td>{{ $lawyer->numero_documento }}</td>
+        <td>{{ $lawyer->correo }}</td>
+        <td>
+            <button class="btn-edit"
+                data-id="{{ $lawyer->id }}"
+                data-nombre="{{ $lawyer->nombre }}"
+                data-apellido="{{ $lawyer->apellido }}"
+                data-tipo_documento="{{ $lawyer->tipo_documento }}"
+                data-numero_documento="{{ $lawyer->numero_documento }}"
+                data-correo="{{ $lawyer->correo }}"
+                data-telefono="{{ $lawyer->telefono ?? '' }}"
+                data-especialidad="{{ $lawyer->especialidad ?? '' }}">
+                Editar
+            </button>
 
-                                    <form action="{{ route('lawyers.destroy', $lawyer->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar este abogado?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-delete">Eliminar</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
+            <form action="{{ route('lawyers.destroy', $lawyer->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('¿Estás seguro de eliminar este abogado?');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-delete">Eliminar</button>
+            </form>
+        </td>
+    </tr>
+    @endforeach
+</tbody>
 
                     </table>
                 </div>
@@ -233,5 +233,13 @@
     </div>
 
     <!-- Scripts -->
+    
     <script src="{{ asset('js/dashboard.js') }}"></script>
+
+    <script>
+    setInterval(() => {
+        fetch('/sanctum/csrf-cookie');
+    }, 10 * 60 * 1000); // cada 10 minutos
+</script>
+
 </x-app-layout>
