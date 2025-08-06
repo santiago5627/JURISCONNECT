@@ -157,7 +157,7 @@
             </form>
         </div>
 
-        <!-- Contenido Principal -->
+        <!-- Contenido Princl -->
         <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
@@ -179,8 +179,9 @@
 
                 <div class="action-buttons">
                     <button class="btn-primary" id="createBtn">CREAR NUEVO ABOGADO</button>
-                    <a href="{{ route('lawyers.export.excel') }}" class="btn-success">Exportar Excel</a>
-                    <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">Exportar PDF</a>
+                    <a href="{{ route('lawyers.export.excel') }}" class="btn btn-success">EXPORTAR EXCEL</a>
+                    <a href="{{ route('lawyers.export.pdf') }}" class="btn btn-danger">EXPORTAR PDF</a>
+
                 </div>
 
                 <div class="table-container">

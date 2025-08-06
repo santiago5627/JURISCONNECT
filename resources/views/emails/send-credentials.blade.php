@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Credenciales de Acceso - JustConnect SENA</title>
+    <title>Credenciales de acceso</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -45,14 +44,6 @@
             margin-top: 30px;
         }
 
-        .credentials {
-            background-color: #f1f5f9;
-            padding: 15px 20px;
-            border-radius: 6px;
-            margin-top: 20px;
-            font-size: 15px;
-        }
-
         .button-container {
             text-align: center;
             margin: 35px 0;
@@ -79,14 +70,25 @@
             margin-top: 40px;
             text-align: center;
         }
+
+        .credentials {
+            margin-top: 20px;
+        }
+
+        .credentials ul {
+            padding-left: 20px;
+        }
+
+        .credentials li {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
-
 <body>
     <div class="container">
         <div class="header">
             <img src="https://senasofiaplus.xyz/wp-content/uploads/2023/10/logo-del-sena-01.png" alt="Logo SENA" class="logo">
-            <h1 class="title">Credenciales de Acceso</h1>
+            <h1 class="title">Bienvenido(a) a JustConnect SENA</h1>
         </div>
 
         <div class="content">
@@ -94,26 +96,29 @@
 
             <p>Se ha creado tu cuenta en el sistema <strong>JustConnect SENA</strong>.</p>
 
-            <p><strong>Tus credenciales de acceso son:</strong></p>
             <div class="credentials">
-                <p><strong>Correo:</strong> {{ $user->email }}</p>
-                <p><strong>Contraseña temporal:</strong> {{ $plainPassword }}</p>
+                <p><strong>Tus credenciales de acceso son:</strong></p>
+                <ul>
+                    <li><strong>Correo:</strong> {{ $user->email }}</li>
+                    <li><strong>Contraseña temporal:</strong> {{ $plainPassword }}</li>
+                </ul>
             </div>
 
-            <p>Por seguridad, debes cambiar tu contraseña lo antes posible.</p>
+            <p>Por seguridad, debes cambiar tu contraseña. Haz clic en el siguiente botón:</p>
 
             <div class="button-container">
-                <a href="{{ $resetUrl }}" class="button">
+                <a href="{{ $resetUrl }}" class="button" style="color: #ffffff !important; text-decoration: none !important;">
                     Cambiar mi contraseña
                 </a>
             </div>
-        </div>
 
-        <div class="footer">
-            <p>Gracias,<br>El equipo de JustConnect SENA</p>
-            <p><small>Este es un mensaje automático. Por favor, no respondas a este correo.</small></p>
+            <p>Este enlace es válido durante los próximos <strong>30 minutos</strong>.</p>
+
+            <div class="footer">
+                <p>Gracias,<br>El equipo de JustConnect SENA</p>
+                <p><small>Este es un mensaje automático. Por favor, no respondas a este correo.</small></p>
+            </div>
         </div>
     </div>
 </body>
-
 </html>

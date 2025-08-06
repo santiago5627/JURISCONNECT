@@ -54,7 +54,10 @@ class LawyerController extends Controller
         $lawyer->save();
 
         // Enviar correo con credenciales
-        Mail::to($validated['correo'])->send(new SendCredentialsToLawyer($user, $validated['numeroDocumento']));
+       // Forzar envío inmediato sin cola
+       Mail::to($validated['correo'])->sendNow(new SendCredentialsToLawyer($user, $validated['numeroDocumento']));
+
+
 
         return redirect()->route('dashboard')->with('success', 'Abogado creado y credenciales enviadas.');
     }

@@ -12,14 +12,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\LawyersExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\LegalProcessController;
-// rutas/web.php
-Route::resource('lawyers', LawyerController::class);
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/mis-procesos', [App\Http\Controllers\AbogadoController::class, 'misProcesos'])->name('mis.procesos');
-    Route::get('/conceptos/create', [App\Http\Controllers\AbogadoController::class, 'crearConcepto'])->name('conceptos.create');
-    Route::get('/legal-processes/create', [App\Http\Controllers\LegalProcessController::class, 'create'])->name('legal_processes.create');
-});
 
 // Ruta por defecto
 Route::get('/', function () {
@@ -38,13 +30,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/perfil/foto', [ProfileController::class, 'editPhoto'])->name('profile.photo');
     Route::post('/perfil/foto', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
 
-    // Abogados (CRUD)
-    Route::resource('lawyers', LawyerController::class)->except(['edit', 'update', 'destroy']);
-    Route::get('/lawyers/{lawyer}/edit', [LawyerController::class, 'edit'])->name('lawyers.edit');
-    Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])->name('lawyers.update');
-    Route::delete('/lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('lawyers.destroy');
-
-    // Exportaciones
+    // Exportaciones (¡van antes de resource!)
     Route::get('/lawyers/export-pdf', function () {
         $lawyers = Lawyer::all();
         $pdf = Pdf::loadView('exports.lawyers-pdf', compact('lawyers'));
@@ -54,6 +40,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lawyers/export-excel', function () {
         return Excel::download(new LawyersExport, 'abogados.xlsx');
     })->name('lawyers.export.excel');
+
+    // Abogados (CRUD)
+    Route::resource('lawyers', LawyerController::class)->except(['edit', 'update', 'destroy']);
+    Route::get('/lawyers/{lawyer}/edit', [LawyerController::class, 'edit'])->name('lawyers.edit');
+    Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])->name('lawyers.update');
+    Route::delete('/lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('lawyers.destroy');
+
+    // ⚠️ Si necesitas esta ruta show, debes definir el método show() en LawyerController
+    // Route::get('/lawyers/{lawyer}', [LawyerController::class, 'show'])->name('lawyers.show');
+
+    // Otros accesos del abogado
+    Route::get('/mis-procesos', [AbogadoController::class, 'misProcesos'])->name('mis.procesos');
+    Route::get('/conceptos/create', [AbogadoController::class, 'crearConcepto'])->name('conceptos.create');
+    Route::get('/legal-processes/create', [LegalProcessController::class, 'create'])->name('legal_processes.create');
 });
 
 // Rutas de autenticación
