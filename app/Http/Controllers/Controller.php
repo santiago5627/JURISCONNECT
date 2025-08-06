@@ -41,7 +41,7 @@ class UserController extends Controller
 
         // Enviar email con credenciales (solo en texto plano temporal)
         try {
-            Mail::to($user->email)->send(new WelcomeUserMail($user, $password));
+            //Mail::to($user->email)->send(new WelcomeUserMail($user, $password));
             
             return response()->json([
                 'message' => 'Usuario creado exitosamente. Se enviaron las credenciales por email.',

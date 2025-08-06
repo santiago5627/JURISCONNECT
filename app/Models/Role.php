@@ -12,12 +12,7 @@ class Role extends Model
 
     protected $table = 'roles';
 
-    /**
-     * Solo incluir 'name' sin 'description'
-     */
-    protected $fillable = [
-        'name',
-    ];
+    protected $fillable = ['name']; // ✅ ESTA línea es la clave
 
     protected $casts = [
         'created_at' => 'datetime',

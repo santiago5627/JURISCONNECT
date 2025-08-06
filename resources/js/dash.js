@@ -589,10 +589,21 @@ function searchLawyersWithAlert() {
     }
 }
 
-// Exportar
-document.getElementById("exportBtn").addEventListener("click", function() {
-    showCustomAlert('info', 'Funcionalidad en Desarrollo', 'La exportación a Excel estará disponible próximamente.');
+//Funciones de exportación
+
+document.getElementById("exportBtn").addEventListener("click", async function () {
+    // Crear un enlace temporal para la descarga
+    const link = document.createElement("a");
+    link.href = "/export-users"; // Ajusta si tu ruta es diferente
+    link.download = "usuarios.xlsx";
+    link.style.display = "none";
+    document.body.appendChild(link);
+    // Esperar un poco y luego mostrar alerta
+    setTimeout(() => {
+        showCustomAlert('success', '¡Exportación Exitosa!', 'Los usuarios fueron exportados correctamente.');
+    }, 2000); // 1 segundo
 });
+
 
 // iOS: Prevenir zoom en inputs
 if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
@@ -618,6 +629,4 @@ document.addEventListener('DOMContentLoaded', function() {
 // Hacer funciones disponibles globalmente
 window.showCustomAlert = showCustomAlert;
 window.hideCustomAlert = hideCustomAlert;
-
-// Validaciones para los registros
 

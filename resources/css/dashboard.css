@@ -1,4 +1,4 @@
-        /* RESET COMPLETO para evitar conflictos con Laravel */
+
         * {
             margin: 0;
             padding: 0;
@@ -428,7 +428,7 @@
 
         .btn-primary {
             padding: 12px 25px;
-            background: #DFF1E2;
+            background: #0fb625;
             color: #1D1D1D;
             border: 2px solid #1D6D32;
             border-radius: 5px;
@@ -440,13 +440,13 @@
         }
 
         .btn-primary:hover {
-            background: #C8E6CA;
+            background: #ffffff;
         }
 
         .btn-success {
             padding: 12px 25px;
-            background: #26b139;
-            color: #ffffff;
+            background: #0fb625;
+            color: #000000;
             border: 2px solid #1D6D32;
             border-radius: 5px;
             font-size: 12px;
@@ -454,10 +454,11 @@
             text-transform: uppercase;
             cursor: pointer;
             transition: all 0.3s;
+            text-decoration: none;
         }
 
         .btn-success:hover {
-            background: #1D6D32;
+            background: #fdfffd;
         }
 
         /* TABLA */

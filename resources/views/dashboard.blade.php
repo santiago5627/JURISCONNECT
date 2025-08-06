@@ -24,7 +24,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('lawyers.store') }}" method="POST">
-                       @csrf
+                      @csrf
                         <div class="form-group">
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" name="nombre" required>
@@ -130,12 +130,8 @@
     <div class="profile">
     <input type="file" id="fileInput" accept="image/*" hidden>
     <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
-        {{-- Muestra la foto del usuario si existe, de lo contrario muestra una por defecto --}}
-        <img src="{{ Auth::user()->photo ? asset('storage/' . Auth::user()->photo) : asset('img/f4a614740649d8c495ddc7a55a2cf0d9.jpg') }}"
-     alt="Foto de Perfil"
-     width="100px"
-     height="70"
-     class="logo">
+        <img id="profileImage" src="{{ Auth::user()->profile_photo ? asset('storage/' . 
+        Auth::user()->profile_photo) : asset('img/default-user.png') }}" alt="Foto de perfil" class="rounded-full w-32 h-32 object-cover">
     </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
@@ -181,7 +177,7 @@
 
                 <div class="action-buttons">
                     <button class="btn-primary" id="createBtn">CREAR NUEVO ABOGADO</button>
-                    <a href="{{ route('exportar.usuarios') }}" class="btn btn-success" id="exportBtn">Exportar Usuarios a Excel</a>
+                    <a href="{{ route('exportar.usuarios') }}" class="btn-success" id="exportBtn">Exportar Usuarios a Excel</a>
                 </div>
 
                 <div class="table-container">
@@ -245,4 +241,14 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
+    
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+<form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="image" required>
+    <button type="submit">Subir Imagen</button>
+</form>
+
+
 </x-app-layout>

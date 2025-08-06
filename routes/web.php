@@ -15,8 +15,9 @@ Route::get('/', function () {
 require __DIR__.'/auth.php';
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth'])
     ->name('dashboard');
+
 
 // Rutas resource para lawyers (incluye store, destroy, edit, update, etc.)
 Route::resource('lawyers', LawyerController::class)->middleware('auth');
@@ -56,4 +57,7 @@ Route::get('/avatars/{filename}', function ($filename) {
     
     return response()->file($path);
 })->where('filename', '.*')->name('avatar.serve');
+
+//IMAGENES
+Route::post('/upload-image', [App\Http\Controllers\ProfileController::class, 'uploadImage'])->name('upload-image');
 

@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 
 
 
+
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable;
@@ -25,7 +26,11 @@ class User extends Authenticatable implements MustVerifyEmail
             'password',
             'password_changed',
             'avatar', // Agregar esta línea
+            'role_id', // Asegúrate de que este campo exista en tu tabla users
+            'profile_photos' // Agregar esta línea si usas profile_photo en la migración
     ];
+
+    
 
     protected $casts = [
     'password_changed' => 'boolean',

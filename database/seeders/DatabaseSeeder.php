@@ -9,21 +9,22 @@ use Illuminate\Support\Str;
 
 class DatabaseSeeder extends \Illuminate\Database\Seeder
 {
-    public function run(): void
-    {
-        // Crear rol de administrador
-        $adminRole = Role::firstOrCreate(['name' => 'Administrador']);
+    // Modifica tu DatabaseSeeder.php así:
+public function run(): void
+{
+    // Crear rol de administrador sin el campo slug
+    $adminRole = Role::firstOrCreate([
+        'name' => 'Administrador'
+    ]);
 
-        // Crear un usuario con ese rol
-        User::create([
-            'name' => 'Administrador',
-            'email' => 'admin@sena.edu.co',
-            'email_verified_at' => now(),
-            'password' => Hash::make('admin123'), // Puedes cambiar la clave
-            'remember_token' => Str::random(10),
-            'role_id' => $adminRole->id,
-
-        ]);
-
-    }
+    // Crear un usuario con ese rol
+    User::firstOrCreate([
+        'email' => 'admin@sena.edu.co'
+    ], [
+        'name' => 'Admin',
+        'password' => Hash::make('admin123'), // Cambia la contraseña según tus necesidades
+        'role_id' => $adminRole->id,
+        'remember_token' => Str::random(10),
+    ]);
+}
 }
