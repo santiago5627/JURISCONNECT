@@ -8,12 +8,13 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendCredentialsToLawyer;
+use Barryvdh\DomPDF\Facade\Pdf; // Importar DomPDF
 
 class LawyerController extends Controller
 {
     public function index()
     {
-        $lawyers = Lawyer::with('user')->get(); // Carga con usuario relacionado si existe
+        $lawyers = Lawyer::with('user')->get();
         return view('lawyers.index', compact('lawyers'));
     }
 
@@ -29,7 +30,6 @@ class LawyerController extends Controller
             'especialidad' => 'nullable|string|max:255',
         ]);
 
-        // Crear abogado
         $lawyer = Lawyer::create([
             'nombre' => $validated['nombre'],
             'apellido' => $validated['apellido'],
@@ -40,24 +40,18 @@ class LawyerController extends Controller
             'especialidad' => $validated['especialidad'] ?? null,
         ]);
 
-        // Crear usuario
         $user = User::create([
             'name' => $validated['nombre'] . ' ' . $validated['apellido'],
             'email' => $validated['correo'],
             'password' => Hash::make($validated['numeroDocumento']),
-            'role_id' => 2, // Rol de abogado
+            'role_id' => 2,
             'numero_documento' => $validated['numeroDocumento'],
         ]);
 
-        // Asociar abogado con usuario
         $lawyer->user_id = $user->id;
         $lawyer->save();
 
-        // Enviar correo con credenciales
-       // Forzar envío inmediato sin cola
-       Mail::to($validated['correo'])->sendNow(new SendCredentialsToLawyer($user, $validated['numeroDocumento']));
-
-
+        Mail::to($validated['correo'])->sendNow(new SendCredentialsToLawyer($user, $validated['numeroDocumento']));
 
         return redirect()->route('dashboard')->with('success', 'Abogado creado y credenciales enviadas.');
     }
@@ -94,7 +88,6 @@ class LawyerController extends Controller
 
     public function destroy(Lawyer $lawyer)
     {
-        // Elimina también el usuario asociado si deseas
         if ($lawyer->user_id) {
             $user = User::find($lawyer->user_id);
             if ($user) {
@@ -105,4 +98,17 @@ class LawyerController extends Controller
         $lawyer->delete();
         return redirect()->route('lawyers.index')->with('success', 'Abogado eliminado exitosamente.');
     }
+
+    // 🔹 Método para exportar a PDF y forzar descarga
+public function exportPDF()
+{
+    $lawyers = Lawyer::orderBy('nombre')->get();
+    $logoPath = public_path('img/LogoInsti.png'); // Ruta al logo
+
+    $pdf = Pdf::loadView('exports.lawyers-pdf', compact('lawyers', 'logoPath'))
+              ->setPaper('a4', 'portrait');
+
+    return $pdf->download('listado_abogados.pdf');
+}
+
 }

@@ -7,11 +7,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AbogadoController;
 use App\Http\Controllers\AsistenteController;
-use App\Models\Lawyer;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Controllers\LegalProcessController;
 use App\Exports\LawyersExport;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Controllers\LegalProcessController;
 
 // Ruta por defecto
 Route::get('/', function () {
@@ -30,12 +28,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/perfil/foto', [ProfileController::class, 'editPhoto'])->name('profile.photo');
     Route::post('/perfil/foto', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
 
-    // Exportaciones (¡van antes de resource!)
-    Route::get('/lawyers/export-pdf', function () {
-        $lawyers = Lawyer::all();
-        $pdf = Pdf::loadView('exports.lawyers-pdf', compact('lawyers'));
-        return $pdf->download('abogados.pdf');
-    })->name('lawyers.export.pdf');
+    // Exportaciones
+    Route::get('/lawyers/export-pdf', [LawyerController::class, 'exportPDF'])
+        ->name('lawyers.export.pdf');
 
     Route::get('/lawyers/export-excel', function () {
         return Excel::download(new LawyersExport, 'abogados.xlsx');
@@ -46,9 +41,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lawyers/{lawyer}/edit', [LawyerController::class, 'edit'])->name('lawyers.edit');
     Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])->name('lawyers.update');
     Route::delete('/lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('lawyers.destroy');
-
-    // ⚠️ Si necesitas esta ruta show, debes definir el método show() en LawyerController
-    // Route::get('/lawyers/{lawyer}', [LawyerController::class, 'show'])->name('lawyers.show');
 
     // Otros accesos del abogado
     Route::get('/mis-procesos', [AbogadoController::class, 'misProcesos'])->name('mis.procesos');
