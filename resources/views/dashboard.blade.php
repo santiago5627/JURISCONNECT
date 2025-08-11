@@ -24,7 +24,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('lawyers.store') }}" method="POST">
-                      @csrf
+                    @csrf
                         <div class="form-group">
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" name="nombre" required>
@@ -49,26 +49,23 @@
                             <label for="numeroDocumento">Número de Documento:</label>
                             <input type="text" id="numeroDocumento" name="numeroDocumento" required>
                         </div>
-
                         <div class="form-group">
                             <label for="correo">Correo Electrónico:</label>
                             <input type="email" id="correo" name="correo" required>
                         </div>
-
                         <div class="form-group">
                             <label for="telefono">Teléfono:</label>
                             <input type="tel" id="telefono" name="telefono">
                         </div>
-
                         <div class="form-group">
                             <label for="especialidad">Especialidad:</label>
                             <input type="text" id="especialidad" name="especialidad" placeholder="Ej: Derecho Civil, Penal, etc.">
                         </div>
-
                         <div class="form-actions">
                             <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
                             <button type="submit" class="btn-submit">Crear Abogado</button>
                         </div>
+                    @csrf
                     </form>
                 </div>
             </div>
@@ -122,7 +119,7 @@
                 <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
             </form>
         </div>
-    </div>
+    </div>  
 </div>
 
 <!-- Sidebar -->
@@ -130,23 +127,17 @@
     <div class="profile">
     <input type="file" id="fileInput" accept="image/*" hidden>
     <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
-        <img id="profileImage" src="{{ Auth::user()->profile_photo ? asset('storage/' . 
-        Auth::user()->profile_photo) : asset('img/default-user.png') }}" alt="Foto de perfil" class="rounded-full w-32 h-32 object-cover">
+        <img src="/storage/profiles/{{ $user->photo }}">
     </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
-
         </div>
- 
             <div class="nav-menu">
-
             </div>
-
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
             </div>
-
-             <!-- Botón de Cerrar Sesión -->
+            <!-- Botón de Cerrar Sesión -->
                 <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
                     @csrf
                     <button type="submit" class="logout-btn">
@@ -159,27 +150,22 @@
         <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
-
                 <div class="title-logo-container">
                     <h1 class="title">JustConnect SENA</h1>
                 </div>
-
                 <div class="logo-container">
                     <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo Empresa" width="100px" height="70" class="logo">
                 </div>
             </div>
-
             <div class="content-panel">
                 <div class="search-section">
                     <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o numero de documento" id="searchInput">
                     <button class="search-btn" id="searchBtn">Buscar</button>
                 </div>
-
                 <div class="action-buttons">
                     <button class="btn-primary" id="createBtn">CREAR NUEVO ABOGADO</button>
                     <a href="{{ route('exportar.usuarios') }}" class="btn-success" id="exportBtn">Exportar Usuarios a Excel</a>
                 </div>
-
                 <div class="table-container">
                     <table>
                         <thead>
@@ -194,7 +180,7 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-               <tbody id="tableBody">
+<tbody id="tableBody">
     @foreach($lawyers ?? [] as $lawyer)
     <tr data-id="{{ $lawyer->id }}">
         <td>{{ $lawyer->nombre }}</td>
@@ -241,14 +227,4 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
-    
-
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-<form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" name="image" required>
-    <button type="submit">Subir Imagen</button>
-</form>
-
-
 </x-app-layout>

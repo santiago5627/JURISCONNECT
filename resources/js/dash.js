@@ -614,19 +614,19 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
     });
 }
 
+// Hacer funciones disponibles globalmente
+window.showCustomAlert = showCustomAlert;
+window.hideCustomAlert = hideCustomAlert;
+
+
 // Inicializar funcionalidades cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
     // Configurar la subida de imagen
     setupImageUpload();
     
     // Guardar la imagen original como referencia
-    const profileImage = document.getElementById('profileImage');
+    const profileImage = document.getElementById('profile_photo');
     if (profileImage) {
         profileImage.dataset.originalSrc = profileImage.src;
     }
 });
-
-// Hacer funciones disponibles globalmente
-window.showCustomAlert = showCustomAlert;
-window.hideCustomAlert = hideCustomAlert;
-

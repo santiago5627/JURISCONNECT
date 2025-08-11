@@ -284,14 +284,6 @@
                         </a>
                     @endif
                 </div>
-
-                <div class="forgot-link">
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}">
-                            {{ __('¿No tienes una cuenta? Regístrate') }}
-                        </a>
-                    @endif
-                </div>
             </form> 
 
             <!-- Logo del SENA abajo -->
