@@ -96,7 +96,7 @@ class LawyerController extends Controller
         }
 
         $lawyer->delete();
-        return redirect()->route('lawyers.index')->with('success', 'Abogado eliminado exitosamente.');
+        return redirect()->route('dashboard')->with('success', 'Abogado eliminado exitosamente.');
     }
 
     // 🔹 Método para exportar a PDF y forzar descarga

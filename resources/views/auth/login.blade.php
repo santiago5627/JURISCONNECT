@@ -295,7 +295,6 @@
                 <div class="register-link" style="margin-top: 10px; font-size: 0.9rem; text-align: center;">
                     @if (Route::has('register'))
                     <a href="{{ route('register') }}" style="color: #39A900; text-decoration: none;">
-                        ¿No tienes cuenta? Regístrate aquí
                     </a>
                     @endif
                 </div>
