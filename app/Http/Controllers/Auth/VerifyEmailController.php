@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\RedirectResponse;
+use App\Models\User;
+
+
+
+
 
 class VerifyEmailController extends Controller
 {
@@ -22,6 +27,12 @@ class VerifyEmailController extends Controller
             event(new Verified($request->user()));
         }
 
-        return redirect()->intended(route('dashboard', absolute: false) . '?verified=1');
+        return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+
+        // Verificar si el email ya existe
+        $user = User::where('email', $request->email)->first();
+
+       
+
     }
 }

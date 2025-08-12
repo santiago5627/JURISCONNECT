@@ -4,10 +4,10 @@
     <head>
         <meta charset="UTF-8">
         <title>JurisConnect SENA - Login</title>
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="{{ asset('/css/login.css') }}">
     </head>
-   
-    <style>
+
+<style>
         * {
             margin: 0;
             padding: 0;
@@ -121,8 +121,7 @@
             font-size: 1rem;
         }
 
-        l input[type="email"]:focus,
-        input[type="password"]:focus {
+        input[type="email"]:focus, input[type="password"]:focus {
             border-color: #39A900;
             outline: none;
         }
@@ -204,9 +203,9 @@
         .error-input {
             border-color: #dc3545 !important;
         }
-    </style>
+</style>
 
-    <body>
+<body>
         <!-- Ondas del fondo -->
         <div class="wave1"></div>
         <div class="wave2"></div>
@@ -291,15 +290,7 @@
                     </a>
                     @endif
                 </div>
-
-                <div class="register-link" style="margin-top: 10px; font-size: 0.9rem; text-align: center;">
-                    @if (Route::has('register'))
-                    <a href="{{ route('register') }}" style="color: #39A900; text-decoration: none;">
-                    </a>
-                    @endif
-                </div>
-
-            </form>
+            </form> 
 
             <!-- Logo del SENA abajo -->
             <div class="logo_container">
@@ -307,6 +298,5 @@
             </div>
         </div>
 
-    </body>
-
-    </html>
+</body>
+</html>

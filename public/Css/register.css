@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>JurisConnect SENA - register</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-
-<style>
-        * {
+* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -211,82 +202,4 @@
             margin-top:10px; 
             text-decoration:none;
         }
-</style>
-
-<body>
-        <!-- Ondas del fondo -->
-        <div class="wave1"></div>
-        <div class="wave2"></div>
-        <div class="wave3"></div>
-
-    <div class="login-container">
-
-        <form method="POST" action="{{ route('register.validate') }}">
-        @csrf
-
-        <!-- Título -->
-            <h3>ingrese el correo electronico y su contraseña que le fue enviado</h3>
-
-            <!-- Email Address -->
-                <label for="email">{{ __('Correo Electrico') }}</label>
-                <input 
-                    id="email" 
-                    type="email" 
-                    name="email" 
-                    value="{{ old('email') }}" 
-                    required 
-                    autofocus 
-                    autocomplete="username"
-                    class="{{ $errors->get('email') ? 'error-input' : '' }}"
-                >
-                @if ($errors->get('email'))
-                    <div class="error-message">
-                        @foreach ($errors->get('email') as $error)
-                            {{ $error }}
-                        @endforeach
-                    </div>
-                @endif
-
-                <!-- Password -->
-                <label for="password">{{ __('Contraseña') }}</label>
-                <input 
-                    id="password" 
-                    type="password" 
-                    name="password" 
-                    required 
-                    autocomplete="current-password"
-                    class="{{ $errors->get('password') ? 'error-input' : '' }}"
-                >
-                @if ($errors->get('password'))
-                    <div class="error-message">
-                        @foreach ($errors->get('password') as $error)
-                            {{ $error }}
-                        @endforeach
-                    </div>
-                @endif
-
-      
-
-                <x-primary-button class="ms-4" type="submit">
-                    {{ __('Validar') }}
-                </x-primary-button>
-
-
-                <a href='{{ route('login') }}'" class="ms-4" >
-                    {{ __('volver al login') }}
-                </a>
-
-        </form>
-    </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('¿Ya estás registrado?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+        
