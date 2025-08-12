@@ -10,7 +10,7 @@
     <div class="dashboard-wrapper">
         
         <!-- Overlay para móviles -->
-        <div class="overlay" id="overlay"></div>
+        <div class="overlay" id="overlay"></div>      
 
         <!-- Enlace a CSS -->
         <link rel="stylesheet" href="{{ asset('/css/dashboard.css') }}">
