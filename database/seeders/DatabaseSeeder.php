@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 class DatabaseSeeder extends \Illuminate\Database\Seeder
 {
-    // Modifica tu DatabaseSeeder.php así:
+    
 public function run(): void
 {
     // Crear rol de administrador sin el campo slug
@@ -22,7 +22,7 @@ public function run(): void
         'email' => 'admin@sena.edu.co'
     ], [
         'name' => 'Admin',
-        'password' => Hash::make('admin123'), // Cambia la contraseña según tus necesidades
+        'password' => Hash::make('admin123'), 
         'role_id' => $adminRole->id,
         'remember_token' => Str::random(10),
     ]);

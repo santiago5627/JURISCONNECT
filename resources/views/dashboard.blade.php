@@ -148,7 +148,7 @@
             </form>
         </div>
 
-        <!-- Contenido Princl -->
+        <!-- Contenido Principal -->
         <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>

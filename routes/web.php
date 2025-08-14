@@ -45,22 +45,25 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/lawyers/{lawyer}', [LawyerController::class, 'destroy'])->name('lawyers.destroy');
 
     // Otros accesos del abogado
-    Route::get('/mis-procesos', [AbogadoController::class, 'misProcesos'])->name('mis.procesos');
+    Route::get('/mis-procesos', [LegalProcessController::class, 'index'])->name('mis.procesos');
     Route::get('/conceptos/create', [AbogadoController::class, 'crearConcepto'])->name('conceptos.create');
     Route::get('/legal-processes/create', [LegalProcessController::class, 'create'])->name('legal_processes.create');
 
     
 });
 
-
-
 // Rutas resource para lawyers (incluye store, destroy, edit, update, etc.)
 Route::resource('lawyers', LawyerController::class)->middleware('auth');
+Route::resource('procesos', LegalProcessController::class);
 
 Route::get('/exportar-usuarios', [ExportController::class, 'exportUsers'])->name('exportar.usuarios');
 
 Route::post('/validar-registro', [RegisteredUserController::class, 'validarRegistro'])->name('register.validate');
 
+//rutas de proceso legal
+Route::get('/procesos/create', [LegalProcessController::class, 'create'])->name('procesos.create');
+Route::post('/procesos', [LegalProcessController::class, 'store'])->name('procesos.store');
+Route::resource('procesos', LegalProcessController::class);
 
 
 // GRUPO CONSOLIDADO: Rutas de perfil protegidas por autenticación

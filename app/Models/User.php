@@ -30,9 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Los atributos que deben ocultarse al serializar.
-     
-     * The attributes that should be cast.
-     *
+
      * @var array<string, string>
      */
     protected $casts = [
