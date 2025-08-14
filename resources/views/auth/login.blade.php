@@ -1,196 +1,110 @@
-    <!DOCTYPE html>
-    <html lang="es">
-
-    <head>
-        <meta charset="UTF-8">
-        <title>JurisConnect SENA - Login</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-   
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>JurisConnect SENA - Login</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
+        }   
         body {
             font-family: Arial, sans-serif;
-            min-height: 100vh;
+            height: 100vh;
+            background: url('{{ asset("img/JURISCONNECT.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
             display: flex;
-            justify-content: center;
             align-items: center;
-            position: relative;
-            background-color: #ffffff;
-            overflow: hidden;
+            justify-content: space-between;
+            padding: 0 6%;
         }
+        /* Logo y texto a la izquierda */
+    .branding {
+        color: white;
+        text-align: center;
+        position: relative;
+        left: 250px; /* Ajusta el valor según lo que necesites */
+    }
 
-        /* Franja verde superior */
-
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 80px;
-            width: 100%;
-            background-color: #39A900;
-            z-index: 0;
-        }
-
-        /* Onda más oscura (capa inferior) */
-        .wave1 {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 850px;
-            background-color: #39A900;
-            clip-path: polygon(0% 100%, 0% 50%, 50% 70%, 100% 50%, 100% 100%);
-            z-index: 4;
-        }
-
-        /* Onda intermedia (verde medio) */
-        .wave2 {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 560px;
-            background-color: #8dc73f;
-            clip-path: polygon(0% 100%, 0% 60%, 50% 75%, 100% 60%, 100% 100%);
-            z-index: 4;
-        }
-
-        /* Onda más clara (capa superior) */
-        .wave3 {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 300px;
-            background-color: #4e9b10;
-            clip-path: polygon(0% 100%, 0% 65%, 50% 78%, 100% 65%, 100% 100%);
-            z-index: 4;
-        }
-
-        .login-container {
-            z-index: 5;
-            background-color: white;
-            padding: 2.5rem 4rem;
-            /* Aumenta el padding horizontal */
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgb(0, 0, 0);
+    .branding img { 
+        width: 400px;
+        height: auto;
+        margin-bottom: 15px;
+    }
+        /* Caja de login más grande y centrada */
+        .login-box {
+            background: rgba(255, 255, 255, 0.2); /* blanco con transparencia */
+            backdrop-filter: blur(15px);
+           -webkit-backdrop-filter: blur(15px);
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.35);
+            width: 550px; /* más ancho */
+            height: auto; /* adaptable al contenido */
             text-align: center;
             position: relative;
-            width: 420px;
-            /* Añade un ancho fijo mayor */
-            max-width: 95vw;
+            left: -220px; /* movido a la izquierda */
         }
 
-        .logo-arriba {
-            margin-bottom: 15px;
-            margin-top: 5px;
+        .login-box h2 {
+            margin-bottom: 25px;
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
         }
-
-        h2 {
-            font-size: 1.6rem;
-            margin-bottom: 30px;
-            font-family: 'Times New Roman';
-            text-transform: uppercase;
-        }
-
-        form {
-            text-align: left;
-        }
-
-        label {
+        .login-box label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 0.95rem;
+            color: #fff;
+            margin-bottom: 6px;
+            text-align: left;
+            font-size: 1rem;
         }
-
-        input[type="email"],
-        input[type="password"] {
+        .login-box input {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
+            padding: 14px;
+            border-radius: 25px;
             border: 2px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        l input[type="email"]:focus,
-        input[type="password"]:focus {
-            border-color: #39A900;
+            margin-bottom: 18px;
             outline: none;
-        }
-
-        /* Checkbox remember me */
-        .remember-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .remember-container input[type="checkbox"] {
-            width: auto;
-            margin-right: 8px;
-            margin-bottom: 0;
-        }
-
-        .remember-container label {
-            margin-bottom: 0;
-            font-weight: normal;
-            font-size: 0.9rem;
-        }
-
-        button {
-            width: 100%;
-            background-color: #39A900;
-            color: white;
-            padding: 12px;
-            font-weight: bold;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 10px;
             font-size: 1rem;
         }
-
-        button:hover {
-            background-color: #2d7a00;
+        .login-box input:focus {
+            border-color: #238C00; /* verde más oscuro como la referencia */
         }
-
-        .forgot-link {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            text-align: right;
+        .login-box button {
+            background-color: #238C00; /* Verde exacto como la referencia */
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 25px;
+            width: 100%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: bold;
         }
-
-        .forgot-link a {
+        .login-box button:hover {
+            background-color: #1c7300;
+        }
+        .login-box a {
             color: #39A900;
             text-decoration: none;
+            font-size: 0.95rem;
         }
-
-        .forgot-link a:hover {
-            text-decoration: underline;
+        .login-box img {
+            margin-top: 18px;
+            width: 85px;
         }
-
-        .logo_container {
-            padding: 10%;
-        }
-
-        /* Estilos para mensajes de error */
         .error-message {
-            color: #dc3545;
-            font-size: 0.875rem;
+            color: #ff6b6b;
+            font-size: 0.85rem;
+            text-align: left;
             margin-top: -10px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
-
-        /* Estilos para mensajes de estado de sesión */
+        .error-input {
+            border-color: #ff6b6b !important;
+        }
         .session-status {
             background-color: #d4edda;
             color: #155724;
@@ -200,113 +114,62 @@
             font-size: 0.9rem;
         }
 
-        /* Estilos para campos con errores */
-        .error-input {
-            border-color: #dc3545 !important;
-        }
     </style>
+</head>
+<body>
+    
+    <!-- Izquierda: logo -->
+    <div class="branding">
+        <img src="{{ asset('img/BlancoJuris.png') }}" alt="JurisConnect">
+    </div>
 
-    <body>
-        <!-- Ondas del fondo -->
-        <div class="wave1"></div>
-        <div class="wave2"></div>
-        <div class="wave3"></div>
+    <!-- Derecha: login -->
+    <div class="login-box">
+        <h2>Bienvenido</h2>
 
-        <div class="login-container">
-
-            <!-- Logo institucional arriba -->
-            <div class="logo-arriba">
-                <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo SENA" width="80">
-            </div>
-
-            <!-- Título -->
-            <h2>JURISCONNECT SENA</h2>
-
-            <!-- Session Status -->
-            @if (session('status'))
+        @if (session('status'))
             <div class="session-status">
                 {{ session('status') }}
             </div>
-            @endif
+        @endif
 
-            <!-- Formulario -->
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
 
-                <!-- Email Address -->
-                <label for="email">{{ __('Correo Electrico') }}</label>
-                <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    value="{{ old('email') }}"
-                    required
-                    autofocus
-                    autocomplete="username"
-                    class="{{ $errors->get('email') ? 'error-input' : '' }}">
-                @if ($errors->get('email'))
+            <label for="email">Correo Electrónico</label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" class="{{ $errors->get('email') ? 'error-input' : '' }}">
+            @if ($errors->get('email'))
                 <div class="error-message">
                     @foreach ($errors->get('email') as $error)
-                    {{ $error }}
+                        {{ $error }}
                     @endforeach
                 </div>
-                @endif
+            @endif
 
-                <!-- Password -->
-                <label for="password">{{ __('Contraseña') }}</label>
-                <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    required
-                    autocomplete="current-password"
-                    class="{{ $errors->get('password') ? 'error-input' : '' }}">
-                @if ($errors->get('password'))
+            <label for="password">Contraseña</label>
+            <input id="password" type="password" name="password" required autocomplete="current-password" class="{{ $errors->get('password') ? 'error-input' : '' }}">
+            @if ($errors->get('password'))
                 <div class="error-message">
                     @foreach ($errors->get('password') as $error)
-                    {{ $error }}
+                        {{ $error }}
                     @endforeach
                 </div>
-                @endif
-
-                <!-- Remember Me -->
-                <div class="remember-container">
-                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                        <input
-                            id="remember_me"
-                            type="checkbox"
-                            name="remember"
-                            style="margin: 0;">
-                        {{ __('Recuérdame') }}
-                    </label>
-                </div>
+            @endif
 
 
-                <button type="submit">{{ __('Iniciar Sesión') }}</button>
+            <button type="submit">Ingresar</button>
 
-                <div class="forgot-link">
-                    @if (Route::has('password.request'))
+            <p style="margin-top:10px;">
+                @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}">
-                        {{ __('¿Haz olvidado tu contraseña?') }}
+                        ¿Olvidó su contraseña?
                     </a>
-                    @endif
-                </div>
+                @endif
+            </p>
 
-                <div class="register-link" style="margin-top: 10px; font-size: 0.9rem; text-align: center;">
-                    @if (Route::has('register'))
-                    <a href="{{ route('register') }}" style="color: #39A900; text-decoration: none;">
-                    </a>
-                    @endif
-                </div>
+            <img src="{{ asset('img/senablanco.png') }}" alt="Logo SENA">
+        </form>
+    </div>
 
-            </form>
-
-            <!-- Logo del SENA abajo -->
-            <div class="logo_container">
-                <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo Institucional" width="85">
-            </div>
-        </div>
-
-    </body>
-
-    </html>
+</body>
+</html>
