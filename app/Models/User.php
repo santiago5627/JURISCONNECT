@@ -19,7 +19,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'name',
         'email',
         'password',
-        'role_id',
         'foto_perfil',
         'password_changed',
         'avatar',          // Campo para avatar
@@ -30,9 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Los atributos que deben ocultarse al serializar.
-     
-     * The attributes that should be cast.
-     *
+
      * @var array<string, string>
      */
     protected $casts = [
