@@ -21,7 +21,7 @@
                             </ul>
                         </div>
                     @endif
-
+   
                     <form method="POST" action="{{ route('procesos.update', $proceso->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
