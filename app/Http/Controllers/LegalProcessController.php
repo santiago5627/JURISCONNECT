@@ -68,7 +68,7 @@ class LegalProcessController extends Controller
     public function edit($id)
     {
         $proceso = Proceso::findOrFail($id);
-        return view('legal_processes.edit', compact('proceso'));
+        return view('legal_processes.editProcesos', compact('proceso'));
     }
 
     /**
