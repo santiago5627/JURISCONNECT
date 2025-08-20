@@ -13,6 +13,7 @@ body {
     justify-content: space-between;
     padding: 0 8%;
     position: relative;
+    align-items: center;
 }
 
 .background-image {
@@ -29,7 +30,8 @@ body {
     color: white;
     text-align: center;
     flex: 1;
-    max-width: 500px;
+    max-width: 750px;
+    transform: translateY(20%);
 }
 
 .branding img { 
@@ -43,37 +45,39 @@ body {
     font-weight: bold;
 }
 
-/* Caja de login a la derecha con fondo blanco translúcido */
-.login-box {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 45px;
-    border-radius: 15px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    width: 50vh;
-    max-width: 400px;
-    min-width: 300px;
-    text-align: center;
-    transform: translate(-20%, 0%);
-    height: auto;
-    /* Removido min-height para que sea más flexible */
+
+.login-box{     /*Caja de inicio de sesión*/
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 25px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        padding: 40px;
+        width: 100%;
+        max-width: 450px;
+        margin: 50px;
+        animation: fadeInRight 1s ease-out;
 }
 
-.login-box h2 {
+.login-box h2 {  /*Título de la caja de inicio de sesión */
     margin-bottom: 20px;
     color: #fff;
+    font-size: 1.8rem;
+    text-align: center;
+    padding: 2px;
 }
 
-.login-box label {
+.login-box label {  /* Etiquetas de los campos de entrada */
     display: block;
     color: #fff;
     margin-bottom: 5px;
     text-align: left;
-    padding: 10px;
+    padding: 0px;
+    font-size: 1rem;
+    font-weight: bold;
 }
 
-.login-box input {
+.login-box input {  /* Campos (inputs) de entrada */
     background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(10px);
     width: 100%;
@@ -85,11 +89,11 @@ body {
     font-size: 1rem;
 }
 
-.login-box input:focus {
+.login-box input:focus {  /* Efecto del borde de los inputs  */
     border-color: #39A900;
 }
 
-.login-box button {
+.login-box button {  /* Botón de inicio de sesión */
     background-color: #39A900;
     color: white;
     border: none;
@@ -104,21 +108,24 @@ body {
     background-color: #2d7a00;
 }
 
-.login-box a {
+.login-box a {      /*Texto de restablecer contraseña*/
     color: #ffffff;
-    text-decoration: none;
-    font-size: 0.9rem;
-    font-style: bold;
     text-decoration: underline;
+    font-size: 1rem;
+    font-weight: bold;   /* mejor que font-style */
+    display: block;      /* hace que el enlace ocupe una línea */
+    text-align: center;  /* centrado, opcional */
+    margin-top: 20px;    /* separación con el botón */
 }
 
-.login-box img {
+
+.login-box img { /* Logo de SENA */
     margin-top: 15px;
     width: 80px;
 }
 
 .error-message {
-    color: #ff6b6b;
+    color: #ff0000;
     font-size: 0.85rem;
     text-align: left;
     margin-top: -10px;
@@ -149,8 +156,7 @@ body {
 }
 
 .sena-logo {
-    margin-top: 20px;
-    width: 50px;    
+    transform: translateX(150px);
 }
 
 .login-box p {
@@ -160,6 +166,14 @@ body {
 .login-box form {
     height: auto;
 }
+
+.logo_J{
+    width: 100%;
+    height: auto;
+    max-width: 500px;
+    margin: 0 auto 20px;
+}
+
 
 /* Media Queries para Responsive */
 
@@ -305,3 +319,43 @@ body {
         font-size: 0.85rem;
     }
 }
+
+
+/* Animación al entrar la caja */
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animación de latido suave al pasar el mouse */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Animación de flotación suave */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+

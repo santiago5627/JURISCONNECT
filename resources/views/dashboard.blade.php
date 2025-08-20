@@ -8,7 +8,7 @@
 
     <!-- Contenido sin contenedores restrictivos -->
     <div class="dashboard-wrapper">
-
+        
         <!-- Overlay para móviles -->
         <div class="overlay" id="overlay"></div>      
 
@@ -148,7 +148,7 @@
             </form>
         </div>
 
-        <!-- Contenido Princl -->
+        <!-- Contenido Principal -->
         <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
@@ -217,7 +217,7 @@
                     @method('DELETE')
                     <button type="submit" class="btn-delete">
                         Eliminar</button>
-                </form>  
+                </form>
         </td>
     </tr>
     @endforeach

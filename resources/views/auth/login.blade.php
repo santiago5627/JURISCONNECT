@@ -10,12 +10,12 @@
 
     <!--Fondo de pantalla -->
     <div class="background-image">
-        <img src="{{ asset('img/Login.jpg') }}" alt="Fondo de Pantalla"   class="background-image">
+        <img src="{{ asset('img/Login.jpg') }}" alt="Fondo de Pantalla"  class="background-image">
     </div>
 
     <!-- Izquierda: logo -->
     <div class="branding">
-        <img src="{{ asset('img/LogoJ.png') }}" alt="JurisConnect" class="logo">
+        <img src="{{ asset('img/LogoJ.png') }}" alt="JurisConnect" class="logo_J">
     </div>
 
     <!-- Derecha: login -->
@@ -52,10 +52,10 @@
             @endif
             <button type="submit">Ingresar</button>
 
-            <p style="margin-top:10px;">
+            <p >
                 @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}">
-                        ¿Olvidó su contraseña?, restablecer contraseña
+                        ¿Olvidó su contraseña?
                     </a>
                 @endif
             </p>
