@@ -8,12 +8,12 @@
 
     <!-- Contenido sin contenedores restrictivos -->
     <div class="dashboard-wrapper">
-               
+        
         <!-- Overlay para móviles -->
         <div class="overlay" id="overlay"></div>      
 
         <!-- Enlace a CSS -->
-        <link rel="stylesheet" href="{{ asset('/css/dashboard.css') }}">
+        <link rel="stylesheet" href="{{ asset('/Css/dashboard.css') }}">
 
         <!-- Modal para crear nuevo abogado -->
         <div class="modal" id="createLawyerModal">

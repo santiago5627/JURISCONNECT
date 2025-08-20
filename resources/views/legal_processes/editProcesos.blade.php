@@ -21,7 +21,7 @@
                             </ul>
                         </div>
                     @endif
-   
+
                     <form method="POST" action="{{ route('procesos.update', $proceso->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -50,11 +50,11 @@
                                 <div class="mb-3">
                                     <label for="numero_radicado" class="form-label">Número de Radicado *</label>
                                     <input type="text" 
-                                           class="form-control @error('numero_radicado') is-invalid @enderror" 
-                                           id="numero_radicado" 
-                                           name="numero_radicado" 
-                                           value="{{ old('numero_radicado', $proceso->numero_radicado) }}" 
-                                           required>
+                                        class="form-control @error('numero_radicado') is-invalid @enderror" 
+                                        id="numero_radicado" 
+                                        name="numero_radicado" 
+                                        value="{{ old('numero_radicado', $proceso->numero_radicado) }}" 
+                                        required>
                                     @error('numero_radicado')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -67,11 +67,11 @@
                                 <div class="mb-3">
                                     <label for="demandante" class="form-label">Demandante *</label>
                                     <input type="text" 
-                                           class="form-control @error('demandante') is-invalid @enderror" 
-                                           id="demandante" 
-                                           name="demandante" 
-                                           value="{{ old('demandante', $proceso->demandante) }}" 
-                                           required>
+                                        class="form-control @error('demandante') is-invalid @enderror" 
+                                        id="demandante" 
+                                        name="demandante" 
+                                        value="{{ old('demandante', $proceso->demandante) }}" 
+                                        required>
                                     @error('demandante')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -82,11 +82,11 @@
                                 <div class="mb-3">
                                     <label for="demandado" class="form-label">Demandado *</label>
                                     <input type="text" 
-                                           class="form-control @error('demandado') is-invalid @enderror" 
-                                           id="demandado" 
-                                           name="demandado" 
-                                           value="{{ old('demandado', $proceso->demandado) }}" 
-                                           required>
+                                        class="form-control @error('demandado') is-invalid @enderror" 
+                                        id="demandado" 
+                                        name="demandado" 
+                                        value="{{ old('demandado', $proceso->demandado) }}" 
+                                        required>
                                     @error('demandado')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -97,10 +97,10 @@
                         <div class="mb-3">
                             <label for="descripcion" class="form-label">Descripción *</label>
                             <textarea class="form-control @error('descripcion') is-invalid @enderror" 
-                                      id="descripcion" 
-                                      name="descripcion" 
-                                      rows="4" 
-                                      required>{{ old('descripcion', $proceso->descripcion) }}</textarea>
+                                    id="descripcion" 
+                                    name="descripcion" 
+                                    rows="4" 
+                                    required>{{ old('descripcion', $proceso->descripcion) }}</textarea>
                             @error('descripcion')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -118,8 +118,8 @@
                                         </span>
                                         <div>
                                             <a href="{{ Storage::url($proceso->documento) }}" 
-                                               target="_blank" 
-                                               class="btn btn-sm btn-outline-primary me-2">
+                                            target="_blank" 
+                                            class="btn btn-sm btn-outline-primary me-2">
                                                 <i class="fas fa-eye"></i> Ver
                                             </a>
                                             <label class="btn btn-sm btn-outline-danger">
@@ -132,10 +132,10 @@
                             @endif
                             
                             <input type="file" 
-                                   class="form-control @error('documento') is-invalid @enderror" 
-                                   id="documento" 
-                                   name="documento" 
-                                   accept=".pdf,.doc,.docx">
+                                class="form-control @error('documento') is-invalid @enderror" 
+                                id="documento" 
+                                name="documento" 
+                                accept=".pdf,.doc,.docx">
                             <small class="text-muted">Formatos permitidos: PDF, DOC, DOCX. Tamaño máximo: 2MB</small>
                             @error('documento')
                                 <div class="invalid-feedback">{{ $message }}</div>
