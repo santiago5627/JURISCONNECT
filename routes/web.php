@@ -18,6 +18,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
+
 // Rutas de autenticación
 require __DIR__ . '/auth.php';
 
@@ -25,6 +26,7 @@ require __DIR__ . '/auth.php';
 Route::post('/validar-registro', [RegisteredUserController::class, 'validarRegistro'])->name('register.validate');
 Route::get('/exportar-usuarios', [ExportController::class, 'exportUsers'])->name('exportar.usuarios');
 Route::post('/upload-image', [ProfileController::class, 'upload'])->name('upload.image');
+
 
 // Rutas protegidas por autenticación
 Route::middleware(['auth'])->group(function () {

@@ -11,8 +11,8 @@
         <!-- Overlay para móviles -->
         <div class="overlay" id="overlay"></div>
 
-<!-- Estilos -->
-<style>
+        <!-- Estilos -->
+        <style>
             body {
                 margin: 0;
                 font-family: Arial, sans-serif;
@@ -118,6 +118,7 @@
                 background: #A93226;
             }
 
+
             .sena-logo {
                 text-align: center;
                 display: flex;
@@ -140,13 +141,13 @@
                 padding: 20px;
                 transition: margin-left 0.3s ease;
             }
-
+            
             .header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
-
+            
             .hamburger {
                 font-size: 24px;
                 background: none;
@@ -155,16 +156,17 @@
                 cursor: pointer;
                 margin-right: 10px;
             }
-
+            
             .content-panel {
                 margin-top: 20px;
             }
-
+            
             .cards-container {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                 gap: 20px;
             }
+            
 
             .dashboard-card {
                 background: white;
@@ -174,9 +176,11 @@
                 text-align: center;
             }
 
+            
             .dashboard-card h3 {
                 margin-bottom: 10px;
             }
+            
 
             .dashboard-card a {
                 display: inline-block;
@@ -187,11 +191,11 @@
                 border-radius: 5px;
                 text-decoration: none;
             }
-
+            
             .dashboard-card a:hover {
                 background-color: #1b5e20;
             }
-
+            
             /* Overlay para móviles */
             .overlay {
                 position: fixed;
@@ -204,9 +208,11 @@
                 z-index: 500;
             }
 
+            
             .overlay.active {
                 display: block;
             }
+            
 
             /* Media queries */
             @media (max-width: 768px) {
@@ -214,6 +220,7 @@
                     margin-left: 0;
                 }
             }
+
 </style>
 
         <!-- Sidebar -->
@@ -228,11 +235,20 @@
             </div>
             <div class="nav-menu">
                 <!-- Aquí puedes agregar botones de navegación si los necesitas -->
+
             </div>
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
             </div>
 
+            <!-- Botón de Cerrar Sesión -->
+            <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
+                @csrf
+                <button type="submit" class="logout-btn">
+                    Cerrar Sesión
+                </button>
+            </form>
+        </div>
             <!-- Botón de Cerrar Sesión -->
             <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
                 @csrf
@@ -267,6 +283,7 @@
                     </div>
 
                     <div class="dashboard-card">
+
                         <h3>Crear conceptos</h3>
                         <p>Crear nuevos conceptos juridicos</p>
                         <a href="{{ route('conceptos.create') }}">Crear</a>

@@ -8,7 +8,7 @@
 
     <!-- Contenido sin contenedores restrictivos -->
     <div class="dashboard-wrapper">
-        
+               
         <!-- Overlay para móviles -->
         <div class="overlay" id="overlay"></div>      
 
