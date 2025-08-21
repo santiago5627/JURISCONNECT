@@ -15,7 +15,7 @@
 
     <!-- Izquierda: logo -->
     <div class="branding">
-        <img src="{{ asset('img/LogoJ.png') }}" alt="JurisConnect" class="logo_J">
+        <img src="{{ asset('img/LogoJ.png') }}" alt="JurisConnect">
     </div>
 
     <!-- Derecha: login -->

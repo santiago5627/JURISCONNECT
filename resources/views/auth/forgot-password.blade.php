@@ -6,6 +6,7 @@
     <title>JurisConnect SENA - Recuperar Contraseña</title>
     <link rel="stylesheet" href="{{ asset('/Css/recuperar.css') }}">
     <style>
+        
 
     </style>
 </head>
@@ -14,10 +15,9 @@
         <img src="{{ asset('img/Login.jpg') }}" alt="Fondo de Pantalla" class="background-image">
     </div>
 
-
     <div class="main-container">
         <!-- Sección izquierda con logo y título -->
-        <div class="left-section">
+        <div class="logo-jurisconnect">
             <img src="{{ asset('img/LogoJ.png') }}" alt="Logo JurisConnect" class="logo-jurisconnect">
         </div>
 
@@ -54,8 +54,7 @@
 
             <!-- Logo SENA -->
             <div class="left-section">
-                <img src="{{ asset('img/Sena.png') }}" alt="Logo JurisConnect" class="logo">
-            </div>
+                <img src="{{ asset('img/Sena.png') }}" alt="Logo JurisConnect">
             </div>
         </div>
     </div>
