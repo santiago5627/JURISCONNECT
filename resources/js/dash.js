@@ -26,9 +26,9 @@ function showCustomAlert(type, title = '', message = '', showCancel = false, con
 
         const buttonsHTML = showCancel
             ? `<div class="alert-buttons">
-                  <button class="alert-button secondary" id="cancelAlertBtn">${cancelText}</button>
-                  <button class="alert-button ${type}" id="confirmAlertBtn">${confirmText}</button>
-               </div>`
+                <button class="alert-button secondary" id="cancelAlertBtn">${cancelText}</button>
+                <button class="alert-button ${type}" id="confirmAlertBtn">${confirmText}</button>
+                </div>`
             : `<button class="alert-button ${type}" id="confirmAlertBtn">${confirmText}</button>`;
 
         overlay.innerHTML = `
@@ -354,6 +354,7 @@ editLawyerForm.addEventListener("submit", async function(e) {
     const form = e.target;
     const data = new FormData(form);
     const lawyerId = form.action.split("/").pop();
+    
 
     // NUEVA VALIDACIÓN - Verificar campos obligatorios
     const validationErrors = validateEditForm(data);
