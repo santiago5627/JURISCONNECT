@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JurisConnect SENA - Recuperar Contraseña</title>
     <link rel="stylesheet" href="{{ asset('/Css/recuperar.css') }}">
-    <style>
-        
-
-    </style>
 </head>
 <body>
     <div class="background-image">

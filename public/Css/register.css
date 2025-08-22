@@ -1,205 +1,447 @@
 * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8%;
+    position: relative;
+    align-items: center;
+}
+
+.background-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* Logo y texto a la izquierda */
+.branding {
+    color: white;
+    text-align: center;
+    flex: 1;
+    max-width: 750px;
+    transform: translateY(20%);
+}
+
+.branding img { 
+    width: 70%;
+    max-width: 450px;
+    margin-bottom: 120px;
+    animation: fadeInLeft 1s ease-out;
+    transition: transform 0.3s ease;
+    
+}
+
+.branding h1 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+
+.login-box{     /*Caja de inicio de sesión*/
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 25px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        padding: 40px;
+        width: 100%;
+        max-width: 450px;
+        margin: 50px;
+        animation: fadeInRight 1s ease-out;
+}
+
+.login-box h2 {  /*Título de la caja de inicio de sesión */
+    margin-bottom: 20px;
+    color: #fff;
+    font-size: 1.8rem;
+    text-align: center;
+    padding: 2px;
+}
+
+.login-box label {  /* Etiquetas de los campos de entrada */
+    display: block;
+    color: #fff;
+    margin-bottom: 5px;
+    text-align: left;
+    padding: 0px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.login-box input {  /* Campos (inputs) de entrada */
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 2px solid #ccc;
+    margin-bottom: 15px;
+    outline: none;
+    font-size: 1rem;
+}
+
+.login-box input:focus {  /* Efecto del borde de los inputs  */
+    border-color: #39A900;
+}
+
+.login-box button {  /* Botón de inicio de sesión */
+    background-color: #39A900;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 20px;
+    width: 100%;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.login-box button:hover {
+    background-color: #2d7a00;
+}
+
+.login-box a {      /*Texto de restablecer contraseña*/
+    color: #ffffff;
+    text-decoration: underline;
+    font-size: 1rem;
+    font-weight: bold;   /* mejor que font-style */
+    display: block;      /* hace que el enlace ocupe una línea */
+    text-align: center;  /* centrado, opcional */
+    margin-top: 20px;    /* separación con el botón */
+}
+
+
+.login-box img { /* Logo de SENA */
+    margin-top: 15px;
+    width: 80px;
+}
+
+.error-message {
+    color: #ff0000;
+    font-size: 0.85rem;
+    text-align: left;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.error-input {
+    border-color: #ff6b6b !important;
+}
+
+.session-status {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.remember-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    color: white;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.sena-logo {
+    transform: translateX(150px);
+}
+
+.login-box p {
+    margin: 10px 0;
+}
+
+.login-box form {
+    height: auto;
+}
+
+
+.button-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 35px;
+    margin-bottom: 30px;
+}
+
+.btn {
+    flex: 1;
+    padding: 18px 30px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-back {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+}
+
+.btn-back:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(37, 99, 235, 0.4);
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+}
+
+.btn-next {
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+    color: white;
+    box-shadow: 0 8px 25px rgba(22, 163, 74, 0.3);
+}
+
+.btn-next:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(22, 163, 74, 0.4);
+    background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+}
+
+
+
+/* Media Queries para Responsive */
+
+/* Tablets */
+@media screen and (max-width: 1024px) and (min-width: 901px) {
+    body {
+        padding: 0 5%;
+    }
+    
+    .branding img {
+        margin-bottom: 80px;
+    }
+    
+    .branding h1 {
+        font-size: 1.8rem;
+    }
+    
+    .login-box {
+        transform: translate(-10%, 0%);
+        width: 45vh;
+    }
+}
+
+/* Tablets pequeñas y móviles grandes */
+@media screen and (max-width: 900px) {
+    body {
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 20px !important;
+        gap: 30px !important;
+        min-height: 100vh !important;
+    }
+    
+    .branding {
+        order: 1;
+        margin-bottom: 0;
+        width: 100%;
+        max-width: 300px;
+        flex: none;
+    }
+    
+    .branding img {
+        width: 60%;
+        max-width: 180px;
+        margin-bottom: 20px;
+    }
+    
+    .branding h1 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+    
+    .login-box {
+        order: 2;
+        transform: none !important;
+        width: 90%;
+        max-width: 380px;
+        height: auto;
+        padding: 25px;
+        margin: 0;
+        position: relative;
+        /* Sin min-height para que se ajuste al contenido */
+    }
+}
+
+/* Móviles */
+@media screen and (max-width: 480px) {
+    body {
+        padding: 15px;
+        gap: 25px;
+    }
+    
+    .branding {
+        max-width: 250px;
+    }
+    
+    .branding img {
+        width: 50%;
+        max-width: 140px;
+        margin-bottom: 15px;
+    }
+    
+    .branding h1 {
+        font-size: 1.3rem;
+    }
+    
+    .login-box {
+        width: 95%;
+        max-width: 320px;
+        padding: 20px 18px;
+        border-radius: 10px;
+        /* Altura automática basada en contenido */
+        height: auto;
+    }
+    
+    .login-box h2 {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+    }
+    
+    .login-box label {
+        padding: 8px 5px;
+        font-size: 0.9rem;
+    }
+    
+    .login-box input {
+        padding: 8px;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+    }
+    
+    .login-box button {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+    
+    .login-box img {
+        width: 60px;
+    }
+    
+    .sena-logo {
+        width: 40px;
+    }
+}
+
+/* Móviles muy pequeños */
+@media screen and (max-width: 320px) {
+    .login-box {
+        padding: 20px 15px;
+    }
+    
+    .branding h1 {
+        font-size: 1.2rem;
+    }
+    
+    .login-box h2 {
+        font-size: 1.3rem;
+    }
+    
+    .login-box input,
+    .login-box button {
+        font-size: 0.85rem;
+    }
+}
+
+
+/* Animación al entrar la caja */
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animación de latido suave al pasar el mouse */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Animación de flotación suave */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+    /* Animaciones */
+    @keyframes fadeInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-60px);
+            }
+            to {
+            opacity: 1;
+            transform: translateX(0);
+            }
         }
 
-        body {
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            background-color: #ffffff;
-            overflow: hidden;
+    @keyframes fadeInRight {
+        from {
+            opacity: 0;
+            transform: translateX(60px);
+            }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+            }
         }
-
-        /* Franja verde superior */
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 80px;
-            width: 100%;
-            background-color: #39A900;
-            z-index: 0;
-        }
-
-        /* Onda más oscura (capa inferior) */
-        .wave1 {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 850px;
-            background-color: #39A900;
-            clip-path: polygon(0% 100%, 0% 50%, 50% 70%, 100% 50%, 100% 100%);
-            z-index: 4;
-        }
-
-        /* Onda intermedia (verde medio) */
-        .wave2 {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 560px;
-            background-color: #8dc73f;
-            clip-path: polygon(0% 100%, 0% 60%, 50% 75%, 100% 60%, 100% 100%);
-            z-index: 4;
-        }
-
-        /* Onda más clara (capa superior) */
-        .wave3 {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 300px;
-            background-color: #4e9b10;
-            clip-path: polygon(0% 100%, 0% 65%, 50% 78%, 100% 65%, 100% 100%);
-            z-index: 4;
-        }
-
-        .login-container {
-            z-index: 5;
-            background-color: white;
-            padding: 2.5rem 4rem; /* Aumenta el padding horizontal */
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgb(0, 0, 0);
-            text-align: center;
-            position: relative;
-            width: 420px; /* Añade un ancho fijo mayor */
-            max-width: 95vw;
-        }
-
-        .logo-arriba {
-            margin-bottom: 15px;
-            margin-top: 5px;      
-        }
-
-        h2 {
-            font-size: 1.6rem;
-            margin-bottom: 30px;
-            font-family: 'Times New Roman';
-            text-transform: uppercase;
-        }
-
-        form {
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 0.95rem;
-        }
-
-        input[type="email"], input[type="password"], input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focus {
-            border-color: #39A900;
-            outline: none;
-        }
-
-        /* Checkbox remember me */
-        .remember-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .remember-container input[type="checkbox"] {
-            width: auto;
-            margin-right: 8px;
-            margin-bottom: 0;
-        }
-
-        .remember-container label {
-            margin-bottom: 0;
-            font-weight: normal;
-            font-size: 0.9rem;
-        }
-
-        button {
-            width: 100%;
-            background-color: #39A900;
-            color: white;
-            padding: 12px;
-            font-weight: bold;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 10px;
-            font-size: 1rem;
-        }
-
-        button:hover {
-            background-color: #2d7a00;
-        }
-
-        .forgot-link {
-            margin-top: 10px;
-            font-size: 0.9rem;
-            text-align: right;
-        }
-
-        .forgot-link a {
-            color: #39A900;
-            text-decoration: none;
-        }
-
-        .forgot-link a:hover {
-            text-decoration: underline;
-        }
-
-        .logo_container {
-            padding: 10%;
-        }
-
-        /* Estilos para mensajes de error */
-        .error-message {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: -10px;
-            margin-bottom: 15px;
-        }
-
-        /* Estilos para mensajes de estado de sesión */
-        .session-status {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-        }
-
-        /* Estilos para campos con errores */
-        .error-input {
-            border-color: #dc3545 !important;
-        }
-
-        a {
-            display:inline-block; 
-            text-align:center; 
-            width:100%; 
-            background-color:#39A900; 
-            color:white; 
-            padding:12px; 
-            font-weight:bold; 
-            border-radius:20px; 
-            margin-top:10px; 
-            text-decoration:none;
-        }
-        
