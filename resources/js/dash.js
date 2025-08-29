@@ -470,7 +470,7 @@ function searchLawyersWithoutAlert() {
         const text = row.textContent.toLowerCase();
         if (text.includes(searchTerm)) {
             row.style.display = "";
-        } else {
+        } else { 
             row.style.display = "none";
         }
     });

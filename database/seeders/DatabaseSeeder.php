@@ -12,6 +12,12 @@ class DatabaseSeeder extends \Illuminate\Database\Seeder
     
 public function run(): void
 {
+    $this->call([
+            RoleSeeder::class,    // Tu seeder actual (renombrado)
+            AbogadoUserSeeder::class,  // Tu nuevo seeder de abogados
+            // Puedes agregar más seeders aquí
+        ]);
+
     // Crear rol de administrador sin el campo slug
     $adminRole = Role::firstOrCreate([
         'name' => 'Administrador'

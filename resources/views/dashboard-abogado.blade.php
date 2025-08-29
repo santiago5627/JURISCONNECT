@@ -11,8 +11,8 @@
         <!-- Overlay para móviles -->
         <div class="overlay" id="overlay"></div>
 
-        <!-- Estilos -->
-        <style>
+<!-- Estilos -->
+<style>
             body {
                 margin: 0;
                 font-family: Arial, sans-serif;
@@ -67,7 +67,7 @@
                 color: #1D1D1D;
                 margin: 5px 0;
             }
-     
+
             .nav-menu {
                 display: flex;
                 flex-direction: column;
@@ -140,13 +140,13 @@
                 padding: 20px;
                 transition: margin-left 0.3s ease;
             }
-            
+
             .header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
             }
-            
+
             .hamburger {
                 font-size: 24px;
                 background: none;
@@ -155,17 +155,17 @@
                 cursor: pointer;
                 margin-right: 10px;
             }
-            
+
             .content-panel {
                 margin-top: 20px;
             }
-            
+
             .cards-container {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                 gap: 20px;
             }
-            
+
             .dashboard-card {
                 background: white;
                 padding: 20px;
@@ -173,11 +173,11 @@
                 box-shadow: 0 2px 5px rgba(0,0,0,0.1);
                 text-align: center;
             }
-            
+
             .dashboard-card h3 {
                 margin-bottom: 10px;
             }
-            
+
             .dashboard-card a {
                 display: inline-block;
                 margin-top: 10px;
@@ -187,11 +187,11 @@
                 border-radius: 5px;
                 text-decoration: none;
             }
-            
+
             .dashboard-card a:hover {
                 background-color: #1b5e20;
             }
-            
+
             /* Overlay para móviles */
             .overlay {
                 position: fixed;
@@ -203,44 +203,44 @@
                 display: none;
                 z-index: 500;
             }
-            
+
             .overlay.active {
                 display: block;
             }
-            
+
             /* Media queries */
             @media (max-width: 768px) {
                 .main-content {
                     margin-left: 0;
                 }
             }
-        </style>
+</style>
 
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="profile">
-                <input type="file" id="fileInput" accept="image/*" hidden>
-                <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
-                    <img src="{{ asset('img/sena_logo.png') }}" alt="Perfil" width="100px" height="70" class="logo">
-                </div>
-                <h3>{{ Auth::user()->name }}</h3>
-                <p>{{ Auth::user()->email }}</p>
+<!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="profile">
+            <input type="file" id="fileInput" accept="image/*" hidden>
+            <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
+                <img src="{{ asset('img/sena_logo.png') }}" alt="Perfil" width="100px" height="70" class="logo">
             </div>
-            <div class="nav-menu">
-                <!-- Aquí puedes agregar botones de navegación si los necesitas -->
-            </div>
+            <h3>{{ Auth::user()->name }}</h3>
+            <p>{{ Auth::user()->email }}</p>
+        </div>
+        <div class="nav-menu">
+            <!-- Aquí puedes agregar botones de navegación si los necesitas -->
+        </div>
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
             </div>
 
             <!-- Botón de Cerrar Sesión -->
-            <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
-                @csrf
-                <button type="submit" class="logout-btn">
-                    Cerrar Sesión
-                </button>
-            </form>
-        </div>
+        <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
+            @csrf
+            <button type="submit" class="logout-btn">
+                Cerrar Sesión
+            </button>
+        </form>
+    </div>
 
         <!-- Contenido -->
         <div class="main-content" id="mainContent">
@@ -267,16 +267,11 @@
                     </div>
 
                     <div class="dashboard-card">
-                        <h3>Crear conceptos</h3>
-                        <p>Crear nuevos conceptos juridicos</p>
-                        <a href="{{ route('conceptos.create') }}">Crear</a>
-                    </div>
-
-                    <div class="dashboard-card">
                         <h3>Conceptos Jurídicos</h3>
                         <p>Emite nuevos conceptos y clasifícalos por tema.</p>
-                        <a href="{{ route('abogado.misConceptos') }}">Emitir</a>
+                        <a href="{{ route('conceptos.create') }}">Ver conceptos</a>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -299,4 +294,5 @@
             overlay.classList.remove('active');
         });
     </script>
+
 </x-app-layout>

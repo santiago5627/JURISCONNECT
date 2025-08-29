@@ -32,7 +32,7 @@
         <strong class="block font-semibold">Documento:</strong>
         @if($proceso->documento)
             <a href="{{ asset('storage/'.$proceso->documento) }}" target="_blank" class="text-blue-600 underline">
-                Ver documento adjunto
+                Ver documento adjunto: {{ basename($proceso->documento) }}
             </a>
         @else
             <p class="text-gray-500">No hay documento adjunto</p>

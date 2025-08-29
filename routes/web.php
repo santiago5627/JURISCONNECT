@@ -58,15 +58,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/legal-processes/create', [LegalProcessController::class, 'create'])->name('legal_processes.create');
     Route::get('/procesos/create', [LegalProcessController::class, 'create'])->name('procesos.create');
     Route::post('/procesos', [LegalProcessController::class, 'store'])->name('procesos.store');
+    
 
     // === CONCEPTOS JURÍDICOS ===
     Route::get('/conceptos/create', [AbogadoController::class, 'crearConcepto'])->name('conceptos.create');
     Route::get('/abogado/mis-procesos', [AbogadoController::class, 'misProcesos'])->name('abogado.misConceptos');
+    
+    Route::get('/abogado/crear-concepto/{id?}', [AbogadoController::class, 'crearConcepto'])->name('abogado.crear-concepto');
+    Route::put('/abogado/guardar-concepto/{id}', [AbogadoController::class, 'guardarConcepto'])->name('abogado.guardar-concepto');
+    Route::post('/abogado/finalizar-proceso/{id}', [AbogadoController::class, 'finalizarProceso'])->name('abogado.finalizar-proceso');
 
-    // Nueva ruta para listar procesos
     Route::get('/abogado/procesos', [AbogadoController::class, 'listarProcesos'])->name('abogado.listar-procesos');
 
-    // Ruta para crear concepto (requiere ID)
     Route::post('/abogado/proceso/{id}/concepto', [AbogadoController::class, 'guardarConcepto'])->name('abogado.guardar-concepto');
 
 });

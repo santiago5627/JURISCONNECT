@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout><!-- pagina para el dashboard de los administradores -->
     <x-slot name="header">
         <!-- Header vacío para evitar conflictos -->
     </x-slot>
@@ -8,7 +8,7 @@
 
     <!-- Contenido sin contenedores restrictivos -->
     <div class="dashboard-wrapper">
-        
+
         <!-- Overlay para móviles -->
         <div class="overlay" id="overlay"></div>      
 
@@ -184,6 +184,7 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
+
 <tbody id="tableBody">
     @foreach($lawyers ?? [] as $lawyer)
     <tr data-id="{{ $lawyer->id }}">
@@ -207,17 +208,17 @@
                 Editar
             </button>
 
-                <form action="{{ route('lawyers.destroy', $lawyer->id) }}"
-                    method="POST"
-                    class="delete-lawyer-form"
-                    data-id="{{ $lawyer->id }}"
-                    data-name="{{ $lawyer->nombre }} {{ $lawyer->apellido }}"
-                    style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn-delete">
-                        Eliminar</button>
-                </form>
+            <form action="{{ route('lawyers.destroy', $lawyer->id) }}"
+                method="POST"
+                class="delete-lawyer-form"
+                data-id="{{ $lawyer->id }}"
+                data-name="{{ $lawyer->nombre }} {{ $lawyer->apellido }}"
+                style="display: inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-delete">
+                Eliminar</button>
+            </form>
         </td>
     </tr>
     @endforeach

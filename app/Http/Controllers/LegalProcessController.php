@@ -69,7 +69,7 @@ class LegalProcessController extends Controller
     {
         $proceso = Proceso::findOrFail($id);
         return view('legal_processes.editProcesos', compact('proceso'));
-    }
+    } 
 
     /**
      * Actualizar proceso judicial
