@@ -58,7 +58,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/legal-processes/create', [LegalProcessController::class, 'create'])->name('legal_processes.create');
     Route::get('/procesos/create', [LegalProcessController::class, 'create'])->name('procesos.create');
     Route::post('/procesos', [LegalProcessController::class, 'store'])->name('procesos.store');
-    
+    Route::get('/procesos/{id}', [LegalProcessController::class, 'show']);
+
 
     // === CONCEPTOS JURÍDICOS ===
     Route::get('/conceptos/create', [AbogadoController::class, 'crearConcepto'])->name('conceptos.create');

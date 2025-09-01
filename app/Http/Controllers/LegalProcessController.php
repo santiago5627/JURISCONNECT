@@ -59,7 +59,8 @@ class LegalProcessController extends Controller
     public function show($id)
     {
         $proceso = Proceso::findOrFail($id);
-        return view('legal_processes.show', compact('proceso'));
+        //return view('legal_processes.show', compact('proceso'));
+        return response()->json($proceso); 
     }
 
     /**

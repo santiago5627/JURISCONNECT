@@ -599,6 +599,17 @@
 
 
 <body>
+    <!-- Modal para ver datos del proceso -->
+<div id="viewProcessModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
+    <div class="modal-content" style="background:white; border-radius:16px; max-width:500px; margin:auto; padding:2rem; position:relative;">
+        <span class="close-button" onclick="closeProcessModal()" style="position:absolute; top:1rem; right:1rem; font-size:2rem; cursor:pointer;">&times;</span>
+        <h2 style="font-size:1.25rem; font-weight:600; margin-bottom:1rem;">Datos del Proceso</h2>
+        <div id="processModalBody">
+            <p>Cargando datos...</p>
+        </div>
+    </div>
+</div>
+
     <div class="container">
         <!-- Header Principal -->
         <div class="main-header">
@@ -726,10 +737,11 @@
 
                     <td class="actions-cell">
                         <div class="actions-group">
-                            <a href="{{ route('procesos.show', $proceso->id) }}" class="action-btn action-view" title="Ver detalles">
+                            <!-- Modifica el botón "Ver detalles" para llamar a la función -->
+                            <a href="javascript:void(0);" onclick="openProcessModal({{ $proceso->id }})" class="action-btn action-view" title="Ver detalles">
                                 <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                 </svg>
                             </a>
 
@@ -790,8 +802,35 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/dash.js') }}"></script>
+    <!-- <script src="{{ asset('js/dash.js') }}"></script> -->
+<script>
+// Abre el modal y carga los datos del proceso por AJAX
+function openProcessModal(id) {
+    document.getElementById('viewProcessModal').style.display = 'flex';
+    const body = document.getElementById('processModalBody');
+    body.innerHTML = '<p>Cargando datos...</p>';
 
+    fetch(`/procesos/${id}`)
+        .then(res => res.json())
+        .then(data => {
+            body.innerHTML = `
+                <p><strong>ID:</strong> ${data.id}</p>
+                <p><strong>Radicado:</strong> ${data.numero_radicado}</p>
+                <p><strong>Tipo:</strong> ${data.tipo_proceso}</p>
+                <p><strong>Demandante:</strong> ${data.demandante}</p>
+                <p><strong>Demandado:</strong> ${data.demandado}</p>
+                <p><strong>Descripción:</strong> ${data.descripcion ?? 'Sin descripción'}</p>
+            `;
+        })
+        .catch(() => {
+            body.innerHTML = '<p>Error al cargar los datos.</p>';
+        });
+}
+
+function closeProcessModal() {
+    document.getElementById('viewProcessModal').style.display = 'none';
+}
+</script>
 
 </body>
 </html>

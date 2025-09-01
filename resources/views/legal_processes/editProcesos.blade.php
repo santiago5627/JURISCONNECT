@@ -732,7 +732,7 @@
                                     Ver
                                 </a>
                                 <label class="btn-delete-file">
-                                    <input type="checkbox" name="eliminar_documento" value="1" class="delete-checkbox">
+                                    <button type="submit" name="eliminar_documento" value="1" class="delete-checkbox"></button>
                                     <i class="fas fa-trash"></i>
                                     Eliminar
                                 </label>
@@ -769,6 +769,7 @@
                             Actualizar Proceso
                         </button>
                     </div>
+
                 </form>
             </div>
         </div>
