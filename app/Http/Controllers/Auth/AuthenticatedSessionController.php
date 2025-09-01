@@ -38,7 +38,7 @@ class AuthenticatedSessionController extends Controller
             case 3: // Asistente Jurídico
                 return redirect()->route('dashboard.asistente');
             default:
-                return redirect('/home');
+                return redirect('/dashboard');
         }
     }
 

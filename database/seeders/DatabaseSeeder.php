@@ -2,22 +2,29 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
-class DatabaseSeeder extends Seeder
+class DatabaseSeeder extends \Illuminate\Database\Seeder
 {
-    /**
-     * Seed the application's database.
-     */
-    public function run(): void
-    {
-        // User::factory(10)->create();
+    
+public function run(): void
+{
+    // Crear rol de administrador sin el campo slug
+    $adminRole = Role::firstOrCreate([
+        'name' => 'Administrador'
+    ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
-    }
+    // Crear un usuario con ese rol
+    User::firstOrCreate([
+        'email' => 'bsalinas1054@gmail.com'
+    ], [
+        'name' => 'Admin',
+        'password' => Hash::make('admin123'), 
+        'role_id' => $adminRole->id,
+        'remember_token' => Str::random(10),
+    ]);
+}
 }

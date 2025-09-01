@@ -3,87 +3,102 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Restablecer Contraseña - JurisConnect SENA</title>
-    
-    <!-- Enlace a CSS -->
-        <link rel="stylesheet" href="{{ asset('css/resetPassword.css') }}">
+    <title>JurisConnect SENA - Restablecer Contraseña</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to bottom, #ffffff, #9bd170);
+        * {
             margin: 0;
-            padding: 40px 20px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            height: 100vh;
+            background: url('{{ asset("img/JURISCONNECT.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
             display: flex;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            justify-content: space-between;
+            padding: 0 6%;
         }
 
-        .card {
-            background-color: #fff;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-            max-width: 420px;
-            width: 100%;
-            padding: 40px 30px;
-            box-sizing: border-box;
-        }
-
-        .card h2 {
-            text-align: center;
-            color: #2d2d2d;
-            margin-bottom: 30px;
-        }
-
-        .logo {
-            display: block;
-            margin: 0 auto 20px auto;
-            width: 90px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-            color: #333;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1.5px solid #c5e1a5;
-            border-radius: 8px;
-            background-color: #f6fdf4;
-            font-size: 15px;
-            line-height: 1.4;
-            box-sizing: border-box;
-            transition: border 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: #6abf4b;
-        }
-
-        .btn {
-            width: 100%;
-            background-color: #6abf4b;
+        /* Branding izquierdo */
+        .branding {
             color: white;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
+            text-align: center;
+            position: relative;
+            left: 250px;
         }
 
-        .btn:hover {
-            background-color: #58a03f;
+        .branding img {
+            width: 400px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        /* Caja de restablecer */
+        .reset-box {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 60px;
+            border-radius: 20px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.35);
+            width: 550px;
+            height: auto;
+            text-align: center;
+            position: relative;
+            left: -220px;
+        }
+
+        .reset-box h2 {
+            margin-bottom: 25px;
+            color: #fff;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .reset-box label {
+            display: block;
+            color: #fff;
+            margin-bottom: 6px;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .reset-box input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 25px;
+            border: 2px solid #ccc;
+            margin-bottom: 18px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .reset-box input:focus {
+            border-color: #238C00;
+        }
+
+        .reset-box button {
+            background-color: #238C00;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 25px;
+            width: 100%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .reset-box button:hover {
+            background-color: #1c7300;
+        }
+
+        .reset-box img {
+            margin-top: 18px;
+            width: 85px;
         }
 
         .errors {
@@ -92,25 +107,26 @@
             padding: 10px;
             border-radius: 8px;
             margin-bottom: 20px;
+            text-align: left;
         }
 
-        .footer-logo {
-            margin-top: 25px;
-            text-align: center;
-        }
-
-        .footer-logo img {
-            width: 70px;
+        .error-input {
+            border-color: #ff6b6b !important;
         }
     </style>
 </head>
 
 <body>
-    <div class="card">
-        <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo JurisConnect" class="logo">
+    <!-- Izquierda: logo -->
+    <div class="branding">
+        <img src="{{ asset('img/BlancoJuris.png') }}" alt="JurisConnect">
+    </div>
 
-        <h2>🔒 Restablecer Contraseña</h2>
+    <!-- Derecha: restablecer contraseña -->
+    <div class="reset-box">
+        <h2>Restablecer Contraseña</h2>
 
+        <!-- Mostrar errores -->
         @if ($errors->any())
         <div class="errors">
             <ul>
@@ -121,31 +137,37 @@
         </div>
         @endif
 
+        <!-- Formulario -->
         <form method="POST" action="{{ route('password.store') }}">
             @csrf
             <input type="hidden" name="token" value="{{ request()->route('token') }}">
 
-            <div class="form-group">
-                <label for="email">Correo electrónico</label>
-                <input id="email" type="email" name="email" value="{{ request()->email }}" required autofocus>
-            </div>
+            <!-- Email -->
+            <label for="email">Correo Electrónico</label>
+            <input id="email" type="email" name="email" value="{{ old('email', request('email')) }}" required autofocus>
+            @error('email')
+            <span class="error-message">{{ $message }}</span>
+            @enderror
 
-            <div class="form-group">
-                <label for="password">Nueva contraseña</label>
-                <input id="password" type="password" name="password" required>
-            </div>
+            <!-- Password -->
+            <label for="password">Nueva Contraseña</label>
+            <input id="password" type="password" name="password" required>
+            @error('password')
+            <span class="error-message">{{ $message }}</span>
+            @enderror
 
-            <div class="form-group">
-                <label for="password_confirmation">Confirmar contraseña</label>
-                <input id="password_confirmation" type="password" name="password_confirmation" required>
-            </div>
+            <!-- Confirm Password -->
+            <label for="password_confirmation">Confirmar Contraseña</label>
+            <input id="password_confirmation" type="password" name="password_confirmation" required>
+            @error('password_confirmation')
+            <span class="error-message">{{ $message }}</span>
+            @enderror
 
-            <button class="btn" type="submit">Restablecer contraseña</button>
+            <button type="submit" class="btn-submit">Restablecer Contraseña</button>
+
+            <img src="{{ asset('img/senablanco.png') }}" alt="Logo SENA" class="logo">
         </form>
 
-        <div class="footer-logo">
-            <img src="{{ asset('img/sena_logo.png') }}" alt="Logo SENA">
-        </div>
     </div>
 </body>
 

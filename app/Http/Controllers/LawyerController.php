@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendCredentialsToLawyer;
 use Barryvdh\DomPDF\Facade\Pdf; // Importar DomPDF
+use Illuminate\Validation\ValidationException;
 
 class LawyerController extends Controller
 {
@@ -110,5 +111,6 @@ public function exportPDF()
 
     return $pdf->download('listado_abogados.pdf');
 }
+
 
 }

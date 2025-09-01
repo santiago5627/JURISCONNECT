@@ -49,8 +49,9 @@ services:
             retries: 3
             timeout: 5s
 networks:
-    sail:
-        driver: bridge
+  sail:
+    driver: bridge
+
 volumes:
-    sail-pgsql:
-        driver: local
+  sail-pgsql:
+    driver: local

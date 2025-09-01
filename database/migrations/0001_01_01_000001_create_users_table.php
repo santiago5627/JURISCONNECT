@@ -15,9 +15,10 @@ return new class extends Migration {
             $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
+            $table->string('profile_photo')->nullable();
         });
     }
-
+    
     public function down(): void {
         Schema::dropIfExists('users');
     }

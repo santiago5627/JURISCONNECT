@@ -3,51 +3,69 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rules\Password as PasswordRule;
 
 class NewPasswordController extends Controller
 {
     /**
-     * Mostrar la vista para restablecer la contraseña.
+     * Muestra la vista de restablecer contraseña.
      */
-    public function create(Request $request): View
+    public function create(Request $request, $token)
     {
         return view('auth.reset-password', [
-            'request' => $request,
-            'token' => $request->route('token'),
-            'email' => $request->email
+            'token' => $token,
+            'email' => $request->email,
         ]);
     }
 
     /**
-     * Procesar la solicitud para restablecer la contraseña.
+     * Procesa el restablecimiento de la contraseña.
      */
     public function store(Request $request)
     {
+        // Validación estricta
         $request->validate([
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => [
+                'required',
+                'confirmed', // 👈 obliga a coincidir con password_confirmation
+                PasswordRule::min(8)
+                    ->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised(),
+            ],
+        ], [
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+            'password.min' => 'La contraseña debe tener al menos :min caracteres.',
+            'password.letters' => 'Debe incluir al menos una letra.',
+            'password.mixed_case' => 'Debe incluir mayúsculas y minúsculas.',
+            'password.numbers' => 'Debe incluir al menos un número.',
+            'password.symbols' => 'Debe incluir al menos un carácter especial.',
         ]);
 
+        // Intentar restablecer contraseña
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
-            function ($user, $password) {
+            function ($user) use ($request) {
                 $user->forceFill([
-                    'password' => Hash::make($password),
+                    'password' => Hash::make($request->password),
+                    'remember_token' => Str::random(60), // 👈 asegura que se invaliden sesiones viejas
                 ])->save();
 
-                // Si quieres iniciar sesión automáticamente después de restablecer:
-                // Auth::login($user);
+                event(new PasswordReset($user)); // 👈 dispara el evento
             }
         );
 
         return $status === Password::PASSWORD_RESET
-            ? redirect()->route('login')->with('status', __($status))
-            : back()->withErrors(['email' => [__($status)]]);
+            ? redirect()->route('login')->with('status', 'Tu contraseña ha sido restablecida correctamente.')
+            : back()->withErrors(['email' => 'No se pudo restablecer la contraseña.']);
     }
 }
