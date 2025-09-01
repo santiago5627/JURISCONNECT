@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>JurisConnect SENA - Login</title>
-    <link rel="stylesheet" href="{{ asset('/Css/register.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/register.css') }}">
 </head>
 <body>
     

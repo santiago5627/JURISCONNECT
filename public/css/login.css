@@ -40,7 +40,6 @@ body {
     margin-bottom: 120px;
     animation: fadeInLeft 1s ease-out;
     transition: transform 0.3s ease;
-    
 }
 
 .branding h1 {
@@ -48,21 +47,20 @@ body {
     font-weight: bold;
 }
 
-
-.login-box{     /*Caja de inicio de sesión*/
-        background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border-radius: 25px;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        padding: 40px;
-        width: 100%;
-        max-width: 450px;
-        margin: 50px;
-        animation: fadeInRight 1s ease-out;
+.login-box {     /* Caja de inicio de sesión */
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 25px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    padding: 40px;
+    width: 100%;
+    max-width: 450px;
+    margin: 50px;
+    animation: fadeInRight 1s ease-out;
 }
 
-.login-box h2 {  /*Título de la caja de inicio de sesión */
+.login-box h2 {  /* Título de la caja de inicio de sesión */
     margin-bottom: 20px;
     color: #fff;
     font-size: 1.8rem;
@@ -111,16 +109,15 @@ body {
     background-color: #2d7a00;
 }
 
-.login-box a {      /*Texto de restablecer contraseña*/
+.login-box a {      /* Texto de restablecer contraseña */
     color: #ffffff;
     text-decoration: underline;
     font-size: 1rem;
-    font-weight: bold;   /* mejor que font-style */
-    display: block;      /* hace que el enlace ocupe una línea */
-    text-align: center;  /* centrado, opcional */
-    margin-top: 20px;    /* separación con el botón */
+    font-weight: bold;
+    display: block;
+    text-align: center;
+    margin-top: 20px;
 }
-
 
 .login-box img { /* Logo de SENA */
     margin-top: 15px;
@@ -170,24 +167,61 @@ body {
     height: auto;
 }
 
+/* --- 🔥 Toggle de contraseña con imágenes --- */
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
 
+.password-toggle {
+    position: absolute;
+    width: 30px;   /* 🔹 el ancho se ajusta sola */
+    height: 30px;    /* 🔹 la altura se ajusta sola */
+    right: 12px;
+    top: 45%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
 
-/* Media Queries para Responsive */
+.password-toggle:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+.password-toggle:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+/* Ajuste para el input de contraseña */
+.password-input {
+    padding-right: 45px !important;
+}
+
+/* Animación para el cambio de icono */
+.password-toggle.changing {
+    animation: toggleBounce 0.3s ease-in-out;
+}
+
+@keyframes toggleBounce {
+    0%   { transform: translateY(-50%) scale(1); }
+    50%  { transform: translateY(-50%) scale(1.15); }
+    100% { transform: translateY(-50%) scale(1); }
+}
+
+/* --- Media Queries para responsive --- */
 
 /* Tablets */
 @media screen and (max-width: 1024px) and (min-width: 901px) {
     body {
         padding: 0 5%;
     }
-    
     .branding img {
         margin-bottom: 80px;
     }
-    
     .branding h1 {
         font-size: 1.8rem;
     }
-    
     .login-box {
         transform: translate(-10%, 0%);
         width: 45vh;
@@ -204,7 +238,6 @@ body {
         gap: 30px !important;
         min-height: 100vh !important;
     }
-    
     .branding {
         order: 1;
         margin-bottom: 0;
@@ -212,18 +245,15 @@ body {
         max-width: 300px;
         flex: none;
     }
-    
     .branding img {
         width: 60%;
         max-width: 180px;
         margin-bottom: 20px;
     }
-    
     .branding h1 {
         font-size: 1.5rem;
         margin-bottom: 20px;
     }
-    
     .login-box {
         order: 2;
         transform: none !important;
@@ -233,10 +263,8 @@ body {
         padding: 25px;
         margin: 0;
         position: relative;
-        /* Sin min-height para que se ajuste al contenido */
     }
 }
-
 
 /* Móviles */
 @media screen and (max-width: 480px) {
@@ -244,55 +272,44 @@ body {
         padding: 15px;
         gap: 25px;
     }
-    
     .branding {
         max-width: 250px;
     }
-    
     .branding img {
         width: 50%;
         max-width: 140px;
         margin-bottom: 15px;
     }
-    
     .branding h1 {
         font-size: 1.3rem;
     }
-    
     .login-box {
         width: 95%;
         max-width: 320px;
         padding: 20px 18px;
         border-radius: 10px;
-        /* Altura automática basada en contenido */
         height: auto;
     }
-    
     .login-box h2 {
         font-size: 1.4rem;
         margin-bottom: 15px;
     }
-    
     .login-box label {
         padding: 8px 5px;
         font-size: 0.9rem;
     }
-    
     .login-box input {
         padding: 8px;
         font-size: 0.9rem;
         margin-bottom: 12px;
     }
-    
     .login-box button {
         padding: 10px;
         font-size: 0.9rem;
     }
-    
     .login-box img {
         width: 60px;
     }
-    
     .sena-logo {
         width: 40px;
     }
@@ -303,23 +320,19 @@ body {
     .login-box {
         padding: 20px 15px;
     }
-    
     .branding h1 {
         font-size: 1.2rem;
     }
-    
     .login-box h2 {
         font-size: 1.3rem;
     }
-    
     .login-box input,
     .login-box button {
         font-size: 0.85rem;
     }
 }
 
-
-/* Animación al entrar la caja */
+/* Animaciones */
 @keyframes fadeInRight {
     0% {
         opacity: 0;
@@ -331,51 +344,25 @@ body {
     }
 }
 
-/* Animación de latido suave al pasar el mouse */
 @keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
-/* Animación de flotación suave */
 @keyframes float {
-    0% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-8px);
-    }
-    100% {
-        transform: translateY(0px);
-    }
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+    100% { transform: translateY(0px); }
 }
 
-    /* Animaciones */
-    @keyframes fadeInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-60px);
-            }
-            to {
-            opacity: 1;
-            transform: translateX(0);
-            }
-        }
-
-    @keyframes fadeInRight {
-        from {
-            opacity: 0;
-            transform: translateX(60px);
-            }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-            }
-        }
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LawyerController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
@@ -12,6 +11,7 @@ use App\Http\Controllers\AsistenteController;
 use App\Http\Controllers\LegalProcessController;
 use App\Exports\LawyersExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\ImageController;
 
 // Ruta por defecto
 Route::get('/', function () {
@@ -27,10 +27,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard'); // Administrador
     Route::get('/dashboard/abogado', [AbogadoController::class, 'index'])->name('dashboard.abogado'); // Abogado
     Route::get('/dashboard/asistente', [AsistenteController::class, 'index'])->name('dashboard.asistente'); // Asistente Jurídico
-
-    // Perfil (foto)
-    Route::get('/perfil/foto', [ProfileController::class, 'editPhoto'])->name('profile.photo');
-    Route::post('/perfil/foto', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
 
     // Exportaciones
     Route::get('/lawyers/export-pdf', [LawyerController::class, 'exportPDF'])
@@ -80,8 +76,12 @@ Route::middleware('auth')->group(function() {
     Route::post('/upload-image', [ProfileController::class, 'uploadImage'])->name('upload-image');
 });
 
-// Ruta para servir las imágenes si tienes problemas con storage:link
-Route::post('/upload-image', [ProfileController::class, 'upload'])->name('upload.image');
+
+// Apunta a un método 'guardar' en un controlador llamado ImageController
+Route::post('/guardar-imagen', [ImageController::class, 'guardar'])->name('imagenes.guardar');
+Route::post('/user/profile-photo', [ProfileController::class, 'updatePhoto'])
+    ->middleware('auth') // Protegida para que solo usuarios logueados puedan usarla
+    ->name('profile.photo.update');
 
 // Rutas de autenticación
 require __DIR__ . '/auth.php';

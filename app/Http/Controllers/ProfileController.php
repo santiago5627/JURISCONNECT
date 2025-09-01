@@ -6,38 +6,35 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-
-
 class ProfileController extends Controller
 {
-    public function upload(Request $request)
+    /**
+     * Actualiza la foto de perfil del usuario autenticado.
+     */
+    public function updatePhoto(Request $request)
     {
-        try {
-            // Validar que venga la imagen
-            $request->validate([
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-            ]);
+        // 1. Validar que el archivo sea una imagen válida.
+        $request->validate([
+            'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Límite de 2MB
+        ]);
 
-            $user = Auth::user();
+        $user = Auth::user();
 
-            // Guardar imagen
-            $path = $request->file('image')->store('profiles', 'public');
-
-            // Actualizar en la base de datos
-            $user->profile_photos = $path;
-            //$user->save();
-
-            // Retornar la URL completa para mostrarla en el JS
-            return response()->json([
-                'success' => true,
-                'url' => asset('storage/' . $path)
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage()
-            ], 500);
+        // 2. Si el usuario ya tiene una foto, eliminar la anterior para no acumular archivos.
+        if ($user->profile_photo_path) {
+            Storage::disk('public')->delete($user->profile_photo_path);
         }
+
+        // 3. Guardar la nueva imagen en `storage/app/public/profile-photos`
+        // El método store() genera un nombre de archivo único automáticamente.
+        $path = $request->file('profile_photo')->store('profile-photos', 'public');
+
+        // 4. Actualizar la base de datos con la nueva ruta de la imagen.
+        //$user->forceFill([
+          //  'profile_photo_path' => $path,
+        //])->save();
+
+        // 5. Redireccionar a la página anterior con un mensaje de éxito.
+        return redirect()->back()->with('status', '¡Foto de perfil actualizada correctamente!');
     }
 }

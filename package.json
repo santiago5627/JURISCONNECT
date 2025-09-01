@@ -20,6 +20,7 @@
         "vite": "^6.3.5"
     },
     "dependencies": {
+        "bootstrap": "^5.3.8",
         "build": "^0.1.4",
         "sweetalert2": "^11.22.2"
     }
