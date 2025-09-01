@@ -25,7 +25,7 @@ public function run(): void
 
     // Crear un usuario con ese rol
     User::firstOrCreate([
-        'email' => 'admin@sena.edu.co'
+        'email' => 'bsalinas1054@gmail.com'
     ], [
         'name' => 'Admin',
         'password' => Hash::make('admin123'), 

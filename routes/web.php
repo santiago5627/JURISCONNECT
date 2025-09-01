@@ -12,6 +12,10 @@ use App\Http\Controllers\AsistenteController;
 use App\Http\Controllers\LegalProcessController;
 use App\Exports\LawyersExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Controllers\ConceptoController;
+
+Route::get('/conceptos/create', [ConceptoController::class, 'create'])->name('conceptos.create');
+
 
 // Ruta por defecto
 Route::get('/', function () {

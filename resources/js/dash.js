@@ -621,4 +621,26 @@ function setupImageUpload() {
             fileInput.value = '';
         });
     }
+
+// ===== FUNCIÓN PARA VERIFICAR DUPLICADOS EN LA BASE DE DATOS =====
+async function checkDuplicateLawyer(correo, numeroDocumento) {
+    try {
+        const response = await fetch('/lawyers/check-duplicate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({ correo, numeroDocumento }),
+        });
+        const data = await response.json();
+        return data.exists;
+    } catch (error) {
+        console.error('Error al verificar duplicados:', error);
+        return false;
+    }
+}
+
+
+
 }

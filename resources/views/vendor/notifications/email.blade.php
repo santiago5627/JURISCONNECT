@@ -1,58 +1,45 @@
-<x-mail::message>
-{{-- Greeting --}}
-@if (! empty($greeting))
-# {{ $greeting }}
-@else
-@if ($level === 'error')
-# @lang('Whoops!')
-@else
-# @lang('Hello!')
-@endif
-@endif
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Restablecer Contraseña - JustConnect SENA</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f4f8; margin: 0; padding: 0; }
+        .container { max-width: 640px; margin: 30px auto; background-color: #fff; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.08); padding: 40px; }
+        .header { text-align: center; }
+        .logo { width: 120px; margin-bottom: 10px; }
+        .title { font-size: 22px; font-weight: 600; color: #00471b; }
+        .content { font-size: 16px; line-height: 1.6; margin-top: 30px; }
+        .button-container { text-align: center; margin: 30px 0; }
+        .button { background-color: #007a33; color: #fff; padding: 14px 32px; border-radius: 6px; font-weight: 600; text-decoration: none; display: inline-block; }
+        .button:hover { background-color: #006124; }
+        .footer { font-size: 13px; color: #000000ff; margin-top: 40px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://senasofiaplus.xyz/wp-content/uploads/2023/10/logo-del-sena-01.png" alt="Logo SENA" class="logo">
+            <h1 class="title">Restablecer Contraseña</h1>
+        </div>
 
-{{-- Intro Lines --}}
-@foreach ($introLines as $line)
-{{ $line }}
+        <div class="content">
+            <p>Has solicitado restablecer tu contraseña en el sistema <strong>JustConnect SENA</strong>.</p>
+            <p>Haz clic en el siguiente botón para continuar:</p>
 
-@endforeach
+            <div class="button-container">
+               <a href="{{ $actionUrl }}" class="button">Cambiar mi contraseña</a>
 
-{{-- Action Button --}}
-@isset($actionText)
-<?php
-    $color = match ($level) {
-        'success', 'error' => $level,
-        default => 'primary',
-    };
-?>
-<x-mail::button :url="$actionUrl" :color="$color">
-{{ $actionText }}
-</x-mail::button>
-@endisset
+            </div>
 
-{{-- Outro Lines --}}
-@foreach ($outroLines as $line)
-{{ $line }}
+            <p>Este enlace es válido durante los próximos <strong>30 minutos</strong>.</p>
+            <p>Si no solicitaste este cambio, puedes ignorar este mensaje.</p>
+        </div>  
 
-@endforeach
-
-{{-- Salutation --}}
-@if (! empty($salutation))
-{{ $salutation }}
-@else
-@lang('Regards,')<br>
-{{ config('app.name') }}
-@endif
-
-{{-- Subcopy --}}
-@isset($actionText)
-<x-slot:subcopy>
-@lang(
-    "If you're having trouble clicking the \":actionText\" button, copy and paste the URL below\n".
-    'into your web browser:',
-    [
-        'actionText' => $actionText,
-    ]
-) <span class="break-all">[{{ $displayableActionUrl }}]({{ $actionUrl }})</span>
-</x-slot:subcopy>
-@endisset
-</x-mail::message>
+        <div class="footer">
+            <p>Gracias,<br>El equipo de JustConnect SENA</p>
+            <p><small>Este es un mensaje automático. Por favor, no respondas a este correo.</small></p>
+        </div>
+    </div>
+</body>
+</html>

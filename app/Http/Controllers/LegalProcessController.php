@@ -49,7 +49,7 @@ class LegalProcessController extends Controller
      */
     public function index()
     {
-        $procesos = Proceso::latest()->paginate(10);//10 por pagina
+        $procesos = Proceso::latest()->paginate(10); //10 por pagina
         return view('legal_processes.index', compact('procesos'));
     }
 

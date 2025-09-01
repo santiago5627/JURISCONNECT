@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Lawyer extends Model
 {
-    use HasFactory;
+    //use SoftDeletes;
 
     protected $fillable = [
         'nombre',
@@ -17,12 +17,10 @@ class Lawyer extends Model
         'correo',
         'telefono',
         'especialidad',
-        'user_id', // Asegúrate de tener esta columna en la tabla si vas a relacionar con users
+        'user_id',
     ];
 
-    /**
-     * Relación con el modelo User
-     */
+    // relación (si la tienes)
     public function user()
     {
         return $this->belongsTo(User::class);
