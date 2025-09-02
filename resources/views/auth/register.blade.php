@@ -70,7 +70,7 @@
             background-color: #4e9b10;
             clip-path: polygon(0% 100%, 0% 65%, 50% 78%, 100% 65%, 100% 100%);
             z-index: 4;
-        }
+            }
 
         .login-container {
             z-index: 5;

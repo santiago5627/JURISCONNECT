@@ -2,57 +2,36 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JurisConnect SENA - Recuperar Contraseña</title>
     <link rel="stylesheet" href="{{ asset('/css/recuperar.css') }}">
 </head>
 <body>
-    <div class="background-image">
-        <img src="{{ asset('img/Login.jpg') }}" alt="Fondo de Pantalla" class="background-image">
+    
+    <!-- Izquierda: logo -->
+    <div class="branding">
+        <img src="{{ asset('img/BlancoJuris.png') }}" alt="JurisConnect">
     </div>
 
-    <div class="main-container">
-        <!-- Sección izquierda con logo y título -->
-        <div class="logo-jurisconnect">
-            <img src="{{ asset('img/LogoJ.png') }}" alt="Logo JurisConnect" class="logo-jurisconnect">
-        </div>
+    <!-- Derecha: formulario forgot password -->
+    <div class="forgot-box">
+        <h2>Recuperar Acceso</h2>
+        <p>Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña de forma segura.</p>
 
-        <!-- Contenedor del formulario -->
-        <div class="form-container">
-            <h2 class="form-title">Recuperar Contraseña</h2>
-            <p class="form-description">
-                Ingresa tu correo de recuperación
-            </p>
+        <form method="POST" action="{{ route('password.email') }}">
+            @csrf
 
-            <!-- Formulario -->
-            <form id="passwordResetForm">
-                <div class="form-group">
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        class="form-input" 
-                        placeholder="xxxxxxxxxxxx"
-                        required 
-                        autofocus
-                    >
-                </div>
+            <label for="email">Correo Electrónico</label>
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
 
-                <div class="button-group">
-                    <button type="button" class="btn btn-back" onclick="window.location='{{ url('/') }}'">
-                        Volver
-                    </button>
-                    <button type="submit" class="btn btn-next">
-                        Siguiente
-                    </button>
-                </div>
-            </form>
+            <button type="submit" class="btn-primary">Enviar enlace</button>
 
-            <!-- Logo SENA -->
-            <div class="left-section">
-                <img src="{{ asset('img/Sena.png') }}" alt="Logo JurisConnect">
-            </div>
-        </div>
+            <a href="{{ route('login') }}">
+                <button type="button" class="btn-secondary">Volver al Login</button>
+            </a>
+
+            <img src="{{ asset('img/senablanco.png') }}" alt="Logo SENA">
+        </form>
     </div>
+
 </body>
 </html>

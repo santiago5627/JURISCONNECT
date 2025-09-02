@@ -22,6 +22,7 @@
     <div class="login-box">
         <h2>Actualizar Contraseña </h2>
 
+        <!-- Mostrar errores -->
         @if ($errors->any())
         <div class="errors">
             <ul>
@@ -32,24 +33,31 @@
         </div>
         @endif
 
+        <!-- Formulario -->
         <form method="POST" action="{{ route('password.store') }}">
             @csrf
             <input type="hidden" name="token" value="{{ request()->route('token') }}">
 
-            <div class="form-group">
-                <label for="email">Correo electrónico</label>
-                <input id="email" type="email" name="email" value="{{ request()->email }}" required autofocus>
-            </div>
+            <!-- Email -->
+            <label for="email">Correo Electrónico</label>
+            <input id="email" type="email" name="email" value="{{ old('email', request('email')) }}" required autofocus>
+            @error('email')
+            <span class="error-message">{{ $message }}</span>
+            @enderror
 
-            <div class="form-group">
-                <label for="password">Nueva contraseña</label>
-                <input id="password" type="password" name="password" required>
-            </div>
+            <!-- Password -->
+            <label for="password">Nueva Contraseña</label>
+            <input id="password" type="password" name="password" required>
+            @error('password')
+            <span class="error-message">{{ $message }}</span>
+            @enderror
 
-            <div class="form-group">
-                <label for="password_confirmation">Confirmar contraseña</label>
-                <input id="password_confirmation" type="password" name="password_confirmation" required>
-            </div>
+            <!-- Confirm Password -->
+            <label for="password_confirmation">Confirmar Contraseña</label>
+            <input id="password_confirmation" type="password" name="password_confirmation" required>
+            @error('password_confirmation')
+            <span class="error-message">{{ $message }}</span>
+            @enderror
 
         </form>
             <div class="button-group">

@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+
 class AsistenteController extends Controller
 {
     public function index()
     {
-        return view('dashboard-asistente');
+        return app(AbogadoController::class)->index();
     }
 }
+//solucion temporal

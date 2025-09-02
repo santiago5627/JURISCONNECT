@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\Role;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
     /**
      * Los atributos que se pueden asignar en masa.
@@ -29,9 +30,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Los atributos que deben ocultarse al serializar.
-     
-     * The attributes that should be cast.
-     *
+
      * @var array<string, string>
      */
     protected $casts = [

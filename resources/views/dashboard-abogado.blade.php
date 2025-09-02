@@ -269,7 +269,8 @@
                     <div class="dashboard-card">
                         <h3>Conceptos Jurídicos</h3>
                         <p>Emite nuevos conceptos y clasifícalos por tema.</p>
-                        <a href="{{ route('conceptos.create') }}">Emitir</a>
+                        <a href="{{ route('conceptos.create') }}" class="btn btn-success">Emitir</a>
+
                     </div>
                 </div>
             </div>

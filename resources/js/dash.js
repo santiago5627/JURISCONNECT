@@ -639,8 +639,3 @@ document.addEventListener('DOMContentLoaded', function() {
                 fileInput.value = ''; // Limpiar input
             });
         }
-
-        // Inicializar cuando el DOM esté listo
-        document.addEventListener('DOMContentLoaded', function() {
-            setupImageUpload();
-        });
