@@ -107,7 +107,7 @@ public function exportPDF()
     $logoPath = public_path('img/LogoInsti.png'); // Ruta al logo
 
     $pdf = Pdf::loadView('exports.lawyers-pdf', compact('lawyers', 'logoPath'))
-              ->setPaper('a4', 'portrait');
+                ->setPaper('a4', 'portrait');
 
     return $pdf->download('listado_abogados.pdf');
 }

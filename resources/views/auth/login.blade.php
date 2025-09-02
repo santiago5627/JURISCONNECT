@@ -3,121 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>JurisConnect SENA - Login</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }   
-        body {
-            font-family: Arial, sans-serif;
-            height: 100vh;
-            background: url('{{ asset("img/JURISCONNECT.jpg") }}') no-repeat center center fixed;
-            background-size: cover;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 6%;
-        }
-        /* Logo y texto a la izquierda */
-    .branding {
-        color: white;
-        text-align: center;
-        position: relative;
-        left: 250px; /* Ajusta el valor según lo que necesites */
-    }
-
-    .branding img { 
-        width: 400px;
-        height: auto;
-        margin-bottom: 15px;
-    }
-        /* Caja de login más grande y centrada */
-        .login-box {
-            background: rgba(255, 255, 255, 0.2); /* blanco con transparencia */
-            backdrop-filter: blur(15px);
-           -webkit-backdrop-filter: blur(15px);
-            padding: 60px;
-            border-radius: 20px;
-            box-shadow: 0 4px 25px rgba(0,0,0,0.35);
-            width: 550px; /* más ancho */
-            height: auto; /* adaptable al contenido */
-            text-align: center;
-            position: relative;
-            left: -220px; /* movido a la izquierda */
-        }
-
-        .login-box h2 {
-            margin-bottom: 25px;
-            color: #fff;
-            font-size: 2rem;
-            font-weight: bold;
-        }
-        .login-box label {
-            display: block;
-            color: #fff;
-            margin-bottom: 6px;
-            text-align: left;
-            font-size: 1rem;
-        }
-        .login-box input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 25px;
-            border: 2px solid #ccc;
-            margin-bottom: 18px;
-            outline: none;
-            font-size: 1rem;
-        }
-        .login-box input:focus {
-            border-color: #238C00; /* verde más oscuro como la referencia */
-        }
-        .login-box button {
-            background-color: #238C00; /* Verde exacto como la referencia */
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 25px;
-            width: 100%;
-            font-size: 1.1rem;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .login-box button:hover {
-            background-color: #1c7300;
-        }
-        .login-box a {
-            color: #39A900;
-            text-decoration: none;
-            font-size: 0.95rem;
-        }
-        .login-box img {
-            margin-top: 18px;
-            width: 85px;
-        }
-        .error-message {
-            color: #ff6b6b;
-            font-size: 0.85rem;
-            text-align: left;
-            margin-top: -10px;
-            margin-bottom: 10px;
-        }
-        .error-input {
-            border-color: #ff6b6b !important;
-        }
-        .session-status {
-            background-color: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-        }
-
-    </style>
+    <link rel="stylesheet" href="{{ asset('/css/login.css') }}">
 </head>
 <body>
-    
+    <!-- Fondo de pantalla -->
+    <div class="background-image">
+        <img src="{{ asset('img/Login.jpg') }}" alt="Fondo de Pantalla" class="background-image">
+    </div>
+
     <!-- Izquierda: logo -->
     <div class="branding">
         <img src="{{ asset('img/BlancoJuris.png') }}" alt="JurisConnect">
@@ -147,7 +40,43 @@
             @endif
 
             <label for="password">Contraseña</label>
-            <input id="password" type="password" name="password" required autocomplete="current-password" class="{{ $errors->get('password') ? 'error-input' : '' }}">
+            <div class="password-container">
+                <input id="password" 
+                    type="password" 
+                    name="password" 
+                    required 
+                    autocomplete="current-password" 
+                    class="password-input {{ $errors->get('password') ? 'error-input' : '' }}">
+                
+                <!-- SVG del ojo (toggle) -->
+    <span id="togglePassword" class="password-toggle" 
+        role="button" tabindex="0" 
+        title="Mostrar contraseña"
+        onclick="togglePasswordVisibility()">
+
+        <!-- 👁️‍🗨️ Ojo cerrado (se ve primero) -->
+        <svg xmlns="http://www.w3.org/2000/svg" 
+            id="eyeClosed" 
+            width="22" height="22" 
+            viewBox="0 0 24 24" 
+            fill="none" stroke="black" stroke-width="2" 
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17.94 17.94A10.12 10.12 0 0 1 12 20c-7 0-11-8-11-8a19.44 19.44 0 0 1 4.24-5.94M9.9 4.24A9.77 9.77 0 0 1 12 4c7 0 11 8 11 8a19.44 19.44 0 0 1-4.24 5.94M1 1l22 22"/>
+        </svg>
+
+        <!-- 👁️ Ojo abierto (oculto al inicio) -->
+        <svg xmlns="http://www.w3.org/2000/svg" 
+            id="eyeOpen" 
+            width="22" height="22" 
+            viewBox="0 0 24 24" 
+            fill="none" stroke="black" stroke-width="2" 
+            stroke-linecap="round" stroke-linejoin="round" 
+            style="display:none;">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+    </span>
+            </div>
             @if ($errors->get('password'))
                 <div class="error-message">
                     @foreach ($errors->get('password') as $error)
@@ -155,21 +84,57 @@
                     @endforeach
                 </div>
             @endif
-
-
+            
             <button type="submit">Ingresar</button>
 
-            <p style="margin-top:10px;">
+            <p>
                 @if (Route::has('password.request'))
                     <a href="{{ route('password.request') }}">
                         ¿Olvidó su contraseña?
                     </a>
                 @endif
             </p>
-
-            <img src="{{ asset('img/senablanco.png') }}" alt="Logo SENA">
+            <img src="{{ asset('img/Sena.png') }}" alt="Logo SENA" class="sena-logo">
         </form>
     </div>
+<script>
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password');
+        const eyeOpen = document.getElementById('eyeOpen');
+        const eyeClosed = document.getElementById('eyeClosed');
 
+        if (passwordInput.type === 'password') {
+            // Mostrar contraseña
+            passwordInput.type = 'text';
+            eyeClosed.style.display = 'none';
+            eyeOpen.style.display = 'inline';
+        } else {
+            // Ocultar contraseña
+            passwordInput.type = 'password';
+            eyeClosed.style.display = 'inline';
+            eyeOpen.style.display = 'none';
+        }
+
+        passwordInput.focus();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleButton = document.getElementById('togglePassword');
+        const eyeClosed = document.getElementById('eyeClosed');
+        const eyeOpen = document.getElementById('eyeOpen');
+
+        // 👁️‍🗨️ Aseguramos que cargue con ojo cerrado
+        eyeClosed.style.display = 'inline';
+        eyeOpen.style.display = 'none';
+
+        // Accesibilidad con teclado
+        toggleButton.addEventListener('keydown', function(e) {
+            if (e.code === 'Space' || e.code === 'Enter') {
+                e.preventDefault();
+                togglePasswordVisibility();
+            }
+        });
+    });
+</script>
 </body>
 </html>

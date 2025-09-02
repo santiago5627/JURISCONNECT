@@ -14,7 +14,7 @@ class LegalProcessController extends Controller
     public function create()
     {
         return view('legal_processes.create');
-    }
+    }  
 
     /**
      * Guardar nuevo proceso judicial
@@ -41,7 +41,7 @@ class LegalProcessController extends Controller
 
         return redirect()
             ->route('procesos.index')
-            ->with('success', 'Proceso judicial creado con éxito.');
+            ->with('success', ' Proceso judicial creado con éxito.');
     }
 
     /**
@@ -49,7 +49,7 @@ class LegalProcessController extends Controller
      */
     public function index()
     {
-        $procesos = Proceso::latest()->paginate(10);
+        $procesos = Proceso::latest()->paginate(10); //10 por pagina
         return view('legal_processes.index', compact('procesos'));
     }
 
@@ -59,7 +59,66 @@ class LegalProcessController extends Controller
     public function show($id)
     {
         $proceso = Proceso::findOrFail($id);
-        return view('procesos.show', compact('proceso'));
+        //return view('legal_processes.show', compact('proceso'));
+        return response()->json($proceso); 
+    }
+
+    /**
+     * Mostrar formulario de edición
+     */
+    public function edit($id)
+    {
+        $proceso = Proceso::findOrFail($id);
+        return view('legal_processes.editProcesos', compact('proceso'));
+    } 
+
+    /**
+     * Actualizar proceso judicial
+     */
+    public function update(Request $request, $id)
+    {
+        $proceso = Proceso::findOrFail($id);
+
+        // Validar datos de entrada (excluyendo el número radicado actual)
+        $validated = $request->validate([
+            'tipo_proceso'      => 'required|string|max:100',
+            'numero_radicado'   => 'required|string|max:50|unique:procesos,numero_radicado,' . $id,
+            'demandante'        => 'required|string|max:255',
+            'demandado'         => 'required|string|max:255',
+            'descripcion'       => 'required|string',
+            'documento'         => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'eliminar_documento' => 'nullable|boolean', // Para eliminar documento existente
+        ]);
+
+        // Manejar documento
+        if ($request->hasFile('documento')) {
+            // Eliminar documento anterior si existe
+            if ($proceso->documento && Storage::disk('public')->exists($proceso->documento)) {
+                Storage::disk('public')->delete($proceso->documento);
+            }
+            
+            // Subir nuevo documento
+            $validated['documento'] = $request->file('documento')->store('documentos', 'public');
+        } elseif ($request->has('eliminar_documento') && $request->eliminar_documento) {
+            // Eliminar documento si se marcó la opción
+            if ($proceso->documento && Storage::disk('public')->exists($proceso->documento)) {
+                Storage::disk('public')->delete($proceso->documento);
+            }
+            $validated['documento'] = null;
+        } else {
+            // Mantener documento actual
+            unset($validated['documento']);
+        }
+
+        // Remover campo auxiliar de validación
+        unset($validated['eliminar_documento']);
+
+        // Actualizar proceso
+        $proceso->update($validated);
+
+        return redirect()
+            ->route('procesos.show', $proceso->id)
+            ->with('success', 'Proceso actualizado correctamente.');
     }
 
     /**
@@ -80,34 +139,5 @@ class LegalProcessController extends Controller
             ->route('procesos.index')
             ->with('success', ' Proceso eliminado correctamente.');
     }
-
-    public function edit($id)
-{
-    $proceso = Proceso::findOrFail($id);
-    return view('procesos.edit', compact('proceso'));
-}
-
-public function update(Request $request, $id)
-{
-    $proceso = Proceso::findOrFail($id);
-
-    $validated = $request->validate([
-        'tipo_proceso'    => 'required|string|max:100',
-        'numero_radicado' => 'required|string|max:50|unique:procesos,numero_radicado,'.$id,
-        'demandante'      => 'required|string|max:255',
-        'demandado'       => 'required|string|max:255',
-        'descripcion'     => 'required|string',
-        'documento'       => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-    ]);
-
-    if ($request->hasFile('documento')) {
-        $validated['documento'] = $request->file('documento')->store('documentos', 'public');
-    }
-
-    $proceso->update($validated);
-
-    return redirect()->route('procesos.index')->with('success', 'Proceso actualizado correctamente.');
-}
-
 
 }
