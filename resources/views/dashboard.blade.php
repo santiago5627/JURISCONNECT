@@ -13,7 +13,7 @@
         <div class="overlay" id="overlay"></div>      
 
         <!-- Enlace a CSS -->
-        <link rel="stylesheet" href="{{ asset('/Css/dashboard.css') }}">
+        <link rel="stylesheet" href="{{ asset('/css/dashboard.css') }}">
 
         <!-- Modal para crear nuevo abogado -->
         <div class="modal" id="createLawyerModal">
@@ -128,15 +128,21 @@
     <div class="profile">
     <input type="file" id="fileInput" accept="image/*" hidden>
     <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
-        <img src="{{ asset('img/sena_logo.png') }}" alt="Perfil" width="100px" height="70" class="logo">
+    <form action="{{ route('imagenes.guardar') }}" method="POST" enctype="multipart/form-data">
+    @csrf <div>
+        <label for="imagen">Selecciona una imagen:</label>
+        <input type="file" name="imagen" id="imagen" required>
     </div>
+
+    <button type="submit">Subir Imagen</button>
+</form>    </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
         </div>
             <div class="nav-menu">
             </div>
             <div class="sena-logo">
-                <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
+                <img src="{{ asset('img/.png') }}" alt="Logo SENA" width="100" height="100">
             </div>
 
             <!-- Botón de Cerrar Sesión -->

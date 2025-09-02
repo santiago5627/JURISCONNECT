@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LawyerController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
@@ -13,9 +12,7 @@ use App\Http\Controllers\LegalProcessController;
 use App\Exports\LawyersExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\ConceptoController;
-
-Route::get('/conceptos/create', [ConceptoController::class, 'create'])->name('conceptos.create');
-
+use App\Http\Controllers\ImageController;
 
 // Ruta por defecto
 Route::get('/', function () {
@@ -68,7 +65,7 @@ Route::middleware(['auth'])->group(function () {
     // === CONCEPTOS JURÍDICOS ===
     Route::get('/conceptos/create', [AbogadoController::class, 'crearConcepto'])->name('conceptos.create');
     Route::get('/abogado/mis-procesos', [AbogadoController::class, 'misProcesos'])->name('abogado.misConceptos');
-    
+    Route::get('/conceptos/create', [ConceptoController::class, 'create'])->name('conceptos.create');
     Route::get('/abogado/crear-concepto/{id?}', [AbogadoController::class, 'crearConcepto'])->name('abogado.crear-concepto');
     Route::put('/abogado/guardar-concepto/{id}', [AbogadoController::class, 'guardarConcepto'])->name('abogado.guardar-concepto');
     Route::post('/abogado/finalizar-proceso/{id}', [AbogadoController::class, 'finalizarProceso'])->name('abogado.finalizar-proceso');
@@ -83,3 +80,12 @@ Route::middleware(['auth'])->group(function () {
 Route::resource('lawyers', LawyerController::class)->middleware('auth')->except(['edit', 'update', 'destroy']);
 Route::resource('procesos', LegalProcessController::class);
 Route::resource('lawyers', LawyerController::class)->middleware('auth');
+
+// Apunta a un método 'guardar' en un controlador llamado ImageController
+Route::post('/guardar-imagen', [ImageController::class, 'guardar'])->name('imagenes.guardar');
+Route::post('/user/profile-photo', [ProfileController::class, 'updatePhoto'])
+    ->middleware('auth') // Protegida para que solo usuarios logueados puedan usarla
+    ->name('profile.photo.update');
+
+// Rutas de autenticación
+require __DIR__ . '/auth.php';
