@@ -4,14 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LawyerController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AbogadoController;
 use App\Http\Controllers\AsistenteController;
 use App\Http\Controllers\LegalProcessController;
 use App\Exports\LawyersExport;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Http\Controllers\ImageController;
+use App\Http\Controllers\ProfileController;
 
 // Ruta por defecto
 Route::get('/', function () {
@@ -76,12 +75,21 @@ Route::middleware('auth')->group(function() {
     Route::post('/upload-image', [ProfileController::class, 'uploadImage'])->name('upload-image');
 });
 
+    
+// Ruta para subir la foto de perfil (POST)
+Route::post('/user/profile-photo', [ProfileController::class, 'updateProfilePhoto'])
+    ->middleware('auth')
+    ->name('user.profile-photo');
 
-// Apunta a un método 'guardar' en un controlador llamado ImageController
-Route::post('/guardar-imagen', [ImageController::class, 'guardar'])->name('imagenes.guardar');
-Route::post('/user/profile-photo', [ProfileController::class, 'updatePhoto'])
-    ->middleware('auth') // Protegida para que solo usuarios logueados puedan usarla
-    ->name('profile.photo.update');
+// Si también quieres una ruta GET para mostrar la foto (opcional)
+Route::get('/user/profile-photo-view', [ProfileController::class, 'showProfilePhoto'])
+    ->middleware('auth')
+    ->name('user.profile-photo.view');
+
+// Ruta para eliminar la foto de perfil (opcional)
+Route::delete('/user/profile-photo', [ProfileController::class, 'deleteProfilePhoto'])
+    ->middleware('auth')
+    ->name('user.profile-photo.delete');
 
 // Rutas de autenticación
 require __DIR__ . '/auth.php';

@@ -24,9 +24,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'password_changed',
         'avatar',          // Campo para avatar
         'role_id',         // Rol del usuario
-        'profile_photos'   // Foto de perfil (asegúrate que en la migración sea igual)
+        'profile_photo_path', // ← Agregar esto
     ];
-    
 
     /**
      * Los atributos que deben ocultarse al serializar.

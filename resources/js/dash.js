@@ -531,94 +531,116 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // ===== FUNCIONALIDAD DE SUBIDA DE IMAGEN DE PERFIL =====
-function setupImageUpload() {
-    const fileInput = document.getElementById('fileInput');
-    const profileImage = document.getElementById('profiles_photo');
-    
-    if (fileInput) {
-        fileInput.addEventListener('change', async function(e) {
-            const file = e.target.files[0];
+        function setupImageUpload() {
+            const fileInput = document.getElementById('fileInput');
+            const profileImage = document.getElementById('profileImage');
+            const loadingIndicator = document.getElementById('loadingIndicator');
             
-            if (!file) return;
-
-            // Validar tipo de archivo
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-            if (!allowedTypes.includes(file.type)) {
-                await showCustomAlert('error', 'Tipo de archivo no válido', 'Solo se permiten archivos JPG, JPEG y PNG.');
-                fileInput.value = ''; // Limpiar el input
+            if (!fileInput || !profileImage) {
+                console.warn('Elementos para subida de imagen no encontrados.');
                 return;
             }
 
-            // Validar tamaño (2MB máximo)
-            const maxSize = 2 * 1024 * 1024; // 2MB en bytes
-            if (file.size > maxSize) {
-                await showCustomAlert('error', 'Archivo muy grande', 'El archivo debe ser menor a 2MB.');
-                fileInput.value = ''; // Limpiar el input
-                return;
-            }
+            // Guardar la imagen original como referencia
+            profileImage.dataset.originalSrc = profileImage.src;
 
-            // Mostrar preview inmediato de la imagen
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                if (profileImage) {
-                    profileImage.src = e.target.result;
-                }
-            };
-            reader.readAsDataURL(file);
-
-            // Crear FormData para enviar el archivo
-            const formData = new FormData();
-            formData.append('image', file);
-
-            // Obtener token CSRF
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            try {
-                // Mostrar indicador de carga (opcional)
-                const loadingAlert = showCustomAlert('info', 'Subiendo imagen...', 'Por favor espera mientras se procesa tu imagen.');
-
-                const response = await fetch('/upload-image', {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': csrfToken,
-                        'Accept': 'application/json'
-                    },
-                    body: formData
-                });
-
-                // Cerrar alerta de carga
-                hideCustomAlert();
-
-                const data = await response.json();
-
-                if (data.success) {
-                    // Actualizar la imagen de perfil con la nueva URL
-                    if (profileImage && data.url) {
-                        profileImage.src = data.url;
-                    }
-                    
-                    await showCustomAlert('success', '¡Imagen actualizada!', 'Tu foto de perfil se ha actualizado correctamente.');
-                } else {
-                    // Revertir la imagen si hubo error
-                    if (profileImage) {
-                        profileImage.src = profileImage.dataset.originalSrc || '/img/descarga.jpeg';
-                    }
-                    
-                    await showCustomAlert('error', 'Error al subir imagen', data.message || 'No se pudo actualizar la imagen. Inténtalo de nuevo.');
-                }
-
-            } catch (error) {
-                // Revertir la imagen si hubo error
-                if (profileImage) {
-                    profileImage.src = profileImage.dataset.originalSrc || '/img/descarga.jpeg';
-                }
+            fileInput.addEventListener('change', async function(e) {
+                const file = e.target.files[0];
                 
-                console.error('Error al subir imagen:', error);
-                await showCustomAlert('error', 'Error de conexión', 'No se pudo conectar con el servidor. Verifica tu conexión a internet.');
-            }
+                if (!file) return;
 
-            // Limpiar el input para permitir seleccionar el mismo archivo nuevamente
-            fileInput.value = '';
+                // Validar tipo de archivo
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (!allowedTypes.includes(file.type)) {
+                    alert('Solo se permiten archivos JPG, JPEG y PNG.');
+                    fileInput.value = '';
+                    return;
+                }
+
+                // Validar tamaño (2MB máximo)
+                const maxSize = 2 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    alert('El archivo debe ser menor a 2MB.');
+                    fileInput.value = '';
+                    return;
+                }
+
+                // Mostrar preview inmediato
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    profileImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                // Mostrar indicador de carga
+                if (loadingIndicator) {
+                    loadingIndicator.style.display = 'block';
+                }
+
+                // Crear FormData
+                const formData = new FormData();
+                formData.append('profile_photo', file);
+
+                // Verificar token CSRF
+                const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
+                if (!csrfTokenElement) {
+                    console.error('Token CSRF no encontrado');
+                    alert('Error de seguridad: Token CSRF no encontrado.');
+                    return;
+                }
+
+                const csrfToken = csrfTokenElement.getAttribute('content');
+
+                try {
+                    const response = await fetch('/user/profile-photo', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.success) {
+                        // Actualizar imagen con URL del servidor
+                        profileImage.src = data.url + '?t=' + new Date().getTime();
+                        profileImage.dataset.originalSrc = data.url;
+                        alert('¡Imagen actualizada correctamente!');
+                    } else {
+                        // Revertir imagen
+                        profileImage.src = profileImage.dataset.originalSrc;
+                        alert('Error: ' + (data.message || 'No se pudo actualizar la imagen.'));
+                    }
+
+                } catch (error) {
+                    // Revertir imagen
+                    profileImage.src = profileImage.dataset.originalSrc;
+                    console.error('Error al subir imagen:', error);
+                    
+                    let errorMessage = 'No se pudo conectar con el servidor.';
+                    if (error.message.includes('HTTP error')) {
+                        errorMessage = 'Error del servidor. Por favor, intenta de nuevo.';
+                    }
+                    
+                    alert('Error: ' + errorMessage);
+                } finally {
+                    // Ocultar indicador de carga
+                    if (loadingIndicator) {
+                        loadingIndicator.style.display = 'none';
+                    }
+                }
+
+                fileInput.value = ''; // Limpiar input
+            });
+        }
+
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            setupImageUpload();
         });
-    }
-}

@@ -24,7 +24,7 @@
                 </div>
                 <div class="modal-body">
                     <form action="{{ route('lawyers.store') }}" method="POST">
-                    @csrf
+                        @csrf
                         <div class="form-group">
                             <label for="nombre">Nombre:</label>
                             <input type="text" id="nombre" name="nombre" required>
@@ -65,7 +65,6 @@
                             <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
                             <button type="submit" class="btn-submit">Crear Abogado</button>
                         </div>
-                    @csrf
                     </form>
                 </div>
             </div>
@@ -122,27 +121,35 @@
             </div>
         </div>
 
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="profile">
+                <!-- Input file oculto para la foto de perfil -->
+                <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
 
-<!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
-    <div class="profile">
-    <input type="file" id="fileInput" accept="image/*" hidden>
-    <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
-    <form action="{{ route('imagenes.guardar') }}" method="POST" enctype="multipart/form-data">
-    @csrf <div>
-        <label for="imagen">Selecciona una imagen:</label>
-        <input type="file" name="imagen" id="imagen" required>
-    </div>
+                <!-- Contenedor de la foto de perfil -->
+                <div class="profile-pic" onclick="document.getElementById('fileInput').click();" title="Haz clic para cambiar tu foto">
+                    <img src="{{ Auth::user()->profile_photo_path ? Storage::url(Auth::user()->profile_photo_path) : asset('img/default-avatar.png') }}" 
+                        id="profileImage" 
+                        alt="Foto de perfil">
+                    
+                    <!-- Overlay para indicar que es clickeable -->
+                    <div class="photo-overlay">
+                    </div>
+                </div>
 
-    <button type="submit">Subir Imagen</button>
-</form>    </div>
+                <!-- Indicador de carga -->
+                <div id="loadingIndicator" style="display: none; text-align: center; margin-top: 10px;">
+                    <small>Subiendo imagen...</small>
+                </div>
+
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
-        </div>
-            <div class="nav-menu">
             </div>
+            
+            <div class="nav-menu"></div>
             <div class="sena-logo">
-                <img src="{{ asset('img/.png') }}" alt="Logo SENA" width="100" height="100">
+                <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
             </div>
 
             <!-- Botón de Cerrar Sesión -->
@@ -174,7 +181,6 @@
                     <button class="btn-primary" id="createBtn">CREAR NUEVO ABOGADO</button>
                     <a href="{{ route('lawyers.export.excel') }}" class="btn btn-success">EXPORTAR EXCEL</a>
                     <a href="{{ route('lawyers.export.pdf') }}" class="btn btn-danger">EXPORTAR PDF</a>
-
                 </div>
                 <div class="table-container">
                     <table>
@@ -190,51 +196,50 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-<tbody id="tableBody">
-    @foreach($lawyers ?? [] as $lawyer)
-    <tr data-id="{{ $lawyer->id }}">
-        <td>{{ $lawyer->nombre }}</td>
-        <td>{{ $lawyer->apellido }}</td>
-        <td>{{ $lawyer->tipo_documento }}</td>
-        <td>{{ $lawyer->numero_documento }}</td>
-        <td>{{ $lawyer->correo }}</td>
-        <td>{{ $lawyer->telefono}}</td>
-        <td>{{ $lawyer->especialidad}}</td>
-        <td>
-            <button class="btn-edit"
-                    data-id="{{ $lawyer->id }}"
-                    data-nombre="{{ $lawyer->nombre }}"
-                    data-apellido="{{ $lawyer->apellido }}"
-                    data-tipo_documento="{{ $lawyer->tipo_documento }}"
-                    data-numero_documento="{{ $lawyer->numero_documento }}"
-                    data-correo="{{ $lawyer->correo }}"
-                    data-telefono="{{ $lawyer->telefono }}"
-                    data-especialidad="{{ $lawyer->especialidad }}">
-                Editar
-            </button>
+                        <tbody id="tableBody">
+                            @foreach($lawyers ?? [] as $lawyer)
+                            <tr data-id="{{ $lawyer->id }}">
+                                <td>{{ $lawyer->nombre }}</td>
+                                <td>{{ $lawyer->apellido }}</td>
+                                <td>{{ $lawyer->tipo_documento }}</td>
+                                <td>{{ $lawyer->numero_documento }}</td>
+                                <td>{{ $lawyer->correo }}</td>
+                                <td>{{ $lawyer->telefono}}</td>
+                                <td>{{ $lawyer->especialidad}}</td>
+                                <td>
+                                    <button class="btn-edit"
+                                            data-id="{{ $lawyer->id }}"
+                                            data-nombre="{{ $lawyer->nombre }}"
+                                            data-apellido="{{ $lawyer->apellido }}"
+                                            data-tipo_documento="{{ $lawyer->tipo_documento }}"
+                                            data-numero_documento="{{ $lawyer->numero_documento }}"
+                                            data-correo="{{ $lawyer->correo }}"
+                                            data-telefono="{{ $lawyer->telefono }}"
+                                            data-especialidad="{{ $lawyer->especialidad }}">
+                                        Editar
+                                    </button>
 
-                <form action="{{ route('lawyers.destroy', $lawyer->id) }}"
-                    method="POST"
-                    class="delete-lawyer-form"
-                    data-id="{{ $lawyer->id }}"
-                    data-name="{{ $lawyer->nombre }} {{ $lawyer->apellido }}"
-                    style="display: inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn-delete">
-                        Eliminar</button>
-                </form>
-        </td>
-    </tr>
-    @endforeach
-</tbody>
-
+                                    <form action="{{ route('lawyers.destroy', $lawyer->id) }}"
+                                        method="POST"
+                                        class="delete-lawyer-form"
+                                        data-id="{{ $lawyer->id }}"
+                                        data-name="{{ $lawyer->nombre }} {{ $lawyer->apellido }}"
+                                        style="display: inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-delete">
+                                            Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
+    <!-- Scripts originales -->
     <script src="{{ asset('js/dash.js') }}"></script>
 </x-app-layout>
