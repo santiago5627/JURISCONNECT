@@ -14,7 +14,7 @@ class LegalProcessController extends Controller
     public function create()
     {
         return view('legal_processes.create');
-    }
+    }  
 
     /**
      * Guardar nuevo proceso judicial
