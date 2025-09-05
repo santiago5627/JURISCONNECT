@@ -92,11 +92,6 @@ Route::get('/user/profile-photo-view', [ProfileController::class, 'showProfilePh
     ->middleware('auth')
     ->name('user.profile-photo.view');
 
-// Ruta para eliminar la foto de perfil (opcional)
-Route::delete('/user/profile-photo', [ProfileController::class, 'deleteProfilePhoto'])
-    ->middleware('auth')
-    ->name('user.profile-photo.delete');
-
-
+    
 // Rutas de autenticación
 require __DIR__ . '/auth.php';

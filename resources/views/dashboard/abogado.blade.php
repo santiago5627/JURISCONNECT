@@ -28,7 +28,7 @@
                     <h3 class="text-lg font-semibold mb-2">Registrar Proceso</h3>
                     <p class="text-gray-600 mb-4">Agrega un nuevo proceso jurídico al sistema.</p>
                     <a href="{{ route('legal_processes.create') }}" 
-                       class="inline-block px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition">
+                        class="inline-block px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition">
                         Registrar
                     </a>
                 </div>

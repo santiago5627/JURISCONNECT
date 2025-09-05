@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Lawyer; // Importa el modelo de abogados
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 
 class DashboardController extends Controller
 {
@@ -16,3 +14,4 @@ class DashboardController extends Controller
         return view('dashboard', compact('lawyers' , 'user')); // envía a la vista
     }
 }
+

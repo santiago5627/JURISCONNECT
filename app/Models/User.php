@@ -2,57 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Role;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, Notifiable, SoftDeletes; 
 
     /**
-     * Los atributos que se pueden asignar en masa.
+     * Los atributos que se pueden asignar masivamente.
      */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'role_id',
-        'foto_perfil',
-        'password_changed',
-        'avatar',          // Campo para avatar
-        'role_id',         // Rol del usuario
-        'profile_photo_path', // ← Agregar esto
     ];
 
     /**
-     * Los atributos que deben ocultarse al serializar.
-
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'password_changed' => 'boolean',
-        'password_changed_at' => 'datetime',
-    ];
-
-    /**
-     * Método para marcar contraseña como cambiada.
-     */
-    public function markPasswordAsChanged()
-    {
-        $this->update([
-            'password_changed' => true,
-            'password_changed_at' => now()
-        ]);
-    }
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
+     * Los atributos que deben estar ocultos para la serialización.
      */
     protected $hidden = [
         'password',
@@ -60,7 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * Los atributos que deben convertirse automáticamente.
+     * Obtener los atributos que deben ser convertidos.
      */
     protected function casts(): array
     {
@@ -68,25 +37,5 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
-    }
-
-    /**
-     * Relación con la tabla de roles.
-     */
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
-
-    /**
-     * Notificación personalizada para restablecer contraseña.
-     */
-    public function getAvatarUrlAttribute()
-    {
-        if ($this->avatar) {
-            return asset('storage/avatars/' . $this->avatar);
-        }
-        
-        return null; // o una imagen por defecto
     }
 }

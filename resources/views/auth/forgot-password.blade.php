@@ -6,32 +6,70 @@
     <link rel="stylesheet" href="{{ asset('/css/recuperar.css') }}">
 </head>
 <body>
-    
-    <!-- Izquierda: logo -->
-    <div class="branding">
-        <img src="{{ asset('img/BlancoJuris.png') }}" alt="JurisConnect">
+    <!-- Fondo -->
+    <div class="background-image">
+        <img src="{{ asset('img/Login.jpg') }}" alt="Fondo">
     </div>
 
-    <!-- Derecha: formulario forgot password -->
-    <div class="forgot-box">
-        <h2>Recuperar Acceso</h2>
-        <p>Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña de forma segura.</p>
+    <!-- Contenedor principal -->
+    <div class="main-container">
+        
+        <!-- Izquierda: Logo -->
+        <div class="left-section">
+            <img class="logo-jurisconnect" src="{{ asset('img/LogoJ.png') }}" alt="JurisConnect">
+        </div>
 
-        <form method="POST" action="{{ route('password.email') }}">
-            @csrf
+        <!-- Derecha: Formulario -->
+        <div class="form-container">
+            <h2 class="form-title">Recuperar Acceso</h2>
+            <p class="form-description">Ingresa tu correo electrónico</p>
 
-            <label for="email">Correo Electrónico</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
+            <form method="POST" action="{{ route('password.email') }}">
+                @csrf
 
-            <button type="submit" class="btn-primary">Enviar enlace</button>
+                <div class="form-group">
+                    <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus placeholder="Correo Electrónico" class="form-input">
+                </div>
 
-            <a href="{{ route('login') }}">
-                <button type="button" class="btn-secondary">Volver al Login</button>
-            </a>
+                <div class="button-group">
+                    <a href="{{ route('login') }}" class="btn btn-back">Volver</a>
+                    <button type="submit" class="btn btn-next">Enviar</button>
+                </div>
 
-            <img src="{{ asset('img/senablanco.png') }}" alt="Logo SENA">
-        </form>
+                <!-- Logo SENA -->
+                <div class="sena-container">
+                    <img src="{{ asset('img/Sena.png') }}" alt="Logo SENA">
+                </div>
+            </form>
+        </div>
     </div>
 
+    <!-- Script con showCustomAlert -->
+    <script>
+        function showCustomAlert(message, type = 'success') {
+            const overlay = document.createElement('div');
+            overlay.className = 'custom-alert-overlay';
+
+            const alertBox = document.createElement('div');
+            alertBox.className = `custom-alert-box ${type}`;
+            alertBox.innerHTML = `
+                <p>${message}</p>
+                <button class="custom-alert-btn">Aceptar</button>
+            `;
+
+            overlay.appendChild(alertBox);
+            document.body.appendChild(overlay);
+
+            alertBox.querySelector('.custom-alert-btn').addEventListener('click', () => {
+                overlay.remove();
+            });
+        }
+
+        // Mostrar el mensaje si Laravel lo envía
+        const statusMessage = @json(session('status') ?: null);
+        if (statusMessage) {
+            showCustomAlert(statusMessage, 'success');
+        }
+    </script>
 </body>
 </html>

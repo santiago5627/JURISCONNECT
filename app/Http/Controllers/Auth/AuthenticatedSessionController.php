@@ -34,9 +34,9 @@ class AuthenticatedSessionController extends Controller
             case 1: // Administrador
                 return redirect()->route('dashboard');
             case 2: // Abogado
-                return redirect()->route('dashboard.abogado');
-            case 3: // Asistente Jurídico
                 return redirect()->route('dashboard.asistente');
+            case 3: // Asistente Jurídico
+                return redirect()->route('dashboard.abogado');
             default:
                 return redirect('/dashboard');
         }
