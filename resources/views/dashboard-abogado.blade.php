@@ -227,13 +227,13 @@
             <p>{{ Auth::user()->email }}</p>
         </div>
         <div class="nav-menu">
-            <!-- Aquí puedes agregar botones de navegación si los necesitas -->
+<!-- Aquí puedes agregar botones de navegación si los necesitas -->
         </div>
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
             </div>
 
-            <!-- Botón de Cerrar Sesión -->
+<!-- Botón de Cerrar Sesión -->
         <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
             @csrf
             <button type="submit" class="logout-btn">
@@ -242,7 +242,7 @@
         </form>
     </div>
 
-        <!-- Contenido -->
+<!-- Contenido -->
         <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
@@ -277,14 +277,14 @@
         </div>
     </div>
 
-    <!-- Script hamburguesa -->
+<!-- Script hamburguesa -->
     <script>
         const hamburgerBtn = document.getElementById('hamburgerBtn');
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
         const mainContent = document.getElementById('mainContent');
 
-        // Función para alternar el sidebar
+// Función para alternar el sidebar
         function toggleSidebar() {
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');

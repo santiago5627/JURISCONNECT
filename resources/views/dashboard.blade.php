@@ -15,7 +15,7 @@
         <!-- Enlace a CSS -->
         <link rel="stylesheet" href="{{ asset('/css/dashboard.css') }}">
 
-        <!-- Modal para crear nuevo abogado -->
+<!-- Modal para crear nuevo abogado -->
         <div class="modal" id="createLawyerModal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <!-- Modal para editar abogado -->
+<!-- Modal para editar abogado -->
         <div class="modal" id="editLawyerModal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -145,7 +145,7 @@
                 <img src="{{ asset('img/.png') }}" alt="Logo SENA" width="100" height="100">
             </div>
 
-            <!-- Botón de Cerrar Sesión -->
+<!-- Botón de Cerrar Sesión -->
             <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
                 @csrf
                 <button type="submit" class="logout-btn">
@@ -154,7 +154,7 @@
             </form>
         </div>
 
-        <!-- Contenido Principal -->
+<!-- Contenido Principal -->
         <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
@@ -236,6 +236,6 @@
         </div>
     </div>
 
-    <!-- Scripts -->
+<!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
 </x-app-layout>

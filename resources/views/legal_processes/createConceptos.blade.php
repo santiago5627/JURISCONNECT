@@ -489,7 +489,7 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
+<!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -500,7 +500,7 @@
     </nav>
 
     <div class="container">
-        <!-- Header -->
+<!-- Header -->
         <div class="header">
             <div class="header-content">
                 <h1>Procesos Pendientes de Concepto Jurídico</h1>
@@ -512,7 +512,7 @@
             </button>
         </div>
 
-        <!-- Alerta de éxito (oculta por defecto) -->
+<!-- Alerta de éxito (oculta por defecto) -->
         <div id="success-alert" class="alert alert-success hidden">
             <i class="fas fa-check-circle"></i>
             <span>Operación realizada exitosamente.</span>
@@ -521,7 +521,7 @@
             </button>
         </div>
 
-        <!-- Info de procesos pendientes -->
+<!-- Info de procesos pendientes -->
         <div class="alert alert-info">
             <i class="fas fa-info-circle"></i>
             <div>
@@ -530,9 +530,9 @@
             </div>
         </div>
 
-        <!-- Lista de Procesos -->
+<!-- Lista de Procesos -->
         <div class="process-grid">
-            <!-- Proceso 1 -->
+<!-- Proceso 1 -->
             <div class="process-card fade-in-up">
                 <div class="card-header">
                     <div class="card-title">
@@ -543,7 +543,7 @@
                     </div>
                     <span class="status-badge">Pendiente</span>
                 </div>
-                
+
                 <div class="card-body">
                     <div class="card-grid">
                         <div class="info-section">
@@ -556,7 +556,7 @@
                                     <p>2024-001-JC</p>
                                 </div>
                             </div>
-                            
+
                             <div class="info-item info-item-green">
                                 <div class="info-icon info-icon-green">
                                     <i class="fas fa-balance-scale"></i>
@@ -566,7 +566,7 @@
                                     <p>Contencioso Administrativo</p>
                                 </div>
                             </div>
-                            
+
                             <div class="info-item info-item-purple">
                                 <div class="info-icon info-icon-purple">
                                     <i class="fas fa-calendar-alt"></i>
@@ -577,7 +577,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="info-section">
                             <div class="info-item info-item-orange">
                                 <div class="info-icon info-icon-orange">
@@ -588,7 +588,7 @@
                                     <p>María González Pérez</p>
                                 </div>
                             </div>
-                            
+
                             <div class="info-item info-item-red">
                                 <div class="info-icon info-icon-red">
                                     <i class="fas fa-user-minus"></i>
@@ -600,7 +600,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="card-footer">
                         <div class="timestamp">
                             <i class="fas fa-clock"></i>
@@ -614,7 +614,7 @@
                 </div>
             </div>
 
-            <!-- Proceso 2 -->
+<!-- Proceso 2 -->
             <div class="process-card fade-in-up" style="animation-delay: 0.1s;">
                 <div class="card-header">
                     <div class="card-title">
@@ -625,7 +625,7 @@
                     </div>
                     <span class="status-badge">Pendiente</span>
                 </div>
-                
+
                 <div class="card-body">
                     <div class="card-grid">
                         <div class="info-section">
@@ -638,7 +638,7 @@
                                     <p>2024-002-JC</p>
                                 </div>
                             </div>
-                            
+
                             <div class="info-item info-item-green">
                                 <div class="info-icon info-icon-green">
                                     <i class="fas fa-balance-scale"></i>
@@ -648,7 +648,7 @@
                                     <p>Civil</p>
                                 </div>
                             </div>
-                            
+
                             <div class="info-item info-item-purple">
                                 <div class="info-icon info-icon-purple">
                                     <i class="fas fa-calendar-alt"></i>
@@ -659,7 +659,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="info-section">
                             <div class="info-item info-item-orange">
                                 <div class="info-icon info-icon-orange">
@@ -670,7 +670,7 @@
                                     <p>Carlos Rodríguez López</p>
                                 </div>
                             </div>
-                            
+
                             <div class="info-item info-item-red">
                                 <div class="info-icon info-icon-red">
                                     <i class="fas fa-user-minus"></i>
@@ -682,7 +682,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="card-footer">
                         <div class="timestamp">
                             <i class="fas fa-clock"></i>
@@ -696,90 +696,7 @@
                 </div>
             </div>
 
-            <!-- Proceso 3 -->
-            <div class="process-card fade-in-up" style="animation-delay: 0.2s;">
-                <div class="card-header">
-                    <div class="card-title">
-                        <div class="card-title-icon">
-                            <i class="fas fa-gavel"></i>
-                        </div>
-                        <h3>Proceso Legal</h3>
-                    </div>
-                    <span class="status-badge">Pendiente</span>
-                </div>
-                
-                <div class="card-body">
-                    <div class="card-grid">
-                        <div class="info-section">
-                            <div class="info-item info-item-blue">
-                                <div class="info-icon info-icon-blue">
-                                    <i class="fas fa-hashtag"></i>
-                                </div>
-                                <div class="info-content">
-                                    <p>Radicado</p>
-                                    <p>2024-003-JC</p>
-                                </div>
-                            </div>
-                            
-                            <div class="info-item info-item-green">
-                                <div class="info-icon info-icon-green">
-                                    <i class="fas fa-balance-scale"></i>
-                                </div>
-                                <div class="info-content">
-                                    <p>Tipo de Proceso</p>
-                                    <p>Laboral</p>
-                                </div>
-                            </div>
-                            
-                            <div class="info-item info-item-purple">
-                                <div class="info-icon info-icon-purple">
-                                    <i class="fas fa-calendar-alt"></i>
-                                </div>
-                                <div class="info-content">
-                                    <p>Fecha Radicación</p>
-                                    <p>20/08/2024</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="info-section">
-                            <div class="info-item info-item-orange">
-                                <div class="info-icon info-icon-orange">
-                                    <i class="fas fa-user-plus"></i>
-                                </div>
-                                <div class="info-content">
-                                    <p>Demandante</p>
-                                    <p>Ana Patricia Herrera</p>
-                                </div>
-                            </div>
-                            
-                            <div class="info-item info-item-red">
-                                <div class="info-icon info-icon-red">
-                                    <i class="fas fa-user-minus"></i>
-                                </div>
-                                <div class="info-content">
-                                    <p>Demandado</p>
-                                    <p>Constructora ABC Ltda.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card-footer">
-                        <div class="timestamp">
-                            <i class="fas fa-clock"></i>
-                            <span>Proceso creado: 20/08/2024 16:45</span>
-                        </div>
-                        <button class="action-btn">
-                            <i class="fas fa-edit"></i>
-                            Redactar Concepto Jurídico
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Recordatorio -->
+<!-- Recordatorio -->
         <div class="reminder">
             <div class="reminder-content">
                 <div class="reminder-icon">
@@ -792,18 +709,18 @@
             </div>
         </div>
 
-        <!-- Estado sin procesos (comentado para mostrar la versión con procesos) -->
-        <!--
+<!-- Estado sin procesos (comentado para mostrar la versión con procesos) -->
+        <!--  
         <div class="empty-state">
             <div class="empty-icon">
                 <i class="fas fa-check-circle"></i>
             </div>
             <h3>¡Excelente trabajo!</h3>
             <p>No tienes procesos pendientes de concepto jurídico.</p>
-            <button class="action-btn">
+            <a href="{{ route('mis.procesos') }}" class="action-btn">
                 <i class="fas fa-eye"></i>
                 Ver Todos Mis Procesos
-            </button>
+            </a>
         </div>
         -->
     </div>

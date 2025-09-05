@@ -377,7 +377,7 @@
 <body>
     <div class="container">
         <div class="form-wrapper">
-            <!-- Header -->
+<!-- Header -->
             <div class="header">
                 <h1>
                     <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -389,7 +389,7 @@
             </div>
 
             <div class="form-content">
-                <!-- Mensajes de error -->
+<!-- Mensajes de error -->
                 <div class="error-container" style="display: none;">
                     <div class="error-header">
                         <svg class="error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -405,9 +405,9 @@
                 <form action="{{ route('procesos.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-                    <!-- Grid de campos principales -->
+<!-- Grid de campos principales -->
                     <div class="form-grid">
-                        <!-- Tipo de Proceso -->
+<!-- Tipo de Proceso -->
                         <div class="field-group">
                             <label for="tipo_proceso" class="field-label">
                                 <span class="label-content">
@@ -426,7 +426,7 @@
                             </select>
                         </div>
 
-                        <!-- Número de radicado -->
+<!-- Número de radicado -->
                         <div class="field-group">
                             <label for="numero_radicado" class="field-label">
                                 <span class="label-content">
@@ -437,19 +437,19 @@
                                 </span>
                             </label>
                             <input type="text" name="numero_radicado" id="numero_radicado" class="form-input" 
-                                placeholder="11001-31-05-001-2025-00001-00">
+                                placeholder="11001-2025-00001-00">
                                 @error('numero_radicado')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
                         </div>
                     </div>
 
-                    <!-- Partes del proceso -->
+<!-- Partes del proceso -->
                     <div class="parties-section">
                         <h3 class="section-title">Partes del Proceso</h3>
                         
                         <div class="parties-grid">
-                            <!-- Demandante -->
+<!-- Demandante -->
                             <div class="field-group">
                                 <label for="demandante" class="field-label">
                                     <span class="label-content">
@@ -464,7 +464,7 @@
                                     placeholder="Nombre completo del demandante">
                             </div>
 
-                            <!-- Demandado -->
+<!-- Demandado -->
                             <div class="field-group">
                                 <label for="demandado" class="field-label">
                                     <span class="label-content">
@@ -481,7 +481,7 @@
                         </div>
                     </div>
 
-                    <!-- Descripción -->
+<!-- Descripción -->
                     <div class="field-group">
                         <label for="descripcion" class="field-label">
                             <span class="label-content">
@@ -496,7 +496,7 @@
                         <p class="help-text">Proporcione una descripción clara y detallada del proceso judicial</p>
                     </div>
 
-                    <!-- Documentos -->
+<!-- Documentos -->
                     <div class="document-section">
                         <div class="document-header">
                             <svg class="document-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -517,7 +517,7 @@
                         </div>
                     </div>
 
-                    <!-- Botones -->
+<!-- Botones -->
                     <div class="button-container">
                         <a href="{{ route('dashboard.abogado') }}" class="btn btn-cancel">
                             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -557,12 +557,12 @@ document.getElementById("formProceso").addEventListener("submit", async function
         });
 
         if (response.ok) {
-            //  Registro exitoso
+//  Registro exitoso
             let data = await response.json();
             alert("Proceso creado correctamente ✅");
             form.reset(); // limpiar formulario
         } else if (response.status === 422) {
-            //  Errores de validación
+//  Errores de validación
             let errorData = await response.json();
             let errorContainer = document.getElementById("errorContainer");
             errorContainer.innerHTML = "";

@@ -4,9 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Proceso;
+use App\Models\Lawyer;
 
-class ProcesoSeeder extends Seeder
+class LawyerSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,6 +14,6 @@ class ProcesoSeeder extends Seeder
     public function run(): void
     {
         // Crea 20 registros falsos
-        Proceso::factory()->count(20)->create();
+        Lawyer::factory()->count(20)->create();
     }
 }

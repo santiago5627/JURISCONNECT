@@ -9,10 +9,10 @@ class ConceptoController extends Controller
 {
     public function create()
     {
-        return view('conceptos.create');
+        return view('legal_processes.createConceptos');
     }
 
-    public function store(Request $request)
+    public function store(Request $request) 
     {
         $request->validate([
             'titulo' => 'required|string|max:255',

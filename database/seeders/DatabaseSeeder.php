@@ -15,6 +15,8 @@ public function run(): void
     $this->call([
             RoleSeeder::class,    // Tu seeder actual (renombrado)
             AbogadoUserSeeder::class,  // Tu nuevo seeder de abogados
+            ProcesoSeeder::class,
+            LawyerSeeder::class,
             // Puedes agregar más seeders aquí
         ]);
 
@@ -25,7 +27,7 @@ public function run(): void
 
     // Crear un usuario con ese rol
     User::firstOrCreate([
-        'email' => 'bsalinas1054@gmail.com'
+        'email' => 'admin@sena.edu.co'
     ], [
         'name' => 'Admin',
         'password' => Hash::make('admin123'), 
