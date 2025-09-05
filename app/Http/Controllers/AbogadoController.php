@@ -30,12 +30,17 @@ class AbogadoController extends Controller
     // Mostrar lista de procesos o concepto específico
     public function crearConcepto($id = null)
     {
+        // Obtener todos los procesos o los procesos del usuario autenticado
+        $procesos = ConceptoJuridico::all();
+
         // Si no se pasa ID, mostrar lista de procesos pendientes
         if (!$id) {
             $procesos = ConceptoJuridico::where('abogado_id', Auth::id())
                 ->where('estado', 'pendiente')
                 ->orderBy('fecha_radicacion', 'asc')
                 ->get();
+
+            dd($procesos);
 
             return view('legal_processes.createConceptos', compact('procesos'));
         }

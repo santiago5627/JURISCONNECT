@@ -25,7 +25,7 @@
             @endif
 
             @if(isset($proceso))
-                <!-- Información del Proceso -->
+<!-- Información del Proceso -->
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-dark text-white">
                         <div class="d-flex justify-content-between align-items-center">
@@ -69,7 +69,7 @@
                     </div>
                 </div>
 
-                <!-- Formulario del Concepto Jurídico -->
+<!-- Formulario del Concepto Jurídico -->
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">
@@ -81,7 +81,7 @@
                             @csrf
                             @method('PUT')
 
-                            <!-- Concepto Jurídico Principal -->
+<!-- Concepto Jurídico Principal -->
                             <div class="mb-4">
                                 <label for="concepto" class="form-label fw-bold">
                                     <i class="fas fa-gavel text-primary"></i> Concepto Jurídico *
@@ -101,7 +101,7 @@
                                 @enderror
                             </div>
 
-                            <!-- Recomendaciones -->
+<!-- Recomendaciones -->
                             <div class="mb-4">
                                 <label for="recomendaciones" class="form-label fw-bold">
                                     <i class="fas fa-lightbulb text-warning"></i> Recomendaciones (Opcional)
@@ -114,7 +114,7 @@
                                     placeholder="Ingresa recomendaciones adicionales para el caso...">{{ old('recomendaciones') }}</textarea>
                             </div>
 
-                            <!-- Botones de Acción -->
+<!-- Botones de Acción -->
                             <div class="d-flex justify-content-between">
                                 <div>
                                     <a href="{{ route('abogado.crear-concepto') }}" class="btn btn-outline-secondary btn-lg">
@@ -134,7 +134,7 @@
                     </div>
                 </div>
 
-                <!-- Panel de Ayuda -->
+<!-- Panel de Ayuda -->
                 <div class="card bg-light mt-4">
                     <div class="card-header bg-transparent">
                         <h6 class="mb-0">
@@ -210,13 +210,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const conceptoTextarea = document.getElementById('concepto');
     const counter = document.getElementById('conceptoCounter');
     const submitBtn = document.getElementById('submitBtn');
-    
-    // Contador de caracteres
+
+// Contador de caracteres
     conceptoTextarea.addEventListener('input', function() {
         const length = this.value.length;
         counter.textContent = length + ' caracteres';
-        
-        // Cambiar color según la longitud
+
+// Cambiar color según la longitud
         if (length < 50) {
             counter.className = 'text-danger';
             submitBtn.disabled = true;
@@ -225,11 +225,11 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = false;
         }
     });
-    
-    // Trigger inicial
+
+// Trigger inicial
     conceptoTextarea.dispatchEvent(new Event('input'));
-    
-    // Confirmación antes de enviar
+
+// Confirmación antes de enviar
     document.getElementById('conceptoForm').addEventListener('submit', function(e) {
         if (!confirm('¿Estás seguro de que deseas finalizar este concepto? Una vez enviado, no podrás modificarlo.')) {
             e.preventDefault();

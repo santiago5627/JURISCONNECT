@@ -19,7 +19,6 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-
 // Rutas de autenticación
 require __DIR__ . '/auth.php';
 
@@ -27,7 +26,6 @@ require __DIR__ . '/auth.php';
 Route::post('/validar-registro', [RegisteredUserController::class, 'validarRegistro'])->name('register.validate');
 Route::get('/exportar-usuarios', [ExportController::class, 'exportUsers'])->name('exportar.usuarios');
 Route::post('/upload-image', [ProfileController::class, 'upload'])->name('upload.image');
-
 
 // Rutas protegidas por autenticación
 Route::middleware(['auth'])->group(function () {
@@ -61,20 +59,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/procesos', [LegalProcessController::class, 'store'])->name('procesos.store');
     Route::get('/procesos/{id}', [LegalProcessController::class, 'show']);
 
-
     // === CONCEPTOS JURÍDICOS ===
     Route::get('/conceptos/create', [AbogadoController::class, 'crearConcepto'])->name('conceptos.create');
     Route::get('/abogado/mis-procesos', [AbogadoController::class, 'misProcesos'])->name('abogado.misConceptos');
     Route::get('/conceptos/create', [ConceptoController::class, 'create'])->name('conceptos.create');
-    Route::get('/abogado/crear-concepto/{id?}', [AbogadoController::class, 'crearConcepto'])->name('abogado.crear-concepto');
+    Route::get('/abogado/conceptos', [AbogadoController::class, 'crearConcepto'])->name('abogado.crear-concepto');
     Route::put('/abogado/guardar-concepto/{id}', [AbogadoController::class, 'guardarConcepto'])->name('abogado.guardar-concepto');
     Route::post('/abogado/finalizar-proceso/{id}', [AbogadoController::class, 'finalizarProceso'])->name('abogado.finalizar-proceso');
-
     Route::get('/abogado/procesos', [AbogadoController::class, 'listarProcesos'])->name('abogado.listar-procesos');
-
     Route::post('/abogado/proceso/{id}/concepto', [AbogadoController::class, 'guardarConcepto'])->name('abogado.guardar-concepto');
 
-});
+}); 
 
 // === RESOURCES ===
 Route::resource('lawyers', LawyerController::class)->middleware('auth')->except(['edit', 'update', 'destroy']);
@@ -83,9 +78,7 @@ Route::resource('lawyers', LawyerController::class)->middleware('auth');
 
 // Apunta a un método 'guardar' en un controlador llamado ImageController
 Route::post('/guardar-imagen', [ImageController::class, 'guardar'])->name('imagenes.guardar');
-Route::post('/user/profile-photo', [ProfileController::class, 'updatePhoto'])
-    ->middleware('auth') // Protegida para que solo usuarios logueados puedan usarla
-    ->name('profile.photo.update');
+Route::post('/user/profile-photo', [ProfileController::class, 'updatePhoto']) ->middleware('auth') ->name('profile.photo.update');// Protegida para que solo usuarios logueados puedan usarla
 
 // Rutas de autenticación
 require __DIR__ . '/auth.php';

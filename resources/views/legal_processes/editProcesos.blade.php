@@ -584,7 +584,7 @@
     </style>
 </head>
 <body>
-    <!-- Navbar -->
+<!-- Navbar -->
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -596,7 +596,7 @@
 
     <div class="container">
         <div class="main-card fade-in-up">
-            <!-- Header -->
+<!-- Header -->
             <div class="card-header">
                 <h1>
                     <i class="fas fa-edit"></i>
@@ -608,9 +608,9 @@
                 </a>
             </div>
 
-            <!-- Contenido -->
+<!-- Contenido -->
             <div class="card-body">
-                <!-- Alerta de errores (ejemplo) -->
+<!-- Alerta de errores (ejemplo) -->
                 <div class="alert alert-danger" style="display: none;" id="error-alert">
                     <ul>
                         <li>El campo tipo de proceso es obligatorio.</li>
@@ -618,11 +618,11 @@
                     </ul>
                 </div>
 
-                <!-- Formulario -->
+<!-- Formulario -->
                 <form class="form" method="POST" enctype="multipart/form-data" action="{{ route('procesos.update', $proceso->id) }}">
                     @csrf
                     @method('PUT')    
-                <!-- Primera fila -->
+<!-- Primera fila -->
                     <div class="form-row">
                         <div class="form-group">
                             <label for="tipo_proceso" class="form-label">
@@ -659,7 +659,7 @@
                         </div>
                     </div>
 
-                    <!-- Segunda fila -->
+<!-- Segunda fila -->
                     <div class="form-row">
                         <div class="form-group">
                             <label for="demandante" class="form-label">
@@ -694,7 +694,7 @@
                         </div>
                     </div>
 
-                    <!-- Descripción -->
+<!-- Descripción -->
                     <div class="form-group full-width">
                         <label for="descripcion" class="form-label">
                             Descripción <span class="required">*</span>
@@ -710,14 +710,14 @@
                                 @enderror
                     </div>
 
-                    <!-- Documento -->
+<!-- Documento -->
                     <div class="form-group full-width">
                         <label for="documento" class="form-label">
                             <i class="fas fa-file-upload"></i>
                             Documento
                         </label>
 
-                        <!-- Archivo actual -->
+<!-- Archivo actual -->
                         @if($proceso->documento)
                         <div class="current-file">
                             <div class="current-file-info">
@@ -740,7 +740,7 @@
                         </div>
                         @endif
 
-                        <!-- Input para nuevo archivo -->
+<!-- Input para nuevo archivo -->
                         <div class="file-input">
                             <input type="file"
                                 class="form-control @error('documento') is-invalid @enderror"  
@@ -762,7 +762,7 @@
                         @enderror
                     </div>
 
-                    <!-- Botones de acción -->
+<!-- Botones de acción -->
                     <div class="form-actions">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-save"></i>
@@ -776,17 +776,17 @@
     </div>
 
     <script>
-        // Función para mostrar/ocultar alertas
+// Función para mostrar/ocultar alertas
         function showErrorAlert() {
             document.getElementById('error-alert').style.display = 'block';
             document.getElementById('error-alert').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Función para mostrar estado de carga
+// Función para mostrar estado de carga
         function showLoading(button) {
             button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Actualizando...';
             button.disabled = true;
-            // Simular carga (en aplicación real esto se manejaría con el envío del formulario)
+// Simular carga (en aplicación real esto se manejaría con el envío del formulario)
             setTimeout(() => {
                 button.innerHTML = '<i class="fas fa-check"></i> ¡Actualizado!';
                 setTimeout(() => {
@@ -796,7 +796,7 @@
             }, 2000);
         }
 
-        // Mejorar la experiencia del file input
+// Mejorar la experiencia del file input
         document.getElementById('documento').addEventListener('change', function(e) {
             const label = document.querySelector('.file-input-label span');
             if (e.target.files.length > 0) {
@@ -809,7 +809,7 @@
             }
         });
 
-        // Drag and drop para el file input
+// Drag and drop para el file input
         const fileInput = document.querySelector('.file-input');
         const fileInputLabel = document.querySelector('.file-input-label');
 
@@ -855,7 +855,7 @@
             }
         }
 
-        // Validación en tiempo real
+// Validación en tiempo real
         document.querySelectorAll('input[required], select[required], textarea[required]').forEach(field => {
             field.addEventListener('blur', function() {
                 if (!this.value.trim()) {

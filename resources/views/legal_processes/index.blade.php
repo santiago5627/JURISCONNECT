@@ -498,7 +498,7 @@
 
         .pagination-info {
             font-size: 0.875rem;
-            color: #374151;
+            color: #d1d5db;
         }
 
         .pagination-info span {
@@ -534,6 +534,20 @@
         .pagination-btn.disabled:hover {
             color: #9ca3af;
             background: white;
+        }
+
+        .pagination-btn.active {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+        color: #ffffff;
+        font-weight: 600;
+        }
+
+        .pagination-btn.disabled {
+        background-color: #f9fafb;
+        border-color: #e5e7eb;
+        color: #9ca3af;
+        cursor: not-allowed;
         }
 
         /* Animaciones */
@@ -599,7 +613,7 @@
 
 
 <body>
-    <!-- Modal para ver datos del proceso -->
+<!-- Modal para ver datos del proceso -->
 <div id="viewProcessModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
     <div class="modal-content" style="background:white; border-radius:16px; max-width:500px; margin:auto; padding:2rem; position:relative;">
         <span class="close-button" onclick="closeProcessModal()" style="position:absolute; top:1rem; right:1rem; font-size:2rem; cursor:pointer;">&times;</span>
@@ -611,7 +625,7 @@
 </div>
 
     <div class="container">
-        <!-- Header Principal -->
+<!-- Header Principal -->
         <div class="main-header">
             <div class="header-content">
                 <div class="header-left">
@@ -627,11 +641,11 @@
                 </div>
                 <div class="header-stats">
                     <span class="stats-label">Total:</span>
-                    <span class="stats-value">15</span>
+                    <span class="pagination-info">{{ $procesos->total() }}</span>
                 </div>
             </div>
 
-            <!-- Mensaje de éxito (ejemplo) -->
+<!-- Mensaje de éxito (ejemplo) -->
             <div class="success-message" style="display: none;">
                 <svg class="success-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -639,7 +653,7 @@
                 <p class="success-text">Proceso creado exitosamente</p>
             </div>
 
-            <!-- Barra de acciones -->
+<!-- Barra de acciones -->
             <div class="actions-bar">
                 <div class="actions-content">
                     <div class="info-text">
@@ -668,11 +682,11 @@
             </div>
         </div>
 
-        <!-- Tabla -->
+<!-- Tabla -->
         <div class="table-container">
             <div class="table-wrapper">
                 <table class="process-table">
-                    <!-- titulos de la tabla -->
+<!-- titulos de la tabla -->
                     <thead class="table-header">
                         <tr>
                             <th>
@@ -737,7 +751,7 @@
 
                     <td class="actions-cell">
                         <div class="actions-group">
-                            <!-- Modifica el botón "Ver detalles" para llamar a la función -->
+<!-- Modifica el botón "Ver detalles" para llamar a la función -->
                             <a href="javascript:void(0);" onclick="openProcessModal({{ $proceso->id }})" class="action-btn action-view" title="Ver detalles">
                                 <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -774,35 +788,80 @@
                 </table>
             </div>
 
-            <!-- Paginación -->
+<!-- Paginación -->
             <div class="pagination-container">
                 <div class="pagination-content">
-                    <!-- Paginación móvil -->
+<!-- Paginación móvil -->
                     <div class="pagination-mobile">
-                        <a href="#" class="pagination-btn">Anterior</a>
-                        <a href="#" class="pagination-btn">Siguiente</a>
-                    </div>
+                @if ($procesos->onFirstPage())
+                    <span class="pagination-btn disabled">Anterior</span>
+                @else
+                    <a href="{{ $procesos->previousPageUrl() }}" class="pagination-btn">Anterior</a>
+                @endif
+                
+                @if ($procesos->hasMorePages())
+                    <a href="{{ $procesos->nextPageUrl() }}" class="pagination-btn">Siguiente</a>
+                @else
+                    <span class="pagination-btn disabled">Siguiente</span>
+                @endif
+            </div>
 
-                    <!-- Paginación desktop -->
-                    <div class="pagination-desktop">
-                        <div class="pagination-info">
-                            Mostrando <span>1</span> a <span>2</span> de <span>15</span> resultados
-                        </div>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <span class="pagination-btn disabled">Anterior</span>
-                            <a href="#" class="pagination-btn">1</a>
-                            <a href="#" class="pagination-btn">2</a>
-                            <a href="#" class="pagination-btn">3</a>
-                            <a href="#" class="pagination-btn">Siguiente</a>
-                        </div>
-                    </div>
+<!-- Paginación desktop -->
+            <div class="pagination-desktop">
+                
+                <div style="display: flex; gap: 0.5rem;">
+                    <!-- Botón Anterior -->
+                    @if ($procesos->onFirstPage())
+                        <span class="pagination-btn disabled">Anterior</span>
+                    @else
+                        <a href="{{ $procesos->previousPageUrl() }}" class="pagination-btn">Anterior</a>
+                    @endif
+
+                    <!-- Números de página -->
+                    @php
+                        $currentPage = $procesos->currentPage();
+                        $lastPage = $procesos->lastPage();
+                        $start = max(1, $currentPage - 2);
+                        $end = min($lastPage, $currentPage + 2);
+                    @endphp
+
+                    @if ($start > 1)
+                        <a href="{{ $procesos->url(1) }}" class="pagination-btn">1</a>
+                        @if ($start > 2)
+                            <span class="pagination-btn disabled">...</span>
+                        @endif
+                    @endif
+
+                    @for ($i = $start; $i <= $end; $i++)
+                        @if ($i == $currentPage)
+                            <span class="pagination-btn active">{{ $i }}</span>
+                        @else
+                            <a href="{{ $procesos->url($i) }}" class="pagination-btn">{{ $i }}</a>
+                        @endif
+                    @endfor
+
+                    @if ($end < $lastPage)
+                        @if ($end < $lastPage - 1)
+                            <span class="pagination-btn disabled">...</span>
+                        @endif
+                        <a href="{{ $procesos->url($lastPage) }}" class="pagination-btn">{{ $lastPage }}</a>
+                    @endif
+
+                    <!-- Botón Siguiente -->
+                    @if ($procesos->hasMorePages())
+                        <a href="{{ $procesos->nextPageUrl() }}" class="pagination-btn">Siguiente</a>
+                    @else
+                        <span class="pagination-btn disabled">Siguiente</span>
+                    @endif
+                </div>
+            </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
-    <!-- <script src="{{ asset('js/dash.js') }}"></script> -->
+<!-- Scripts -->
+<!-- <script src="{{ asset('js/dash.js') }}"></script> -->
 <script>
 // Abre el modal y carga los datos del proceso por AJAX
 function openProcessModal(id) {
@@ -821,7 +880,7 @@ function openProcessModal(id) {
                 <p><strong>Demandado:</strong> ${data.demandado}</p>
                 <p><strong>Descripción:</strong> ${data.descripcion ?? 'Sin descripción'}</p>
             `;
-        })
+        }) 
         .catch(() => {
             body.innerHTML = '<p>Error al cargar los datos.</p>';
         });

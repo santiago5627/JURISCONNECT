@@ -61,9 +61,9 @@ class Proceso extends Model
     {
         return $query->where(function ($q) use ($term) {
             $q->where('numero_radicado', 'like', "%{$term}%")
-              ->orWhere('demandante', 'like', "%{$term}%")
-              ->orWhere('demandado', 'like', "%{$term}%")
-              ->orWhere('tipo_proceso', 'like', "%{$term}%");
+            ->orWhere('demandante', 'like', "%{$term}%")
+            ->orWhere('demandado', 'like', "%{$term}%")
+            ->orWhere('tipo_proceso', 'like', "%{$term}%");
         });
     }
 
