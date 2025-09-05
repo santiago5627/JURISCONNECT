@@ -2,26 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Concepto;
 use Illuminate\Http\Request;
+use App\Models\Proceso; // Ajusta según tu modelo
 
 class ConceptoController extends Controller
 {
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return view('legal_processes.createConceptos');
+        // Si no tienes datos, crea una colección vacía para evitar errores
+        //$procesos = collect([]); // Colección vacía temporal
+        
+        // O mejor aún, obtén los datos reales:
+         $procesos = Proceso::all();
+        
+        return view('legal_processes.createConceptos', compact('procesos'));
     }
 
-    public function store(Request $request) 
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
     {
-        $request->validate([
-            'titulo' => 'required|string|max:255',
-            'categoria' => 'required|string|max:255',
-            'descripcion' => 'required|string',
-        ]);
-
-        Concepto::create($request->all());
-
-        return redirect()->route('dashboard.abogado')->with('success', 'Concepto jurídico creado correctamente.');
+        // Tu lógica para guardar
     }
+    
+    // Otros métodos...
 }

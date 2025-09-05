@@ -60,7 +60,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/procesos/{id}', [LegalProcessController::class, 'show']);
 
     // === CONCEPTOS JURÍDICOS ===
-    Route::get('/conceptos/create', [AbogadoController::class, 'crearConcepto'])->name('conceptos.create');
     Route::get('/abogado/mis-procesos', [AbogadoController::class, 'misProcesos'])->name('abogado.misConceptos');
     Route::get('/conceptos/create', [ConceptoController::class, 'create'])->name('conceptos.create');
     Route::get('/abogado/conceptos', [AbogadoController::class, 'crearConcepto'])->name('abogado.crear-concepto');
