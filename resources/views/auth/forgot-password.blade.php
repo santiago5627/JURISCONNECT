@@ -45,31 +45,52 @@
     </div>
 
     <!-- Script con showCustomAlert -->
-    <script>
-        function showCustomAlert(message, type = 'success') {
-            const overlay = document.createElement('div');
-            overlay.className = 'custom-alert-overlay';
+<script>
+    function showCustomAlert(message, type = 'success') {
+        const overlay = document.createElement('div');
+        overlay.className = 'custom-alert-overlay';
 
-            const alertBox = document.createElement('div');
-            alertBox.className = `custom-alert-box ${type}`;
-            alertBox.innerHTML = `
-                <p>${message}</p>
-                <button class="custom-alert-btn">Aceptar</button>
-            `;
+        const alertBox = document.createElement('div');
+        alertBox.className = `custom-alert-box ${type}`;
 
-            overlay.appendChild(alertBox);
-            document.body.appendChild(overlay);
+        // Íconos según el tipo
+        let icon = '';
+        if (type === 'success') icon = '✅';
+        if (type === 'error') icon = '❌';
+        if (type === 'warning') icon = '⚠️';
+        if (type === 'info') icon = 'ℹ️';
 
-            alertBox.querySelector('.custom-alert-btn').addEventListener('click', () => {
+        alertBox.innerHTML = `
+            <div class="custom-alert-header">
+                <span class="custom-alert-icon">${icon}</span>
+                <h3 class="custom-alert-title">${type === 'success' ? 'Éxito' : 'Aviso'}</h3>
+            </div>
+            <p class="custom-alert-message">${message}</p>
+            <button class="custom-alert-btn">Aceptar</button>
+        `;
+
+        overlay.appendChild(alertBox);
+        document.body.appendChild(overlay);
+
+        // Cerrar alerta
+        alertBox.querySelector('.custom-alert-btn').addEventListener('click', () => {
+            overlay.remove();
+        });
+
+        // También con tecla ESC
+        document.addEventListener('keydown', function escListener(e) {
+            if (e.key === 'Escape') {
                 overlay.remove();
-            });
-        }
+                document.removeEventListener('keydown', escListener);
+            }
+        });
+    }
 
-        // Mostrar el mensaje si Laravel lo envía
-        const statusMessage = @json(session('status') ?: null);
-        if (statusMessage) {
-            showCustomAlert(statusMessage, 'success');
-        }
-    </script>
+    // Mostrar el mensaje si Laravel lo envía
+    const statusMessage = @json(session('status') ?: null);
+    if (statusMessage) {
+        showCustomAlert(statusMessage, 'success');
+    }
+</script>
 </body>
 </html>

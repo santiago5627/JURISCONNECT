@@ -112,6 +112,131 @@ function hideCustomAlert() {
     }
 }
 
+// ===== FUNCIONES DE MANEJO DE ERRORES DE DUPLICADOS MEJORADAS =====
+
+/**
+ * Maneja errores específicos de duplicados y los presenta de forma clara
+ * @param {Object} error - Objeto de error del servidor
+ * @param {number} status - Código de estado HTTP
+ * @param {string} context - Contexto de la operación ('create' o 'edit')
+ */
+async function handleDuplicateError(error, status, context = 'create') {
+    if (status === 422) {
+        const errorMessage = error.message || '';
+        const errors = error.errors || {};
+        
+        // Verificar si es un error de duplicado específico
+        if (errorMessage.includes('documento') && errorMessage.includes('ya existe')) {
+            await showCustomAlert(
+                'error', 
+                'Documento Duplicado', 
+                `Ya existe un abogado registrado con este número de documento. Por favor, verifica que el número sea correcto o usa un documento diferente.`
+            );
+            return true;
+        }
+        
+        if (errorMessage.includes('correo') && (errorMessage.includes('ya existe') || errorMessage.includes('unique'))) {
+            await showCustomAlert(
+                'error', 
+                'Correo Duplicado', 
+                `Ya existe un abogado registrado con este correo electrónico. Por favor, usa una dirección de correo diferente.`
+            );
+            return true;
+        }
+        
+        // Verificar errores específicos en el objeto errors
+        if (errors.numero_documento && errors.numero_documento.some(err => err.includes('ya existe'))) {
+            await showCustomAlert(
+                'error', 
+                'Número de Documento Ya Registrado', 
+                `El número de documento ingresado ya está registrado en el sistema. Cada abogado debe tener un número de documento único.`
+            );
+            return true;
+        }
+        
+        if (errors.correo && errors.correo.some(err => err.includes('ya existe'))) {
+            await showCustomAlert(
+                'error', 
+                'Correo Electrónico Ya Registrado', 
+                `El correo electrónico ingresado ya está registrado en el sistema. Cada abogado debe tener un correo único.`
+            );
+            return true;
+        }
+        
+        // Error general de duplicado
+        if (errorMessage.includes('ya existe') || errorMessage.includes('duplicado') || errorMessage.includes('unique')) {
+            const actionText = context === 'create' ? 'crear' : 'actualizar';
+            await showCustomAlert(
+                'error', 
+                'Información Duplicada', 
+                `No se puede ${actionText} el abogado porque ya existe otro con la misma información (número de documento o correo electrónico). Por favor, verifica los datos ingresados.`
+            );
+            return true;
+        }
+        
+        // Error de validación general
+        await showCustomAlert(
+            'warning', 
+            'Error de Validación', 
+            errorMessage || "Los datos ingresados no son válidos. Por favor, verifica que todos los campos estén completos y correctos."
+        );
+        return true;
+    }
+    
+    return false; // No fue un error manejado
+}
+
+/**
+ * Función específica para validar duplicados antes del envío
+ * @param {FormData} formData - Datos del formulario
+ * @param {string} currentId - ID actual (para edición)
+ * @returns {Promise<boolean>} - true si hay duplicados, false si no
+ */
+async function checkForDuplicates(formData, currentId = null) {
+    try {
+        const response = await fetch('/lawyers/check-duplicates', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                numero_documento: formData.get('numeroDocumento'),
+                correo: formData.get('correo'),
+                current_id: currentId
+            })
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            
+            if (result.duplicates && result.duplicates.length > 0) {
+                const duplicateMessages = result.duplicates.map(duplicate => {
+                    if (duplicate.field === 'numero_documento') {
+                        return `• Número de documento ${duplicate.value} ya está registrado`;
+                    } else if (duplicate.field === 'correo') {
+                        return `• Correo electrónico ${duplicate.value} ya está registrado`;
+                    }
+                    return `• ${duplicate.field}: ${duplicate.value} ya existe`;
+                });
+
+                await showCustomAlert(
+                    'warning',
+                    'Información Duplicada Detectada',
+                    `Se encontraron los siguientes duplicados:\n\n${duplicateMessages.join('\n')}\n\nPor favor, modifica estos campos antes de continuar.`
+                );
+                return true;
+            }
+        }
+    } catch (error) {
+        console.log('No se pudo verificar duplicados:', error);
+        // No mostramos error aquí, se manejará en el envío principal
+    }
+    
+    return false;
+}
+
 // ===== FUNCIONES DE VALIDACIÓN =====
 function validateForm(formData) {
     const errors = [];
@@ -154,7 +279,6 @@ function validateForm(formData) {
 
     return errors;
 }
-
 
 // ===== FUNCIONES DE VALIDACIÓN para editar=====
 function validateEditForm(formData) {
@@ -227,6 +351,83 @@ function validateRegisterForm(formData) {
     return errors;
 }
 
+// ===== VALIDACIÓN EN TIEMPO REAL (OPCIONAL) =====
+/**
+ * Valida duplicados mientras el usuario escribe (con debounce)
+ * @param {string} fieldName - Nombre del campo ('numeroDocumento' o 'correo')
+ * @param {HTMLElement} inputElement - Elemento del input
+ */
+function setupRealTimeValidation(fieldName, inputElement) {
+    let timeoutId;
+    
+    inputElement.addEventListener('input', function() {
+        clearTimeout(timeoutId);
+        
+        // Esperar 1 segundo después de que el usuario deje de escribir
+        timeoutId = setTimeout(async () => {
+            const value = this.value.trim();
+            
+            if (value.length < 3) return; // No validar valores muy cortos
+            
+            try {
+                const response = await fetch('/lawyers/check-field', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        field: fieldName,
+                        value: value
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    
+                    if (result.exists) {
+                        // Agregar clase de error visual
+                        inputElement.classList.add('error');
+                        inputElement.classList.remove('success');
+                        
+                        // Opcional: mostrar tooltip o mensaje
+                        showFieldError(inputElement, `Este ${fieldName === 'numeroDocumento' ? 'número de documento' : 'correo'} ya está registrado`);
+                    } else {
+                        // Agregar clase de éxito visual
+                        inputElement.classList.add('success');
+                        inputElement.classList.remove('error');
+                        hideFieldError(inputElement);
+                    }
+                }
+            } catch (error) {
+                console.log('Error en validación en tiempo real:', error);
+            }
+        }, 1000);
+    });
+}
+
+// Funciones auxiliares para mostrar/ocultar errores de campo
+function showFieldError(inputElement, message) {
+    let errorElement = inputElement.parentNode.querySelector('.field-error');
+    
+    if (!errorElement) {
+        errorElement = document.createElement('div');
+        errorElement.className = 'field-error';
+        errorElement.style.color = '#e74c3c';
+        errorElement.style.fontSize = '12px';
+        errorElement.style.marginTop = '4px';
+        inputElement.parentNode.appendChild(errorElement);
+    }
+    
+    errorElement.textContent = message;
+}
+
+function hideFieldError(inputElement) {
+    const errorElement = inputElement.parentNode.querySelector('.field-error');
+    if (errorElement) {
+        errorElement.remove();
+    }
+}
 
 // ===== FUNCIONALIDAD PRINCIPAL =====
 
@@ -284,7 +485,6 @@ function updateRowInTable(id, updatedData) {
     row.children[5].textContent = updatedData.telefono || "";
     row.children[6].textContent = updatedData.especialidad || "";
 }
-
 
 // Event listeners básicos
 hamburgerBtn.addEventListener("click", toggleSidebar);
@@ -348,6 +548,7 @@ document.addEventListener("click", function(e) {
     }
 });
 
+// ===== FORMULARIO DE EDICIÓN MEJORADO =====
 editLawyerForm.addEventListener("submit", async function(e) {
     e.preventDefault();
 
@@ -355,12 +556,17 @@ editLawyerForm.addEventListener("submit", async function(e) {
     const data = new FormData(form);
     const lawyerId = form.action.split("/").pop();
     
-
-    // NUEVA VALIDACIÓN - Verificar campos obligatorios
+    // VALIDACIÓN DE CAMPOS OBLIGATORIOS
     const validationErrors = validateEditForm(data);
     if (validationErrors.length > 0) {
         await showCustomAlert('warning', 'Campos Incompletos', validationErrors.join('\n'));
         return;
+    }
+
+    // VERIFICACIÓN DE DUPLICADOS (opcional - si implementas el endpoint)
+    const hasDuplicates = await checkForDuplicates(data, lawyerId);
+    if (hasDuplicates) {
+        return; // Detener si hay duplicados
     }
 
     try {
@@ -384,40 +590,43 @@ editLawyerForm.addEventListener("submit", async function(e) {
             };
 
             updateRowInTable(lawyerId, updatedLawyer);
-            showCustomAlert('success', '¡Perfecto!', `El abogado ${updatedLawyer.nombre} ${updatedLawyer.apellido} ha sido actualizado exitosamente.`);
+            await showCustomAlert('success', '¡Perfecto!', `El abogado ${updatedLawyer.nombre} ${updatedLawyer.apellido} ha sido actualizado exitosamente.`);
             closeEditModal();
         } else {
             const error = await response.json();
-
-            // MANEJO MEJORADO DE ERRORES DE DUPLICADOS
-            if (response.status === 422) {
-                if (error.message && (error.message.includes('ya existe') || error.message.includes('duplicado'))) {
-                    showCustomAlert('error', 'Información Duplicada', 'Ya existe un abogado con este número de documento o correo electrónico. Por favor, verifica los datos.');
-                } else {
-                    showCustomAlert('error', 'Error de Validación', error.message || "Los datos ingresados no son válidos. Verifica que todos los campos estén correctos y no duplicados.");
-                }
-            } else {
-                showCustomAlert('error', 'Error de Actualización', "Error al actualizar: " + (error.message || "Verifica que todos los campos estén correctos."));
+            
+            // Usar el nuevo manejador de errores de duplicados
+            const handled = await handleDuplicateError(error, response.status, 'edit');
+            
+            if (!handled) {
+                // Error no específico de duplicados
+                await showCustomAlert('error', 'Error de Actualización', "Error al actualizar: " + (error.message || "Verifica que todos los campos estén correctos."));
             }
         }
     } catch (error) {
         console.error(error);
-        showCustomAlert('error', 'Error Inesperado', 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo o contacta al soporte técnico.');
+        await showCustomAlert('error', 'Error Inesperado', 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo o contacta al soporte técnico.');
     }
 });
 
-// CREACIÓN DE ABOGADOS CON VALIDACIONES MEJORADAS
+// ===== CREACIÓN DE ABOGADOS CON VALIDACIONES MEJORADAS =====
 document.getElementById("createLawyerModal").querySelector("form").addEventListener("submit", async function(e) {
     e.preventDefault();
 
     const form = e.target;
     const data = new FormData(form);
 
-    // NUEVA VALIDACIÓN - Verificar campos obligatorios
+    // VALIDACIÓN DE CAMPOS OBLIGATORIOS
     const validationErrors = validateForm(data);
     if (validationErrors.length > 0) {
         await showCustomAlert('warning', 'Campos Incompletos', 'Por favor, completa todos los campos obligatorios:\n\n' + validationErrors.join('\n'));
         return;
+    }
+
+    // VERIFICACIÓN DE DUPLICADOS (opcional - si implementas el endpoint)
+    const hasDuplicates = await checkForDuplicates(data);
+    if (hasDuplicates) {
+        return; // Detener si hay duplicados
     }
 
     try {
@@ -430,30 +639,24 @@ document.getElementById("createLawyerModal").querySelector("form").addEventListe
         });
 
         if (response.ok) {
-            // Mostrar la alerta y esperar a que el usuario haga clic en "Aceptar"
             await showCustomAlert('success', '¡Excelente!', `El abogado ${data.get('nombre')} ${data.get('apellido')} ha sido registrado exitosamente.`);
-
-            // Solo después de que el usuario haga clic en "Aceptar", hacer la limpieza y recarga
             form.reset();
             closeModalFunction();
             location.reload();
         } else {
             const error = await response.json();
-
-            // MANEJO MEJORADO DE ERRORES ESPECÍFICOS
-            if (response.status === 422) {
-                if (error.message && (error.message.includes('ya existe') || error.message.includes('duplicado') || error.message.includes('unique'))) {
-                    showCustomAlert('error', 'Abogado Ya Registrado', 'Ya existe un abogado registrado con este número de documento o correo electrónico. Por favor, verifica la información antes de continuar.');
-                } else {
-                    showCustomAlert('error', 'Error de Validación', error.message || "Los datos ingresados no son válidos. Verifica que todos los campos estén completos y correctos.");
-                }
-            } else {
-                showCustomAlert('error', 'Error al Crear', "Error al guardar: " + (error.message || "Verifica que todos los campos estén completos y correctos."));
+            
+            // Usar el nuevo manejador de errores de duplicados
+            const handled = await handleDuplicateError(error, response.status, 'create');
+            
+            if (!handled) {
+                // Error no específico de duplicados
+                await showCustomAlert('error', 'Error al Crear', "Error al guardar: " + (error.message || "Verifica que todos los campos estén completos y correctos."));
             }
         }
     } catch (error) {
         console.error(error);
-        showCustomAlert('error', 'Error de Conexión', 'No se pudo crear el abogado. Verifica tu conexión a internet e inténtalo de nuevo.');
+        await showCustomAlert('error', 'Error de Conexión', 'No se pudo crear el abogado. Verifica tu conexión a internet e inténtalo de nuevo.');
     }
 });
 
@@ -498,9 +701,115 @@ function searchLawyersWithAlert() {
     }
 }
 
-//Funciones de exportación
+// ===== FUNCIONALIDAD DE SUBIDA DE IMAGEN DE PERFIL =====
+function setupImageUpload() {
+    const fileInput = document.getElementById('fileInput');
+    const profileImage = document.getElementById('profileImage');
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    
+    if (!fileInput || !profileImage) {
+        console.warn('Elementos para subida de imagen no encontrados.');
+        return;
+    }
 
+    // Guardar la imagen original como referencia
+    profileImage.dataset.originalSrc = profileImage.src;
 
+    fileInput.addEventListener('change', async function(e) {
+        const file = e.target.files[0];
+        
+        if (!file) return;
+
+        // Validar tipo de archivo
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Solo se permiten archivos JPG, JPEG y PNG.');
+            fileInput.value = '';
+            return;
+        }
+
+        // Validar tamaño (2MB máximo)
+        const maxSize = 2 * 1024 * 1024;
+        if (file.size > maxSize) {
+            alert('El archivo debe ser menor a 2MB.');
+            fileInput.value = '';
+            return;
+        }
+
+        // Mostrar preview inmediato
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            profileImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+
+        // Mostrar indicador de carga
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'block';
+        }
+
+        // Crear FormData
+        const formData = new FormData();
+        formData.append('profile_photo', file);
+
+        // Verificar token CSRF
+        const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
+        if (!csrfTokenElement) {
+            console.error('Token CSRF no encontrado');
+            alert('Error de seguridad: Token CSRF no encontrado.');
+            return;
+        }
+
+        const csrfToken = csrfTokenElement.getAttribute('content');
+
+        try {
+            const response = await fetch('/user/profile-photo', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Actualizar imagen con URL del servidor
+                profileImage.src = data.url + '?t=' + new Date().getTime();
+                profileImage.dataset.originalSrc = data.url;
+                alert('¡Imagen actualizada correctamente!');
+            } else {
+                // Revertir imagen
+                profileImage.src = profileImage.dataset.originalSrc;
+                alert('Error: ' + (data.message || 'No se pudo actualizar la imagen.'));
+            }
+
+        } catch (error) {
+            // Revertir imagen
+            profileImage.src = profileImage.dataset.originalSrc;
+            console.error('Error al subir imagen:', error);
+            
+            let errorMessage = 'No se pudo conectar con el servidor.';
+            if (error.message.includes('HTTP error')) {
+                errorMessage = 'Error del servidor. Por favor, intenta de nuevo.';
+            }
+            
+            alert('Error: ' + errorMessage);
+        } finally {
+            // Ocultar indicador de carga
+            if (loadingIndicator) {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        fileInput.value = ''; // Limpiar input
+    });
+}
 
 // iOS: Prevenir zoom en inputs
 if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
@@ -514,9 +823,10 @@ if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
 // Hacer funciones disponibles globalmente
 window.showCustomAlert = showCustomAlert;
 window.hideCustomAlert = hideCustomAlert;
+window.handleDuplicateError = handleDuplicateError;
+window.checkForDuplicates = checkForDuplicates;
 
-
-// Inicializar funcionalidades cuando el DOM esté listo
+// ===== INICIALIZACIÓN DE TODAS LAS FUNCIONALIDADES =====
 document.addEventListener('DOMContentLoaded', function() {
     // Configurar la subida de imagen
     setupImageUpload();
@@ -526,116 +836,32 @@ document.addEventListener('DOMContentLoaded', function() {
     if (profileImage) {
         profileImage.dataset.originalSrc = profileImage.src;
     }
+
+    // ===== INICIALIZACIÓN DE VALIDACIÓN EN TIEMPO REAL =====
+    // Para el modal de creación
+    const createNumeroDocumento = document.getElementById('numeroDocumento');
+    const createCorreo = document.getElementById('correo');
+    
+    if (createNumeroDocumento) {
+        setupRealTimeValidation('numeroDocumento', createNumeroDocumento);
+    }
+    
+    if (createCorreo) {
+        setupRealTimeValidation('correo', createCorreo);
+    }
+    
+    // Para el modal de edición
+    const editNumeroDocumento = document.getElementById('editNumeroDocumento');
+    const editCorreo = document.getElementById('editCorreo');
+    
+    if (editNumeroDocumento) {
+        setupRealTimeValidation('numeroDocumento', editNumeroDocumento);
+    }
+    
+    if (editCorreo) {
+        setupRealTimeValidation('correo', editCorreo);
+    }
+
+    // Inicializar otros elementos si es necesario
+    console.log('Sistema de alertas y validaciones inicializado correctamente');
 });
-
-
-
-// ===== FUNCIONALIDAD DE SUBIDA DE IMAGEN DE PERFIL =====
-        function setupImageUpload() {
-            const fileInput = document.getElementById('fileInput');
-            const profileImage = document.getElementById('profileImage');
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            
-            if (!fileInput || !profileImage) {
-                console.warn('Elementos para subida de imagen no encontrados.');
-                return;
-            }
-
-            // Guardar la imagen original como referencia
-            profileImage.dataset.originalSrc = profileImage.src;
-
-            fileInput.addEventListener('change', async function(e) {
-                const file = e.target.files[0];
-                
-                if (!file) return;
-
-                // Validar tipo de archivo
-                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-                if (!allowedTypes.includes(file.type)) {
-                    alert('Solo se permiten archivos JPG, JPEG y PNG.');
-                    fileInput.value = '';
-                    return;
-                }
-
-                // Validar tamaño (2MB máximo)
-                const maxSize = 2 * 1024 * 1024;
-                if (file.size > maxSize) {
-                    alert('El archivo debe ser menor a 2MB.');
-                    fileInput.value = '';
-                    return;
-                }
-
-                // Mostrar preview inmediato
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    profileImage.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-
-                // Mostrar indicador de carga
-                if (loadingIndicator) {
-                    loadingIndicator.style.display = 'block';
-                }
-
-                // Crear FormData
-                const formData = new FormData();
-                formData.append('profile_photo', file);
-
-                // Verificar token CSRF
-                const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
-                if (!csrfTokenElement) {
-                    console.error('Token CSRF no encontrado');
-                    alert('Error de seguridad: Token CSRF no encontrado.');
-                    return;
-                }
-
-                const csrfToken = csrfTokenElement.getAttribute('content');
-
-                try {
-                    const response = await fetch('/user/profile-photo', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Accept': 'application/json'
-                        },
-                        body: formData
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-
-                    const data = await response.json();
-
-                    if (data.success) {
-                        // Actualizar imagen con URL del servidor
-                        profileImage.src = data.url + '?t=' + new Date().getTime();
-                        profileImage.dataset.originalSrc = data.url;
-                        alert('¡Imagen actualizada correctamente!');
-                    } else {
-                        // Revertir imagen
-                        profileImage.src = profileImage.dataset.originalSrc;
-                        alert('Error: ' + (data.message || 'No se pudo actualizar la imagen.'));
-                    }
-
-                } catch (error) {
-                    // Revertir imagen
-                    profileImage.src = profileImage.dataset.originalSrc;
-                    console.error('Error al subir imagen:', error);
-                    
-                    let errorMessage = 'No se pudo conectar con el servidor.';
-                    if (error.message.includes('HTTP error')) {
-                        errorMessage = 'Error del servidor. Por favor, intenta de nuevo.';
-                    }
-                    
-                    alert('Error: ' + errorMessage);
-                } finally {
-                    // Ocultar indicador de carga
-                    if (loadingIndicator) {
-                        loadingIndicator.style.display = 'none';
-                    }
-                }
-
-                fileInput.value = ''; // Limpiar input
-            });
-        }

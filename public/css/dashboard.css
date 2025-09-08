@@ -2,8 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 /* ==============================================
-   ===      VARIABLES GLOBALES (Paleta Azul)    ===
-   ==============================================
+    ===      VARIABLES GLOBALES (Paleta Azul)    ===
+    ==============================================
 */
 :root {
     /* Paleta de colores principal - Tonos Azules */
@@ -580,10 +580,27 @@ tr:hover td {
     background: var(--color-danger-dark);
 }
 
-/* ==============================================
-   ===            ALERTAS CUSTOMIZADAS        ===
-   ==============================================
+/*  ==============================================
+    ===            ALERTAS CUSTOMIZADAS        ===
+    ==============================================
 */
+
+.error {
+    border-color: #e74c3c !important;
+    box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.2) !important;
+}
+
+.success {
+    border-color: #27ae60 !important;
+    box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.2) !important;
+}
+
+.field-error {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
 .alert-overlay {
     position: fixed;
     top: 0;

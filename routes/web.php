@@ -92,6 +92,8 @@ Route::get('/user/profile-photo-view', [ProfileController::class, 'showProfilePh
     ->middleware('auth')
     ->name('user.profile-photo.view');
 
-    
+    //Duplicados y existencia
+Route::post('/lawyers/check-duplicates', [LawyerController::class, 'checkDuplicates']);
+Route::post('/lawyers/check-field', [LawyerController::class, 'checkField']);
 // Rutas de autenticación
 require __DIR__ . '/auth.php';
