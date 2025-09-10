@@ -129,10 +129,8 @@
 
                 <!-- Contenedor de la foto de perfil -->
                 <div class="profile-pic" onclick="document.getElementById('fileInput').click();" title="Haz clic para cambiar tu foto">
-                    <img src="{{ Auth::user()->profile_photo_path ? Storage::url(Auth::user()->profile_photo_path) : asset('img/default-avatar.png') }}" 
-                        id="profileImage" 
-                        alt="Foto de perfil">
-                    
+                    <img src="{{ Auth::user()->profile_photo ? Storage::url(Auth::user()->profile_photo) : asset('img/a7dec46aca07b2e12e2e361cfa9312ec.jpg') }}" id="profileImage"  alt="Foto de perfil">
+
                     <!-- Overlay para indicar que es clickeable -->
                     <div class="photo-overlay">
                     </div>
@@ -140,7 +138,6 @@
 
                 <!-- Indicador de carga -->
                 <div id="loadingIndicator" style="display: none; text-align: center; margin-top: 10px;">
-                    <small>Subiendo imagen...</small>
                 </div>
 
                 <h3>{{ Auth::user()->name }}</h3>

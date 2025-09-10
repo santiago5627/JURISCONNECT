@@ -704,7 +704,7 @@ function searchLawyersWithAlert() {
 // ===== FUNCIONALIDAD DE SUBIDA DE IMAGEN DE PERFIL =====
 function setupImageUpload() {
     const fileInput = document.getElementById('fileInput');
-    const profileImage = document.getElementById('profileImage');
+    const profileImage = document.getElementById('profileImage'); // unificado
     const loadingIndicator = document.getElementById('loadingIndicator');
     
     if (!fileInput || !profileImage) {
@@ -717,13 +717,12 @@ function setupImageUpload() {
 
     fileInput.addEventListener('change', async function(e) {
         const file = e.target.files[0];
-        
         if (!file) return;
 
         // Validar tipo de archivo
         const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         if (!allowedTypes.includes(file.type)) {
-            alert('Solo se permiten archivos JPG, JPEG y PNG.');
+            await showCustomAlert('error', 'Archivo no válido', 'Solo se permiten archivos JPG, JPEG y PNG.');
             fileInput.value = '';
             return;
         }
@@ -731,7 +730,7 @@ function setupImageUpload() {
         // Validar tamaño (2MB máximo)
         const maxSize = 2 * 1024 * 1024;
         if (file.size > maxSize) {
-            alert('El archivo debe ser menor a 2MB.');
+            await showCustomAlert('error', 'Archivo muy grande', 'El archivo debe ser menor a 2MB.');
             fileInput.value = '';
             return;
         }
@@ -750,13 +749,21 @@ function setupImageUpload() {
 
         // Crear FormData
         const formData = new FormData();
-        formData.append('profile_photo', file);
+        formData.append('profile_photo', file); // 👈 nombre correcto
 
-        // Verificar token CSRF
+            fetch('/user/profile-photo', {
+                method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json',
+                        },
+                        body: formData
+            });
+
+        // CSRF
         const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
         if (!csrfTokenElement) {
-            console.error('Token CSRF no encontrado');
-            alert('Error de seguridad: Token CSRF no encontrado.');
+            await showCustomAlert('error', 'Error de seguridad', 'Token CSRF no encontrado.');
             return;
         }
 
@@ -772,44 +779,31 @@ function setupImageUpload() {
                 body: formData
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
             const data = await response.json();
 
-            if (data.success) {
-                // Actualizar imagen con URL del servidor
-                profileImage.src = data.url + '?t=' + new Date().getTime();
+            if (response.ok && data.success) {
+                profileImage.src = data.url + '?t=' + new Date().getTime(); // evitar cache
                 profileImage.dataset.originalSrc = data.url;
-                alert('¡Imagen actualizada correctamente!');
+                await showCustomAlert('success', '¡Perfecto!', 'Imagen actualizada correctamente.');
             } else {
-                // Revertir imagen
                 profileImage.src = profileImage.dataset.originalSrc;
-                alert('Error: ' + (data.message || 'No se pudo actualizar la imagen.'));
+                await showCustomAlert('error', 'Error', data.message || 'No se pudo actualizar la imagen.');
             }
 
         } catch (error) {
-            // Revertir imagen
             profileImage.src = profileImage.dataset.originalSrc;
             console.error('Error al subir imagen:', error);
-            
-            let errorMessage = 'No se pudo conectar con el servidor.';
-            if (error.message.includes('HTTP error')) {
-                errorMessage = 'Error del servidor. Por favor, intenta de nuevo.';
-            }
-            
-            alert('Error: ' + errorMessage);
+            await showCustomAlert('error', 'Error de conexión', 'No se pudo conectar con el servidor.');
         } finally {
-            // Ocultar indicador de carga
             if (loadingIndicator) {
                 loadingIndicator.style.display = 'none';
             }
         }
 
-        fileInput.value = ''; // Limpiar input
+        fileInput.value = ''; // limpiar input
     });
 }
+
 
 // iOS: Prevenir zoom en inputs
 if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {

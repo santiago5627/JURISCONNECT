@@ -18,7 +18,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'profile_photo',
     ];
+    public function getProfilePhotoPathAttribute()
+        {
+            return $this->profile_photo;
+        }
 
     /**
      * Los atributos que deben estar ocultos para la serialización.
@@ -39,3 +44,4 @@ class User extends Authenticatable
         ];
     }
 }
+

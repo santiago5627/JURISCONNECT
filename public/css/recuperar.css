@@ -43,15 +43,15 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    transform: translateX(143px);
+    transform: translateX(100px);
 }
 
 .logo-jurisconnect {
     max-width: 100%;
-    width: 490px;
+    width: 400px;
     height: auto;
     margin-bottom: -10px;
-    margin-left: -300px;
+    margin-left: -150px;
     animation: fadeInLeft 1s ease-out;
     transition: transform 0.3s ease;
 }
@@ -64,8 +64,8 @@ body {
     border-radius: 25px;
     border: 1px solid rgba(255, 255, 255, 0.25);
     padding: 100px 40px;
-    width: 1500px;
-    max-width: 550px;
+    width: 100%;
+    max-width: 480px;
     height: 500px;
     box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
     animation: fadeInRight 1s ease-out;
@@ -225,73 +225,87 @@ body {
     align-items: center;
 }
 
+/* Fondo oscurecido con blur */
 .custom-alert-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 2000;
+    z-index: 10000;
+    backdrop-filter: blur(3px);
 }
 
+/* Caja de la alerta */
 .custom-alert-box {
     background: #fff;
-    padding: 20px 25px;
     border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-    text-align: center;
-    max-width: 400px;
+    padding: 25px 30px;
+    max-width: 420px;
     width: 90%;
-    animation: fadeIn 0.3s ease;
+    text-align: center;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.25);
+    animation: alertIn 0.35s ease;
 }
 
-.custom-alert-header {
+/* Círculo con ícono */
+.custom-alert-icon-circle {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: #047857; /* verde */
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    margin-bottom: 10px;
 }
 
-.custom-alert-icon {
-    font-size: 28px;
+.custom-alert-icon-circle i {
+    color: #fff;
+    font-size: 32px;
 }
 
+/* Título */
 .custom-alert-title {
     font-size: 20px;
-    font-weight: bold;
-    margin: 0;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 8px;
 }
 
+/* Mensaje */
 .custom-alert-message {
-    font-size: 16px;
-    margin: 10px 0 20px;
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 20px;
 }
 
+/* Botón */
 .custom-alert-btn {
-    background: #006633;
+    background: #047857;
     color: #fff;
     border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    cursor: pointer;
+    padding: 12px 28px;
+    border-radius: 25px;
     font-size: 15px;
-    transition: background 0.2s;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .custom-alert-btn:hover {
-    background: #004d26;
+    background: #03613d;
+    transform: translateY(-2px);
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Animación */
+@keyframes alertIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
 }
-
 
 /* Animación */
 @keyframes fadeIn {

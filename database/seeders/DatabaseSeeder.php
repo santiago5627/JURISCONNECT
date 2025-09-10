@@ -16,10 +16,15 @@ public function run(): void
     $adminRole = Role::firstOrCreate([
         'name' => 'Administrador'
     ]);
+    
+    $this->call([
+        ProcesoSeeder::class,
+        AbogadoUserSeeder::class,
+    ]);
 
     // Crear un usuario con ese rol
     User::firstOrCreate([
-        'email' => 'bsalinas1054@gmail.com'
+        'email' => 'brendaModa45@gmail.com'
     ], [
         'name' => 'Admin',
         'password' => Hash::make('admin123'), 

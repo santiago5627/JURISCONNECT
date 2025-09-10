@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Proceso;
 
 class ProcesoSeeder extends Seeder
 {
@@ -12,6 +12,19 @@ class ProcesoSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Proceso::create([
+            'nombre' => 'Demanda Civil',
+            'descripcion' => 'Proceso relacionado con disputas civiles.',
+        ]);
+
+        Proceso::create([
+            'nombre' => 'Proceso Penal',
+            'descripcion' => 'Caso relacionado con derecho penal.',
+        ]);
+
+        Proceso::create([
+            'nombre' => 'Audiencia Laboral',
+            'descripcion' => 'Conflictos laborales y sindicales.',
+        ]);
     }
 }

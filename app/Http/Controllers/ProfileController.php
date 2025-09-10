@@ -5,104 +5,36 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rules\File;
-use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
-    /**
-     * Actualizar la foto de perfil del usuario
-     */
-    public function updateProfilePhoto(Request $request)
+    public function updatePhoto(Request $request)
     {
-        try {
-            // Log para debug
-            Log::info('Intentando subir foto de perfil', [
-                'user_id' => Auth::id(),
-                'file_present' => $request->hasFile('profile_photo')
-            ]);
+        // Validar archivo
+        $request->validate([
+            'profile_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
 
-            // Validar el archivo
-            $request->validate([
-                'profile_photo' => [
-                    'required',
-                    'file',
-                    'image',
-                    'mimes:jpeg,jpg,png',
-                    'max:2048', // 2MB máximo
-                ],
-            ], [
-                'profile_photo.required' => 'Debe seleccionar una imagen.',
-                'profile_photo.file' => 'El archivo debe ser una imagen válida.',
-                'profile_photo.image' => 'El archivo debe ser una imagen.',
-                'profile_photo.mimes' => 'Solo se permiten archivos JPG, JPEG y PNG.',
-                'profile_photo.max' => 'La imagen no debe ser mayor a 2MB.',
-            ]);
+        if ($request->hasFile('profile_photo')) {
+            // Guardar en storage/app/public/profile-photos
+            $path = $request->file('profile_photo')->store('profile-photos', 'public');
 
+            // Actualizar al usuario logueado
+            /** @var \App\Models\User $user */
             $user = Auth::user();
-            
-            if (!$user) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Usuario no autenticado.'
-                ], 401);
-            }
+            $user->profile_photo = $path; // se guarda la ruta relativa
+            $user->save();
 
-            // Verificar que el directorio existe
-            if (!Storage::disk('public')->exists('profile-photos')) {
-                Storage::disk('public')->makeDirectory('profile-photos');
-            }
-
-            // Eliminar la foto anterior si existe
-            if ($user->profile_photo_path && Storage::disk('public')->exists($user->profile_photo_path)) {
-                Storage::disk('public')->delete($user->profile_photo_path);
-                Log::info('Foto anterior eliminada', ['path' => $user->profile_photo_path]);
-            }
-
-            // Guardar la nueva foto
-            $file = $request->file('profile_photo');
-            $filename = 'profile_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-            $path = $file->storeAs('profile-photos', $filename, 'public');
-            
-            Log::info('Nueva foto guardada', ['path' => $path]);
-
-            // Actualizar el usuario
-            $user->profile_photo_path = $path;
-            $user->Auth::save();
-
-            $photoUrl = Storage::url($path);
-
-            Log::info('Foto de perfil actualizada correctamente', [
-                'user_id' => $user->id,
-                'path' => $path,
-                'url' => $photoUrl
-            ]);
-
+            // Retornar URL lista para mostrar en frontend
             return response()->json([
                 'success' => true,
-                'message' => 'Imagen de perfil actualizada correctamente.',
-                'url' => $photoUrl
+                'url' => Storage::url($path), // /storage/profile-photos/xxxx.jpg
             ]);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            Log::warning('Error de validación al subir foto', ['errors' => $e->errors()]);
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Error de validación.',
-                'errors' => $e->errors()
-            ], 422);
-
-        } catch (\Exception $e) {
-            Log::error('Error al subir foto de perfil', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Error interno del servidor: ' . $e->getMessage()
-            ], 500);
         }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'No se subió ninguna imagen'
+        ]);
     }
 }
