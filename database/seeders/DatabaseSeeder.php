@@ -24,17 +24,11 @@ public function run(): void
     $adminRole = Role::firstOrCreate([
         'name' => 'Administrador'
     ]);
-    
-    $this->call([
-        ProcesoSeeder::class,
-        AbogadoUserSeeder::class,
-    ]);
 
     // Crear un usuario con ese rol
     User::firstOrCreate([
         'email' => 'brendaModa45@gmail.com'
 
-        'email' => 'admin@sena.edu.co'
     ], [
         'name' => 'Admin',
         'password' => Hash::make('admin123'), 

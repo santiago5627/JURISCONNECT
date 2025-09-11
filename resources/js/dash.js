@@ -860,5 +860,5 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Sistema de alertas y validaciones inicializado correctamente');
 });
 
-}
+
 

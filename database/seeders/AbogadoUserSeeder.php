@@ -9,15 +9,9 @@ use App\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
 class AbogadoUserSeeder extends Seeder   // 👈 Aquí debe llamarse AbogadoUserSeeder, no ProcesoSeeder
-
-class AbogadoUserSeeder extends Seeder
 {
     public function run(): void
     {
-        Proceso::create([
-    'nombre' => 'Proceso de prueba',
-    'descripcion' => 'Proceso asignado al abogado inicial',
-    ]);
 
         // Buscar el rol abogado
         $lawyerRole = Role::where('name', 'lawyer')->first();
