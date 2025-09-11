@@ -475,12 +475,13 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
             <h2>Redactar Concepto Jurídico</h2>
-            <a href="#" class="btn-back">
+            <a href="{{ route('conceptos.create') }}" class="btn-back">
                 <i class="fas fa-arrow-left"></i> 
                 Volver a la Lista
             </a>
@@ -497,7 +498,6 @@
 
         <!-- Información del Proceso -->
         <div class="card">
-@foreach($procesos as $proceso)
             <div class="card-header">
                 <h5>
                     <i class="fas fa-info-circle"></i> 
@@ -507,7 +507,6 @@
             </div>
             <div class="card-body">
                 <div class="info-grid">
-                    
                     <div>
                         <div class="info-item">
                             <div class="info-label">
@@ -546,11 +545,9 @@
                             </div>
                             <div class="info-value">{{ $proceso->demandado }}</div>
                         </div>
-                    
                     </div>
                 </div>
             </div>
-@endforeach
         </div>
 
         <!-- Formulario del Concepto Jurídico -->
@@ -595,37 +592,12 @@ Estructura sugerida:
                         </div>
                     </div>
 
-                    <!-- Recomendaciones -->
-                    <div class="form-group">
-                        <label for="recomendaciones" class="form-label">
-                            <i class="fas fa-lightbulb" style="color: #f59e0b;"></i> 
-                            Recomendaciones 
-                            <span class="optional">(Opcional)</span>
-                        </label>
-                        <div class="form-help warning">
-                            Proporciona recomendaciones estratégicas para el manejo del caso.
-                        </div>
-                        <textarea 
-                            id="recomendaciones" 
-                            name="recomendaciones" 
-                            rows="8" 
-                            class="form-textarea"
-                            placeholder="Ingresa recomendaciones adicionales para el caso...
-
-Por ejemplo:
-• Acciones procesales a seguir
-• Documentos adicionales requeridos
-• Estrategias de defensa
-• Plazos importantes a considerar"
-                        ></textarea>
-                    </div>
-
                     <!-- Botones de Acción -->
                     <div class="btn-group">
-                        <button type="button" class="btn btn-cancel">
+                        <a href="{{ route('conceptos.create') }}" class="btn btn-cancel">
                             <i class="fas fa-times"></i> 
                             Cancelar
-                        </button>
+                        </a>
                         <div class="btn-actions">
                             <button type="button" onclick="guardarBorrador()" class="btn btn-draft">
                                 <i class="fas fa-save"></i> 

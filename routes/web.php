@@ -62,8 +62,7 @@ Route::middleware(['auth'])->group(function () {
     // === CONCEPTOS JURÍDICOS ===
     Route::get('/abogado/mis-procesos', [AbogadoController::class, 'misProcesos'])->name('abogado.misConceptos');
     Route::get('/conceptos/create', [ConceptoController::class, 'create'])->name('conceptos.create');
-    Route::get('/abogado/conceptos', [AbogadoController::class, 'crearConcepto'])->name('abogado.crear-concepto');
-    // Route::put('/abogado/guardar-concepto/{id}', [AbogadoController::class, 'guardarConcepto'])->name('abogado.guardar-concepto');
+
     Route::get('/procesos/{id}/concepto', [AbogadoController::class, 'mostrarFormularioConcepto'])->name('abogado.crear-concepto');
     Route::post('/procesos/{proceso}/concepto', [ConceptoController::class, 'store'])->name('procesos.conceptos.store');
     Route::post('/abogado/finalizar-proceso/{id}', [AbogadoController::class, 'finalizarProceso'])->name('abogado.finalizar-proceso');

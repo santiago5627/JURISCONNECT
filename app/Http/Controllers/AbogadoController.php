@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ConceptoJuridico;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Proceso; 
 
 class AbogadoController extends Controller
 {
@@ -210,13 +211,11 @@ class AbogadoController extends Controller
     public function mostrarFormularioConcepto($id)
     {
         try {
-            $proceso = ConceptoJuridico::findOrFail($id);
-
-            $this->verificarAccesoProceso($proceso);
+            $proceso = Proceso::findOrFail($id);
 
             return view('legal_processes.editConceptos', compact('proceso'));
         } catch (\Exception $e) {
-            return redirect()->route('abogado.crear-concepto')
+            return redirect()->back()
                 ->with('error', 'Proceso no encontrado');
         }
     }
