@@ -6,6 +6,7 @@
     <title>JurisConnect SENA - Recuperar Contraseña</title>
     <link rel="stylesheet" href="{{ asset('/css/recuperar.css') }}">
     <!-- Si quieres mantener el CSS en línea temporalmente, lo dejo más abajo -->
+
 </head>
 <body>
     <!-- Fondo -->

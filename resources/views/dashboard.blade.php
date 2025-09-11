@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout><!-- pagina para el dashboard de los administradores -->
     <x-slot name="header">
         <!-- Header vacío para evitar conflictos -->
     </x-slot>
@@ -8,14 +8,14 @@
 
     <!-- Contenido sin contenedores restrictivos -->
     <div class="dashboard-wrapper">
-        
+
         <!-- Overlay para móviles -->
         <div class="overlay" id="overlay"></div>      
 
         <!-- Enlace a CSS -->
         <link rel="stylesheet" href="{{ asset('/css/dashboard.css') }}">
 
-        <!-- Modal para crear nuevo abogado -->
+<!-- Modal para crear nuevo abogado -->
         <div class="modal" id="createLawyerModal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -70,7 +70,7 @@
             </div>
         </div>
 
-        <!-- Modal para editar abogado -->
+<!-- Modal para editar abogado -->
         <div class="modal" id="editLawyerModal">
             <div class="modal-content">
                 <div class="modal-header">
@@ -140,16 +140,30 @@
                 <div id="loadingIndicator" style="display: none; text-align: center; margin-top: 10px;">
                 </div>
 
+
+<!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+    <div class="profile">
+    <input type="file" id="fileInput" accept="image/*" hidden>
+    <div class="profile-pic" onclick="document.getElementById('fileInput').click();">
+    <form action="{{ route('imagenes.guardar') }}" method="POST" enctype="multipart/form-data">
+    @csrf <div>
+        <label for="imagen">Selecciona una imagen:</label>
+        <input type="file" name="imagen" id="imagen" required>
+    </div>
+
+    <button type="submit">Subir Imagen</button>
+</form>    </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
             </div>
             
             <div class="nav-menu"></div>
             <div class="sena-logo">
-                <img src="{{ asset('img/LogoInsti.png') }}" alt="Logo SENA" width="100" height="100">
+                <img src="{{ asset('img/.png') }}" alt="Logo SENA" width="100" height="100">
             </div>
 
-            <!-- Botón de Cerrar Sesión -->
+<!-- Botón de Cerrar Sesión -->
             <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
                 @csrf
                 <button type="submit" class="logout-btn">
@@ -158,7 +172,7 @@
             </form>
         </div>
 
-        <!-- Contenido Principal -->
+<!-- Contenido Principal -->
         <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
@@ -231,6 +245,47 @@
                             </tr>
                             @endforeach
                         </tbody>
+
+
+<tbody id="tableBody">
+    @foreach($lawyers ?? [] as $lawyer)
+    <tr data-id="{{ $lawyer->id }}">
+        <td>{{ $lawyer->nombre }}</td>
+        <td>{{ $lawyer->apellido }}</td>
+        <td>{{ $lawyer->tipo_documento }}</td>
+        <td>{{ $lawyer->numero_documento }}</td>
+        <td>{{ $lawyer->correo }}</td>
+        <td>{{ $lawyer->telefono}}</td>
+        <td>{{ $lawyer->especialidad}}</td>
+        <td>
+            <button class="btn-edit"
+                    data-id="{{ $lawyer->id }}"
+                    data-nombre="{{ $lawyer->nombre }}"
+                    data-apellido="{{ $lawyer->apellido }}"
+                    data-tipo_documento="{{ $lawyer->tipo_documento }}"
+                    data-numero_documento="{{ $lawyer->numero_documento }}"
+                    data-correo="{{ $lawyer->correo }}"
+                    data-telefono="{{ $lawyer->telefono }}"
+                    data-especialidad="{{ $lawyer->especialidad }}">
+                Editar
+            </button>
+
+            <form action="{{ route('lawyers.destroy', $lawyer->id) }}"
+                method="POST"
+                class="delete-lawyer-form"
+                data-id="{{ $lawyer->id }}"
+                data-name="{{ $lawyer->nombre }} {{ $lawyer->apellido }}"
+                style="display: inline;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-delete">
+                Eliminar</button>
+            </form>
+        </td>
+    </tr>
+    @endforeach
+</tbody>
+
                     </table>
                 </div>
             </div>
@@ -238,5 +293,7 @@
     </div>
 
     <!-- Scripts originales -->
+
+<!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
 </x-app-layout>

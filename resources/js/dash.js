@@ -673,7 +673,7 @@ function searchLawyersWithoutAlert() {
         const text = row.textContent.toLowerCase();
         if (text.includes(searchTerm)) {
             row.style.display = "";
-        } else {
+        } else { 
             row.style.display = "none";
         }
     });
@@ -859,3 +859,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar otros elementos si es necesario
     console.log('Sistema de alertas y validaciones inicializado correctamente');
 });
+
+}
+

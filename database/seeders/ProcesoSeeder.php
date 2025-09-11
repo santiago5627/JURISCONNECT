@@ -26,5 +26,7 @@ class ProcesoSeeder extends Seeder
             'nombre' => 'Audiencia Laboral',
             'descripcion' => 'Conflictos laborales y sindicales.',
         ]);
+        // Crea 20 registros falsos
+        Proceso::factory()->count(20)->create();
     }
 }

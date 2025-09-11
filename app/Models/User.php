@@ -11,6 +11,9 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, SoftDeletes; 
 
+    use HasFactory, Notifiable;
+
+
     /**
      * Los atributos que se pueden asignar masivamente.
      */
@@ -19,6 +22,11 @@ class User extends Authenticatable
         'email',
         'password',
         'profile_photo',
+        'foto_perfil',
+        'password_changed',
+        'avatar',          // Campo para avatar
+        'role_id',         // Rol del usuario
+        'profile_photos'   // Foto de perfil (asegúrate que en la migración sea igual)
     ];
     public function getProfilePhotoPathAttribute()
         {
