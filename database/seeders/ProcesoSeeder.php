@@ -12,21 +12,7 @@ class ProcesoSeeder extends Seeder
      */
     public function run(): void
     {
-        Proceso::create([
-            'nombre' => 'Demanda Civil',
-            'descripcion' => 'Proceso relacionado con disputas civiles.',
-        ]);
-
-        Proceso::create([
-            'nombre' => 'Proceso Penal',
-            'descripcion' => 'Caso relacionado con derecho penal.',
-        ]);
-
-        Proceso::create([
-            'nombre' => 'Audiencia Laboral',
-            'descripcion' => 'Conflictos laborales y sindicales.',
-        ]);
-        // Crea 20 registros falsos
-        Proceso::factory()->count(20)->create();
+        // Crea 30 registros falsos
+        Proceso::factory()->count(30)->create();
     }
 }

@@ -31,8 +31,5 @@ class VerifyEmailController extends Controller
 
         // Verificar si el email ya existe
         $user = User::where('email', $request->email)->first();
-
-       
-
     }
 }

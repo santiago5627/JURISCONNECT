@@ -17,14 +17,14 @@ class LawyerController extends Controller
         $duplicates = [];
         
         if (Lawyer::where('numero_documento', $request->numero_documento)
-                  ->when($request->current_id, fn($q) => $q->where('id', '!=', $request->current_id))
-                  ->exists()) {
+                    ->when($request->current_id, fn($q) => $q->where('id', '!=', $request->current_id))
+                    ->exists()) {
             $duplicates[] = ['field' => 'numero_documento', 'value' => $request->numero_documento];
         }
         
         if (Lawyer::where('correo', $request->correo)
-                  ->when($request->current_id, fn($q) => $q->where('id', '!=', $request->current_id))
-                  ->exists()) {
+                    ->when($request->current_id, fn($q) => $q->where('id', '!=', $request->current_id))
+                    ->exists()) {
             $duplicates[] = ['field' => 'correo', 'value' => $request->correo];
         }
         
@@ -43,6 +43,9 @@ class LawyerController extends Controller
         return view('lawyers.index', compact('lawyers'));
     }
 
+    /**
+     * Crear nuevo abogado
+     */
     public function store(Request $request)
     {
         try {
@@ -101,11 +104,17 @@ class LawyerController extends Controller
         }
     }
 
+    /**
+     * Mostrar formulario de edición
+     */
     public function edit(Lawyer $lawyer)
     {
         return view('lawyers.edit', compact('lawyer'));
     }
 
+    /**
+     * Actualizar abogado existente
+     */
     public function update(Request $request, Lawyer $lawyer)
     {
         try {
