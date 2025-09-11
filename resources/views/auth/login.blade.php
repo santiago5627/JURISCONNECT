@@ -55,7 +55,7 @@
 
         <!-- 👁️‍🗨️ Ojo cerrado (se ve primero) -->
         <svg xmlns="http://www.w3.org/2000/svg" 
-            id="eyeClosed" 
+            id="eyeClosed"cambio 
             width="22" height="22" 
             viewBox="0 0 24 24" 
             fill="none" stroke="black" stroke-width="2" 
