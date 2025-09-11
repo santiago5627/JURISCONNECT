@@ -299,7 +299,7 @@
         /* Footer del card */
         .card-footer {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             gap: 1rem;
             padding-top: 1rem;
@@ -506,10 +506,11 @@
                 <h1>Procesos Pendientes de Concepto Jurídico</h1>
                 <p>Gestiona los procesos que requieren análisis jurídico</p>
             </div>
-            <button class="cancel-btn" onclick="window.history.back()">
+            <a class="cancel-btn" href="{{ route('dashboard.abogado') }}">
                 <i class="fas fa-arrow-left"></i>
                 Cancelar
-            </button>
+            </a>
+           
         </div>
 
 <!-- Alerta de éxito (oculta por defecto) -->
@@ -541,8 +542,9 @@
                         <i class="fas fa-gavel"></i>
                     </div>
                     <h3>Proceso Legal</h3>
+                    <h3>{{ $proceso->id }}</h3>
                 </div>
-                <span class="status-badge">Pendiente</span>
+                <span class="status-badge">Pendiente</span> 
             </div>
             <div class="card-body">
                 <div class="card-grid">
@@ -563,15 +565,6 @@
                             <div class="info-content">
                                 <p>Tipo de Proceso</p>
                                 <p>{{ $proceso->tipo_proceso }}</p>
-                            </div>
-                        </div>
-                        <div class="info-item info-item-purple">
-                            <div class="info-icon info-icon-purple">
-                                <i class="fas fa-calendar-alt"></i>
-                            </div>
-                            <div class="info-content">
-                                <p>Fecha Radicación</p>
-                                <p>{{ $proceso->created_at }}</p>
                             </div>
                         </div>
                     </div>
@@ -595,16 +588,21 @@
                             </div>
                         </div>
                     </div>
+                    <div class="info-item info-item-purple">
+                        <div class="info-icon info-icon-purple">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <p>Fecha Radicación</p>
+                            <p>{{ $proceso->created_at }}</p>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer">
-                    <div class="timestamp">
-                        <i class="fas fa-clock"></i>
-                        <span>Proceso creado: {{ $proceso->created_at }}</span>
-                    </div>
-                    <button class="action-btn">
+                    <a href="{{ route('abogado.crear-concepto', $proceso->id) }}" class="action-btn">
                         <i class="fas fa-edit"></i>
                         Redactar Concepto Jurídico
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
