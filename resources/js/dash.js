@@ -860,5 +860,28 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Sistema de alertas y validaciones inicializado correctamente');
 });
 
-
+// las secciones
+        document.addEventListener('DOMContentLoaded', function() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const sections = document.querySelectorAll('.section-content');
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const sectionId = this.getAttribute('data-section');
+                    
+                    // Remover clase activa de todos los botones y secciones
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    sections.forEach(section => section.classList.remove('active'));
+                    
+                    // Agregar clase activa al botón clickeado
+                    this.classList.add('active');
+                    
+                    // Mostrar la sección correspondiente
+                    const targetSection = document.getElementById(sectionId + '-section');
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                });
+            });
+        });
 

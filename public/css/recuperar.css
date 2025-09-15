@@ -1,174 +1,122 @@
+/* Reset general */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Base */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
     overflow-x: hidden;
+    background-color: #f8f9fa; /* fallback en caso de no cargar imagen */
 }
 
+/* Imagen de fondo */
 .background-image img {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: fixed;
+    inset: 0;
     width: 100%;
     height: 100%;
+    object-fit: cover;
     z-index: -1;
 }
 
-/* Contenedor principal */
-.main-container {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* cambio: logo a la izq y form a la der */
-    width: 100%;
-    max-width: 1200px;
-    min-height: 100vh;
-    padding: 40px;
-    gap: 100px;
-}
 
-/* Sección izquierda - Logo JurisConnect */
+/* Logo izquierda */
 .left-section {
     flex: 1;
     display: flex;
-    align-items: center;
     justify-content: flex-start;
-    transform: translateX(100px);
-
-    transform: translateX(143px);
 }
 
 .logo-jurisconnect {
-    max-width: 100%;
-    width: 400px;
+    width: 420px;
     height: auto;
-    margin-bottom: -10px;
-    margin-left: -150px;
-
-    width: 490px;
-    height: auto;
-    margin-bottom: -10px;
-    margin-left: -50px;
     animation: fadeInLeft 1s ease-out;
     transition: transform 0.3s ease;
 }
 
-/* Contenedor del formulario */
-.form-container {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border-radius: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    padding: 100px 40px;
+/* Contenedor principal */
+.main-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* mantenemos el logo a la izquierda */
     width: 100%;
-    max-width: 480px;
-    height: 500px;
-
-    padding: 50px 40px;
-    width: 100%;
-    max-width: 450px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-    animation: fadeInRight 1s ease-out;
-    margin-right: -200px; /* añadido: separa el form del borde derecho */
+    max-width: 1200px;
+    min-height: 100vh;
+    padding: 40px;
+    gap: 80px;
+    z-index: 10;
 }
 
-.form-title {
-    margin-top: -35px;
+/* Formulario */
+.form-container {
+    transform: translateX(180px);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(25px);
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 60px 40px;
+    width: 100%;
+    max-width: 460px; 
+    min-height: 480px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    animation: fadeInRight 1s ease-out;
+}
 
+/* Títulos */
+.form-title {
     text-align: center;
     color: #ffffff;
     font-size: 2rem;
     font-weight: 700;
-    margin-bottom: 50px;
-
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .form-description {
-    display: block;
     color: #fff;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     text-align: left;
     font-size: 1rem;
     font-weight: bold;
-    margin-top: 55px;
-
-
-    text-align: center;
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 35px;
-    color: #f0f0f0;
-    opacity: 0.9;
 }
 
-/* Campo de entrada */
+/* Inputs */
 .form-group {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .form-input {
     width: 100%;
-    padding: 18px 25px;
+    padding: 16px 22px;
     border-radius: 50px;
     font-size: 1rem;
-    transition: all 0.3s ease;
-    color: #333;
     text-align: center;
+    color: #333;
     background: rgba(255, 255, 255, 0.15);
     border: 2px solid rgba(255, 255, 255, 0.3);
     outline: none;
     font-weight: 500;
-    margin-top: -70px;
+    transition: all 0.3s ease;
 }
 
 .form-input::placeholder {
-    color: #131111;
+    color: #222;
     font-weight: 400;
-    letter-spacing: 1px;
-    border-color: #131111;
-
-    background: rgba(255, 255, 255, 0.9);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    outline: none;
-    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
-.form-input::placeholder {
-    color: #999;
-    font-weight: 400;
-    letter-spacing: 1px;
-}
-
-.form-input:hover {
-    border-color: rgba(255, 255, 255, 0.6);
-    background: rgba(243, 236, 236, 0.808);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: #131111;
-
-
-    background: rgba(255, 255, 255, 0.95);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
+.form-input:hover,
 .form-input:focus {
+    background: #fff;
     border-color: #007bff;
-    box-shadow: 0 0 25px rgba(0, 123, 255, 0.4);
-    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
     transform: translateY(-2px);
 }
 
@@ -217,110 +165,90 @@ body {
 
 .btn-back {
     height: 50px;
-
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     color: white;
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
 }
-
-.btn-back:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(37, 99, 235, 0.4);
-    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+/* Efecto brillo */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s;
 }
+
+.btn:hover::before {
+    left: 100%;
+}
+
 
 .btn-next {
-    height: 50px;
-
-    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-    color: white;
-    box-shadow: 0 8px 25px rgba(22, 163, 74, 0.3);
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    box-shadow: 0 6px 20px rgba(22, 163, 74, 0.3);
 }
-
 .btn-next:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(22, 163, 74, 0.4);
-    background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+    background: linear-gradient(135deg, #166534, #15803d);
+    transform: translateY(-2px);
 }
 
+/* Footer SENA */
 .sena-container{
     position: absolute;
-    bottom: 10px;
+    bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-/* Overlay */
+/* ALERTA PERSONALIZADA */
 .custom-alert-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.55);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Fondo oscurecido con blur */
-.custom-alert-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    inset: 0;
+    background: rgba(0,0,0,0.45);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10000;
     backdrop-filter: blur(3px);
 }
-
-/* Caja de la alerta */
 .custom-alert-box {
     background: #fff;
-    border-radius: 12px;
-    padding: 25px 30px;
+    border-radius: 15px;
+    padding: 30px;
     max-width: 420px;
     width: 90%;
     text-align: center;
     box-shadow: 0 6px 25px rgba(0,0,0,0.25);
     animation: alertIn 0.35s ease;
 }
-
-/* Círculo con ícono */
 .custom-alert-icon-circle {
     width: 70px;
     height: 70px;
     margin: 0 auto 18px;
     border-radius: 50%;
-    background: #047857; /* verde */
+    background: #047857;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
 .custom-alert-icon-circle i {
     color: #fff;
     font-size: 32px;
 }
-
-/* Título */
 .custom-alert-title {
     font-size: 20px;
     font-weight: 700;
     color: #111;
     margin-bottom: 8px;
 }
-
-/* Mensaje */
 .custom-alert-message {
     font-size: 15px;
     color: #555;
     margin-bottom: 20px;
 }
-
-/* Botón */
 .custom-alert-btn {
     background: #047857;
     color: #fff;
@@ -331,295 +259,44 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
-
 .custom-alert-btn:hover {
     background: #03613d;
     transform: translateY(-2px);
 }
 
-/* Animación */
+/* Animaciones */
 @keyframes alertIn {
     from { opacity: 0; transform: scale(0.8); }
     to { opacity: 1; transform: scale(1); }
 }
-
-/* Animación */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* Animaciones */
 @keyframes fadeInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
 }
-
 @keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(60px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    from { opacity: 0; transform: translateX(100px); }
+    to { opacity: 1; transform: translateX(100); }
 }
 
-/* RESPONSIVE DESIGN */
-
-/* Tablets grandes */
+/* Responsive */
 @media (max-width: 1024px) {
-    .main-container {
-        gap: 60px;
-        padding: 30px;
-    }
-    
-    .logo-jurisconnect {
-        width: 350px;
-    }
-    
-    .form-container {
-        max-width: 400px;
-        padding: 40px;
-        margin-right: 0; /* resetea en responsive */
-    }
+    .main-container { gap: 50px; padding: 30px; }
+    .logo-jurisconnect { width: 320px; }
+    .form-container { padding: 45px; max-width: 420px; }
 }
-
-/* Tablets */
 @media (max-width: 768px) {
     .main-container {
         flex-direction: column;
         gap: 40px;
         padding: 30px 20px;
-        justify-content: center;
-        min-height: auto;
-        padding-top: 60px;
-        padding-bottom: 60px;
     }
-
-    .left-section {
-        flex: none;
-        order: 1;
-    }
-
-    .logo-jurisconnect {
-        width: 280px;
-    }
-
-    .form-container {
-        order: 2;
-        max-width: 100%;
-        width: 100%;
-        padding: 35px 30px;
-        margin: 0 auto; /* centrado en pantallas pequeñas */
-    }
-
-    .form-title {
-        font-size: 1.8rem;
-    }
-
-    .form-description {
-        font-size: 0.95rem;
-    }
-
-    .button-group {
-        gap: 15px;
-    }
-
-    .btn {
-        padding: 16px 28px;
-        font-size: 0.95rem;
-    }
-
-    .sena-container img {
-        width: 70px;
-    }
+    .logo-jurisconnect { width: 260px; }
+    .form-container { max-width: 100%; padding: 35px; }
 }
-
-/* Móviles grandes */
 @media (max-width: 480px) {
-    .main-container {
-        padding: 20px 15px;
-        gap: 30px;
-        padding-top: 40px;
-        padding-bottom: 40px;
-    }
-
-    .logo-jurisconnect {
-        width: 240px;
-    }
-
-    .form-container {
-        padding: 30px 25px;
-        border-radius: 20px;
-    }
-
-    .form-title {
-        font-size: 1.6rem;
-        margin-bottom: 15px;
-    }
-
-    .form-description {
-        font-size: 0.9rem;
-        margin-bottom: 30px;
-    }
-
-    .form-input {
-        padding: 16px 22px;
-        font-size: 0.95rem;
-    }
-
-    .button-group {
-        flex-direction: column;
-        gap: 12px;
-        margin-top: 30px;
-        margin-bottom: 25px;
-    }
-
-    .btn {
-        padding: 16px 24px;
-        font-size: 0.9rem;
-    }
-
-    .sena-container {
-        bottom: 10px;
-    }
-
-    .sena-container img {
-        width: 60px;
-    }
-}
-
-/* Móviles pequeños */
-@media (max-width: 360px) {
-    .main-container {
-        padding: 15px 10px;
-        gap: 25px;
-    }
-
-    .logo-jurisconnect {
-        width: 200px;
-    }
-
-    .form-container {
-        padding: 25px 20px;
-    }
-
-    .form-title {
-        font-size: 1.4rem;
-    }
-
-    .form-description {
-        font-size: 0.85rem;
-    }
-
-    .form-input {
-        padding: 14px 20px;
-        font-size: 0.9rem;
-    }
-
-    .btn {
-        padding: 14px 20px;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-    }
-
-    .sena-container img {
-        width: 50px;
-    }
-}
-
-/* Landscape en móviles */
-@media (max-height: 600px) and (orientation: landscape) {
-    .main-container {
-        flex-direction: row;
-        padding: 20px;
-        gap: 40px;
-        min-height: 100vh;
-    }
-
-    .left-section {
-        flex: 1;
-        order: 1;
-    }
-
-    .logo-jurisconnect {
-        width: 200px;
-    }
-
-    .form-container {
-        flex: 1;
-        max-width: 350px;
-        padding: 25px;
-        order: 2;
-        margin-right: 0;
-    }
-
-    .form-title {
-        font-size: 1.4rem;
-        margin-bottom: 15px;
-    }
-
-    .form-description {
-        font-size: 0.85rem;
-        margin-bottom: 25px;
-    }
-
-    .form-input {
-        padding: 14px 20px;
-    }
-
-    .button-group {
-        margin-top: 25px;
-        margin-bottom: 20px;
-        gap: 12px;
-    }
-
-    .btn {
-        padding: 14px 22px;
-        font-size: 0.85rem;
-    }
-
-    .sena-container {
-
-        bottom: 10px;
-
-        bottom: 5px;
-
-    }
-
-    .sena-container img {
-        width: 45px;
-    }
-}
-
-/* Muy landscape (pantallas muy anchas y bajas) */
-@media (max-height: 450px) and (orientation: landscape) {
-    .form-container {
-        padding: 20px;
-    }
-
-    .form-title {
-        font-size: 1.2rem;
-        margin-bottom: 10px;
-    }
-
-    .form-description {
-        font-size: 0.8rem;
-        margin-bottom: 20px;
-    }
-
-    .button-group {
-        margin-top: 20px;
-        margin-bottom: 15px;
-    }
+    .logo-jurisconnect { width: 220px; }
+    .form-container { padding: 25px 20px; }
+    .form-title { font-size: 1.5rem; }
+    .button-group { flex-direction: column; gap: 12px; }
 }

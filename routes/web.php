@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ConceptoController;
 use App\Http\Controllers\ImageController;
 
+
 // Ruta por defecto
 Route::get('/', function () {
     return redirect()->route('login');
@@ -123,6 +124,16 @@ Route::post('/lawyers/check-field', [LawyerController::class, 'checkField']);
 // Apunta a un método 'guardar' en un controlador llamado ImageController
 Route::post('/guardar-imagen', [ImageController::class, 'guardar'])->name('imagenes.guardar');
 Route::post('/user/profile-photo', [ProfileController::class, 'updatePhoto']) ->middleware('auth') ->name('profile.photo.update');// Protegida para que solo usuarios logueados puedan usarla
+
+// Rutas de procesos legales
+Route::resource('legal_processes', LegalProcessController::class);
+Route::resource('conceptos', ConceptoController::class);
+Route::get('/legal_processes/export/excel', [LegalProcessController::class, 'exportExcel'])
+    ->name('legal_processes.export.excel');
+
+Route::get('/legal_processes/export/pdf', [LegalProcessController::class, 'exportPdf'])
+    ->name('legal_processes.export.pdf');
+
 
 // Rutas de autenticación
 require __DIR__ . '/auth.php';

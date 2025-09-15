@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Proceso;
 use Illuminate\Support\Facades\Storage;
 
+
 class LegalProcessController extends Controller
 {
     // ===============================
@@ -188,3 +189,4 @@ class LegalProcessController extends Controller
         unset($validated['eliminar_documento']);
     }
 }
+
