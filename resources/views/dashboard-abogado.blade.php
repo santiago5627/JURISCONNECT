@@ -12,209 +12,237 @@
         <div class="overlay" id="overlay"></div>
 
 <!-- Estilos -->
+
 <style>
-            body {
-                margin: 0;
-                font-family: Arial, sans-serif;
-                background-color: #f4f6f7;
-            }
-            .dashboard-wrapper {
-                display: flex;
-            }
-            /* SIDEBAR */
-            .sidebar {
-                width: 280px;
-                position: fixed;
-                top: 0;
-                left: 0;
-                height: 100vh;
-                background: #f2f7f2;
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-start;
-                padding: 20px 15px;
-                z-index: 1000;
-                transition: transform 0.3s ease-in-out;
-                transform: translateX(-100%);
-                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-            }
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f7;
+    }
+    .dashboard-wrapper {
+        display: flex;
+    }
+    /* SIDEBAR */
 
-            .sidebar.active {
-                transform: translateX(0);
-            }
+    .sidebar {
+        width: 280px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        background: #f2f7f2;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 20px 15px;
+        z-index: 1000;
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(-100%);
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    }
 
-            .profile {
-                text-align: center;
-                margin-bottom: 30px;
-                margin-top: 20px;
-            }
+    .sidebar.active {
+        transform: translateX(0);
+    }
 
-            .profile-icon {
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-                border: 3px solid #145A32;
-                margin: 0 auto 10px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 24px;
-                color: #1D1D1D;
-            }
+    .profile {
+        text-align: center;
+        margin-bottom: 30px;
+        margin-top: 20px;
+    }
 
-            .profile h3,
-            .profile p {
-                color: #1D1D1D;
-                margin: 5px 0;
-            }
+    .profile-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 3px solid #14c1caff;
+        margin: 0 auto 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: #1D1D1D;
+    }
 
-            .nav-menu {
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-                margin-bottom: auto;
-                padding: 50px 0;
-                width: 100%;
-                margin-top: 85px;
-            }
+    .profile h3,
+    .profile p {
+        color: #1D1D1D;
+        margin: 5px 0;
+    }
 
-            .nav-btn {
-                padding: 20px 20px;
-                background: #39A900;
-                color: #ffffff;
-                border: none;
-                border-radius: 5px;
-                font-size: 14px;
-                font-weight: bold;
-                text-transform: uppercase;
-                transition: background 0.3s;
-                width: 100%;
-                height: 50px;
-                cursor: pointer;
-            }
+    .nav-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: auto;
+        padding: 50px 0;
+        width: 100%;
+        margin-top: 85px;
+    }
 
-            .nav-btn:hover,
-            .nav-btn.active {
-                background: #145A32;
-            }
+    /* --- NAV-BTN con 3 colores distintos --- */
+    .nav-btn {
+        padding: 20px 20px;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: background 0.3s;
+        width: 100%;
+        height: 50px;
+        cursor: pointer;
+    }
 
-            .logout-btn {
-                padding: 12px 20px;
-                background: #C0392B;
-                color: #ffffff;
-                border: none;
-                border-radius: 5px;
-                font-size: 14px;
-                font-weight: bold;
-                text-transform: uppercase;
-                transition: background 0.3s;
-                width: 100%;
-                height: 50px;
-                cursor: pointer;
-                margin-top: 20px;
-            }
+    .nav-btn:nth-child(1) {
+        background: #3498db; /* Azul */
+        
+    }
+    .nav-btn:nth-child(2) {
+        background: #27ae60; /* Verde */
+    }
+    .nav-btn:nth-child(3) {
+        background: #e74c3c; /* Rojo */
+    }
 
-            .logout-btn:hover {
-                background: #A93226;
-            }
+    .nav-btn:hover,
+    .nav-btn.active {
+        opacity: 0.9;
+    }
 
-            .sena-logo {
-                text-align: center;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 100%;
-                margin-top: auto;
-                padding: 50px;
-            }
+    .logout-btn {
+        padding: 12px 20px;
+        background: #C0392B;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: background 0.3s;
+        width: 100%;
+        height: 50px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
 
-            .sena-logo img {
-                width: 80px;
-                height: auto;
-            }
-            /* Main content - Ahora ocupa toda la pantalla por defecto */
-            .main-content {
-                flex: 1;
-                width: 100%;
-                margin-left: 0;
-                padding: 20px;
-                transition: margin-left 0.3s ease;
-            }
+    .logout-btn:hover {
+        background: #A93226;
+    }
 
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
+    .sena-logo {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-top: auto;
+        padding: 50px;
+    }
 
-            .hamburger {
-                font-size: 24px;
-                background: none;
-                border: none;
-                color: #2e7d32;
-                cursor: pointer;
-                margin-right: 10px;
-            }
+    .sena-logo img {
+        width: 80px;
+        height: auto;
+    }
+    /* Main content */
+    .main-content {
+        flex: 1;
+        width: 100%;
+        margin-left: 0;
+        padding: 20px;
+        transition: margin-left 0.3s ease;
+    }
 
-            .content-panel {
-                margin-top: 20px;
-            }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #ffffff; /* Fondo blanco */
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+    }
 
-            .cards-container {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 20px;
-            }
+    .header h1 {
+        font-family: 'Georgia', serif; /* Tipografía elegante */
+        font-size: 24px;
+        font-weight: bold;
+        color: #2c3e50; /* Azul oscuro */
+    }
 
-            .dashboard-card {
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-                text-align: center;
-            }
+    .hamburger {
+        font-size: 24px;
+        background: none;
+        border: none;
+        color: #2e7d32;
+        cursor: pointer;
+        margin-right: 10px;
+    }
 
-            .dashboard-card h3 {
-                margin-bottom: 10px;
-            }
+.content-panel {
+    background: #fff;                /* Fondo blanco */
+    border-radius: 10px;             /* Bordes redondeados */
+    padding: 20px;                   /* Espaciado interno */
+    margin: 20px;                    /* Separación hacia fuera */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1); /* Sombra suave */
+}   
 
-            .dashboard-card a {
-                display: inline-block;
-                margin-top: 10px;
-                padding: 8px 15px;
-                background-color: #2e7d32;
-                color: white;
-                border-radius: 5px;
-                text-decoration: none;
-            }
+    .cards-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
 
-            .dashboard-card a:hover {
-                background-color: #1b5e20;
-            }
+    .dashboard-card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        text-align: center;
+    }
 
-            /* Overlay para móviles */
-            .overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0,0,0,0.3);
-                display: none;
-                z-index: 500;
-            }
+    .dashboard-card h3 {
+        margin-bottom: 10px;
+    }
 
-            .overlay.active {
-                display: block;
-            }
+    .dashboard-card a {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 8px 15px;
+        background-color: #2e7d64ff;
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+    }
 
-            /* Media queries */
-            @media (max-width: 768px) {
-                .main-content {
-                    margin-left: 0;
-                }
-            }
+    .dashboard-card a:hover {
+        background-color: #1b5e20;
+    }
+
+    /* Overlay para móviles */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.3);
+        display: none;
+        z-index: 500;
+    }
+
+    .overlay.active {
+        display: block;
+    }
+
+    /* Media queries */
+    @media (max-width: 768px) {
+        .main-content {
+            margin-left: 0;
+        }
+    }
 </style>
+
 
 <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
@@ -246,7 +274,7 @@
         <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
-                <h1>Panel del Abogado</h1>
+                <h1>PANEL DE ABOGADO</h1>
                 <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo" width="80">
             </div>
 
@@ -289,7 +317,7 @@
             sidebar.classList.toggle('active');
             overlay.classList.toggle('active');
         }
-        overlay.addEventListener('click', () => {
+        overlay.addEventListener('click', () => {Ingresar       
             sidebar.classList.remove('active');
             overlay.classList.remove('active');
         });

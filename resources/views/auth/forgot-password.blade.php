@@ -18,7 +18,7 @@
         <!-- Izquierda: Logo -->
         <div class="left-section">
             <img class="logo-jurisconnect" src="{{ asset('img/LogoJ.png') }}" alt="JurisConnect">
-        </div>
+        </div>git
 
         <!-- Derecha: Formulario -->
         <div class="form-container">
