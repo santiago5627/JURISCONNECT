@@ -9,7 +9,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        $lawyers = Lawyer::all();
+        $lawyers = Lawyer::paginate(10);
         return view('dashboard', compact('lawyers'));
     }
 }

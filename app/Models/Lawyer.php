@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Lawyer extends Model
 {
+    /*use SoftDeletes;*/
     //use SoftDeletes;
     use HasFactory;
 

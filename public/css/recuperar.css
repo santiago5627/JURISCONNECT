@@ -1,54 +1,41 @@
+/* Reset general */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Base */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
     overflow-x: hidden;
+    background-color: #f8f9fa; /* fallback en caso de no cargar imagen */
 }
 
+/* Imagen de fondo */
 .background-image img {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: fixed;
+    inset: 0;
     width: 100%;
     height: 100%;
+    object-fit: cover;
     z-index: -1;
 }
 
-/* Contenedor principal */
-.main-container {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* cambio: logo a la izq y form a la der */
-    width: 100%;
-    max-width: 1200px;
-    min-height: 100vh;
-    padding: 40px;
-    gap: 100px;
-}
 
-/* Sección izquierda - Logo JurisConnect */
+/* Logo izquierda */
 .left-section {
     flex: 1;
     display: flex;
-    align-items: center;
     justify-content: flex-start;
-    transform: translateX(143px);
 }
 
 .logo-jurisconnect {
-    max-width: 100%;
-    width: 490px;
+    width: 420px;
     height: auto;
     margin-bottom: -10px;
     margin-left: -300px;
@@ -72,6 +59,22 @@ body {
     margin-right: -200px; /* añadido: separa el form del borde derecho */
 }
 
+/* Formulario */
+.form-container {
+    transform: translateX(180px);
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(25px);
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 60px 40px;
+    width: 100%;
+    max-width: 460px; 
+    min-height: 480px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    animation: fadeInRight 1s ease-out;
+}
+
+/* Títulos */
 .form-title {
     margin-top: -35px;
     text-align: center;
@@ -93,18 +96,16 @@ body {
 
 }
 
-/* Campo de entrada */
+/* Inputs */
 .form-group {
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .form-input {
     width: 100%;
-    padding: 18px 25px;
+    padding: 16px 22px;
     border-radius: 50px;
     font-size: 1rem;
-    transition: all 0.3s ease;
-    color: #333;
     text-align: center;
     background: rgba(255, 255, 255, 0.15);
     border: 2px solid rgba(255, 255, 255, 0.3);
@@ -129,10 +130,11 @@ body {
 
 }
 
+.form-input:hover,
 .form-input:focus {
+    background: #fff;
     border-color: #007bff;
-    box-shadow: 0 0 25px rgba(0, 123, 255, 0.4);
-    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
     transform: translateY(-2px);
 }
 
@@ -185,12 +187,22 @@ body {
     color: white;
     box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
 }
-
-.btn-back:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(37, 99, 235, 0.4);
-    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+/* Efecto brillo */
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s;
 }
+
+.btn:hover::before {
+    left: 100%;
+}
+
 
 .btn-next {
     height: 50px;
@@ -198,11 +210,9 @@ body {
     color: white;
     box-shadow: 0 8px 25px rgba(22, 163, 74, 0.3);
 }
-
 .btn-next:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 35px rgba(22, 163, 74, 0.4);
-    background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+    background: linear-gradient(135deg, #166534, #15803d);
+    transform: translateY(-2px);
 }
 
 .sena-container{
@@ -261,7 +271,6 @@ body {
     align-items: center;
     justify-content: center;
 }
-
 .custom-alert-icon-circle i {
     color: #fff;
     font-size: 32px;
@@ -314,97 +323,33 @@ body {
 }
 
 /* Animaciones */
+@keyframes alertIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
 @keyframes fadeInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
 }
-
 @keyframes fadeInRight {
-    from {
-        opacity: 0;
-        transform: translateX(60px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    from { opacity: 0; transform: translateX(100px); }
+    to { opacity: 1; transform: translateX(100); }
 }
 
-/* RESPONSIVE DESIGN */
-
-/* Tablets grandes */
+/* Responsive */
 @media (max-width: 1024px) {
-    .main-container {
-        gap: 60px;
-        padding: 30px;
-    }
-    
-    .logo-jurisconnect {
-        width: 350px;
-    }
-    
-    .form-container {
-        max-width: 400px;
-        padding: 40px;
-        margin-right: 0; /* resetea en responsive */
-    }
+    .main-container { gap: 50px; padding: 30px; }
+    .logo-jurisconnect { width: 320px; }
+    .form-container { padding: 45px; max-width: 420px; }
 }
-
-/* Tablets */
 @media (max-width: 768px) {
     .main-container {
         flex-direction: column;
         gap: 40px;
         padding: 30px 20px;
-        justify-content: center;
-        min-height: auto;
-        padding-top: 60px;
-        padding-bottom: 60px;
     }
-
-    .left-section {
-        flex: none;
-        order: 1;
-    }
-
-    .logo-jurisconnect {
-        width: 280px;
-    }
-
-    .form-container {
-        order: 2;
-        max-width: 100%;
-        width: 100%;
-        padding: 35px 30px;
-        margin: 0 auto; /* centrado en pantallas pequeñas */
-    }
-
-    .form-title {
-        font-size: 1.8rem;
-    }
-
-    .form-description {
-        font-size: 0.95rem;
-    }
-
-    .button-group {
-        gap: 15px;
-    }
-
-    .btn {
-        padding: 16px 28px;
-        font-size: 0.95rem;
-    }
-
-    .sena-container img {
-        width: 70px;
-    }
+    .logo-jurisconnect { width: 260px; }
+    .form-container { max-width: 100%; padding: 35px; }
 }
 
 /* Móviles gr7andes */

@@ -2,26 +2,120 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Concepto;
 use Illuminate\Http\Request;
+use App\Models\Proceso;
+use App\Models\ConceptoJuridico;
 
 class ConceptoController extends Controller
 {
-    public function create()
+    // ===============================
+    // MÉTODOS PRINCIPALES
+    // ===============================
+
+    /**
+     * Mostrar todos los procesos disponibles para crear conceptos
+     */
+    public function index()
     {
-        return view('legal_processes.createConceptos');
+        $procesos = Proceso::where('abogado_id', auth()->id())
+                           ->where('estado', 'asignado')
+                           ->whereDoesntHave('conceptos')
+                           ->get();
+        
+        return view('legal_processes.listaProcesos', compact('procesos'));
     }
 
-    public function store(Request $request) 
+    /**
+     * Show the form for creating a new resource
+     */
+    public function create() 
+    {
+        $procesos = Proceso::all();
+        return view('legal_processes.createConceptos', compact('procesos'));
+    }
+
+    /**
+     * Guardar el concepto para un proceso específico
+     */
+    public function store(Request $request, $procesoId)
+    {
+        $this->validateConceptoData($request);
+
+        $proceso = Proceso::findOrFail($procesoId);
+        
+        $this->createConceptoForProceso($request, $proceso);
+        $this->updateProcesoEstado($proceso);
+
+        return redirect()->route('abogado.dashboard')
+                        ->with('success', 'Concepto jurídico creado exitosamente.');
+    }
+
+    /**
+     * Mostrar el formulario para crear un concepto para un proceso específico
+     */
+    public function verFormulario($procesoId)
+    {
+        $proceso = $this->getProcesoWithRelations($procesoId);
+        
+        $this->checkExistingConcepto($procesoId);
+        
+        return view('legal_processes.createConceptos', compact('proceso'));
+    }
+
+    // ===============================
+    // MÉTODOS PRIVADOS DE APOYO
+    // ===============================
+
+    /**
+     * Validar datos del concepto
+     */
+    private function validateConceptoData(Request $request)
     {
         $request->validate([
-            'titulo' => 'required|string|max:255',
-            'categoria' => 'required|string|max:255',
-            'descripcion' => 'required|string',
+            'concepto' => 'required|min:50',
+            'recomendaciones' => 'nullable|string'
         ]);
+    }
 
-        Concepto::create($request->all());
+    /**
+     * Obtener proceso con sus relaciones
+     */
+    private function getProcesoWithRelations($procesoId)
+    {
+        return Proceso::with(['cliente', 'abogado'])->findOrFail($procesoId);
+    }
 
-        return redirect()->route('dashboard.abogado')->with('success', 'Concepto jurídico creado correctamente.');
+    /**
+     * Verificar si ya existe un concepto para el proceso
+     */
+    private function checkExistingConcepto($procesoId)
+    {
+        $conceptoExistente = ConceptoJuridico::where('proceso_id', $procesoId)->first();
+        
+        if ($conceptoExistente) {
+            abort(redirect()->back()->with('error', 'Ya existe un concepto para este proceso.'));
+        }
+    }
+
+    /**
+     * Crear concepto jurídico para el proceso
+     */
+    private function createConceptoForProceso(Request $request, Proceso $proceso)
+    {
+        $concepto = new ConceptoJuridico();
+        $concepto->proceso_id = $proceso->id;
+        $concepto->abogado_id = auth()->id();
+        $concepto->concepto = $request->concepto;
+        $concepto->recomendaciones = $request->recomendaciones;
+        $concepto->estado = 'finalizado';
+        $concepto->save();
+    }
+
+    /**
+     * Actualizar estado del proceso
+     */
+    private function updateProcesoEstado(Proceso $proceso)
+    {
+        $proceso->update(['estado' => 'con_concepto']);
     }
 }

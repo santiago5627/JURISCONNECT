@@ -13,7 +13,7 @@
 
     <!-- Izquierda: logo -->
     <div class="branding">
-        <img src="{{ asset('img/BlancoJuris.png') }}" alt="JurisConnect">
+        <img src="{{ asset('img/LogoJ.png') }}" alt="JurisConnect">
     </div>
 
     <!-- Derecha: login -->
@@ -28,7 +28,6 @@
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
-
             <label for="email">Correo Electrónico</label>
             <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus autocomplete="username" class="{{ $errors->get('email') ? 'error-input' : '' }}">
             @if ($errors->get('email'))
@@ -56,7 +55,11 @@
 
         <!-- 👁️‍🗨️ Ojo cerrado (se ve primero) -->
         <svg xmlns="http://www.w3.org/2000/svg" 
+
+            id="eyeClosed"cambio 
+
             id="eyeClosed" 
+
             width="22" height="22" 
             viewBox="0 0 24 24" 
             fill="none" stroke="black" stroke-width="2" 
