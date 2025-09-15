@@ -12,14 +12,6 @@ class DatabaseSeeder extends \Illuminate\Database\Seeder
     
 public function run(): void
 {
-    $this->call([
-            RoleSeeder::class,    // Tu seeder actual (renombrado)
-            AbogadoUserSeeder::class,  // Tu nuevo seeder de abogados
-            ProcesoSeeder::class,
-            LawyerSeeder::class,
-            // Puedes agregar más seeders aquí
-        ]);
-
     // Crear rol de administrador sin el campo slug
     $adminRole = Role::firstOrCreate([
         'name' => 'Administrador'
@@ -28,16 +20,15 @@ public function run(): void
     // Crear un usuario con ese rol
     User::firstOrCreate([
         'email' => 'brendaModa45@gmail.com'
-
     ], [
         'name' => 'Admin',
         'password' => Hash::make('admin123'), 
         'role_id' => $adminRole->id,
         'remember_token' => Str::random(10),
     ]);
-
     $this->command->info('Usuario Admin creado:');
     $this->command->info('Email: admin@sena.edu.co');
     $this->command->info('Contraseña: admin123');
+
 }
 }
