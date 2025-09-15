@@ -19,6 +19,7 @@ return new class extends Migration
     $table->string('demandado', 255);
     $table->text('descripcion');
     $table->string('documento')->nullable();
+    $table->string('estado');
     $table->timestamps();
 });
     }
