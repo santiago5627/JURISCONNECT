@@ -798,7 +798,37 @@
                 @else
                     <a href="{{ $procesos->previousPageUrl() }}" class="pagination-btn">Anterior</a>
                 @endif
-                
+
+<!-- Números de página -->
+                    @php
+                        $currentPage = $procesos->currentPage();
+                        $lastPage = $procesos->lastPage();
+                        $start = max(1, $currentPage - 2);
+                        $end = min($lastPage, $currentPage + 2);
+                    @endphp
+
+                    @if ($start > 1)
+                        <a href="{{ $procesos->url(1) }}" class="pagination-btn">1</a>
+                        @if ($start > 2)
+                            <span class="pagination-btn disabled">...</span>
+                        @endif
+                    @endif
+
+                    @for ($i = $start; $i <= $end; $i++)
+                        @if ($i == $currentPage)
+                            <span class="pagination-btn active">{{ $i }}</span>
+                        @else
+                            <a href="{{ $procesos->url($i) }}" class="pagination-btn">{{ $i }}</a>
+                        @endif
+                    @endfor
+
+                    @if ($end < $lastPage)
+                        @if ($end < $lastPage - 1)
+                            <span class="pagination-btn disabled">...</span>
+                        @endif
+                        <a href="{{ $procesos->url($lastPage) }}" class="pagination-btn">{{ $lastPage }}</a>
+                    @endif
+
                 @if ($procesos->hasMorePages())
                     <a href="{{ $procesos->nextPageUrl() }}" class="pagination-btn">Siguiente</a>
                 @else

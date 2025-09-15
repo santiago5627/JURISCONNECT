@@ -359,28 +359,7 @@
         </main>
     </div>
 
-    <script>
-        const hamburgerBtn = document.getElementById('hamburgerBtn');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-
-        // Función para abrir/cerrar el menú
-        function toggleSidebar() {
-            sidebar.classList.toggle('active');
-            overlay.classList.toggle('active');
-        }
-
-        // Función para cerrar el menú (usado por el overlay)
-        function closeSidebar() {
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-        }
-        
-        // Asignar eventos solo si los elementos existen
-        if (hamburgerBtn && sidebar && overlay) {
-            hamburgerBtn.addEventListener('click', toggleSidebar);
-            overlay.addEventListener('click', closeSidebar); // Ahora solo cierra, que es más intuitivo
-        }
-    </script>
+ <!-- Scripts -->
+    <script src="{{ asset('js/dash.js') }}"></script>
 
 </x-app-layout>
