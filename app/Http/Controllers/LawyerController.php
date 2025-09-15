@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendCredentialsToLawyer;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Validation\ValidationException;
 
 class LawyerController extends Controller
 {
@@ -172,9 +173,6 @@ class LawyerController extends Controller
             }
 
             return redirect()->route('dashboard')->with('success', 'Abogado eliminado exitosamente.');
-    $pdf = Pdf::loadView('exports.lawyers-pdf', compact('lawyers', 'logoPath'))
-                ->setPaper('a4', 'portrait');
-
 
         } catch (\Exception $e) {
             if ($request->ajax()) {

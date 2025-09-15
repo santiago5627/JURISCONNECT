@@ -12,12 +12,13 @@
     </div>
 
     <!-- Contenedor principal -->
+
     <div class="main-container">
         
         <!-- Izquierda: Logo -->
         <div class="left-section">
             <img class="logo-jurisconnect" src="{{ asset('img/LogoJ.png') }}" alt="JurisConnect">
-        </div>
+        </div>git
 
         <!-- Derecha: Formulario -->
         <div class="form-container">
@@ -25,6 +26,7 @@
             <p class="form-description">
                 Ingresa tu correo electrónico
             </p>
+
 
             <form method="POST" action="{{ route('password.email') }}">
                 @csrf
