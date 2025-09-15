@@ -28,7 +28,7 @@
                     <h3 class="text-lg font-semibold mb-2">Registrar Proceso</h3>
                     <p class="text-gray-600 mb-4">Agrega un nuevo proceso jurídico al sistema.</p>
                     <a href="{{ route('legal_processes.create') }}" 
-                       class="inline-block px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition">
+                        class="inline-block px-4 py-2 bg-green-700 text-white rounded-lg hover:bg-green-800 transition">
                         Registrar
                     </a>
                 </div>
@@ -43,7 +43,7 @@
                     <h3 class="text-lg font-semibold mb-2">Mis Procesos</h3>
                     <p class="text-gray-600 mb-4">Consulta y actualiza tus procesos asignados.</p>
                     <a href="{{ route('mis.procesos') }}" 
-                       class="inline-block px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition">
+                        class="inline-block px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition">
                         Ver procesos
                     </a>
                 </div>
