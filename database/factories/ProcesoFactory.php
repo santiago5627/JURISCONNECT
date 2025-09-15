@@ -10,7 +10,7 @@ class ProcesoFactory extends Factory
 {
     public function definition(): array
     {
-        //$estados = ['En curso', 'Finalizado', 'Archivado', 'Suspendido'];
+        $estados = ['En curso', 'Finalizado', 'Archivado', 'Suspendido'];
         $tipos = ['Civil', 'Laboral', 'Penal', 'Familia', 'Comercial'];
 
         return [
@@ -19,7 +19,7 @@ class ProcesoFactory extends Factory
             'demandante'     => $this->faker->name(),
             'demandado'      => $this->faker->name(),
             'descripcion'    => $this->faker->sentence(12),
-            //'estado'         => $this->faker->randomElement($estados),         
+            'estado'         => $this->faker->randomElement($estados),         
         ];
     }
 }

@@ -173,9 +173,6 @@ class LawyerController extends Controller
             }
 
             return redirect()->route('dashboard')->with('success', 'Abogado eliminado exitosamente.');
-    $pdf = Pdf::loadView('exports.lawyers-pdf', compact('lawyers', 'logoPath'))
-                ->setPaper('a4', 'portrait');
-
 
         } catch (\Exception $e) {
             if ($request->ajax()) {

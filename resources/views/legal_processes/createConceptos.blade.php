@@ -544,7 +544,7 @@
                     <h3>Proceso Legal</h3>
                     <h3>{{ $proceso->id }}</h3>
                 </div>
-                <span class="status-badge">Pendiente</span> 
+                <span class="status-badge">{{ $proceso->estado }}</span>
             </div>
             <div class="card-body">
                 <div class="card-grid">
