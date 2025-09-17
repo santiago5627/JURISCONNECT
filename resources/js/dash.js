@@ -507,28 +507,64 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
-// Manejo de formularios de eliminación
+// Manejo simple de eliminación de abogados con showCustomAlert
 document.addEventListener('submit', async function(e) {
     if (e.target.classList.contains('delete-lawyer-form')) {
         e.preventDefault();
-
+        
         const form = e.target;
         const lawyerName = form.dataset.name;
-
+        
+        // Confirmación con tu alerta personalizada
         const confirmed = await showCustomAlert(
             'warning',
             'Confirmar Eliminación',
-            `¿Estás seguro de eliminar al abogado ${lawyerName}? Esta acción no se puede deshacer.`,
+            `¿Estás seguro de eliminar al abogado ${lawyerName}?`,
             true,
             'Eliminar',
             'Cancelar'
         );
-
+        
         if (confirmed) {
-            form.submit();
+            try {
+                // Enviar solicitud de eliminación
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: new FormData(form)
+                });
+                
+                if (response.ok) {
+                    // Eliminar la fila de la tabla
+                    const row = form.closest('tr');
+                    row.remove();
+                    
+                    // ✅ Actualizar el contador en el dashboard sin salir de la vista
+                    await actualizarConteoDashboard();
+                }
+            } catch (error) {
+                await showCustomAlert('error', 'Error de Conexión', 'No se pudo conectar con el servidor.');
+            }
         }
     }
 });
+
+
+// Función para recargar el conteo del dashboard
+async function actualizarConteoDashboard() {
+    try {
+        const response = await fetch('/dashboard/count-lawyers'); // 🔹 Ruta que debe devolver el conteo
+        if (response.ok) {
+            const data = await response.json();
+            // Suponiendo que el conteo está en un span con id="lawyerCount"
+            document.getElementById('lawyerCount').textContent = data.count;
+        }
+    } catch (error) {
+        console.error("Error al actualizar el conteo:", error);
+    }
+}
 
 // Edición de abogados
 document.addEventListener("click", function(e) {

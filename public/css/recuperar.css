@@ -189,6 +189,7 @@ body {
 .btn-next {
     background: linear-gradient(135deg, #16a34a, #15803d);
     box-shadow: 0 6px 20px rgba(22, 163, 74, 0.3);
+    color: #ffffff;
 }
 .btn-next:hover {
     background: linear-gradient(135deg, #166534, #15803d);
@@ -207,7 +208,7 @@ body {
 .custom-alert-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.45);
+    background: rgb(255, 255, 255);
     display: flex;
     justify-content: center;
     align-items: center;
