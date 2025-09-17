@@ -17,7 +17,7 @@
             --danger-dark-color: #c82333;
             --background-color: #f8f9fa;
             --sidebar-bg: #ffffff;
-            --text-color: #343a40;
+            --text-color: #343a40; 
             --text-muted-color: #6c757d;
             --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             --transition-speed: 0.3s;
