@@ -860,28 +860,129 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Sistema de alertas y validaciones inicializado correctamente');
 });
 
-// las secciones
-        document.addEventListener('DOMContentLoaded', function() {
-            const navButtons = document.querySelectorAll('.nav-btn');
-            const sections = document.querySelectorAll('.section-content');
+// ===== NAVEGACIÓN ENTRE SECCIONES Y PAGINACIÓN AJAX =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Manejo de navegación entre secciones
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const sections = document.querySelectorAll('.section-content');
+    
+    navButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevenir comportamiento por defecto
+            const sectionId = this.getAttribute('data-section');
             
-            navButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const sectionId = this.getAttribute('data-section');
-                    
-                    // Remover clase activa de todos los botones y secciones
-                    navButtons.forEach(btn => btn.classList.remove('active'));
-                    sections.forEach(section => section.classList.remove('active'));
-                    
-                    // Agregar clase activa al botón clickeado
-                    this.classList.add('active');
-                    
-                    // Mostrar la sección correspondiente
-                    const targetSection = document.getElementById(sectionId + '-section');
-                    if (targetSection) {
-                        targetSection.classList.add('active');
-                    }
-                });
-            });
+            // Remover clase activa de todos los botones y secciones
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Agregar clase activa al botón clickeado
+            this.classList.add('active');
+            
+            // Mostrar la sección correspondiente
+            const targetSection = document.getElementById(sectionId + '-section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
         });
+    });
 
+// Manejo de paginación AJAX para la sección de abogados
+function handleAjaxPagination() {
+    const lawyersSection = document.querySelector('#lawyers-section');
+    if (!lawyersSection) {
+        console.log('No se encontró #lawyers-section');
+        return;
+    }
+
+    // Event delegation para manejar clics en enlaces de paginación
+    lawyersSection.addEventListener('click', function(e) {
+        // Verificar si el elemento clickeado es un enlace de paginación AJAX
+        if (e.target.closest('.pagination-btn.ajax-page')) {
+            e.preventDefault();
+            
+            const link = e.target.closest('.pagination-btn.ajax-page');
+            const url = link.getAttribute('href');
+            
+            console.log('URL de paginación:', url);
+            
+            if (!url || url === '#') {
+                console.log('URL inválida');
+                return;
+            }
+            
+            // Mostrar indicador de carga
+            const container = lawyersSection.querySelector('.table-container');
+            if (container) {
+                container.style.opacity = '0.5';
+                container.style.pointerEvents = 'none';
+            }
+            
+            console.log('Iniciando petición AJAX...');
+            
+            // Realizar petición AJAX
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+                console.log('Respuesta recibida:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Datos recibidos:', data);
+                
+                if (data.success && data.html) {
+                    // Actualizar el contenido
+                    const tableContainer = lawyersSection.querySelector('.table-container');
+                    if (tableContainer) {
+                        tableContainer.outerHTML = data.html;
+                        console.log('Contenido actualizado exitosamente');
+                    }
+                    
+                    // Actualizar URL sin recargar página
+                    if (window.history && window.history.pushState) {
+                        window.history.pushState({}, '', url);
+                    }
+                    
+                    // Re-inicializar el manejo de paginación para los nuevos elementos
+                    handleAjaxPagination();
+                } else {
+                    throw new Error(data.message || 'Formato de respuesta inválido');
+                }
+            })
+            .catch(error => {
+                console.error('Error completo:', error);
+                
+                // Mostrar mensaje de error al usuario
+                const container = lawyersSection.querySelector('.table-container');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> ${error.message}<br>
+                            <small>Revisa la consola para más detalles</small>
+                        </div>
+                    `;
+                }
+            })
+            .finally(() => {
+                // Quitar indicador de carga
+                const container = lawyersSection.querySelector('.table-container');
+                if (container) {
+                    container.style.opacity = '1';
+                    container.style.pointerEvents = 'auto';
+                }
+            });
+        }
+    });
+}
+    // Inicializar el manejo de paginación
+    handleAjaxPagination();
+});

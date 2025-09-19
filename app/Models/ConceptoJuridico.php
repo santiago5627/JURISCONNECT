@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class ConceptoJuridico extends Model
 {
     // 👇 Nombre real de la tabla en la BD
-    protected $table = 'conceptos';
+    //protected $table = 'conceptos';
 
     protected $fillable = [
         'numero_radicado',
