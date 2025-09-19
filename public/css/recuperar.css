@@ -37,26 +37,21 @@ body {
 .logo-jurisconnect {
     width: 420px;
     height: auto;
-    margin-bottom: -10px;
-    margin-left: -300px;
     animation: fadeInLeft 1s ease-out;
     transition: transform 0.3s ease;
 }
 
-/* Contenedor del formulario */
-.form-container {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    border-radius: 25px;
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    padding: 100px 40px;
-    width: 1500px;
-    max-width: 550px;
-    height: 500px;
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-    animation: fadeInRight 1s ease-out;
-    margin-right: -200px; /* añadido: separa el form del borde derecho */
+/* Contenedor principal */
+.main-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* mantenemos el logo a la izquierda */
+    width: 100%;
+    max-width: 1200px;
+    min-height: 100vh;
+    padding: 40px;
+    gap: 80px;
+    z-index: 10;
 }
 
 /* Formulario */
@@ -76,24 +71,20 @@ body {
 
 /* Títulos */
 .form-title {
-    margin-top: -35px;
     text-align: center;
     color: #ffffff;
     font-size: 2rem;
     font-weight: 700;
-    margin-bottom: 50px;
+    margin-bottom: 25px;
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .form-description {
-    display: block;
     color: #fff;
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     text-align: left;
     font-size: 1rem;
     font-weight: bold;
-    margin-top: 55px;
-
 }
 
 /* Inputs */
@@ -107,27 +98,18 @@ body {
     border-radius: 50px;
     font-size: 1rem;
     text-align: center;
+    color: #333;
     background: rgba(255, 255, 255, 0.15);
     border: 2px solid rgba(255, 255, 255, 0.3);
     outline: none;
     font-weight: 500;
-    margin-top: -70px;
+    transition: all 0.3s ease;
 }
 
 .form-input::placeholder {
-    color: #131111;
+    color: #222;
     font-weight: 400;
-    letter-spacing: 1px;
-    border-color: #131111;
-}
-
-.form-input:hover {
-    border-color: rgba(255, 255, 255, 0.6);
-    background: rgba(243, 236, 236, 0.808);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-    border-color: #131111;
-
+    letter-spacing: 0.5px;
 }
 
 .form-input:hover,
@@ -205,68 +187,49 @@ body {
 
 
 .btn-next {
-    height: 50px;
-    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
-    color: white;
-    box-shadow: 0 8px 25px rgba(22, 163, 74, 0.3);
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    box-shadow: 0 6px 20px rgba(22, 163, 74, 0.3);
 }
 .btn-next:hover {
     background: linear-gradient(135deg, #166534, #15803d);
     transform: translateY(-2px);
 }
 
+/* Footer SENA */
 .sena-container{
     position: absolute;
-    bottom: 10px;
+    bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
 }
 
-/* Overlay */
+/* ALERTA PERSONALIZADA */
 .custom-alert-overlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.55);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Fondo oscurecido con blur */
-.custom-alert-overlay {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    inset: 0;
+    background: rgba(0,0,0,0.45);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 10000;
     backdrop-filter: blur(3px);
 }
-
-/* Caja de la alerta */
 .custom-alert-box {
     background: #fff;
-    border-radius: 12px;
-    padding: 25px 30px;
+    border-radius: 15px;
+    padding: 30px;
     max-width: 420px;
     width: 90%;
     text-align: center;
     box-shadow: 0 6px 25px rgba(0,0,0,0.25);
     animation: alertIn 0.35s ease;
 }
-
-/* Círculo con ícono */
 .custom-alert-icon-circle {
     width: 70px;
     height: 70px;
     margin: 0 auto 18px;
     border-radius: 50%;
-    background: #047857; /* verde */
+    background: #047857;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -275,23 +238,17 @@ body {
     color: #fff;
     font-size: 32px;
 }
-
-/* Título */
 .custom-alert-title {
     font-size: 20px;
     font-weight: 700;
     color: #111;
     margin-bottom: 8px;
 }
-
-/* Mensaje */
 .custom-alert-message {
     font-size: 15px;
     color: #555;
     margin-bottom: 20px;
 }
-
-/* Botón */
 .custom-alert-btn {
     background: #047857;
     color: #fff;
@@ -302,24 +259,10 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.25s ease;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
-
 .custom-alert-btn:hover {
     background: #03613d;
     transform: translateY(-2px);
-}
-
-/* Animación */
-@keyframes alertIn {
-    from { opacity: 0; transform: scale(0.8); }
-    to { opacity: 1; transform: scale(1); }
-}
-
-/* Animación */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Animaciones */
@@ -351,179 +294,9 @@ body {
     .logo-jurisconnect { width: 260px; }
     .form-container { max-width: 100%; padding: 35px; }
 }
-
-/* Móviles gr7andes */
 @media (max-width: 480px) {
-    .main-container {
-        padding: 20px 15px;
-        gap: 30px;
-        padding-top: 40px;
-        padding-bottom: 40px;
-    }
-
-    .logo-jurisconnect {
-        width: 240px;
-    }
-
-    .form-container {
-        padding: 30px 25px;
-        border-radius: 20px;
-    }
-
-    .form-title {
-        font-size: 1.6rem;
-        margin-bottom: 15px;
-    }
-
-    .form-description {
-        font-size: 0.9rem;
-        margin-bottom: 30px;
-    }
-
-    .form-input {
-        padding: 16px 22px;
-        font-size: 0.95rem;
-    }
-
-    .button-group {
-        flex-direction: column;
-        gap: 12px;
-        margin-top: 30px;
-        margin-bottom: 25px;
-    }
-
-    .btn {
-        padding: 16px 24px;
-        font-size: 0.9rem;
-    }
-
-    .sena-container {
-        bottom: 10px;
-    }
-
-    .sena-container img {
-        width: 60px;
-    }
-}
-
-/* Móviles pequeños */
-@media (max-width: 360px) {
-    .main-container {
-        padding: 15px 10px;
-        gap: 25px;
-    }
-
-    .logo-jurisconnect {
-        width: 200px;
-    }
-
-    .form-container {
-        padding: 25px 20px;
-    }
-
-    .form-title {
-        font-size: 1.4rem;
-    }
-
-    .form-description {
-        font-size: 0.85rem;
-    }
-
-    .form-input {
-        padding: 14px 20px;
-        font-size: 0.9rem;
-    }
-
-    .btn {
-        padding: 14px 20px;
-        font-size: 0.85rem;
-        letter-spacing: 0.5px;
-    }
-
-    .sena-container img {
-        width: 50px;
-    }
-}
-
-/* Landscape en móviles */
-@media (max-height: 600px) and (orientation: landscape) {
-    .main-container {
-        flex-direction: row;
-        padding: 20px;
-        gap: 40px;
-        min-height: 100vh;
-    }
-
-    .left-section {
-        flex: 1;
-        order: 1;
-    }
-
-    .logo-jurisconnect {
-        width: 200px;
-    }
-
-    .form-container {
-        flex: 1;
-        max-width: 350px;
-        padding: 25px;
-        order: 2;
-        margin-right: 0;
-    }
-
-    .form-title {
-        font-size: 1.4rem;
-        margin-bottom: 15px;
-    }
-
-    .form-description {
-        font-size: 0.85rem;
-        margin-bottom: 25px;
-    }
-
-    .form-input {
-        padding: 14px 20px;
-    }
-
-    .button-group {
-        margin-top: 25px;
-        margin-bottom: 20px;
-        gap: 12px;
-    }
-
-    .btn {
-        padding: 14px 22px;
-        font-size: 0.85rem;
-    }
-
-    .sena-container {
-        bottom: 10px;
-    }
-
-    .sena-container img {
-        width: 45px;
-    }
-}
-
-/* Muy landscape (pantallas muy anchas y bajas) */
-/* Ajus
-@media (max-height: 450px) and (orientation: landscape) {
-    .form-container {
-        padding: 20px;
-    }
-
-    .form-title {
-        font-size: 1.2rem;
-        margin-bottom: 10px;
-    }
-
-    .form-description {
-        font-size: 0.8rem;
-        margin-bottom: 20px;
-    }
-
-    .button-group {
-        margin-top: 20px;
-        margin-bottom: 15px;
-    }
+    .logo-jurisconnect { width: 220px; }
+    .form-container { padding: 25px 20px; }
+    .form-title { font-size: 1.5rem; }
+    .button-group { flex-direction: column; gap: 12px; }
 }
