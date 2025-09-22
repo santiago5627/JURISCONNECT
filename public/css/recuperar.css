@@ -461,7 +461,7 @@ body {
     .form-container { max-width: 100%; padding: 35px; }
 }
 
-/* Móviles gr7andes */
+/* Móviles grandes */
 @media (max-width: 480px) {
     .main-container {
         padding: 20px 15px;
@@ -615,7 +615,7 @@ body {
 }
 
 /* Muy landscape (pantallas muy anchas y bajas) */
-/* Ajus
+/* Ajustes para pantallas muy anchas y bajas */
 @media (max-height: 450px) and (orientation: landscape) {
     .form-container {
         padding: 20px;

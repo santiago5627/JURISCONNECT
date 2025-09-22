@@ -814,11 +814,11 @@
                         @endif
                     @endif
 
-                    @for ($i = $start; $i <= $end; $i++)
-                        @if ($i == $currentPage)
-                            <span class="pagination-btn active">{{ $i }}</span>
+                    @for ($pageNumber = $start; $pageNumber <= $end; $pageNumber++)
+                        @if ($pageNumber == $currentPage)
+                            <span class="pagination-btn active">{{ $pageNumber }}</span>
                         @else
-                            <a href="{{ $procesos->url($i) }}" class="pagination-btn">{{ $i }}</a>
+                            <a href="{{ $procesos->url($pageNumber) }}" class="pagination-btn">{{ $pageNumber }}</a>
                         @endif
                     @endfor
 

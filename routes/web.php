@@ -136,9 +136,6 @@ Route::get('/legal_processes/export/pdf', [LegalProcessController::class, 'expor
 
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::middleware([
     'auth:sanctum',

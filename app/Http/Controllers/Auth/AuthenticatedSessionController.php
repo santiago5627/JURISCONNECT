@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,21 +27,21 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-$user = Auth::user();
-$roleName = strtolower(optional($user->role)->name ?? '');
+        $user = Auth::user();
 
-switch ($roleName) {
-    case 'admin':
-        return redirect()->route('dashboard');
-    case 'lawyer':
-        return redirect()->route('dashboard.abogado');
-    case 'client':
-        return redirect()->route('dashboard.asistente');
-    default:
-        return redirect('/');
-}
-}
-
+        // Redirección basada en el rol (por ID)
+        switch ($user->role_id) {
+            case 1: // Administrador
+                return redirect()->route('dashboard');
+            case 2: // Abogado
+                return redirect()->route('dashboard.asistente');
+            case 3: // Asistente Jurídico
+                return redirect()->route('dashboard.abogado');
+            default:
+                // return redirect('/home');  lo conservo por si acaso
+                return redirect()->route('dashboard');
+        }
+    }
 
     /** 
      * Cerrar sesión.

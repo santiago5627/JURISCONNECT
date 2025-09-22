@@ -1127,9 +1127,9 @@ function updateUrlParameter(url, param, paramVal) {
 
     if (additionalURL) {
         const tempArray2 = additionalURL.split("&");
-        for (let i = 0; i < tempArray2.length; i++) {
-            if (tempArray2[i].split('=')[0] != param) {
-                temp += "&" + tempArray2[i];
+        for (let paramIndex = 0; paramIndex < tempArray2.length; paramIndex++) {
+            if (tempArray2[paramIndex].split('=')[0] != param) {
+                temp += "&" + tempArray2[paramIndex];
             }
         }
     }

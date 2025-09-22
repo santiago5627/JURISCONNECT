@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 
-class NewPasswordController extends Controller
+class NewPasswordController
 {
     /**
      * Muestra la vista de restablecer contraseña.
@@ -57,10 +57,10 @@ class NewPasswordController extends Controller
             function ($user) use ($request) {
                 $user->forceFill([
                     'password' => Hash::make($request->password),
-                    'remember_token' => Str::random(60), // invalida sesiones viejas
+                    'remember_token' => Str::random(60), // 👈 asegura que se invaliden sesiones viejas
                 ])->save();
 
-                event(new PasswordReset($user));
+                event(new PasswordReset($user)); // 👈 dispara el evento
             }
         );
 
