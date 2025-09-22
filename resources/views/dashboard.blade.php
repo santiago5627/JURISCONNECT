@@ -50,22 +50,22 @@
                             <label for="numeroDocumento">Número de Documento:</label>
                             <input type="text" id="numeroDocumento" name="numeroDocumento" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="correo">Correo Electrónico:</label>
                             <input type="email" id="correo" name="correo" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="telefono">Teléfono:</label>
                             <input type="tel" id="telefono" name="telefono">
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="especialidad">Especialidad:</label>
                             <input type="text" id="especialidad" name="especialidad" placeholder="Ej: Derecho Civil, Penal, etc.">
                         </div>
-                        
+
                         <div class="form-actions">
                             <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
                             <button type="submit" class="btn-submit">Crear Abogado</button>
@@ -90,12 +90,12 @@
                             <label for="editNombre">Nombre:</label>
                             <input type="text" id="editNombre" name="nombre" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="editApellido">Apellido:</label>
                             <input type="text" id="editApellido" name="apellido" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="editTipoDocumento">Tipo de Documento:</label>
                             <select id="editTipoDocumento" name="tipoDocumento" required>
@@ -105,27 +105,27 @@
                                 <option value="PAS">Pasaporte</option>
                             </select>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="editNumeroDocumento">Número de Documento:</label>
                             <input type="text" id="editNumeroDocumento" name="numeroDocumento" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="editCorreo">Correo:</label>
                             <input type="email" id="editCorreo" name="correo" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="editTelefono">Teléfono:</label>
                             <input type="tel" id="editTelefono" name="telefono">
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="editEspecialidad">Especialidad:</label>
                             <input type="text" id="editEspecialidad" name="especialidad">
                         </div>
-                        
+
                         <div class="form-actions">
                             <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
                             <button type="submit" class="btn-submit">Guardar Cambios</button>
@@ -143,14 +143,14 @@
 
                 <!-- Contenedor de la foto de perfil -->
                 <div class="profile-pic" onclick="document.getElementById('fileInput').click();" title="Haz clic para cambiar tu foto">
-                    <img src="{{ Auth::user()->profile_photo ? Storage::url(Auth::user()->profile_photo) : asset('img/a7dec46aca07b2e12e2e361cfa9312ec.jpg') }}" 
+                    <img src="{{ Auth::user()->profile_photo ? Storage::url(Auth::user()->profile_photo) : asset('img/Phoenix_Wright_in_Phoenix_Wright_Ace_Attorney.png') }}" 
                         id="profileImage" 
                         alt="Foto de perfil">
                 </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
             </div>
-            
+
             <div class="nav-menu">
                 <button class="nav-btn active" data-section="dashboard">
                     📊 Dashboard
@@ -159,7 +159,7 @@
                     ⚖️ Gestión de Abogados
                 </button>
             </div>
-            
+
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo SENA">
             </div>
@@ -168,7 +168,7 @@
             <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
                 @csrf
                 <button type="submit" class="logout-btn">
-                    🚪 Cerrar Sesión
+                    Cerrar Sesión
                 </button>
             </form>
         </div>
@@ -184,9 +184,9 @@
                     <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo Empresa" class="logo">
                 </div>
             </div>
-            
+
             <div class="content-panel">
-                
+
                 <!-- SECCIÓN DASHBOARD PRINCIPAL -->
                 <div class="section-content active" id="dashboard-section">
                     <div class="section-header">
@@ -234,19 +234,19 @@
                         <h2>⚖️ Gestión de Abogados</h2>
                         <p>Administrar el registro de abogados del sistema</p>
                     </div>
-                    
+
                     <div class="search-section">
                         <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
                         <button class="search-btn" id="searchBtn">Buscar</button>
                     </div>
-                    
+
                     <div class="action-buttons">
-                        <button class="btn-primary" id="createBtn">➕ CREAR NUEVO ABOGADO</button>
-                        <a href="{{ route('lawyers.export.excel') }}" class="btn-success">📊 EXPORTAR EXCEL</a>
-                        <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">📄 EXPORTAR PDF</a>
+                        <button class="btn-primary" id="createBtn"> CREAR NUEVO ABOGADO</button>
+                        <a href="{{ route('lawyers.export.excel') }}" class="btn-success"> EXPORTAR EXCEL</a>
+                        <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger"> EXPORTAR PDF</a>
                     </div>
-                    
-                    <div class="table-container">
+
+<div class="table-container">
                         <table>
                             <thead>
                                 <tr>
@@ -284,11 +284,11 @@
                                         </button>
 
                                         <form action="{{ route('lawyers.destroy', $lawyer->id) }}"
-                                              method="POST"
-                                              class="delete-lawyer-form"
-                                              data-id="{{ $lawyer->id }}"
-                                              data-name="{{ $lawyer->nombre }} {{ $lawyer->apellido }}"
-                                              style="display: inline;">
+                                            method="POST"
+                                            class="delete-lawyer-form"
+                                            data-id="{{ $lawyer->id }}"
+                                            data-name="{{ $lawyer->nombre }} {{ $lawyer->apellido }}"
+                                            style="display: inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn-delete">
@@ -301,19 +301,120 @@
                             </tbody>
                         </table>
                     </div>
+
+
+
+<!-- Paginación -->
+            <div class="pagination-container">
+                <div class="pagination-content">
+<!-- Paginación móvil -->
+                    <div class="pagination-mobile">
+                @if ($lawyers->onFirstPage())
+                    <span class="pagination-btn disabled">Anterior</span>
+                @else
+                    <a href="{{ $lawyers->previousPageUrl() }}" class="pagination-btn">Anterior</a>
+                @endif
+
+<!-- Números de página -->
+                    @php
+                        $currentPage = $lawyers->currentPage();
+                        $lastPage = $lawyers->lastPage();
+                        $start = max(1, $currentPage - 2);
+                        $end = min($lastPage, $currentPage + 2);
+                    @endphp
+
+                    @if ($start > 1)
+                        <a href="{{ $lawyers->url(1) }}" class="pagination-btn">1</a>
+                        @if ($start > 2)
+                            <span class="pagination-btn disabled">...</span>
+                        @endif
+                    @endif
+
+                    @for ($i = $start; $i <= $end; $i++)
+                        @if ($i == $currentPage)
+                            <span class="pagination-btn active">{{ $i }}</span>
+                        @else
+                            <a href="{{ $lawyers->url($i) }}" class="pagination-btn">{{ $i }}</a>
+                        @endif
+                    @endfor
+
+                    @if ($end < $lastPage)
+                        @if ($end < $lastPage - 1)
+                            <span class="pagination-btn disabled">...</span>
+                        @endif
+                        <a href="{{ $lawyers->url($lastPage) }}" class="pagination-btn">{{ $lastPage }}</a>
+                    @endif
+
+                @if ($lawyers->hasMorePages())
+                    <a href="{{ $lawyers->nextPageUrl() }}" class="pagination-btn ajax-page">Siguiente</a>
+                @else
+                    <span class="pagination-btn disabled">Siguiente</span>
+                @endif
+            </div>
+
+<!-- Paginación desktop -->
+            <div class="pagination-desktop">
+
+                <div style="display: flex; gap: 0.5rem;">
+                    <!-- Botón Anterior -->
+                    @if ($lawyers->onFirstPage())
+                        <span class="pagination-btn disabled">Anterior</span>
+                    @else
+                        <a href="{{ $lawyers->previousPageUrl() }}" class="pagination-btn">Anterior</a>
+                    @endif
+
+                    <!-- Números de página -->
+                    @php
+                        $currentPage = $lawyers->currentPage();
+                        $lastPage = $lawyers->lastPage();
+                        $start = max(1, $currentPage - 2);
+                        $end = min($lastPage, $currentPage + 2);
+                    @endphp
+
+                    @if ($start > 1)
+                        <a href="{{ $lawyers->url(1) }}" class="pagination-btn">1</a>
+                        @if ($start > 2)
+                            <span class="pagination-btn disabled">...</span>
+                        @endif
+                    @endif
+
+                    @for ($i = $start; $i <= $end; $i++)
+                        @if ($i == $currentPage)
+                            <span class="pagination-btn active">{{ $i }}</span>
+                        @else
+                            <a href="{{ $lawyers->url($i) }}" class="pagination-btn">{{ $i }}</a>
+                        @endif
+                    @endfor
+
+                    @if ($end < $lastPage)
+                        @if ($end < $lastPage - 1)
+                            <span class="pagination-btn disabled">...</span>
+                        @endif
+                        <a href="{{ $lawyers->url($lastPage) }}" class="pagination-btn">{{ $lastPage }}</a>
+                    @endif
+
+                    <!-- Botón Siguiente -->
+                    @if ($lawyers->hasMorePages())
+                        <a href="{{ $lawyers->nextPageUrl() }}" class="pagination-btn">Siguiente</a>
+                    @else
+                        <span class="pagination-btn disabled">Siguiente</span>
+                    @endif
+                </div>
+            </div>
+                </div>
+            </div>
                 </div>
 
-
-                <!-- SECCIÓN CONFIGURACIÓN -->
+<!-- SECCIÓN CONFIGURACIÓN -->
                 <div class="section-content" id="settings-section">
                     <div class="section-header">
-                        <h2>⚙️ Configuración del Sistema</h2>
+                        <h2> Configuración del Sistema</h2>
                         <p>Configuraciones generales y preferencias</p>
                     </div>
                     
                     <div class="settings-grid">
                         <div class="setting-card">
-                            <h3>🔧 Configuración General</h3>
+                            <h3> Configuración General</h3>
                             <div class="setting-item">
                                 <label>Nombre del Sistema:</label>
                                 <input type="text" value="JustConnect SENA" class="form-control">
@@ -325,7 +426,7 @@
                         </div>
                         
                         <div class="setting-card">
-                            <h3>🔔 Notificaciones</h3>
+                            <h3> Notificaciones</h3>
                             <div class="setting-item">
                                 <label>
                                     <input type="checkbox" checked> Notificar nuevos registros
@@ -343,7 +444,7 @@
             </div>
         </div>
     </div>
-
+</div>
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
 </x-app-layout>

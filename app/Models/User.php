@@ -3,13 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes; 
+//use Illuminate\Database\Eloquent\SoftDeletes; 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, SoftDeletes; 
+    use HasFactory, Notifiable; 
 
     use HasFactory, Notifiable;
 
@@ -51,5 +51,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function role()
+{
+    return $this->belongsTo(Role::class, 'role_id');
 }
+
+}
+
 

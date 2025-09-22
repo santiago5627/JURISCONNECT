@@ -135,5 +135,29 @@ Route::get('/legal_processes/export/pdf', [LegalProcessController::class, 'expor
     ->name('legal_processes.export.pdf');
 
 
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    // Ruta principal del dashboard
+    Route::get('/dashboard', [LawyerController::class, 'index'])->name('dashboard');
+    
+    // Rutas para la gestión de abogados
+    Route::prefix('lawyers')->name('lawyers.')->group(function () {
+        Route::post('/', [LawyerController::class, 'store'])->name('store');
+        Route::put('/{lawyer}', [LawyerController::class, 'update'])->name('update');
+        Route::delete('/{lawyer}', [LawyerController::class, 'destroy'])->name('destroy');
+        Route::get('/export/excel', [LawyerController::class, 'exportExcel'])->name('export.excel');
+        Route::get('/export/pdf', [LawyerController::class, 'exportPdf'])->name('export.pdf');
+    });
+});
+
+
 // Rutas de autenticación
 require __DIR__ . '/auth.php';

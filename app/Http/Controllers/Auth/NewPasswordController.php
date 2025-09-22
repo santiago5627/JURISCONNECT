@@ -57,10 +57,10 @@ class NewPasswordController extends Controller
             function ($user) use ($request) {
                 $user->forceFill([
                     'password' => Hash::make($request->password),
-                    'remember_token' => Str::random(60), // 👈 asegura que se invaliden sesiones viejas
+                    'remember_token' => Str::random(60), // invalida sesiones viejas
                 ])->save();
 
-                event(new PasswordReset($user)); // 👈 dispara el evento
+                event(new PasswordReset($user));
             }
         );
 

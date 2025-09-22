@@ -503,7 +503,7 @@
                     <i class="fas fa-info-circle"></i> 
                     Información del Proceso
                 </h5>
-                <span class="badge">En Progreso</span>
+                <span class="badge">{{ $proceso->estado }}</span>
             </div>
             <div class="card-body">
                 <div class="info-grid">

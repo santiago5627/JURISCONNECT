@@ -27,21 +27,21 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-        $user = Auth::user();
+$user = Auth::user();
+$roleName = strtolower(optional($user->role)->name ?? '');
 
-        // Redirección basada en el rol (por ID)
-        switch ($user->role_id) {
-            case 1: // Administrador
-                return redirect()->route('dashboard');
-            case 2: // Abogado
-                return redirect()->route('dashboard.asistente');
-            case 3: // Asistente Jurídico
-                return redirect()->route('dashboard.abogado');
-            default:
-                // return redirect('/home');  lo conservo por si acaso
-                return redirect()->route('dashboard');
-        }
-    }
+switch ($roleName) {
+    case 'admin':
+        return redirect()->route('dashboard');
+    case 'lawyer':
+        return redirect()->route('dashboard.abogado');
+    case 'client':
+        return redirect()->route('dashboard.asistente');
+    default:
+        return redirect('/');
+}
+}
+
 
     /** 
      * Cerrar sesión.
