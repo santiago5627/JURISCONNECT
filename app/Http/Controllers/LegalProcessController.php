@@ -39,7 +39,9 @@ class LegalProcessController extends Controller
         
         $this->handleDocumentUpload($request, $validated);
         
-        Proceso::create($validated);
+        Proceso::create(array_merge($validated, [
+    'estado' => 'pendiente' // o el estado inicial que corresponda
+]));
 
         return redirect()
             ->route('procesos.index')
@@ -116,6 +118,7 @@ class LegalProcessController extends Controller
             'demandado'         => 'required|string|max:255',
             'descripcion'       => 'required|string',
             'documento'         => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+            'estado'            => 'required|string',
         ]);
     }
 
@@ -132,6 +135,7 @@ class LegalProcessController extends Controller
             'descripcion'       => 'required|string',
             'documento'         => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'eliminar_documento' => 'nullable|boolean',
+            'estado'            => 'required|string',
         ]);
     }
 

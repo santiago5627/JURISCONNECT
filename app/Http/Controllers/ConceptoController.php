@@ -31,7 +31,7 @@ class ConceptoController extends Controller
     public function create() 
     {
         $procesos = Proceso::all();
-        return view('legal_processes.createConceptos', compact('procesos'));
+        return view('legal_processes.createConceptos', compact('procesos')); 
     }
 
     /**

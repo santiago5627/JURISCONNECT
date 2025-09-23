@@ -39,7 +39,7 @@
                         <a href="{{ $lawyers->url($lastPage) }}" class="pagination-btn ajax-page">{{ $lastPage }}</a>
                     @endif
 
-                @if ($lawyers->hasMorePages())
+                @if ($lawyers->hasMorePages()) 
                     <a href="{{ $lawyers->nextPageUrl() }}" class="pagination-btn ajax-page">Siguiente</a>
                 @else
                     <span class="pagination-btn disabled">Siguiente</span>

@@ -249,7 +249,6 @@
                     <!-- Incluir la tabla completa -->
     @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
 
-
 <!-- SECCIÓN CONFIGURACIÓN -->
                 <div class="section-content" id="settings-section">
                     <div class="section-header">

@@ -15,6 +15,7 @@
                             <tbody id="tableBody">
                                 @foreach($lawyers ?? [] as $lawyer)
                                 <tr data-id="{{ $lawyer->id }}">
+                                    <td>{{ $lawyer->id }}</td> <!--recuesrda borrar esto para la demostracion y para la version final o comentarlo -->
                                     <td>{{ $lawyer->nombre }}</td>
                                     <td>{{ $lawyer->apellido }}</td>
                                     <td>{{ $lawyer->tipo_documento }}</td>

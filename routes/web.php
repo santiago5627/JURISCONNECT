@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/abogado', [AbogadoController::class, 'index'])->name('dashboard.abogado');
     Route::get('/dashboard/asistente', [AsistenteController::class, 'index'])->name('dashboard.asistente');
 
+
     // === PERFIL ===
     Route::get('/profile/avatar', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile/avatar', [ProfileController::class, 'update'])->name('profile.update');

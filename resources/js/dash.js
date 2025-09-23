@@ -660,46 +660,89 @@ document.getElementById("createLawyerModal").querySelector("form").addEventListe
     }
 });
 
-// Búsqueda y filtrado
-document.getElementById("searchBtn").addEventListener("click", searchLawyersWithAlert);
-document.getElementById("searchInput").addEventListener("input", searchLawyersWithoutAlert);
+// Búsqueda en tiempo real simplificada
+let searchTimeout;
 
-//FUNCION DE BÚSQUEDA SIN ALERTA
-function searchLawyersWithoutAlert() {
-    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-    const rows = document.querySelectorAll("#tableBody tr");
-
-    rows.forEach((row) => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(searchTerm)) {
-            row.style.display = "";
-        } else { 
-            row.style.display = "none";
-        }
-    });
-}
-
-// Función para buscar con alerta (cuando presiona el botón buscar)
-function searchLawyersWithAlert() {
-    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-    const rows = document.querySelectorAll("#tableBody tr");
-    let visibleRows = 0;
-
-    rows.forEach((row) => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(searchTerm)) {
-            row.style.display = "";
-            visibleRows++;
-        } else {
-            row.style.display = "none";
-        }
-    });
-
-    // Solo mostrar alerta cuando se presiona el botón y no hay resultados
-    if (searchTerm && visibleRows === 0) {
-        showCustomAlert('info', 'Sin resultados', `No se encontraron abogados para "${searchTerm}"`);
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById("searchInput");
+    
+    if (searchInput) {
+        // Búsqueda en tiempo real mientras escribes
+        searchInput.addEventListener("input", function() {
+            clearTimeout(searchTimeout);
+            const searchTerm = this.value.trim();
+            
+            searchTimeout = setTimeout(() => {
+                performSearch(searchTerm);
+            }, 300); // Esperar 300ms después de escribir
+        });
     }
+});
+
+// Función principal de búsqueda
+function performSearch(searchTerm) {
+    // Preparar parámetros
+    const params = new URLSearchParams();
+    if (searchTerm) {
+        params.append('search', searchTerm);
+    }
+    params.append('ajax', '1');
+    
+    // Hacer petición AJAX
+    fetch(`${window.location.pathname}?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.html) {
+            // Actualizar tabla
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = data.html;
+            
+            const newTableBody = tempDiv.querySelector('#tableBody');
+            const currentTableBody = document.querySelector('#tableBody');
+            
+            if (newTableBody && currentTableBody) {
+                currentTableBody.innerHTML = newTableBody.innerHTML;
+            }
+            
+            // Actualizar paginación si existe
+            const newPagination = tempDiv.querySelector('.pagination');
+            const currentPagination = document.querySelector('.pagination')?.parentElement;
+            if (currentPagination) {
+                if (newPagination) {
+                    currentPagination.innerHTML = newPagination.parentElement.innerHTML;
+                } else {
+                    currentPagination.innerHTML = '';
+                }
+            }
+            
+            // Actualizar URL
+            const newUrl = new URL(window.location);
+            if (searchTerm) {
+                newUrl.searchParams.set('search', searchTerm);
+            } else {
+                newUrl.searchParams.delete('search');
+            }
+            newUrl.searchParams.delete('page');
+            window.history.replaceState({}, '', newUrl.toString());
+        }
+    })
+    .catch(error => {
+        console.error('Error en búsqueda:', error);
+    });
 }
+
+// Función para limpiar búsqueda (opcional)
+function clearSearch() {
+    document.getElementById("searchInput").value = '';
+    performSearch('');
+}
+
 
 // ===== FUNCIONALIDAD DE SUBIDA DE IMAGEN DE PERFIL =====
 function setupImageUpload() {
