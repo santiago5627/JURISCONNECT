@@ -660,6 +660,7 @@ document.getElementById("createLawyerModal").querySelector("form").addEventListe
     }
 });
 
+// ===== FUNCIONALIDAD DE BÚSQUEDA AJAX =====
 // Búsqueda en tiempo real simplificada
 let searchTimeout;
 
@@ -679,7 +680,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// ===== FUNCIONALIDAD DE BÚSQUEDA AJAX =====
+
 // Función principal de búsqueda
 function performSearch(searchTerm) {
     // Preparar parámetros

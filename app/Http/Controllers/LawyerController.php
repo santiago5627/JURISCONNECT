@@ -171,7 +171,7 @@ class LawyerController extends Controller
                     'message' => 'Abogado eliminado exitosamente.'
                 ]);
             }
-
+ 
             return redirect()->route('dashboard')->with('success', 'Abogado eliminado exitosamente.');
 
         } catch (\Exception $e) {
