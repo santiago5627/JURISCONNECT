@@ -35,14 +35,14 @@ class AdminController extends Controller
             
             // Obtener abogados paginados
             $lawyers = $query->paginate(10);
-            
+
             // Mantener parámetros de búsqueda en la paginación
             $lawyers->appends($request->query());
-            
+
             // Si es una petición AJAX, devolver solo la vista parcial
             if ($request->ajax()) {
                 $html = view('profile.partials.lawyers-table', compact('lawyers'))->render();
-                
+
                 return response()->json([
                     'html' => $html,
                     'success' => true,
@@ -52,10 +52,13 @@ class AdminController extends Controller
                     'search_term' => $searchTerm
                 ]);
             }
-            
+
+            // Contar total de abogados registrados
+            $totalLawyers = Lawyer::count();
+
             // Para peticiones normales, devolver la vista completa
-            return view('dashboard', compact('lawyers'));
-            
+            return view('dashboard', compact('lawyers', 'totalLawyers'));
+
         } catch (\Exception $e) {
             if ($request->ajax()) {
                 return response()->json([

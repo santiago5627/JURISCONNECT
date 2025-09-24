@@ -198,7 +198,7 @@
                         <div class="stat-card">
                             <div class="stat-icon">👨‍💼</div>
                             <div class="stat-info">
-                                <h3>{{ $lawyers->count() ?? 0 }}</h3>
+                                <h3>{{ $totalLawyers }}</h3>
                                 <p>Abogados Registrados</p>
                             </div>
                         </div>

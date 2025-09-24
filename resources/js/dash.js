@@ -679,6 +679,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+// ===== FUNCIONALIDAD DE BÚSQUEDA AJAX =====
 // Función principal de búsqueda
 function performSearch(searchTerm) {
     // Preparar parámetros
