@@ -13,15 +13,34 @@
         <div class="form-wrapper">
 <!-- Header -->
             <div class="header">
-                <h1>
+
+                <form action="{{ route('procesos.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    <h1>
                     <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                     Crear Nuevo Proceso Judicial
                 </h1>
                 <p>Complete los datos del proceso judicial</p>
+<!-- Botones -->
+                    <div class="button-container">
+                        <a href="{{ route('dashboard.abogado') }}" class="btn btn-cancel">
+                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Crear Proceso Judicial
+                        </button>
+                    </div>
+                
             </div>
-
             <div class="form-content">
 <!-- Mensajes de error -->
                 <div class="error-container" style="display: none;">
@@ -35,9 +54,6 @@
                         <li>Ejemplo de error de validación</li>
                     </ul>
                 </div>
-
-                <form action="{{ route('procesos.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
 
 <!-- Grid de campos principales -->
                     <div class="form-grid">
@@ -59,7 +75,6 @@
                                 <option value="Familia">Familia</option>
                             </select>
                         </div>
-
 <!-- Número de radicado -->
                         <div class="field-group">
                             <label for="numero_radicado" class="field-label">
@@ -77,7 +92,6 @@
                                 @enderror
                         </div>
                     </div>
-
 <!-- Partes del proceso -->
                     <div class="parties-section">
                         <h3 class="section-title">Partes del Proceso</h3>
@@ -97,7 +111,6 @@
                                     class="form-input demandante-input" 
                                     placeholder="Nombre completo del demandante">
                             </div>
-
 <!-- Demandado -->
                             <div class="field-group">
                                 <label for="demandado" class="field-label">
@@ -114,7 +127,6 @@
                             </div>
                         </div>
                     </div>
-
 <!-- Descripción -->
                     <div class="field-group">
                         <label for="descripcion" class="field-label">
@@ -129,7 +141,6 @@
                                 placeholder="Describa detalladamente el caso, los hechos relevantes y las pretensiones..."></textarea>
                         <p class="help-text">Proporcione una descripción clara y detallada del proceso judicial</p>
                     </div>
-
 <!-- Documentos -->
                     <div class="document-section">
                         <div class="document-header">
@@ -150,23 +161,6 @@
                             <p class="file-help">Formatos permitidos: PDF, DOC, DOCX. Tamaño máximo: 10MB</p>
                         </div>
                     </div>
-
-                                    <!-- Botones -->
-                    <div class="button-container">
-                        <a href="{{ route('dashboard.abogado') }}" class="btn btn-cancel">
-                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                            Cancelar
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Crear Proceso Judicial
-                        </button>
-                    </div>
-
                 </form>
             </div>
         </div>

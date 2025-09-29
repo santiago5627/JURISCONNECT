@@ -16,11 +16,91 @@ class LegalProcessController extends Controller
     /**
      * Listar procesos judiciales
      */
-    public function index()
+    public function index(Request $request)
     {
-        $procesos = Proceso::latest()->paginate(10);
-        return view('legal_processes.index', compact('procesos'));
+        try{
+            // iniciar query builder
+            $query = Proceso::query();
+            $searchTerm = $request->get('search');
+
+            // aplicar búsqueda si existe el término de búsqueda
+            if ($searchTerm) {
+                $query->where(function($q) use ($searchTerm) {
+                    $q->where('tipo_proceso', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('descripcion', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('estado', 'LIKE', '%' . $searchTerm . '%');
+                      // Agrega más campos según tu modelo Proceso
+                });
+        }
+
+        // Obtener procesos paginados
+        $procesos = $query->latest()->paginate(10);
+
+        // Mantener parámetros de búsqueda en la paginación
+        $procesos->appends($request->query());
+
+        // Si es una petición AJAX, devolver solo la vista parcial
+        if ($request->ajax()) {
+            $html = view('legal_processes.index', compact('procesos'))->render();
+
+            return response()->json([
+                'html' => $html,
+                'success' => true,
+                'total' => $procesos->total(),
+                'current_page' => $procesos->currentPage(),
+                'last_page' => $procesos->lastPage(),
+                'search_term' => $searchTerm
+            ]);
+        }
+
+        //contar total de procesos registrados
+        $totalProcesos = Proceso::count();
+
+       //para peticiones normales, devolver la vista completa
+        return view('legal_processes.index', compact('procesos', 'totalProcesos')); 
+
+        } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error al cargar los datos: ' . $e->getMessage()
+                ], 500);
+            }
+
+            // Para peticiones normales, redirigir con error
+            return back()->with('error', 'Error al cargar los datos');
+        }
     }
+
+    //metodo para busqueda rapida
+    public function search(Request $request)
+    {
+        try {
+        $searchTerm = $request->input('query');
+
+        if (!$searchTerm) {
+            return response()->json([]);
+        }
+
+        $procesos = Proceso::where(function($q) use ($searchTerm) {
+                $q->where('tipo_proceso', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('descripcion', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('estado', 'LIKE', '%' . $searchTerm . '%');
+            })->limit(20)->get(['id', 'numero_radicado', 'tipo_proceso', 'demandante', 'demandado', 'estado']);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error en la búsqueda: ' . $e->getMessage()
+            ], 500);
+        }
+    }    
 
     /**
      * Mostrar formulario para crear proceso judicial

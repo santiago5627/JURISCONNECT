@@ -1031,3 +1031,4 @@ function handleAjaxPagination() {
     // Inicializar el manejo de paginación
     handleAjaxPagination();
 });
+

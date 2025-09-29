@@ -292,10 +292,11 @@
     </div>
 
 <!-- Scripts -->
-<script>
-    // Abre el modal y carga los datos del proceso por AJAX. es para el index.blade de procesos
-function openProcessModal(id) {
-    document.getElementById('viewProcessModal').style.display = 'flex';
+    <!-- <script src="{{ asset('js/dash.js') }}"></script>  -->
+    <script>
+      // Abre el modal y carga los datos del proceso por AJAX. es para el index.blade de procesos
+    function openProcessModal(id) {
+        document.getElementById('viewProcessModal').style.display = 'flex';
     const body = document.getElementById('processModalBody');
     body.innerHTML = '<p>Cargando datos...</p>';
 
@@ -319,7 +320,8 @@ function openProcessModal(id) {
 function closeProcessModal() {
     document.getElementById('viewProcessModal').style.display = 'none';
 }
-</script>
+</script> 
+
 
 </body>
 </html>
