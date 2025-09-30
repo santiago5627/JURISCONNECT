@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('procesos', function (Blueprint $table) {
     $table->id();
     $table->string('tipo_proceso', 100);
-    $table->string('numero_radicado', 50)->unique();
+    $table->string('numero_radicado', 62)->unique();
     $table->string('demandante', 255);
     $table->string('demandado', 255);
     $table->text('descripcion');
     $table->string('documento')->nullable();
-    $table->string('estado');
+    $table->enum('estado', ['Pendiente', 'En curso', 'Finalizado' ])->default('Activo');
     $table->timestamps();
 });
     }

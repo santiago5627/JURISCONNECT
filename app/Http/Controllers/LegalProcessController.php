@@ -18,89 +18,27 @@ class LegalProcessController extends Controller
      */
     public function index(Request $request)
     {
-        try{
-            // iniciar query builder
-            $query = Proceso::query();
-            $searchTerm = $request->get('search');
+    $query = \App\Models\Proceso::query();
 
-            // aplicar búsqueda si existe el término de búsqueda
-            if ($searchTerm) {
-                $query->where(function($q) use ($searchTerm) {
-                    $q->where('tipo_proceso', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('descripcion', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('estado', 'LIKE', '%' . $searchTerm . '%');
-                      // Agrega más campos según tu modelo Proceso
-                });
-        }
-
-        // Obtener procesos paginados
-        $procesos = $query->latest()->paginate(10);
-
-        // Mantener parámetros de búsqueda en la paginación
-        $procesos->appends($request->query());
-
-        // Si es una petición AJAX, devolver solo la vista parcial
-        if ($request->ajax()) {
-            $html = view('legal_processes.index', compact('procesos'))->render();
-
-            return response()->json([
-                'html' => $html,
-                'success' => true,
-                'total' => $procesos->total(),
-                'current_page' => $procesos->currentPage(),
-                'last_page' => $procesos->lastPage(),
-                'search_term' => $searchTerm
-            ]);
-        }
-
-        //contar total de procesos registrados
-        $totalProcesos = Proceso::count();
-
-       //para peticiones normales, devolver la vista completa
-        return view('legal_processes.index', compact('procesos', 'totalProcesos')); 
-
-        } catch (\Exception $e) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error al cargar los datos: ' . $e->getMessage()
-                ], 500);
-            }
-
-            // Para peticiones normales, redirigir con error
-            return back()->with('error', 'Error al cargar los datos');
-        }
+    if ($request->has('search') && $request->get('search')) {
+        $search = $request->get('search');
+        $query->search($search); // Usa el scopeSearch del modelo Proceso
     }
 
-    //metodo para busqueda rapida
-    public function search(Request $request)
-    {
-        try {
-        $searchTerm = $request->input('query');
+    $procesos = $query->latest()->paginate(10);
 
-        if (!$searchTerm) {
-            return response()->json([]);
-        }
+    // Si es AJAX, retorna solo la tabla
+    if ($request->ajax()) {
+        $html = view('legal_processes.profile.partials.processes-table', compact('procesos'))->render();
+        return response()->json([
+            'success' => true,
+            'html' => $html,
+            'total' => $procesos->total(),
+        ]);
+    }
 
-        $procesos = Proceso::where(function($q) use ($searchTerm) {
-                $q->where('tipo_proceso', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('descripcion', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('estado', 'LIKE', '%' . $searchTerm . '%');
-            })->limit(20)->get(['id', 'numero_radicado', 'tipo_proceso', 'demandante', 'demandado', 'estado']);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error en la búsqueda: ' . $e->getMessage()
-            ], 500);
-        }
-    }    
+    return view('legal_processes.index', compact('procesos'));
+    }   
 
     /**
      * Mostrar formulario para crear proceso judicial
@@ -114,19 +52,53 @@ class LegalProcessController extends Controller
      * Guardar nuevo proceso judicial
      */
     public function store(Request $request)
-    {
+{
+    try {
         $validated = $this->validateProcesoData($request);
-        
-        $this->handleDocumentUpload($request, $validated);
-        
-        Proceso::create(array_merge($validated, [
-    'estado' => 'pendiente' // o el estado inicial que corresponda
-]));
 
+        $validated['estado'] = 'Pendiente'; // Estado por defecto
+
+        $this->handleDocumentUpload($request, $validated);
+
+        $proceso = Proceso::create($validated);
+
+        // Si es petición AJAX/JSON, devolver JSON
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Proceso judicial creado con éxito.',
+                'data' => $proceso
+            ], 201);
+        }
+
+        // Si es petición normal (formulario), redirigir
         return redirect()
             ->route('procesos.index')
             ->with('success', 'Proceso judicial creado con éxito.');
+
+    } catch (\Illuminate\Validation\ValidationException $e) {
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        }
+
+        throw $e; // Re-lanzar para que Laravel maneje normalmente
+
+    } catch (\Exception $e) {
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el proceso',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
+        throw $e;
     }
+}
 
     /**
      * Mostrar un proceso específico
@@ -198,7 +170,7 @@ class LegalProcessController extends Controller
             'demandado'         => 'required|string|max:255',
             'descripcion'       => 'required|string',
             'documento'         => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-            'estado'            => 'required|string',
+            'estado'            => 'nullable|string',
         ]);
     }
 
@@ -215,7 +187,7 @@ class LegalProcessController extends Controller
             'descripcion'       => 'required|string',
             'documento'         => 'nullable|file|mimes:pdf,doc,docx|max:2048',
             'eliminar_documento' => 'nullable|boolean',
-            'estado'            => 'required|string',
+            'estado'            => 'nullable|string',
         ]);
     }
 
@@ -273,4 +245,3 @@ class LegalProcessController extends Controller
         unset($validated['eliminar_documento']);
     }
 }
-

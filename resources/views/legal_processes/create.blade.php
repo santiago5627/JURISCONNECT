@@ -14,7 +14,7 @@
 <!-- Header -->
             <div class="header">
 
-                <form action="{{ route('procesos.store') }}" method="POST" enctype="multipart/form-data">
+                <form id="formProceso" action="{{ route('procesos.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <h1>
@@ -43,7 +43,7 @@
             </div>
             <div class="form-content">
 <!-- Mensajes de error -->
-                <div class="error-container" style="display: none;">
+                <div class="error-container" id="errorContainer" style="display: none;">
                     <div class="error-header">
                         <svg class="error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -86,7 +86,7 @@
                                 </span>
                             </label>
                             <input type="text" name="numero_radicado" id="numero_radicado" class="form-input" 
-                                placeholder="11001-2025-00001-00">
+                                placeholder="11001-2025-00001">
                                 @error('numero_radicado')
                                 <span class="text-red-500 text-sm">{{ $message }}</span>
                                 @enderror
@@ -169,46 +169,48 @@
 </html>
 
 <script>
-document.getElementById("formProceso").addEventListener("submit", async function(e) {
-    e.preventDefault(); // Evita el refresh
-
-    let form = e.target;
-    let url = form.action;
-    let formData = new FormData(form);
-
+document.getElementById('formProceso').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
     try {
-        let response = await fetch(url, {
-            method: "POST",
+        const response = await fetch('{{ route("procesos.store") }}', {
+            method: 'POST',
             headers: {
-                "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                // NO pongas 'Content-Type' cuando usas FormData
             },
-            body: formData
+            body: formData // Envía FormData directamente
         });
+        
 
-        if (response.ok) {
-//  Registro exitoso
-            let data = await response.json();
-            alert("Proceso creado correctamente ✅");
-            form.reset(); // limpiar formulario
-        } else if (response.status === 422) {
-//  Errores de validación
-            let errorData = await response.json();
-            let errorContainer = document.getElementById("errorContainer");
-            errorContainer.innerHTML = "";
 
-            Object.values(errorData.errors).forEach(msgArray => {
-                msgArray.forEach(msg => {
-                    let li = document.createElement("div");
-                    li.textContent = msg;
-                    errorContainer.appendChild(li);
-                });
-            });
+
+
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Proceso creado exitosamente');
+            window.location.href = '{{ route("legal_processes.index") }}';
         } else {
-            alert("Ocurrió un error inesperado ");
+            // Mostrar errores de validación
+            if (result.errors) {
+                let errores = '';
+                for (let campo in result.errors) {
+                    errores += result.errors[campo].join('\n') + '\n';
+                }
+                alert('Errores:\n' + errores);
+            } else {
+                alert('Error: ' + result.message);
+            }
         }
+        
     } catch (error) {
-        console.error("Error:", error);
-        alert("Error de conexión ");
+        console.error('Error:', error);
+        alert('Error de conexión');
     }
 });
 </script>

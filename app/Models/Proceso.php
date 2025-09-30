@@ -11,6 +11,10 @@ class Proceso extends Model
 
     protected $table = 'procesos';
 
+    protected $attributes = [
+        'estado' => 'pendiente', // Valor por defecto
+    ];
+
     protected $fillable = [
         'tipo_proceso',
         'numero_radicado',

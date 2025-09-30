@@ -1032,3 +1032,39 @@ function handleAjaxPagination() {
     handleAjaxPagination();
 });
 
+
+// ===== BÚSQUEDA AJAX PARA PROCESOS =====
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById("searchInput");
+    if (searchInput && window.location.pathname.includes('procesos')) {
+        searchInput.addEventListener("input", function() {
+            clearTimeout(window.processSearchTimeout);
+            const searchTerm = this.value.trim();
+            window.processSearchTimeout = setTimeout(() => {
+                performProcessSearch(searchTerm);
+            }, 300);
+        });
+    }
+});
+
+function performProcessSearch(searchTerm) {
+    const params = new URLSearchParams();
+    if (searchTerm) params.append('search', searchTerm);
+    params.append('ajax', '1');
+
+    fetch(`${window.location.pathname}?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.html) {
+            // Actualiza solo la tabla de procesos
+            const container = document.querySelector('.table-container');
+            if (container) container.innerHTML = data.html;
+        }
+    });
+}
