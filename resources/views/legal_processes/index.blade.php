@@ -77,7 +77,7 @@
                 </div>
 
                 <div class="search-section">
-                    <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de radicado" id="searchInput">
+                    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar por nombre, apellido o número de radicado" >
                     <button class="search-btn" id="searchBtn">Buscar</button>
                 </div>
 

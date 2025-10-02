@@ -29,11 +29,10 @@ class LegalProcessController extends Controller
 
     // Si es AJAX, retorna solo la tabla
     if ($request->ajax()) {
-        $html = view('legal_processes.profile.partials.processes-table', compact('procesos'))->render();
+        $html = view('legal_processes.partials.process-cards', compact('procesos'))->render();
         return response()->json([
             'success' => true,
             'html' => $html,
-            'total' => $procesos->total(),
         ]);
     }
 
@@ -134,7 +133,7 @@ class LegalProcessController extends Controller
         $proceso->update($validated);
 
         return redirect()
-            ->route('procesos.show', $proceso->id)
+            ->route('procesos.index', $proceso->id)
             ->with('success', 'Proceso actualizado correctamente.');
     }
 

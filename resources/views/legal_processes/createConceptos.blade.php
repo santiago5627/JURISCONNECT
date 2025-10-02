@@ -32,10 +32,10 @@
                 Cancelar
             </a>
             <!-- busqueda -->
-           <div class="search-section">
-                    <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de radicado" id="searchInput">
+            <div class="search-section">
+                    <input type="text" class="search-input" placeholder="Buscar por id, numero de radicado o fecha de creacion" id="searchInput">
                     <button class="search-btn" id="searchBtn">Buscar</button>
-                </div>
+            </div>
         </div>
 
 <!-- Alerta de éxito (oculta por defecto) -->
@@ -59,7 +59,7 @@
 
 <!-- Lista de Procesos -->
 <div class="process-grid">
-    @foreach($procesos as $proceso)
+    @forelse($procesos as $proceso)
         <div class="process-card fade-in-up">
             <div class="card-header">
                 <div class="card-title">
@@ -131,7 +131,14 @@
                 </div>
             </div>
         </div>
-    @endforeach
+    @empty
+        <div class="empty-state">
+            <div class="empty-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h3>No se encontraron procesos pendientes.</h3>
+        </div>
+    @endforelse
 </div>
 
 <!-- Recordatorio -->
@@ -172,6 +179,91 @@
         function showSuccessAlert() {
             document.getElementById('success-alert').classList.remove('hidden');
         }
+
+        // ===== FUNCIONALIDAD DE BÚSQUEDA AJAX =====
+// Búsqueda en tiempo real simplificada
+let searchTimeout;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById("searchInput");
+
+    if (searchInput) {
+        // Búsqueda en tiempo real mientras escribes
+        searchInput.addEventListener("input", function() {
+            clearTimeout(searchTimeout);
+            const searchTerm = this.value.trim();
+
+            searchTimeout = setTimeout(() => {
+                performSearch(searchTerm);
+            }, 300); // Esperar 300ms después de escribir
+        });
+    }
+});
+
+
+// Función principal de búsqueda
+function performSearch(searchTerm) {
+    // Preparar parámetros
+    const params = new URLSearchParams();
+    if (searchTerm) {
+        params.append('search', searchTerm);
+    }
+    params.append('ajax', '1');
+
+    // Hacer petición AJAX
+    fetch(`${window.location.pathname}?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.html) {
+            // Actualizar tabla
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = data.html;
+
+            const newTableBody = tempDiv.querySelector('#tableBody');
+            const currentTableBody = document.querySelector('#tableBody');
+
+            if (newTableBody && currentTableBody) {
+                currentTableBody.innerHTML = newTableBody.innerHTML;
+            }
+
+            // Actualizar paginación si existe
+            const newPagination = tempDiv.querySelector('.pagination');
+            const currentPagination = document.querySelector('.pagination')?.parentElement;
+            if (currentPagination) {
+                if (newPagination) {
+                    currentPagination.innerHTML = newPagination.parentElement.innerHTML;
+                } else {
+                    currentPagination.innerHTML = '';
+                }
+            }
+
+            // Actualizar URL
+            const newUrl = new URL(window.location);
+            if (searchTerm) {
+                newUrl.searchParams.set('search', searchTerm);
+            } else {
+                newUrl.searchParams.delete('search');
+            }
+            newUrl.searchParams.delete('page');
+            window.history.replaceState({}, '', newUrl.toString());
+        }
+    })
+    .catch(error => {
+        console.error('Error en búsqueda:', error);
+    });
+}
+
+// Función para limpiar búsqueda (opcional)
+function clearSearch() {
+    document.getElementById("searchInput").value = '';
+    performSearch('');
+}
     </script>
 </body>
 </html>
