@@ -9,9 +9,6 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\User;
 
 
-
-
-
 class VerifyEmailController
 {
     /**

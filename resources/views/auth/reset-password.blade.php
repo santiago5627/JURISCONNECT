@@ -4,32 +4,7 @@
     <meta charset="UTF-8">
     <title>JurisConnect SENA - Restablecer Contraseña</title>
     <link rel="stylesheet" href="{{ asset('/css/register.css') }}">
-    <style>
-        /* Para que el ojito quede dentro del input */
-        .password-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
 
-        .password-wrapper input {
-            width: 100%;
-            padding-right: 35px; /* espacio para el ojito */
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-
-        .toggle-password svg {
-            width: 20px;
-            height: 20px;
-        }
-    </style>
 </head>
 <body>
     <!-- Fondo -->
@@ -79,8 +54,8 @@
                         viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17.94 17.94A10.12 10.12 0 0 1 12 20c-7 0-11-8-11-8
-                                 a19.44 19.44 0 0 1 4.24-5.94M9.9 4.24A9.77 9.77 0 0 1 12 4
-                                 c7 0 11 8 11 8a19.44 19.44 0 0 1-4.24 5.94M1 1l22 22"/>
+                                a19.44 19.44 0 0 1 4.24-5.94M9.9 4.24A9.77 9.77 0 0 1 12 4
+                                c7 0 11 8 11 8a19.44 19.44 0 0 1-4.24 5.94M1 1l22 22"/>
                     </svg>
                     <!-- Ojo abierto -->
                     <svg xmlns="http://www.w3.org/2000/svg" id="eyeOpen-password"
@@ -105,8 +80,8 @@
                         viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17.94 17.94A10.12 10.12 0 0 1 12 20c-7 0-11-8-11-8
-                                 a19.44 19.44 0 0 1 4.24-5.94M9.9 4.24A9.77 9.77 0 0 1 12 4
-                                 c7 0 11 8 11 8a19.44 19.44 0 0 1-4.24 5.94M1 1l22 22"/>
+                                a19.44 19.44 0 0 1 4.24-5.94M9.9 4.24A9.77 9.77 0 0 1 12 4
+                                c7 0 11 8 11 8a19.44 19.44 0 0 1-4.24 5.94M1 1l22 22"/>
                     </svg>
                     <!-- Ojo abierto -->
                     <svg xmlns="http://www.w3.org/2000/svg" id="eyeOpen-password_confirmation"
@@ -122,7 +97,6 @@
             @enderror
 
             <!-- Botones -->
-            
             <div class="button-group">
                 <button type="button" class="btn btn-back" onclick="window.location='{{ url('/') }}'">
                     Cancelar
@@ -130,26 +104,8 @@
                 <button class="btn" type="submit">Guardar</button>
             </div>
         </form>
-
         <img src="{{ asset('img/Sena.png') }}" alt="Logo SENA" class="sena-logo">
     </div>
-
-    <script>
-        function togglePassword(fieldId) {
-            const input = document.getElementById(fieldId);
-            const eyeClosed = document.getElementById(`eyeClosed-${fieldId}`);
-            const eyeOpen = document.getElementById(`eyeOpen-${fieldId}`);
-
-            if (input.type === "password") {
-                input.type = "text";
-                eyeClosed.style.display = "none";
-                eyeOpen.style.display = "inline";
-            } else {
-                input.type = "password";
-                eyeClosed.style.display = "inline";
-                eyeOpen.style.display = "none";
-            }
-        }
-    </script>
+    <script src="{{ asset('recuperar.js') }}"></script>
 </body>
 </html>

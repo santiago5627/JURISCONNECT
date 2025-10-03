@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ConceptoJuridico;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Proceso; 
+use Illuminate\Routing\Controller;
 
 class AbogadoController extends Controller
 {

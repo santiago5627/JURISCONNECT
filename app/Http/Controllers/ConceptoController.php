@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Proceso;
 use App\Models\ConceptoJuridico;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ConceptoController extends Controller
 {
@@ -17,10 +19,10 @@ class ConceptoController extends Controller
      */
     public function index()
     {
-        $procesos = Proceso::where('abogado_id', auth()->id())
-                           ->where('estado', 'asignado')
-                           ->whereDoesntHave('conceptos')
-                           ->get();
+        $procesos = Proceso::where('abogado_id', auth())
+                        ->where('estado', 'asignado')
+                        ->whereDoesntHave('conceptos')
+                        ->get();
         
         return view('legal_processes.listaProcesos', compact('procesos'));
     }
@@ -104,7 +106,7 @@ class ConceptoController extends Controller
     {
         $concepto = new ConceptoJuridico();
         $concepto->proceso_id = $proceso->id;
-        $concepto->abogado_id = auth()->id();
+        $concepto->abogado_id = auth();
         $concepto->concepto = $request->concepto;
         $concepto->recomendaciones = $request->recomendaciones;
         $concepto->estado = 'finalizado';

@@ -319,8 +319,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+        function togglePassword(fieldId) {
+            const input = document.getElementById(fieldId);
+            const eyeClosed = document.getElementById(`eyeClosed-${fieldId}`);
+            const eyeOpen = document.getElementById(`eyeOpen-${fieldId}`);
+
+            if (input.type === "password") {
+                input.type = "text";
+                eyeClosed.style.display = "none";
+                eyeOpen.style.display = "inline";
+            } else {
+                input.type = "password";
+                eyeClosed.style.display = "inline";
+                eyeOpen.style.display = "none";
+            }
+        }
+
+
     // Inicializar todo
     setupButtonEvents();
 
     console.log('JurisConnect - Recuperar Contraseña inicializado correctamente');
 });
+
+

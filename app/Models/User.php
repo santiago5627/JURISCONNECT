@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'profile_photo',
+        'foto_perfil',
         'foto_perfil',
         'password_changed',
         'avatar',          // Campo para avatar
@@ -30,7 +30,7 @@ class User extends Authenticatable
     ];
     public function getProfilePhotoPathAttribute()
         {
-            return $this->profile_photo;
+            return $this->foto_perfil ? asset('storage/' . $this->foto_perfil) : null;
         }
 
     /**

@@ -590,7 +590,7 @@ tr:hover td {
 
 .success {
     border-color: #27ae60 !important;
-    box-shadow: 0 0 0 2px rgba(39, 174, 96, 0.2) !important;
+    box-shadow: 0 0 0 2px rgb(255, 255, 255) !important;
 }
 
 .field-error {
@@ -600,111 +600,155 @@ tr:hover td {
 }
 
 .alert-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 10000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(5px);
-}
-.alert-overlay.show {
-    opacity: 1;
-    visibility: visible;
-}
-.custom-alert {
-    background: var(--color-surface);
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-5);
-    max-width: 400px;
-    width: 90%;
-    box-shadow: var(--shadow-lg);
-    text-align: center;
-    transform: scale(0.7) translateY(50px);
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.alert-overlay.show .custom-alert {
-    transform: scale(1) translateY(0);
-}
-.alert-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    margin: 0 auto 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    color: white;
-    font-weight: bold;
-}
-.alert-success .alert-icon {
-    background: linear-gradient(135deg, #198754, #157347);
-    animation: successPulse 0.6s ease-out;
-}
-.alert-error .alert-icon {
-    background: linear-gradient(135deg, #dc3545, #c82333);
-    animation: errorShake 0.6s ease-out;
-}
-.alert-warning .alert-icon {
-    background: linear-gradient(135deg, #ffc107, #d39e00);
-}
-.alert-info .alert-icon {
-    background: linear-gradient(135deg, #0dcaf0, #0b93a8);
-}
-.alert-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 25px;
-}
-.alert-button {
-    border: none;
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition-smooth);
-    min-width: 120px;
-    color: white;
-}
-.alert-button.success { background: linear-gradient(135deg, #198754, #157347); }
-.alert-button.error { background: linear-gradient(135deg, #dc3545, #c82333); }
-.alert-button.warning { background: linear-gradient(135deg, #ffc107, #d39e00); color: #000; }
-.alert-button.info { background: linear-gradient(135deg, #0dcaf0, #0b93a8); }
-.alert-button.secondary { background: #e9ecef; color: var(--color-text-primary); }
-.alert-button:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-.alert-title {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--color-text-primary);
-}
-.alert-message {
-    color: var(--color-text-secondary);
-    margin-bottom: 25px;
-    line-height: 1.6;
-    font-size: 16px;
-}
-@keyframes successPulse { 0% { transform: scale(0.8); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-@keyframes errorShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-@keyframes slideIn { from { transform: translateY(-30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 10000;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: all 0.3s ease;
+                    backdrop-filter: blur(5px);
+                }
+                
+                .alert-overlay.show {
+                    opacity: 1;
+                    visibility: visible;
+                }
+                
+                .custom-alert {
+                    background: white;
+                    border-radius: 20px;
+                    padding: 30px;
+                    max-width: 400px;
+                    width: 90%;
+                    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+                    text-align: center;
+                    transform: scale(0.7) translateY(50px);
+                    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                }
+                
+                .alert-overlay.show .custom-alert {
+                    transform: scale(1) translateY(0);
+                }
+                
+                .alert-icon {
+                    width: 70px;
+                    height: 70px;
+                    border-radius: 50%;
+                    margin: 0 auto 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 35px;
+                    color: white;
+                    font-weight: bold;
+                }
+                
+                .alert-success .alert-icon {
+                    background: linear-gradient(135deg, #4CAF50, #45a049);
+                    animation: successPulse 0.6s ease-out;
+                }
+                
+                .alert-error .alert-icon {
+                    background: linear-gradient(135deg, #f44336, #d32f2f);
+                    animation: errorShake 0.6s ease-out;
+                }
+                
+                .alert-warning .alert-icon {
+                    background: linear-gradient(135deg, #ff9800, #f57c00);
+                }
+                
+                .alert-info .alert-icon {
+                    background: linear-gradient(135deg, #2196F3, #1976D2);
+                }
+                
+                .alert-buttons {
+                    display: flex;
+                    justify-content: center;
+                    gap: 15px;
+                    margin-top: 25px;
+                }
+                
+                .alert-button {
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 50px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    min-width: 120px;
+                }
+                
+                .alert-button.success {
+                    background: linear-gradient(135deg, #4CAF50, #45a049);
+                    color: white;
+                }
+                
+                .alert-button.error {
+                    background: linear-gradient(135deg, #f44336, #d32f2f);
+                    color: white;
+                }
+                
+                .alert-button.warning {
+                    background: linear-gradient(135deg, #ff9800, #f57c00);
+                    color: white;
+                }
+                
+                .alert-button.info {
+                    background: linear-gradient(135deg, #2196F3, #1976D2);
+                    color: white;
+                }
+                
+                .alert-button.secondary {
+                    background: #e0e0e0;
+                    color: #333;
+                }
+                
+                .alert-button:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                }
+                
+                .alert-button:active {
+                    transform: translateY(0);
+                }
+                
+                @keyframes successPulse {
+                    0% { transform: scale(0.8); }
+                    50% { transform: scale(1.1); }
+                    100% { transform: scale(1); }
+                }
+                
+                @keyframes errorShake {
+                    0%, 100% { transform: translateX(0); }
+                    25% { transform: translateX(-5px); }
+                    75% { transform: translateX(5px); }
+                }
+                
+                .alert-title {
+                    font-size: 22px;
+                    font-weight: 700;
+                    margin-bottom: 12px;
+                    color: #2c3e50;
+                }
+                
+                .alert-message {
+                    color: #7f8c8d;
+                    margin-bottom: 25px;
+                    line-height: 1.6;
+                    font-size: 16px;
+                }
 /* ==============================================
-   ===             ESTILOS DE PERFIL          ===
-   ==============================================
+    ===             ESTILOS DE PERFIL          ===
+    ==============================================
 */
 .profile-container {
     text-align: center;

@@ -52,7 +52,7 @@
     <div class="custom-alert-overlay" id="alertOverlay" style="display: none;">
         <div class="custom-alert-box">
             <div class="custom-alert-icon-circle">
-                <i class="fas fa-check"></i>
+                <i class="fas fa-check">✔</i>
             </div>
             <h3 class="custom-alert-title">¡Correo Enviado!</h3>
             <p class="custom-alert-message">
@@ -64,36 +64,36 @@
     </div>
 
     <script>
-        // Función para mostrar la alerta
-        function showAlert() {
-            document.getElementById('alertOverlay').style.display = 'flex';
+    // Función para mostrar la alerta
+    function showAlert() {
+        document.getElementById('alertOverlay').style.display = 'flex';
+    }
+
+    // Función para cerrar la alerta
+    function closeAlert() {
+        document.getElementById('alertOverlay').style.display = 'none';
+    }
+
+    // Cerrar alerta al hacer clic fuera de ella
+    document.getElementById('alertOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeAlert();
         }
+    });
 
-        // Función para cerrar la alerta
-        function closeAlert() {
-            document.getElementById('alertOverlay').style.display = 'none';
+    // Cerrar alerta con tecla Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeAlert();
         }
+    });
 
-        // Cerrar alerta al hacer clic fuera de ella
-        document.getElementById('alertOverlay').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeAlert();
-            }
+    // Mostrar alerta si hay mensaje de éxito de Laravel
+    @if(session('status'))
+        document.addEventListener('DOMContentLoaded', function() {
+            showAlert();
         });
-
-        // Cerrar alerta con tecla Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeAlert();
-            }
-        });
-
-        // Mostrar alerta si hay mensaje de éxito de Laravel
-        @if(session('status'))
-            document.addEventListener('DOMContentLoaded', function() {
-                showAlert();
-            });
-        @endif
+    @endif
     </script>
 </body>
 </html>

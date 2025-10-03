@@ -3,7 +3,6 @@
     <x-slot name="header">
         <!-- Header vacío para evitar conflictos -->
     </x-slot>
-
     <!-- Meta tag para CSRF token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -141,11 +140,19 @@
                 <!-- Input file oculto para la foto de perfil -->
                 <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
 
+                <!-- Indicador de carga (oculto por defecto) -->
+                <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+                    Subiendo...
+                </div>
+
                 <!-- Contenedor de la foto de perfil -->
-                <div class="profile-pic" onclick="document.getElementById('fileInput').click();" title="Haz clic para cambiar tu foto">
-                    <img src="{{ Auth::user()->profile_photo ? Storage::url(Auth::user()->profile_photo) : asset('img/Phoenix_Wright_in_Phoenix_Wright_Ace_Attorney.png') }}" 
-                        id="profileImage" 
-                        alt="Foto de perfil">
+                <div class="profile-pic" onclick="document.getElementById('fileInput').click();" 
+                     style="cursor: pointer; position: relative;" 
+                     title="Haz clic para cambiar tu foto">
+                    <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}" 
+                         id="profileImage" 
+                         alt="Foto de perfil"
+                         style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
                 </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
@@ -153,10 +160,10 @@
 
             <div class="nav-menu">
                 <button class="nav-btn active" data-section="dashboard">
-                    📊 Dashboard
+                    Dashboard
                 </button>
                 <button class="nav-btn" data-section="lawyers">
-                    ⚖️ Gestión de Abogados
+                    Gestión de Abogados
                 </button>
             </div>
 
@@ -190,7 +197,7 @@
                 <!-- SECCIÓN DASHBOARD PRINCIPAL -->
                 <div class="section-content active" id="dashboard-section">
                     <div class="section-header">
-                        <h2>📊 Dashboard Principal</h2>
+                        <h2>Dashboard Principal</h2>
                         <p>Resumen general del sistema JustConnect SENA</p>
                     </div>
                     
@@ -198,7 +205,7 @@
                         <div class="stat-card">
                             <div class="stat-icon">👨‍💼</div>
                             <div class="stat-info">
-                                <h3>{{ $lawyers->count() ?? 0 }}</h3>
+                                <h3>{{$totalLawyers}}</h3>
                                 <p>Abogados Registrados</p>
                             </div>
                         </div>
@@ -231,7 +238,7 @@
                 <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
                 <div class="section-content" id="lawyers-section">
                     <div class="section-header">
-                        <h2>⚖️ Gestión de Abogados</h2>
+                        <h2>Gestión de Abogados</h2>
                         <p>Administrar el registro de abogados del sistema</p>
                     </div>
 
@@ -241,180 +248,24 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button class="btn-primary" id="createBtn"> CREAR NUEVO ABOGADO</button>
-                        <a href="{{ route('lawyers.export.excel') }}" class="btn-success"> EXPORTAR EXCEL</a>
-                        <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger"> EXPORTAR PDF</a>
+                        <button class="btn-primary" id="createBtn">CREAR NUEVO ABOGADO</button>
+                        <a href="{{ route('lawyers.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
+                        <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
 
-<div class="table-container">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Apellido</th>
-                                    <th>Tipo de Documento</th>
-                                    <th>Número de Documento</th>
-                                    <th>Correo</th>
-                                    <th>Teléfono</th>
-                                    <th>Especialidad</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tableBody">
-                                @foreach($lawyers ?? [] as $lawyer)
-                                <tr data-id="{{ $lawyer->id }}">
-                                    <td>{{ $lawyer->nombre }}</td>
-                                    <td>{{ $lawyer->apellido }}</td>
-                                    <td>{{ $lawyer->tipo_documento }}</td>
-                                    <td>{{ $lawyer->numero_documento }}</td>
-                                    <td>{{ $lawyer->correo }}</td>
-                                    <td>{{ $lawyer->telefono }}</td>
-                                    <td>{{ $lawyer->especialidad }}</td>
-                                    <td>
-                                        <button class="btn-edit"
-                                                data-id="{{ $lawyer->id }}"
-                                                data-nombre="{{ $lawyer->nombre }}"
-                                                data-apellido="{{ $lawyer->apellido }}"
-                                                data-tipo_documento="{{ $lawyer->tipo_documento }}"
-                                                data-numero_documento="{{ $lawyer->numero_documento }}"
-                                                data-correo="{{ $lawyer->correo }}"
-                                                data-telefono="{{ $lawyer->telefono }}"
-                                                data-especialidad="{{ $lawyer->especialidad }}">
-                                            Editar
-                                        </button>
-
-                                        <form action="{{ route('lawyers.destroy', $lawyer->id) }}"
-                                            method="POST"
-                                            class="delete-lawyer-form"
-                                            data-id="{{ $lawyer->id }}"
-                                            data-name="{{ $lawyer->nombre }} {{ $lawyer->apellido }}"
-                                            style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn-delete">
-                                                Eliminar
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-
-
-<!-- Paginación -->
-            <div class="pagination-container">
-                <div class="pagination-content">
-<!-- Paginación móvil -->
-                    <div class="pagination-mobile">
-                @if ($lawyers->onFirstPage())
-                    <span class="pagination-btn disabled">Anterior</span>
-                @else
-                    <a href="{{ $lawyers->previousPageUrl() }}" class="pagination-btn">Anterior</a>
-                @endif
-
-<!-- Números de página -->
-                    @php
-                        $currentPage = $lawyers->currentPage();
-                        $lastPage = $lawyers->lastPage();
-                        $start = max(1, $currentPage - 2);
-                        $end = min($lastPage, $currentPage + 2);
-                    @endphp
-
-                    @if ($start > 1)
-                        <a href="{{ $lawyers->url(1) }}" class="pagination-btn">1</a>
-                        @if ($start > 2)
-                            <span class="pagination-btn disabled">...</span>
-                        @endif
-                    @endif
-
-                    @for ($i = $start; $i <= $end; $i++)
-                        @if ($i == $currentPage)
-                            <span class="pagination-btn active">{{ $i }}</span>
-                        @else
-                            <a href="{{ $lawyers->url($i) }}" class="pagination-btn">{{ $i }}</a>
-                        @endif
-                    @endfor
-
-                    @if ($end < $lastPage)
-                        @if ($end < $lastPage - 1)
-                            <span class="pagination-btn disabled">...</span>
-                        @endif
-                        <a href="{{ $lawyers->url($lastPage) }}" class="pagination-btn">{{ $lastPage }}</a>
-                    @endif
-
-                @if ($lawyers->hasMorePages())
-                    <a href="{{ $lawyers->nextPageUrl() }}" class="pagination-btn ajax-page">Siguiente</a>
-                @else
-                    <span class="pagination-btn disabled">Siguiente</span>
-                @endif
-            </div>
-
-<!-- Paginación desktop -->
-            <div class="pagination-desktop">
-
-                <div style="display: flex; gap: 0.5rem;">
-                    <!-- Botón Anterior -->
-                    @if ($lawyers->onFirstPage())
-                        <span class="pagination-btn disabled">Anterior</span>
-                    @else
-                        <a href="{{ $lawyers->previousPageUrl() }}" class="pagination-btn">Anterior</a>
-                    @endif
-
-                    <!-- Números de página -->
-                    @php
-                        $currentPage = $lawyers->currentPage();
-                        $lastPage = $lawyers->lastPage();
-                        $start = max(1, $currentPage - 2);
-                        $end = min($lastPage, $currentPage + 2);
-                    @endphp
-
-                    @if ($start > 1)
-                        <a href="{{ $lawyers->url(1) }}" class="pagination-btn">1</a>
-                        @if ($start > 2)
-                            <span class="pagination-btn disabled">...</span>
-                        @endif
-                    @endif
-
-                    @for ($i = $start; $i <= $end; $i++)
-                        @if ($i == $currentPage)
-                            <span class="pagination-btn active">{{ $i }}</span>
-                        @else
-                            <a href="{{ $lawyers->url($i) }}" class="pagination-btn">{{ $i }}</a>
-                        @endif
-                    @endfor
-
-                    @if ($end < $lastPage)
-                        @if ($end < $lastPage - 1)
-                            <span class="pagination-btn disabled">...</span>
-                        @endif
-                        <a href="{{ $lawyers->url($lastPage) }}" class="pagination-btn">{{ $lastPage }}</a>
-                    @endif
-
-                    <!-- Botón Siguiente -->
-                    @if ($lawyers->hasMorePages())
-                        <a href="{{ $lawyers->nextPageUrl() }}" class="pagination-btn">Siguiente</a>
-                    @else
-                        <span class="pagination-btn disabled">Siguiente</span>
-                    @endif
-                </div>
-            </div>
-                </div>
-            </div>
+                    @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
                 </div>
 
-<!-- SECCIÓN CONFIGURACIÓN -->
+                <!-- SECCIÓN CONFIGURACIÓN -->
                 <div class="section-content" id="settings-section">
                     <div class="section-header">
-                        <h2> Configuración del Sistema</h2>
+                        <h2>Configuración del Sistema</h2>
                         <p>Configuraciones generales y preferencias</p>
                     </div>
                     
                     <div class="settings-grid">
                         <div class="setting-card">
-                            <h3> Configuración General</h3>
+                            <h3>Configuración General</h3>
                             <div class="setting-item">
                                 <label>Nombre del Sistema:</label>
                                 <input type="text" value="JustConnect SENA" class="form-control">
@@ -426,7 +277,7 @@
                         </div>
                         
                         <div class="setting-card">
-                            <h3> Notificaciones</h3>
+                            <h3>Notificaciones</h3>
                             <div class="setting-item">
                                 <label>
                                     <input type="checkbox" checked> Notificar nuevos registros
@@ -440,11 +291,10 @@
                         </div>
                     </div>
                 </div>
-                </div>
             </div>
         </div>
     </div>
-</div>
+
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
 </x-app-layout>

@@ -788,54 +788,7 @@
                 </table>
             </div>
 
-<!-- Paginación -->
-            <div class="pagination-container">
-                <div class="pagination-content">
-<!-- Paginación móvil -->
-                    <div class="pagination-mobile">
-                @if ($procesos->onFirstPage())
-                    <span class="pagination-btn disabled">Anterior</span>
-                @else
-                    <a href="{{ $procesos->previousPageUrl() }}" class="pagination-btn">Anterior</a>
-                @endif
-
-<!-- Números de página -->
-                    @php
-                        $currentPage = $procesos->currentPage();
-                        $lastPage = $procesos->lastPage();
-                        $start = max(1, $currentPage - 2);
-                        $end = min($lastPage, $currentPage + 2);
-                    @endphp
-
-                    @if ($start > 1)
-                        <a href="{{ $procesos->url(1) }}" class="pagination-btn">1</a>
-                        @if ($start > 2)
-                            <span class="pagination-btn disabled">...</span>
-                        @endif
-                    @endif
-
-                    @for ($pageNumber = $start; $pageNumber <= $end; $pageNumber++)
-                        @if ($pageNumber == $currentPage)
-                            <span class="pagination-btn active">{{ $pageNumber }}</span>
-                        @else
-                            <a href="{{ $procesos->url($pageNumber) }}" class="pagination-btn">{{ $pageNumber }}</a>
-                        @endif
-                    @endfor
-
-                    @if ($end < $lastPage)
-                        @if ($end < $lastPage - 1)
-                            <span class="pagination-btn disabled">...</span>
-                        @endif
-                        <a href="{{ $procesos->url($lastPage) }}" class="pagination-btn">{{ $lastPage }}</a>
-                    @endif
-
-                @if ($procesos->hasMorePages())
-                    <a href="{{ $procesos->nextPageUrl() }}" class="pagination-btn">Siguiente</a>
-                @else
-                    <span class="pagination-btn disabled">Siguiente</span>
-                @endif
-            </div>
-
+            
 <!-- Paginación desktop -->
             <div class="pagination-desktop">
                 

@@ -178,6 +178,33 @@ body {
     margin-bottom: 30px;
 }
 
+        /* Para que el ojito quede dentro del input */
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-wrapper input {
+            width: 100%;
+            padding-right: 35px; /* espacio para el ojito */
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            top:10px;
+            left: auto;
+        }
+
+        .toggle-password svg {
+            width: 20px;
+            height: 20px;
+        }
+
 .btn {
     flex: 1;
     padding: 18px 30px;
