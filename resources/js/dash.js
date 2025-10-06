@@ -470,6 +470,8 @@ function setupImageUpload() {
         }
     });
 }
+
+
 /* ========= BÚSQUEDA AJAX ========= */
 let searchTimeout;
 function performSearch(searchTerm) {

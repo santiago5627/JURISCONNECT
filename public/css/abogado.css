@@ -284,3 +284,27 @@
             }
         }
         
+        /* Estilos para la foto de perfil clickeable */
+.profile-pic-clickable {
+    cursor: pointer;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #28a745; /* Color primario verde */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-pic-clickable:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.profile-pic-clickable img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

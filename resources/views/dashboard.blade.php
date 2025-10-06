@@ -147,13 +147,12 @@
 
                 <!-- Contenedor de la foto de perfil -->
                 <div class="profile-pic" onclick="document.getElementById('fileInput').click();" 
-                     style="cursor: pointer; position: relative;" 
-                     title="Haz clic para cambiar tu foto">
+                    style="cursor: pointer; position: relative;" 
+                    title="Haz clic para cambiar tu foto">
                     <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}" 
-                         id="profileImage" 
-                         alt="Foto de perfil"
-                         style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
-                </div>
+                        id="profileImage" 
+                        alt="Foto de perfil">
+                    </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
             </div>
