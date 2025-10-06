@@ -74,24 +74,22 @@ class ConceptoController extends Controller
     public function create() 
     {
         $procesos = Proceso::all();
-        return view('legal_processes.createConceptos', compact('procesos')); 
+        return view('legal_processes.showConceptos', compact('procesos')); 
     }
 
     /**
      * Guardar el concepto para un proceso específico
      */
-    public function store(Request $request, $procesoId)
-    {
-        $this->validateConceptoData($request);
+    public function store(Request $request, Proceso $proceso)
+{
+    $this->validateConceptoData($request);
+    
+    $this->createConceptoForProceso($request, $proceso);
+    $this->updateProcesoEstado($proceso);
 
-        $proceso = Proceso::findOrFail($procesoId);
-        
-        $this->createConceptoForProceso($request, $proceso);
-        $this->updateProcesoEstado($proceso);
-
-        return redirect()->route('abogado.dashboard')
-                        ->with('success', 'Concepto jurídico creado exitosamente.');
-    }
+    return redirect()->route('abogado.dashboard')
+                    ->with('success', 'Concepto jurídico creado exitosamente.');
+}
 
     /**
      * Mostrar el formulario para crear un concepto para un proceso específico
@@ -102,7 +100,7 @@ class ConceptoController extends Controller
         
         $this->checkExistingConcepto($procesoId);
         
-        return view('legal_processes.createConceptos', compact('proceso'));
+        return view('legal_processes.showConceptos', compact('proceso'));
     }
 
     // ===============================
@@ -113,12 +111,13 @@ class ConceptoController extends Controller
      * Validar datos del concepto
      */
     private function validateConceptoData(Request $request)
-    {
-        $request->validate([
-            'concepto' => 'required|min:50',
-            'recomendaciones' => 'nullable|string'
-        ]);
-    }
+{
+    $request->validate([
+        'titulo' => 'required|string|max:255',
+        'categoria' => 'required|string|max:255',
+        'descripcion' => 'required|min:50'
+    ]);
+}
 
     /**
      * Obtener proceso con sus relaciones
@@ -143,14 +142,12 @@ class ConceptoController extends Controller
     /**
      * Crear concepto jurídico para el proceso
      */
-    private function createConceptoForProceso(Request $request, Proceso $proceso)
+    private function createConceptoForProceso(Request $request)
     {
         $concepto = new ConceptoJuridico();
-        $concepto->proceso_id = $proceso->id;
-        $concepto->abogado_id = auth()->id();
-        $concepto->concepto = $request->concepto;
-        $concepto->recomendaciones = $request->recomendaciones;
-        $concepto->estado = 'finalizado';
+        $concepto->titulo = $request->titulo;
+        $concepto->categoria = $request->categoria;
+        $concepto->descripcion = $request->descripcion;
         $concepto->save();
     }
 

@@ -19,7 +19,7 @@ return new class extends Migration
     $table->string('demandado', 255);
     $table->text('descripcion');
     $table->string('documento')->nullable();
-    $table->enum('estado', ['Pendiente', 'En curso', 'Finalizado' ])->default('Activo');
+    $table->enum('estado', ['Pendiente', 'En curso', 'Finalizado' ])->default('Pendiente');
     $table->timestamps();
 });
     }

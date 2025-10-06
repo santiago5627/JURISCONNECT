@@ -39,7 +39,7 @@
                             Crear Proceso Judicial
                         </button>
                     </div>
-                
+
             </div>
             <div class="form-content">
 <!-- Mensajes de error -->
@@ -150,7 +150,7 @@
                             </svg>
                             <h3 class="document-title">Adjuntar Documento</h3>
                         </div>
-                        
+
                         <div class="field-group">
                             <label for="documento" class="field-label" style="color: #1d4ed8;">
                                 Documento inicial del proceso
@@ -171,9 +171,9 @@
 <script>
 document.getElementById('formProceso').addEventListener('submit', async function(e) {
     e.preventDefault();
-    
+
     const formData = new FormData(this);
-    
+
     try {
         const response = await fetch('{{ route("procesos.store") }}', {
             method: 'POST',
@@ -184,14 +184,9 @@ document.getElementById('formProceso').addEventListener('submit', async function
             },
             body: formData // Envía FormData directamente
         });
-        
 
-
-
-
-        
         const result = await response.json();
-        
+
         if (result.success) {
             alert('Proceso creado exitosamente');
             window.location.href = '{{ route("legal_processes.index") }}';
@@ -207,7 +202,7 @@ document.getElementById('formProceso').addEventListener('submit', async function
                 alert('Error: ' + result.message);
             }
         }
-        
+
     } catch (error) {
         console.error('Error:', error);
         alert('Error de conexión');

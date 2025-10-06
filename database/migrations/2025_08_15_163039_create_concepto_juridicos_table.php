@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('demandante');
             $table->string('demandado');
             $table->date('fecha_radicacion')->nullable();
-            $table->enum('estado', ['Pendiente', 'En curso', 'Finalizado'])->default('Pendiente');
+            $table->enum('estado', ['pendiente', 'en curso', 'finalizado'])->default('pendiente');
             
             // Relación con abogado
             $table->foreignId('abogado_id')->constrained('users')->onDelete('cascade');

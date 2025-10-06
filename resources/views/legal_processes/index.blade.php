@@ -58,7 +58,7 @@
                         </svg>
                         <span>Administre sus procesos judiciales desde esta vista</span>
                     </div>
-                    
+
                     <div class="button-group">
                         <a href="{{ route('dashboard.abogado') }}" class="btn btn-secondary">
                             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -66,7 +66,7 @@
                             </svg>
                             Volver al Dashboard
                         </a>
-                        
+
                         <a href="{{ route('procesos.create') }}" class="btn btn-primary">
                             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -89,13 +89,12 @@
 
 <!-- Scripts -->
     <!-- <script src="{{ asset('js/dash.js') }}"></script>  -->
-    <script>
+<script>
       // Abre el modal y carga los datos del proceso por AJAX. es para el index.blade de procesos
     function openProcessModal(id) {
         document.getElementById('viewProcessModal').style.display = 'flex';
     const body = document.getElementById('processModalBody');
     body.innerHTML = '<p>Cargando datos...</p>';
-
     fetch(`/procesos/${id}`)
         .then(res => res.json())
         .then(data => {
@@ -154,7 +153,5 @@ function performProcessSearch(searchTerm) {
     });
 }
 </script> 
-
-
 </body>
 </html>

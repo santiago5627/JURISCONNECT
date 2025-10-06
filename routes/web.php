@@ -75,12 +75,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/procesos', [LegalProcessController::class, 'store'])->name('procesos.store');
     Route::get('/procesos/{id}', [LegalProcessController::class, 'show']);
 
-    // === CONCEPTOS JURÍDICOS ===
+    // === CONCEPTOS JURÍDICOS === 
     Route::get('/abogado/mis-procesos', [AbogadoController::class, 'misProcesos'])->name('abogado.misConceptos');
     Route::get('/conceptos/create', [ConceptoController::class, 'create'])->name('conceptos.create');
 
+    Route::post('/procesos/{proceso}/conceptos', [ConceptoController::class, 'store'])->name('conceptos.store');
     Route::get('/procesos/{id}/concepto', [AbogadoController::class, 'mostrarFormularioConcepto'])->name('abogado.crear-concepto');
-    Route::post('/procesos/{proceso}/concepto', [ConceptoController::class, 'store'])->name('procesos.conceptos.store');
     Route::post('/abogado/finalizar-proceso/{id}', [AbogadoController::class, 'finalizarProceso'])->name('abogado.finalizar-proceso');
     Route::get('/abogado/procesos', [AbogadoController::class, 'listarProcesos'])->name('abogado.listar-procesos');
     Route::post('/abogado/proceso/{id}/concepto', [AbogadoController::class, 'guardarConcepto'])->name('abogado.guardar-concepto');
@@ -100,11 +100,11 @@ Route::middleware('auth')->group(function() {
     Route::get('/profile/avatar', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile/avatar', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile/avatar', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
+
     // Rutas de manejo de avatares/imágenes
     Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
     Route::delete('/profile/avatar', [ProfileController::class, 'deleteAvatar'])->name('profile.avatar.delete');
-    
+
     // Ruta para subir imagen (la que estás usando actualmente)
     Route::post('/upload-image', [ProfileController::class, 'uploadImage'])->name('upload-image');
 });
