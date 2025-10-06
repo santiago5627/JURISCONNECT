@@ -38,12 +38,12 @@
 
 ### Tech Stack <a name="tech-stack"></a>
 
-<li> Laravel </li>
+<li> Laravel sail </li>
 <li> PHP </li>
 <li> Javascript </li>
 <li> CSS </li>
 <li> tailwind </li>
-<li> postgresql </li>
+<li> postgreSQL </li>
 <li> docker </li>
 <!-- Funciones -->
 
@@ -98,35 +98,12 @@ Clona este repositorio a tu carpeta designada:
 
 Instala este proyecto con:
 
-prop-types:
+Para dependencias JSON 
 ```sh
-     npm install prop-types
+     npm install 
 ```
 
-Cors:
-```sh
-     npm install cors
-```
-
-axios
-```sh
-     npm install axios
-```
-
-mysql2
-```sh
-     npm install mysql2
-```
-React + vite
-```sh
-     npm install react-vite
-```
-React-router-dom
-```sh
-     npm install react-router-dom
-```
-
-Express 
+Composer 
 ```sh
      npm install express 
 ```
@@ -157,9 +134,12 @@ navegador el enlace localhost:
 
 Victor Espitia
 
-👤 **Autores1**
+👤 **Autores**
 
-- GitHub: [@victor3spitia](https://github.com/Victor3spitia)
+- GitHub: [@Norelly-Salinas-Bre] (https://github.com/Norelly-Salinas-Bre)
+- Github: [@santiago5627] (https://github.com/santiago5627)
+- GitHub: [@victor3spitia] (https://github.com/Victor3spitia)
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
