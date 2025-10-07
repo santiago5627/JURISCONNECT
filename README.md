@@ -17,24 +17,22 @@
   - [🛠 Construir con](#built-with)
     - [Tech Stack](#tech-stack)
     - [Key Features](#key-features)
-  - [🚀 Live Demo](#live-demo)
 - [💻 Como empezar](#getting-started)
   - [Setup](#setup)
   - [Prerequisitos](#prerequisites)
-  - [Installar](#install)
+  - [Instalacion](#install)
   - [Usos](#usage)
-  - [Realizar un test](#run-tests)
+  - [Realizar pruebas](#run-tests)
 - [👥 Autores](#authors)
 - [🔭 Futuras Funciones](#future-features)
-- [🤝 Contribuidores](#contributing)
 - [⭐️ Apoya nuesto proyecto](#support)
 - [📝 Licencias](#license)
 
 <!-- Descripcion de proyecto -->
 
-# 📖 [Expertrix ] <a name="about-project"></a>
+# 📖 [Jurisconnect] <a name="about-project"></a>
 
-**[Expertrix]** Es un proyecto destinado a mejorar la organización, registro, consulta, seguimiento y control de los procesos jurídicos dentro de la Dirección Jurídica del SENA. Se desarrollará utilizando tecnologías modernas y un enfoque de arquitectura monolítica, implementando en PHP con el framework Laravel. Esto permitirá una separación clara entre capas de presentación, lógica de negocio y acceso a datos. La base de datos será PostgreSQL y se utilizará Laravel Sail (Docker) como entorno de desarrollo.
+**[Jurisconnect]** Es un proyecto destinado a mejorar la organización, registro, consulta, seguimiento y control de los procesos jurídicos dentro de la Dirección Jurídica del SENA. Se desarrollará utilizando tecnologías modernas y un enfoque de arquitectura monolítica, implementando en PHP con el framework Laravel. Esto permitirá una separación clara entre capas de presentación, lógica de negocio y acceso a datos. La base de datos será PostgreSQL y se utilizará Laravel Sail (Docker) como entorno de desarrollo.
 
 ### Tech Stack <a name="tech-stack"></a>
 
@@ -49,26 +47,26 @@
 
 ### Key Features <a name="key-features"></a>
 
-- **[HTML & CSS Best practices]**
-- **[Responsive Design]**
-- **[USER RESERVATIONS]**
-- **[Express Server to handle routing]**
-- **[Bash Script to automate deployment]**
-- **[CI and CD Deployment with Netlify]**
+- **[Base de Datos PostgreSQL]** - Almacenamiento robusto y escalable
+- **[Docker con Laravel Sail]** - Entorno de desarrollo containerizado
+- **[Gestión de Roles y Permisos]** - Control granular de accesos
+- **[Upload de Archivos]** - Soporte para documentos PDF, Word y Excel
+- **[Dashboard Estadístico]** - Visualización de métricas y estadísticas globales del sistema
+- **[Responsive Design con Tailwind CSS]** - Interfaz moderna y adaptable
+- **[Exportación de Reportes]** - Generación dinámica en múltiples formatos
+- **[Notificaciones Internas]** - Sistema de alertas sobre actualizaciones en los procesos
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- LIVE DEMO -->
 
-### 🚀 Live Demo <a name="live-demo"></a>
+<!-- ### 🚀 Live Demo <a name="live-demo"></a> -->
 
 <!-- aqui va el github actions -->
 
-- [Live Demo Link](	https://google.com)
+<!-- - [Live Demo Link](	https://google.com) -->
 
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<!-- <p align="right">(<a href="#readme-top">back to top</a>)</p> -->
 
 <!-- Como empezar -->
 
@@ -78,13 +76,11 @@ Para tener una copia local y correr el proyecto, Sigue estos pasos.
 
 ### Prerequisitos
 para correr el proyecto, necesitas las sigiantes herramientas:
-- [VS Code ]
-- [Git and GitHub ]
-- [Nodejs ]
-- [Express ]
-- [React + Vite ]
-- [Bash Script ]
-- [CI CD Netlify Bot  Instalation]
+- [VS Code]
+- [Git and GitHub]
+- [Nodejs]
+- [Laravel]
+- [Blade]
 
 ### Setup
 
@@ -92,6 +88,7 @@ Clona este repositorio a tu carpeta designada:
 ```sh
  
  git clone https://github.com/Norelly-Salinas-Bre/MI_APP.git
+ cd MI_APP
 ```
 
 ## Install
@@ -100,27 +97,41 @@ Instala este proyecto con:
 
 Para dependencias JSON 
 ```sh
-     npm install 
+    npm install 
 ```
 
 Composer 
 ```sh
-     npm install express 
+    composer install
 ```
 
-### Realizar un test
+copia el archivo de configuracion 
+```sh
+    cp .env.example .env
+```
+
+### Realizar pruebas un test
 
 Para realizar un test, realiza el siguiente comando:
 
-activar el XAMPP con mysql.
+Entrar a la carpeta del proyecto desde la terminal
 
-Dentro de la carpeta de backEnd tienes que escribir en la terminal Node.js command
+inicia el entorno de desarrollo con laravel sail
 ```sh
-     npm start
+     ./vendor/bin/sail up -d
 ```
 
-Dentro de la carpeta front tienes que escribir en otra terminal y despues puedes buscar en el 
-navegador el enlace localhost:
+Ejecuta las migraciones de base de datos 
+```sh
+    ./vendor/bin/sail artisan migrate
+```
+
+Ejecuta los seeders para datos de prueba opcional 
+```sh
+    ./vendor/bin/sail artisan db:seed
+```
+
+Correr el servidor 
 ```sh
     npm run dev
 ```
@@ -132,10 +143,6 @@ navegador el enlace localhost:
 
 ## 👥 Autores <a name="authors"></a>
 
-Victor Espitia
-
-👤 **Autores**
-
 - GitHub: [@Norelly-Salinas-Bre] (https://github.com/Norelly-Salinas-Bre)
 - Github: [@santiago5627] (https://github.com/santiago5627)
 - GitHub: [@victor3spitia] (https://github.com/Victor3spitia)
@@ -144,28 +151,6 @@ Victor Espitia
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- Futuras Funciones -->
-
-## 🔭 Futuras Funciones <a name="future-features"></a>
-
-
-- [ ] **[Recomendaciones Personalizadas]**
-- [ ] **[Busqueda avanzada y Filtros]**
-- [ ] **[Notificaciones y Recordatorios]**
-- [ ] **[]**
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- Soporte -->
-
-## ⭐️ Apoya nuestro proyecto <a name="support"></a>
-
-> Escribe un mensaje para animar a los lectores a apoyar tu proyecto
-
-Si te gusta este proyecto, por favor, da un comienzo.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- LICENSE -->
