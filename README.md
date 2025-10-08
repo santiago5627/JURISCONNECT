@@ -136,7 +136,6 @@ Correr el servidor
     npm run dev
 ```
 
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- autores -->
@@ -149,9 +148,6 @@ Correr el servidor
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- Futuras Funciones -->
-
 
 <!-- LICENSE -->
 
