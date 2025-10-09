@@ -96,25 +96,25 @@
                 <form id="conceptoForm" method="POST" action="{{ route('conceptos.store', $proceso->id) }}">
                     @csrf
                     <!-- Título del Concepto Jurídico -->
-    <div class="form-group">
-        <label for="titulo" class="form-label">
-            <i class="fas fa-heading" style="color: #6366f1;"></i>
-            Título del Concepto
-            <span class="required">*</span>
-        </label>
-        <input
-            type="text"
-            id="titulo"
-            name="titulo"
-            class="form-input"
-            placeholder="Ejemplo: Análisis de la responsabilidad civil en el caso"
-            required
-            maxlength="120"
-        >
-        <div class="form-help">
-            Escribe un título breve y descriptivo para el concepto (máx. 120 caracteres).
-        </div>
-    </div>
+                    <div class="form-group">
+                        <label for="titulo" class="form-label">
+                            <i class="fas fa-heading" style="color: #6366f1;"></i>
+                                Título del Concepto
+                            <span class="required">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="titulo"
+                            name="titulo"
+                            class="form-input"
+                            placeholder="Ejemplo: Análisis de la responsabilidad civil en el caso"
+                            required
+                            maxlength="120"
+                            >
+                        <div class="form-help">
+                            Escribe un título breve y descriptivo para el concepto (máx. 120 caracteres).
+                        </div>
+                    </div>
                     <!-- Concepto Jurídico Principal -->
                     <div class="form-group">
                         <label for="concepto" class="form-label">

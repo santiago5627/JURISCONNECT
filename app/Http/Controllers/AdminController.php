@@ -18,11 +18,11 @@ class AdminController extends Controller
             if ($searchTerm) {
                 $query->where(function($q) use ($searchTerm) {
                     $q->where('nombre', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
+                    ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
                       // Agrega más campos según tu modelo Lawyer
                 });
             }
@@ -84,11 +84,11 @@ class AdminController extends Controller
 
             $lawyers = Lawyer::where(function($q) use ($searchTerm) {
                 $q->where('nombre', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
+                ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
             })->limit(20)->get(['id', 'nombre', 'apellido', 'numero_documento']);
 
             return response()->json([
