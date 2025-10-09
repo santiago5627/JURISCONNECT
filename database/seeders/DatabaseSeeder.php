@@ -14,7 +14,7 @@ public function run(): void
 {
     $this->call([
             RoleSeeder::class,    // Tu seeder actual (renombrado)
-            AbogadoUserSeeder::class,  // Tu nuevo seeder de abogados
+            AbogadoUserSeeder::class,   // Tu nuevo seeder de abogados
             ProcesoSeeder::class,
             LawyerSeeder::class,
             // Puedes agregar más seeders aquí

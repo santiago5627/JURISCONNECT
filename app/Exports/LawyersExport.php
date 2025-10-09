@@ -35,7 +35,7 @@ class LawyersExport implements FromCollection, WithHeadings, WithTitle, WithStyl
 
     public function headings(): array
     {
-        return ['ID', 'Nombre', 'Apellido', 'Correo Electrónico', 'Teléfono', 'Especialidad'];
+        return ['ID', 'Nombre', 'Apellido', 'Teléfono', 'Correo Electrónico', 'Especialidad'];
     }
 
     public function title(): string

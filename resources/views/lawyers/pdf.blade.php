@@ -11,11 +11,12 @@
         }
 
         /* Logo de fondo */
+        
         .background-logo {
             position: fixed;
             top: 30%;
             left: 20%;
-            opacity: 0.05;
+            opacity: 0.10;
             width: 400px;
             z-index: -1;
         }
@@ -75,8 +76,9 @@
 </head>
 <body>
 
-    <!-- Logo de fondo -->
-    <img src="{{ $logoPath }}" class="background-logo">
+ <!-- Logo de fondo -->
+<img src="file://{{ $logoPath }}" class="background-logo">
+
 
     <!-- Encabezado -->
     <header>

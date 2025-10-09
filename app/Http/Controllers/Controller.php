@@ -8,7 +8,7 @@ use App\Models\User;
 abstract class Controller
 
 {
-    public function index()
+    public function dashboard()
     {
         $users = User::all();
 

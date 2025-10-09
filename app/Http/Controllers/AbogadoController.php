@@ -38,6 +38,7 @@ class AbogadoController extends Controller
     // MÉTODOS DE GESTIÓN DE CONCEPTOS
     // ===============================
 
+
     /**
      * Mostrar lista de procesos o concepto específico
      */

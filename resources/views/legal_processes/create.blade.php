@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es"><!-- pagina para crear un nuevo proceso judicial -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,7 +38,7 @@
         }
 
         .header h1 {
-            font-size: 2rem;
+            font-size : 2rem;
             font-weight: bold;
             margin-bottom: 0.5rem;
             display: flex;
@@ -133,7 +134,9 @@
             color: #2563eb;
         }
 
-        .form-input, .form-select, .form-textarea {
+        .form-input,
+        .form-select,
+        .form-textarea {
             width: 100%;
             padding: 1rem;
             border: 2px solid #d1d5db;
@@ -145,17 +148,22 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        .form-input:hover, .form-select:hover, .form-textarea:hover {
+        .form-input:hover,
+        .form-select:hover,
+        .form-textarea:hover {
             border-color: #9ca3af;
         }
 
-        .form-input:focus, .form-select:focus, .form-textarea:focus {
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
             outline: none;
             border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        .form-input::placeholder, .form-textarea::placeholder {
+        .form-input::placeholder,
+        .form-textarea::placeholder {
             color: #9ca3af;
         }
 
@@ -353,6 +361,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -367,6 +376,7 @@
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -377,7 +387,7 @@
 <body>
     <div class="container">
         <div class="form-wrapper">
-<!-- Header -->
+            <!-- Header -->
             <div class="header">
                 <h1>
                     <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -389,7 +399,7 @@
             </div>
 
             <div class="form-content">
-<!-- Mensajes de error -->
+                <!-- Mensajes de error -->
                 <div class="error-container" style="display: none;">
                     <div class="error-header">
                         <svg class="error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -405,9 +415,9 @@
                 <form action="{{ route('procesos.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-<!-- Grid de campos principales -->
+                    <!-- Grid de campos principales -->
                     <div class="form-grid">
-<!-- Tipo de Proceso -->
+                        <!-- Tipo de Proceso -->
                         <div class="field-group">
                             <label for="tipo_proceso" class="field-label">
                                 <span class="label-content">
@@ -426,7 +436,7 @@
                             </select>
                         </div>
 
-<!-- Número de radicado -->
+                        <!-- Número de radicado -->
                         <div class="field-group">
                             <label for="numero_radicado" class="field-label">
                                 <span class="label-content">
@@ -436,20 +446,20 @@
                                     Número de radicado
                                 </span>
                             </label>
-                            <input type="text" name="numero_radicado" id="numero_radicado" class="form-input" 
+                            <input type="text" name="numero_radicado" id="numero_radicado" class="form-input"
                                 placeholder="11001-2025-00001-00">
-                                @error('numero_radicado')
-                                <span class="text-red-500 text-sm">{{ $message }}</span>
-                                @enderror
+                            @error('numero_radicado')
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
+                            @enderror
                         </div>
                     </div>
 
-<!-- Partes del proceso -->
+                    <!-- Partes del proceso -->
                     <div class="parties-section">
                         <h3 class="section-title">Partes del Proceso</h3>
-                        
+
                         <div class="parties-grid">
-<!-- Demandante -->
+                            <!-- Demandante -->
                             <div class="field-group">
                                 <label for="demandante" class="field-label">
                                     <span class="label-content">
@@ -459,12 +469,12 @@
                                         Demandante
                                     </span>
                                 </label>
-                                <input type="text" name="demandante" id="demandante" 
-                                    class="form-input demandante-input" 
+                                <input type="text" name="demandante" id="demandante"
+                                    class="form-input demandante-input"
                                     placeholder="Nombre completo del demandante">
                             </div>
 
-<!-- Demandado -->
+                            <!-- Demandado -->
                             <div class="field-group">
                                 <label for="demandado" class="field-label">
                                     <span class="label-content">
@@ -474,14 +484,14 @@
                                         Demandado
                                     </span>
                                 </label>
-                                <input type="text" name="demandado" id="demandado" 
-                                    class="form-input demandado-input" 
+                                <input type="text" name="demandado" id="demandado"
+                                    class="form-input demandado-input"
                                     placeholder="Nombre completo del demandado">
                             </div>
                         </div>
                     </div>
 
-<!-- Descripción -->
+                    <!-- Descripción -->
                     <div class="field-group">
                         <label for="descripcion" class="field-label">
                             <span class="label-content">
@@ -491,12 +501,12 @@
                                 Descripción del caso
                             </span>
                         </label>
-                        <textarea name="descripcion" id="descripcion" class="form-textarea" 
-                                placeholder="Describa detalladamente el caso, los hechos relevantes y las pretensiones..."></textarea>
+                        <textarea name="descripcion" id="descripcion" class="form-textarea"
+                            placeholder="Describa detalladamente el caso, los hechos relevantes y las pretensiones..."></textarea>
                         <p class="help-text">Proporcione una descripción clara y detallada del proceso judicial</p>
                     </div>
 
-<!-- Documentos -->
+                    <!-- Documentos -->
                     <div class="document-section">
                         <div class="document-header">
                             <svg class="document-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -505,7 +515,7 @@
                             </svg>
                             <h3 class="document-title">Adjuntar Documento</h3>
                         </div>
-                        
+
                         <div class="field-group">
                             <label for="documento" class="field-label" style="color: #1d4ed8;">
                                 Documento inicial del proceso
@@ -517,7 +527,8 @@
                         </div>
                     </div>
 
-<!-- Botones -->
+                    <!-- Botones -->
+                    
                     <div class="button-container">
                         <a href="{{ route('dashboard.abogado') }}" class="btn btn-cancel">
                             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -537,49 +548,50 @@
         </div>
     </div>
 </body>
+
 </html>
 
 <script>
-document.getElementById("formProceso").addEventListener("submit", async function(e) {
-    e.preventDefault(); // Evita el refresh
+    document.getElementById("formProceso").addEventListener("submit", async function(e) {
+        e.preventDefault(); // Evita el refresh
 
-    let form = e.target;
-    let url = form.action;
-    let formData = new FormData(form);
+        let form = e.target;
+        let url = form.action;
+        let formData = new FormData(form);
 
-    try {
-        let response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
-            },
-            body: formData
-        });
-
-        if (response.ok) {
-//  Registro exitoso
-            let data = await response.json();
-            alert("Proceso creado correctamente ✅");
-            form.reset(); // limpiar formulario
-        } else if (response.status === 422) {
-//  Errores de validación
-            let errorData = await response.json();
-            let errorContainer = document.getElementById("errorContainer");
-            errorContainer.innerHTML = "";
-
-            Object.values(errorData.errors).forEach(msgArray => {
-                msgArray.forEach(msg => {
-                    let li = document.createElement("div");
-                    li.textContent = msg;
-                    errorContainer.appendChild(li);
-                });
+        try {
+            let response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": document.querySelector('input[name="_token"]').value
+                },
+                body: formData
             });
-        } else {
-            alert("Ocurrió un error inesperado ");
+
+            if (response.ok) {
+                //  Registro exitoso
+                let data = await response.json();
+                alert("Proceso creado correctamente ✅");
+                form.reset(); // limpiar formulario
+            } else if (response.status === 422) {
+                //  Errores de validación
+                let errorData = await response.json();
+                let errorContainer = document.getElementById("errorContainer");
+                errorContainer.innerHTML = "";
+
+                Object.values(errorData.errors).forEach(msgArray => {
+                    msgArray.forEach(msg => {
+                        let li = document.createElement("div");
+                        li.textContent = msg;
+                        errorContainer.appendChild(li);
+                    });
+                });
+            } else {
+                alert("Ocurrió un error inesperado ");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("Error de conexión ");
         }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Error de conexión ");
-    }
-});
+    });
 </script>

@@ -15,6 +15,7 @@ const closeEditModalBtn = document.getElementById("closeEditModal");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
 // ===== SISTEMA DE ALERTAS PERSONALIZADAS=====
+// ===== 
 function showCustomAlert(type, title = '', message = '', showCancel = false, confirmText = 'Aceptar', cancelText = 'Cancelar') {
 
     // Crear overlay si no existe
@@ -188,6 +189,7 @@ async function handleDuplicateError(error, status, context = 'create') {
 
 /**
  * Función específica para validar duplicados antes del envío
+ * Avísa
  * @param {FormData} formData - Datos del formulario
  * @param {string} currentId - ID actual (para edición)
  * @returns {Promise<boolean>} - true si hay duplicados, false si no
@@ -530,7 +532,7 @@ document.addEventListener('submit', async function(e) {
     }
 });
 
-// Edición de abogados
+// Edición de abogados<
 document.addEventListener("click", function(e) {
     if (e.target.classList.contains("btn-edit")) {
         const row = e.target.closest("tr");
@@ -624,6 +626,7 @@ document.getElementById("createLawyerModal").querySelector("form").addEventListe
     }
 
     // VERIFICACIÓN DE DUPLICADOS (opcional - si implementas el endpoint)
+    //
     const hasDuplicates = await checkForDuplicates(data);
     if (hasDuplicates) {
         return; // Detener si hay duplicados
@@ -660,46 +663,91 @@ document.getElementById("createLawyerModal").querySelector("form").addEventListe
     }
 });
 
-// Búsqueda y filtrado
-document.getElementById("searchBtn").addEventListener("click", searchLawyersWithAlert);
-document.getElementById("searchInput").addEventListener("input", searchLawyersWithoutAlert);
+// ===== FUNCIONALIDAD DE BÚSQUEDA AJAX =====
+// Búsqueda en tiempo real simplificada
+let searchTimeout;
 
-//FUNCION DE BÚSQUEDA SIN ALERTA
-function searchLawyersWithoutAlert() {
-    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-    const rows = document.querySelectorAll("#tableBody tr");
-
-    rows.forEach((row) => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(searchTerm)) {
-            row.style.display = "";
-        } else { 
-            row.style.display = "none";
-        }
-    });
-}
-
-// Función para buscar con alerta (cuando presiona el botón buscar)
-function searchLawyersWithAlert() {
-    const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-    const rows = document.querySelectorAll("#tableBody tr");
-    let visibleRows = 0;
-
-    rows.forEach((row) => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(searchTerm)) {
-            row.style.display = "";
-            visibleRows++;
-        } else {
-            row.style.display = "none";
-        }
-    });
-
-    // Solo mostrar alerta cuando se presiona el botón y no hay resultados
-    if (searchTerm && visibleRows === 0) {
-        showCustomAlert('info', 'Sin resultados', `No se encontraron abogados para "${searchTerm}"`);
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById("searchInput");
+    
+    if (searchInput) {
+        // Búsqueda en tiempo real mientras escribes
+        searchInput.addEventListener("input", function() {
+            clearTimeout(searchTimeout);
+            const searchTerm = this.value.trim();
+            
+            searchTimeout = setTimeout(() => {
+                performSearch(searchTerm);
+            }, 300); // Esperar 300ms después de escribir
+        });
     }
+});
+
+
+// Función principal de búsqueda
+function performSearch(searchTerm) {
+    // Preparar parámetros
+    const params = new URLSearchParams();
+    if (searchTerm) {
+        params.append('search', searchTerm);
+    }
+    params.append('ajax', '1');
+    
+    // Hacer petición AJAX
+    fetch(`${window.location.pathname}?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.html) {
+            // Actualizar tabla
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = data.html;
+            
+            const newTableBody = tempDiv.querySelector('#tableBody');
+            const currentTableBody = document.querySelector('#tableBody');
+            
+            if (newTableBody && currentTableBody) {
+                currentTableBody.innerHTML = newTableBody.innerHTML;
+            }
+            
+            // Actualizar paginación si existe
+            const newPagination = tempDiv.querySelector('.pagination');
+            const currentPagination = document.querySelector('.pagination')?.parentElement;
+            if (currentPagination) {
+                if (newPagination) {
+                    currentPagination.innerHTML = newPagination.parentElement.innerHTML;
+                } else {
+                    currentPagination.innerHTML = '';
+                }
+            }
+            
+            // Actualizar URL
+            const newUrl = new URL(window.location);
+            if (searchTerm) {
+                newUrl.searchParams.set('search', searchTerm);
+            } else {
+                newUrl.searchParams.delete('search');
+            }
+            newUrl.searchParams.delete('page');
+            window.history.replaceState({}, '', newUrl.toString());
+        }
+    })
+    .catch(error => {
+        console.error('Error en búsqueda:', error);
+    });
 }
+
+// Función para limpiar búsqueda (opcional)
+function clearSearch() {
+    document.getElementById("searchInput").value = '';
+    performSearch('');
+}
+
 
 // ===== FUNCIONALIDAD DE SUBIDA DE IMAGEN DE PERFIL =====
 function setupImageUpload() {
@@ -713,6 +761,8 @@ function setupImageUpload() {
     }
 
     // Guardar la imagen original como referencia
+    // No sirve para la edición porque se recarga la página después de subir la imagen y se pierde la referencia original 
+
     profileImage.dataset.originalSrc = profileImage.src;
 
     fileInput.addEventListener('change', async function(e) {
@@ -860,28 +910,129 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Sistema de alertas y validaciones inicializado correctamente');
 });
 
-// las secciones
-        document.addEventListener('DOMContentLoaded', function() {
-            const navButtons = document.querySelectorAll('.nav-btn');
-            const sections = document.querySelectorAll('.section-content');
+// ===== NAVEGACIÓN ENTRE SECCIONES Y PAGINACIÓN AJAX =====
+document.addEventListener('DOMContentLoaded', function() {
+    // Manejo de navegación entre secciones
+    const navButtons = document.querySelectorAll('.nav-btn');
+    const sections = document.querySelectorAll('.section-content');
+    
+    navButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevenir comportamiento por defecto
+            const sectionId = this.getAttribute('data-section');
             
-            navButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const sectionId = this.getAttribute('data-section');
-                    
-                    // Remover clase activa de todos los botones y secciones
-                    navButtons.forEach(btn => btn.classList.remove('active'));
-                    sections.forEach(section => section.classList.remove('active'));
-                    
-                    // Agregar clase activa al botón clickeado
-                    this.classList.add('active');
-                    
-                    // Mostrar la sección correspondiente
-                    const targetSection = document.getElementById(sectionId + '-section');
-                    if (targetSection) {
-                        targetSection.classList.add('active');
-                    }
-                });
-            });
+            // Remover clase activa de todos los botones y secciones
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Agregar clase activa al botón clickeado
+            this.classList.add('active');
+            
+            // Mostrar la sección correspondiente
+            const targetSection = document.getElementById(sectionId + '-section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
         });
+    });
 
+// Manejo de paginación AJAX para la sección de abogados
+function handleAjaxPagination() {
+    const lawyersSection = document.querySelector('#lawyers-section');
+    if (!lawyersSection) {
+        console.log('No se encontró #lawyers-section');
+        return;
+    }
+
+    // Event delegation para manejar clics en enlaces de paginación
+    lawyersSection.addEventListener('click', function(e) {
+        // Verificar si el elemento clickeado es un enlace de paginación AJAX
+        if (e.target.closest('.pagination-btn.ajax-page')) {
+            e.preventDefault();
+            
+            const link = e.target.closest('.pagination-btn.ajax-page');
+            const url = link.getAttribute('href');
+            
+            console.log('URL de paginación:', url);
+            
+            if (!url || url === '#') {
+                console.log('URL inválida');
+                return;
+            }
+            
+            // Mostrar indicador de carga
+            const container = lawyersSection.querySelector('.table-container');
+            if (container) {
+                container.style.opacity = '0.5';
+                container.style.pointerEvents = 'none';
+            }
+            
+            console.log('Iniciando petición AJAX...');
+            
+            // Realizar petición AJAX
+            fetch(url, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+                console.log('Respuesta recibida:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Datos recibidos:', data);
+                
+                if (data.success && data.html) {
+                    // Actualizar el contenido
+                    const tableContainer = lawyersSection.querySelector('.table-container');
+                    if (tableContainer) {
+                        tableContainer.outerHTML = data.html;
+                        console.log('Contenido actualizado exitosamente');
+                    }
+                    
+                    // Actualizar URL sin recargar página
+                    if (window.history && window.history.pushState) {
+                        window.history.pushState({}, '', url);
+                    }
+                    
+                    // Re-inicializar el manejo de paginación para los nuevos elementos
+                    handleAjaxPagination();
+                } else {
+                    throw new Error(data.message || 'Formato de respuesta inválido');
+                }
+            })
+            .catch(error => {
+                console.error('Error completo:', error);
+                
+                // Mostrar mensaje de error al usuario
+                const container = lawyersSection.querySelector('.table-container');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="alert alert-danger">
+                            <strong>Error:</strong> ${error.message}<br>
+                            <small>Revisa la consola para más detalles</small>
+                        </div>
+                    `;
+                }
+            })
+            .finally(() => {
+                // Quitar indicador de carga
+                const container = lawyersSection.querySelector('.table-container');
+                if (container) {
+                    container.style.opacity = '1';
+                    container.style.pointerEvents = 'auto';
+                }
+            });
+        }
+    });
+}
+    // Inicializar el manejo de paginación
+    handleAjaxPagination();
+});

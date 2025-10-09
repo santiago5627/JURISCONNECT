@@ -18,8 +18,8 @@ class LawyerFactory extends Factory
             'apellido'         => $this->faker->lastName(),
             'tipo_documento'   => $this->faker->randomElement($tipos_documento),
             'numero_documento' => $this->faker->unique()->numerify('##########'),
-            'correo'           => $this->faker->unique()->safeEmail(),
-            'telefono'         => $this->faker->phoneNumber(),
+            'telefono'           => $this->faker->unique()->safeEmail(),
+            'correo'         => $this->faker->phoneNumber(),
             'especialidad'     => $this->faker->randomElement($especialidades),
             'user_id'          => User::factory(), // Asocia un usuario creado con la fábrica de User
         ];
