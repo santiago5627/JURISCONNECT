@@ -1,0 +1,60 @@
+/* Estilo general del panel */
+body {
+    background-color: #f9fafb;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Encabezado */
+header h2 {
+    color: #1f2937;
+    letter-spacing: 0.5px;
+}
+
+/* Tarjetas */
+.dashboard-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.dashboard-card:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    transform: translateY(-3px);
+}
+
+/* Títulos de las tarjetas */
+.dashboard-card h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #111827;
+}
+
+/* Texto */
+.dashboard-card p {
+    font-size: 0.95rem;
+    color: #4b5563;
+}
+
+/* Enlaces */
+.dashboard-card a {
+    color: #4f46e5;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.dashboard-card a:hover {
+    text-decoration: underline;
+}
+
+/* Bienvenida */
+.welcome-text {
+    font-size: 1.1rem;
+    color: #374151;
+}
+
+.welcome-text strong {
+    color: #1f2937;
+}

@@ -1,0 +1,12 @@
+/* CSS básico */
+.error-message {
+    color: #e63946;
+    font-size: 14px;
+    margin-top: 5px;
+    display: block;
+}
+
+.is-invalid {
+    border: 2px solid #e63946 !important;
+    background-color: #ffe6e6;
+}
