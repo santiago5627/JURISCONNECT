@@ -1,28 +1,21 @@
 <?php
 
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class ConceptoJuridico extends Model
 {
-    protected $fillable = [
-        'titulo',
-        'categoria',
-        'descripcion',
-        'abogado_id',
-        'estado',
-        'concepto',
-        'recomendaciones',
-        'fecha_radicacion',
-        'created_at',
-        'updated_at'
-    ];
+    // 👇 Nombre real de la tabla en la BD
+    protected $table = 'conceptos';
 
-    // Relación con el abogado (usuario)
-    public function abogado()
-    {
-        return $this->belongsTo(User::class, 'abogado_id');
-    }
+    protected $fillable = [
+        'numero_radicado',
+        'tipo_proceso',
+        'demandante',
+        'demandado',
+        'fecha_radicacion',
+        'estado',
+        'abogado_id'
+    ];
 }

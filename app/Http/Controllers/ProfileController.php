@@ -8,33 +8,34 @@ use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
+    /**
+     * Actualiza la foto de perfil del usuario autenticado.
+     */
     public function updatePhoto(Request $request)
     {
-        // Validar archivo
+        // 1. Validar que el archivo sea una imagen válida.
         $request->validate([
-            'profile_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'profile_photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Máx 2MB
         ]);
 
-        if ($request->hasFile('profile_photo')) {
-            // Guardar en storage/app/public/profile-photos
-            $path = $request->file('profile_photo')->store('profile-photos', 'public');
+        /** @var \App\Models\User $user */
+        
+        $user = Auth::user();
 
-            // Actualizar al usuario logueado
-            /** @var \App\Models\User $user */
-            $user = Auth::user();
-            $user->profile_photo = $path; // se guarda la ruta relativa
-            $user->save();
-
-            // Retornar URL lista para mostrar en frontend 
-            return response()->json([
-                'success' => true,
-                'url' => Storage::url($path), // /storage/profile-photos/xxxx.jpg
-            ]);
+        // 2. Si el usuario ya tiene una foto, eliminar la anterior para no acumular archivos.
+        if ($user->profile_photo) {
+            Storage::disk('public')->delete('profile-photos/' . $user->profile_photo);
         }
+        
+        // 3. Guardar la nueva imagen en storage/app/public/profile-photos
+        $fileName = time() . '_' . $request->file('profile_photo')->getClientOriginalName();
+        $path = $request->file('profile_photo')->storeAs('profile-photos', $fileName, 'public');
 
-        return response()->json([
-            'success' => false,
-            'message' => 'No se subió ninguna imagen'
-        ]);
+        // 4. Guardar la ruta del archivo en la BD
+        $user->profile_photo = $fileName;
+        $user->save();
+
+        // 5. Retornar éxito (puedes cambiar a JSON si usas AJAX)
+        return redirect()->back()->with('status', '¡Foto de perfil actualizada correctamente!');
     }
 }

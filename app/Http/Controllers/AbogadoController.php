@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\ConceptoJuridico;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Proceso; 
-use Illuminate\Routing\Controller;
 
 class AbogadoController extends Controller
 {
@@ -19,8 +18,8 @@ class AbogadoController extends Controller
      */
     public function index()
     {
-        //$estadisticas = $this->getEstadisticas();
-        return view('dashboard-abogado',);
+        $estadisticas = $this->getEstadisticas();
+        return view('dashboard-abogado', $estadisticas);
     }
 
     /**
@@ -214,7 +213,7 @@ class AbogadoController extends Controller
         try {
             $proceso = Proceso::findOrFail($id);
 
-            return view('legal_processes.createConceptos', compact('proceso'));
+            return view('legal_processes.editConceptos', compact('proceso'));
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Proceso no encontrado');

@@ -44,11 +44,9 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('lawyers', LawyerController::class)->except(['edit', 'update', 'destroy']);
 
     // === DASHBOARDS ===
-
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::get('/dashboard/abogado', [AbogadoController::class, 'index'])->name('dashboard.abogado');
     Route::get('/dashboard/asistente', [AsistenteController::class, 'index'])->name('dashboard.asistente');
-
 
     // === PERFIL ===
     Route::get('/profile/avatar', [ProfileController::class, 'edit'])->name('profile.edit');

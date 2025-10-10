@@ -13,20 +13,15 @@ public function up()
 {
     Schema::create('conceptos', function (Blueprint $table) {
         $table->id();
-            $table->string('numero_radicado')->unique();
-            $table->string('tipo_proceso');
-            $table->string('demandante');
-            $table->string('demandado');
-            $table->date('fecha_radicacion')->nullable();
-            $table->enum('estado', ['pendiente', 'en curso', 'finalizado'])->default('pendiente');
-
-            // Relación con abogado
-            $table->foreignId('abogado_id')->constrained('users')->onDelete('cascade');
+        $table->string('titulo');
+        $table->string('categoria');
+        $table->text('descripcion');
+        $table->timestamps();
     });
 }
 
 
-    /** 
+    /**
      * Reverse the migrations.
      */
     public function down(): void

@@ -1,15 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        </x-slot>
+    </x-slot>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Enlace a CSS corregido -->
-    <link rel="stylesheet" href="{{ asset('css/dashboardAbo.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/abogado.css') }}">
 
     <div class="dashboard-wrapper">
 
@@ -23,9 +21,9 @@
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
             </div>
-            
+
             <nav class="nav-menu">
-                </nav>
+            </nav>
 
             <div class="sidebar-footer">
                 <div class="sena-logo">
@@ -75,10 +73,10 @@
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </main> 
+    </div>Notificación factura electrónica
 
- <!-- Scripts -->
+    <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
 
 </x-app-layout>
