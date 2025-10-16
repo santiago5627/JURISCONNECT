@@ -843,8 +843,7 @@
         </div>
     </div>
 
-<!-- Scripts -->
-<!-- <script src="{{ asset('js/dash.js') }}"></script> -->
+
 <script>
 // Abre el modal y carga los datos del proceso por AJAX
 function openProcessModal(id) {

@@ -39,7 +39,6 @@ class RegisteredUserController extends Controller
                 'confirmed',          // debe coincidir con password_confirmation
             ],
         ], [
-            // Mensajes en español
             'password.required' => 'La contraseña es obligatoria.',
             'password.min' => 'La contraseña debe tener al menos 8 caracteres.',    
             'password.regex' => 'La contraseña debe contener al menos una mayúscula, una minúscula, un número y un carácter especial.',

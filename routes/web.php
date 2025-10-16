@@ -35,31 +35,33 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/perfil/foto', [ProfileController::class, 'editPhoto'])->name('profile.photo');
     Route::post('/perfil/foto', [ProfileController::class, 'updatePhoto'])->name('profile.photo.update');
 
-
     // === ABOGADOS ===
-    Route::resource('lawyers', LawyerController::class);
+    // PRIMERO las rutas específicas (antes del resource)
     Route::get('/lawyers/export-pdf', [LawyerController::class, 'exportPDF'])->name('lawyers.export.pdf');
     Route::get('/lawyers/export-excel', function () { 
         return Excel::download(new LawyersExport, 'abogados.xlsx'); 
     })->name('lawyers.export.excel');
     Route::post('/lawyers/check-duplicates', [LawyerController::class, 'checkDuplicates']);
     Route::post('/lawyers/check-field', [LawyerController::class, 'checkField']);
+    
+    // DESPUÉS el resource (UNA SOLA VEZ)
+    Route::resource('lawyers', LawyerController::class);
 
     // === PROCESOS LEGALES ===
-    Route::resource('legal_processes', LegalProcessController::class);
     Route::get('/mis-procesos', [LegalProcessController::class, 'index'])->name('mis.procesos');
+    Route::get('/legal-processes/create', [LegalProcessController::class, 'create'])->name('legal_processes.create');
     Route::get('/procesos/create', [LegalProcessController::class, 'create'])->name('procesos.create');
     Route::post('/procesos', [LegalProcessController::class, 'store'])->name('procesos.store');
-    Route::get('/procesos/{id}', [LegalProcessController::class, 'show']);
-    Route::get('/legal_processes/export/excel', [LegalProcessController::class, 'exportExcel'])->name('legal_processes.export.excel');
-    Route::get('/legal_processes/export/pdf', [LegalProcessController::class, 'exportPdf'])->name('legal_processes.export.pdf');
+    Route::get('/procesos/{id}', [LegalProcessController::class, 'show'])->name('procesos.show');
+    Route::get('/procesos/{id}/edit', [LegalProcessController::class, 'edit'])->name('procesos.edit');
+    Route::put('/procesos/{id}', [LegalProcessController::class, 'update'])->name('procesos.update');
+    Route::delete('/procesos/{id}', [LegalProcessController::class, 'destroy'])->name('procesos.destroy');
 
     // === CONCEPTOS JURÍDICOS ===
-    Route::resource('conceptos', ConceptoController::class);
     Route::get('/abogado/mis-procesos', [AbogadoController::class, 'misProcesos'])->name('abogado.misConceptos');
     Route::get('/conceptos/create', [ConceptoController::class, 'create'])->name('conceptos.create');
+    Route::post('/procesos/{proceso}/conceptos', [ConceptoController::class, 'store'])->name('conceptos.store');
     Route::get('/procesos/{id}/concepto', [AbogadoController::class, 'mostrarFormularioConcepto'])->name('abogado.crear-concepto');
-    Route::post('/procesos/{proceso}/concepto', [ConceptoController::class, 'store'])->name('procesos.conceptos.store');
     Route::post('/abogado/finalizar-proceso/{id}', [AbogadoController::class, 'finalizarProceso'])->name('abogado.finalizar-proceso');
     Route::get('/abogado/procesos', [AbogadoController::class, 'listarProcesos'])->name('abogado.listar-procesos');
     Route::post('/abogado/proceso/{id}/concepto', [AbogadoController::class, 'guardarConcepto'])->name('abogado.guardar-concepto');

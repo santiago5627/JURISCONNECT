@@ -508,7 +508,7 @@
             </div>
             <a class="cancel-btn" href="{{ route('dashboard.abogado') }}">
                 <i class="fas fa-arrow-left"></i>
-                Cancelar
+                Volver
             </a>
            
         </div>

@@ -40,10 +40,6 @@
             <!-- Email -->
             <label for="email">Correo Electrónico</label>
             <input id="email" type="email" name="email" value="{{ old('email', request('email')) }}" required autofocus>
-            @error('email')
-                <span class="error-message">{{ $message }}</span>
-            @enderror
-
             <!-- Password -->
             <label for="password">Nueva Contraseña</label>
             <div class="password-wrapper">
@@ -66,9 +62,6 @@
                     </svg>
                 </span>
             </div>
-            @error('password')
-                <span class="error-message">{{ $message }}</span>
-            @enderror
 
             <!-- Confirm Password -->
             <label for="password_confirmation">Confirmar Contraseña</label>
