@@ -15,6 +15,7 @@ const closeEditModalBtn = document.getElementById("closeEditModal");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
 // ===== SISTEMA DE ALERTAS PERSONALIZADAS=====
+// ===== 
 function showCustomAlert(type, title = '', message = '', showCancel = false, confirmText = 'Aceptar', cancelText = 'Cancelar') {
 
     // Crear overlay si no existe
@@ -188,6 +189,7 @@ async function handleDuplicateError(error, status, context = 'create') {
 
 /**
  * Función específica para validar duplicados antes del envío
+ * Avísa
  * @param {FormData} formData - Datos del formulario
  * @param {string} currentId - ID actual (para edición)
  * @returns {Promise<boolean>} - true si hay duplicados, false si no
@@ -530,7 +532,7 @@ document.addEventListener('submit', async function(e) {
     }
 });
 
-// Edición de abogados
+// Edición de abogados<
 document.addEventListener("click", function(e) {
     if (e.target.classList.contains("btn-edit")) {
         const row = e.target.closest("tr");
@@ -624,6 +626,7 @@ document.getElementById("createLawyerModal").querySelector("form").addEventListe
     }
 
     // VERIFICACIÓN DE DUPLICADOS (opcional - si implementas el endpoint)
+    //
     const hasDuplicates = await checkForDuplicates(data);
     if (hasDuplicates) {
         return; // Detener si hay duplicados
@@ -758,6 +761,8 @@ function setupImageUpload() {
     }
 
     // Guardar la imagen original como referencia
+    // No sirve para la edición porque se recarga la página después de subir la imagen y se pierde la referencia original 
+
     profileImage.dataset.originalSrc = profileImage.src;
 
     fileInput.addEventListener('change', async function(e) {

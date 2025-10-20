@@ -66,7 +66,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/procesos/{id}/concepto', [AbogadoController::class, 'mostrarFormularioConcepto'])->name('abogado.crear-concepto');
     Route::post('/abogado/finalizar-proceso/{id}', [AbogadoController::class, 'finalizarProceso'])->name('abogado.finalizar-proceso');
     Route::get('/abogado/procesos', [AbogadoController::class, 'listarProcesos'])->name('abogado.listar-procesos');
-    Route::post('/abogado/proceso/{id}/concepto', [AbogadoController::class, 'guardarConcepto'])->name('abogado.guardar-concepto');
+    Route::post('/proceso/{id}/concepto', [AbogadoController::class, 'guardarConcepto'])->name('abogado.guardar-concepto');
     Route::put('/procesos/{proceso}/conceptos/{concepto}', [AbogadoController::class, 'updateConcepto']) ->name('procesos.conceptos.update');
 }); 
 

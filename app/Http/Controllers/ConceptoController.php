@@ -84,7 +84,7 @@ class ConceptoController extends Controller
         return Proceso::with(['cliente', 'abogado'])->findOrFail($procesoId);
     }
 
-    /**
+    /**                                    
      * Verificar si ya existe un concepto para el proceso
      */
     private function checkExistingConcepto($procesoId)
