@@ -9,10 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Models\User;
 
 
-
-
-
-class VerifyEmailController extends Controller
+class VerifyEmailController
 {
     /**
      * Mark the authenticated user's email address as verified.

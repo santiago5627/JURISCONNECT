@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Proceso;
+use App\Models\ConceptoJuridico;
 
 class ProcesoSeeder extends Seeder
 {
@@ -12,7 +13,7 @@ class ProcesoSeeder extends Seeder
      */
     public function run(): void
     {
-        // Crea 30 registros falsos
-        Proceso::factory()->count(30)->create();
+    // Crea 20 registros falsos
+        Proceso::factory()->count(40)->create();
     }
 }

@@ -23,9 +23,9 @@
 
 
             <div class="form-group" style="margin-bottom: 15px;">
-                <label for="profile_photo">Selecciona una imagen:</label>
-                <input type="file" name="profile_photo" id="profile_photo" required>
-                @error('profile_photo')
+                <label for="foto_perfil">Selecciona una imagen:</label>
+                <input type="file" name="foto_perfil" id="foto_perfil" required>
+                @error('foto_perfil')
                 <div style="color: red;">{{ $message }}</div>
                 @enderror
             </div>

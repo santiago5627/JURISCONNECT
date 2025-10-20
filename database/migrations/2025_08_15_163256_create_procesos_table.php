@@ -11,17 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('procesos', function (Blueprint $table) {
+    Schema::create('procesos', function (Blueprint $table) {
     $table->id();
-    $table->string('tipo_proceso', 100);
-    $table->string('numero_radicado', 62)->unique();
-    $table->string('demandante', 255);
-    $table->string('demandado', 255);
-    $table->text('descripcion');
-    $table->string('documento')->nullable();
-    $table->enum('estado', ['Pendiente', 'En curso', 'Finalizado' ])->default('Pendiente');
+    //$table->foreignId('concepto_id')->constrained('concepto_juridicos')->onDelete('cascade');
+    $table->string('tipo_proceso');
+    $table->string('numero_radicado');
+    $table->string('demandante');
+    $table->string('demandado');
+    $table->string('estado')->default('pendiente');
+    $table->text('descripcion')->nullable();
     $table->timestamps();
 });
+
+
+
     }
 
     /**
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('procesos');
+        Schema::dropIfExists('concepto_juridicos');
     }
 };

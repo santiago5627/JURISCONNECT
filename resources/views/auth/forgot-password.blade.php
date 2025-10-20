@@ -47,5 +47,53 @@
             </form>
         </div>
     </div>
+
+    <!-- Alerta personalizada -->
+    <div class="custom-alert-overlay" id="alertOverlay" style="display: none;">
+        <div class="custom-alert-box">
+            <div class="custom-alert-icon-circle">
+                <i class="fas fa-check">✔</i>
+            </div>
+            <h3 class="custom-alert-title">¡Correo Enviado!</h3>
+            <p class="custom-alert-message">
+                Hemos enviado las instrucciones de recuperación a tu correo electrónico. 
+                Por favor revisa tu bandeja de entrada y sigue las instrucciones.
+            </p>
+            <button class="custom-alert-btn" onclick="closeAlert()">Entendido</button>
+        </div>
+    </div>
+
+    <script>
+    // Función para mostrar la alerta
+    function showAlert() {
+        document.getElementById('alertOverlay').style.display = 'flex';
+    }
+
+    // Función para cerrar la alerta
+    function closeAlert() {
+        document.getElementById('alertOverlay').style.display = 'none';
+    }
+
+    // Cerrar alerta al hacer clic fuera de ella
+    document.getElementById('alertOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeAlert();
+        }
+    });
+
+    // Cerrar alerta con tecla Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeAlert();
+        }
+    });
+
+    // Mostrar alerta si hay mensaje de éxito de Laravel
+    @if(session('status'))
+        document.addEventListener('DOMContentLoaded', function() {
+            showAlert();
+        });
+    @endif
+    </script>
 </body>
 </html>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Proceso;
 use App\Models\ConceptoJuridico;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ConceptoController extends Controller
 {
@@ -15,57 +17,12 @@ class ConceptoController extends Controller
 
     public function index(Request $request)
     {
-        try {
-            // Iniciar query builder
-            $query = Proceso::query();
-            $searchTerm = $request->get('search');
-
-            // Aplicar búsqueda si existe el término de búsqueda
-            if ($searchTerm) {
-                $query->where(function($q) use ($searchTerm) {
-                    $q->where('id', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('estado', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('tipo_proceso', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('created_at', 'LIKE', '%' . $searchTerm . '%');
-                      // Agrega más campos según tu modelo Lawyer
-                });
-            }
-
-            // Obtener abogados paginados
-            $procesos = $query->paginate(10);
-
-            // Mantener parámetros de búsqueda en la paginación
-            $procesos->appends($request->query());
-
-            // Si es una petición AJAX, devolver solo la vista parcial
-            if ($request->ajax()) {
-                $html = view('profile.partials.lawyers-table', compact('lawyers'))->render();
-
-                return response()->json([
-                    'html' => $html,
-                    'success' => true,
-                    'total' => $procesos->total(),
-                    'current_page' => $procesos->currentPage(),
-                    'last_page' => $procesos->lastPage(),
-                    'search_term' => $searchTerm
-                ]);
-            }
-
-
-        } catch (\Exception $e) {
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error al cargar los datos: ' . $e->getMessage()
-                ], 500);
-            }
-
-            // Para peticiones normales, redirigir con error
-            return back()->with('error', 'Error al cargar los datos');
-        }
+        $procesos = Proceso::where('abogado_id', auth())
+                        ->where('estado', 'asignado')
+                        ->whereDoesntHave('conceptos')
+                        ->get();
+        
+        return view('legal_processes.listaProcesos', compact('procesos'));
     }
 
     /**
@@ -145,9 +102,11 @@ class ConceptoController extends Controller
     private function createConceptoForProceso(Request $request)
     {
         $concepto = new ConceptoJuridico();
-        $concepto->titulo = $request->titulo;
-        $concepto->categoria = $request->categoria;
-        $concepto->descripcion = $request->descripcion;
+        $concepto->proceso_id = $proceso->id;
+        $concepto->abogado_id = auth();
+        $concepto->concepto = $request->concepto;
+        $concepto->recomendaciones = $request->recomendaciones;
+        $concepto->estado = 'finalizado';
         $concepto->save();
     }
 

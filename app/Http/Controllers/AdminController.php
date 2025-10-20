@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Lawyer; // Asegúrate de importar el modelo
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+
 
 class AdminController extends Controller
 {
@@ -13,26 +15,26 @@ class AdminController extends Controller
             // Iniciar query builder
             $query = Lawyer::query();
             $searchTerm = $request->get('search');
-
+            
             // Aplicar búsqueda si existe el término de búsqueda
             if ($searchTerm) {
                 $query->where(function($q) use ($searchTerm) {
                     $q->where('nombre', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
+                      ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
                       // Agrega más campos según tu modelo Lawyer
                 });
             }
-
+            
             // Si es una petición para obtener todos los datos (para búsqueda híbrida)
             if ($request->get('get_all') && $request->ajax()) {
                 $allLawyers = $query->get();
                 return response()->json($allLawyers);
             }
-
+            
             // Obtener abogados paginados
             $lawyers = $query->paginate(10);
 
@@ -66,12 +68,12 @@ class AdminController extends Controller
                     'message' => 'Error al cargar los datos: ' . $e->getMessage()
                 ], 500);
             }
-
+            
             // Para peticiones normales, redirigir con error
             return back()->with('error', 'Error al cargar los datos');
         }
     }
-
+    
     // Método adicional para búsqueda rápida (opcional)
     public function search(Request $request)
     {
@@ -84,13 +86,13 @@ class AdminController extends Controller
 
             $lawyers = Lawyer::where(function($q) use ($searchTerm) {
                 $q->where('nombre', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
+                  ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
             })->limit(20)->get(['id', 'nombre', 'apellido', 'numero_documento']);
-
+            
             return response()->json([
                 'success' => true,
                 'data' => $lawyers,

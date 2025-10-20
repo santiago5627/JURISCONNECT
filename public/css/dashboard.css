@@ -25,6 +25,7 @@
     --color-surface: #FFFFFF; /* Color para paneles, modales, etc. */
     --color-border: #dee2e6; /* Borde gris claro */
 
+
     /* Tipografía */
     --font-family-sans: 'Poppins', sans-serif;
 
@@ -54,6 +55,8 @@
 /* ==============================================
    ===        ESTILOS GLOBALES Y RESET        ===
    ==============================================
+   == Estos estilos aseguran una base consistente para ===
+   
 */
 * {
     margin: 0;
@@ -1110,9 +1113,9 @@ tr:hover td {
     color: white;
 }
 
-/* ==============================================
-   ===        NAVEGACIÓN MEJORADA            ===
-   ==============================================
+/*  ==============================================
+    ===        NAVEGACIÓN MEJORADA            ===
+    ==============================================
 */
 .nav-btn {
     display: flex;

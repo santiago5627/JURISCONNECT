@@ -14,10 +14,13 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h2>Redactar Concepto Jurídico</h2>
-            <a href="{{ route('conceptos.create') }}" class="btn-back">
-                <i class="fas fa-arrow-left"></i> 
-                Volver a la Lista
+            <div class="header-content">
+                <h1>Procesos Pendientes de Concepto Jurídico</h1>
+                <p>Gestiona los procesos que requieren análisis jurídico</p>
+            </div>
+            <a class="cancel-btn" href="{{ route('dashboard.abogado') }}">
+                <i class="fas fa-arrow-left"></i>
+                Volver
             </a>
         </div>
 
