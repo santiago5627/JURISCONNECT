@@ -58,11 +58,10 @@
                     <h3 class="text-lg font-semibold mb-2">Conceptos Jurídicos</h3>
                     <p class="text-gray-600 mb-4">Emite nuevos conceptos y clasifícalos por tema.</p>
                     <a href="{{ route('conceptos.create') }}" 
-                       class="inline-block px-4 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition">
+                        class="inline-block px-4 py-2 bg-purple-700 text-white rounded-lg hover:bg-purple-800 transition">
                         Emitir
                     </a>
                 </div>
-
             </div>
         </div>
     </div>

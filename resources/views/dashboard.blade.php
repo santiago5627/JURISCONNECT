@@ -3,7 +3,6 @@
     <x-slot name="header">
         <!-- Header vacío para evitar conflictos -->
     </x-slot>
-
     <!-- Meta tag para CSRF token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -141,22 +140,29 @@
                 <!-- Input file oculto para la foto de perfil -->
                 <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
 
+                <!-- Indicador de carga (oculto por defecto) -->
+                <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+                    Subiendo...
+                </div>
+
                 <!-- Contenedor de la foto de perfil -->
-                <div class="profile-pic" onclick="document.getElementById('fileInput').click();" title="Haz clic para cambiar tu foto">
-                    <img src="{{ Auth::user()->profile_photo ? Storage::url(Auth::user()->profile_photo) : asset('img/Phoenix_Wright_in_Phoenix_Wright_Ace_Attorney.png') }}" 
+                <div class="profile-pic" onclick="document.getElementById('fileInput').click();" 
+                    style="cursor: pointer; position: relative;" 
+                    title="Haz clic para cambiar tu foto">
+                    <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}" 
                         id="profileImage" 
                         alt="Foto de perfil">
-                </div>
+                    </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
             </div>
 
             <div class="nav-menu">
                 <button class="nav-btn active" data-section="dashboard">
-                    📊 Dashboard
+                    Dashboard
                 </button>
                 <button class="nav-btn" data-section="lawyers">
-                    ⚖️ Gestión de Abogados
+                    Gestión de Abogados
                 </button>
             </div>
 
@@ -190,7 +196,7 @@
                 <!-- SECCIÓN DASHBOARD PRINCIPAL -->
                 <div class="section-content active" id="dashboard-section">
                     <div class="section-header">
-                        <h2>📊 Dashboard Principal</h2>
+                        <h2>Dashboard Principal</h2>
                         <p>Resumen general del sistema JustConnect SENA</p>
                     </div>
                     
@@ -231,7 +237,7 @@
                 <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
                 <div class="section-content" id="lawyers-section">
                     <div class="section-header">
-                        <h2>⚖️ Gestión de Abogados</h2>
+                        <h2>Gestión de Abogados</h2>
                         <p>Administrar el registro de abogados del sistema</p>
                     </div>
 
@@ -241,24 +247,24 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button class="btn-primary" id="createBtn"> CREAR NUEVO ABOGADO</button>
-                        <a href="{{ route('lawyers.export.excel') }}" class="btn-success"> EXPORTAR EXCEL</a>
-                        <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger"> EXPORTAR PDF</a>
+                        <button class="btn-primary" id="createBtn">CREAR NUEVO ABOGADO</button>
+                        <a href="{{ route('lawyers.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
+                        <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
 
-                    <!-- Incluir la tabla completa -->
-    @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
+                    @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
+                </div>
 
-<!-- SECCIÓN CONFIGURACIÓN -->
+                <!-- SECCIÓN CONFIGURACIÓN -->
                 <div class="section-content" id="settings-section">
                     <div class="section-header">
-                        <h2> Configuración del Sistema</h2>
+                        <h2>Configuración del Sistema</h2>
                         <p>Configuraciones generales y preferencias</p>
                     </div>
                     
                     <div class="settings-grid">
                         <div class="setting-card">
-                            <h3> Configuración General</h3>
+                            <h3>Configuración General</h3>
                             <div class="setting-item">
                                 <label>Nombre del Sistema:</label>
                                 <input type="text" value="JustConnect SENA" class="form-control">
@@ -270,7 +276,7 @@
                         </div>
                         
                         <div class="setting-card">
-                            <h3> Notificaciones</h3>
+                            <h3>Notificaciones</h3>
                             <div class="setting-item">
                                 <label>
                                     <input type="checkbox" checked> Notificar nuevos registros
@@ -283,7 +289,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
                 </div>
             </div>
         </div>

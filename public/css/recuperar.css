@@ -189,10 +189,12 @@ body {
 .btn-next {
     background: linear-gradient(135deg, #16a34a, #15803d);
     box-shadow: 0 6px 20px rgba(22, 163, 74, 0.3);
+    color: #ffff;
 }
 .btn-next:hover {
     background: linear-gradient(135deg, #166534, #15803d);
     transform: translateY(-2px);
+    
 }
 
 /* Footer SENA */

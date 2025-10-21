@@ -1,15 +1,13 @@
 <x-app-layout>
     <x-slot name="header">
-        </x-slot>
+    </x-slot>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Enlace a CSS corregido -->
-    <link rel="stylesheet" href="{{ asset('css/dashboardAbo.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/abogado.css') }}">
 
     <div class="dashboard-wrapper">
 
@@ -17,15 +15,26 @@
 
         <aside class="sidebar" id="sidebar">
             <div class="profile">
-                <div class="profile-pic">
-                    <img src="{{ asset('img/sena_logo.png') }}" alt="Perfil">
+                <!-- Input file oculto para la foto de perfil -->
+                <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
+
+                <!-- Indicador de carga (oculto por defecto) -->
+                <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+                    Subiendo...
+                </div>
+
+                <!-- Contenedor de la foto de perfil -->
+                <div class="profile-pic profile-pic-clickable" onclick="document.getElementById('fileInput').click();" title="Haz clic para cambiar tu foto">
+                    <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}" 
+                        id="profileImage" 
+                        alt="Foto de perfil">
                 </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
             </div>
             
             <nav class="nav-menu">
-                </nav>
+            </nav>
 
             <div class="sidebar-footer">
                 <div class="sena-logo">
@@ -77,8 +86,4 @@
             </div>
         </main>
     </div>
-
- <!-- Scripts -->
-    <script src="{{ asset('js/dash.js') }}"></script>
-
 </x-app-layout>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Proceso;
 use App\Models\ConceptoJuridico;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class ConceptoController extends Controller
 {

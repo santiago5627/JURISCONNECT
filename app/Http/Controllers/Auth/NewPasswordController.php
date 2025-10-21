@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Routing\Controller;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -57,10 +57,10 @@ class NewPasswordController extends Controller
             function ($user) use ($request) {
                 $user->forceFill([
                     'password' => Hash::make($request->password),
-                    'remember_token' => Str::random(60), // invalida sesiones viejas
+                    'remember_token' => Str::random(60), // 👈 asegura que se invaliden sesiones viejas
                 ])->save();
 
-                event(new PasswordReset($user));
+                event(new PasswordReset($user)); // 👈 dispara el evento
             }
         );
 

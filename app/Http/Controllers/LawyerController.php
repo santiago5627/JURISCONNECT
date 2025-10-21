@@ -9,46 +9,62 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SendCredentialsToLawyer;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
-class LawyerController extends Controller
+class LawyerController
 {
+    /**
+     * Verificar duplicados en correo y número de documento
+     */
     public function checkDuplicates(Request $request)
     {
         $duplicates = [];
-        
+
         if (Lawyer::where('numero_documento', $request->numero_documento)
-                    ->when($request->current_id, fn($q) => $q->where('id', '!=', $request->current_id))
-                    ->exists()) {
+                ->when($request->current_id, fn($q) => $q->where('id', '!=', $request->current_id))
+                ->exists()) {
             $duplicates[] = ['field' => 'numero_documento', 'value' => $request->numero_documento];
         }
-        
+
         if (Lawyer::where('correo', $request->correo)
-                    ->when($request->current_id, fn($q) => $q->where('id', '!=', $request->current_id))
-                    ->exists()) {
+                ->when($request->current_id, fn($q) => $q->where('id', '!=', $request->current_id))
+                ->exists()) {
             $duplicates[] = ['field' => 'correo', 'value' => $request->correo];
         }
-        
+
         return response()->json(['duplicates' => $duplicates]);
     }
 
+    /**
+     * Verificar si un campo específico ya existe
+     */
     public function checkField(Request $request)
     {
+        $allowed = ['numero_documento', 'correo'];
+        if (!in_array($request->field, $allowed)) {
+            return response()->json(['error' => 'Campo no válido'], 400);
+        }
+
         $exists = Lawyer::where($request->field, $request->value)->exists();
         return response()->json(['exists' => $exists]);
     }
 
-    public function index()
+    /**
+     * Listado de abogados con paginación
+     */
+    public function index(Request $request)
     {
-        $lawyers = Lawyer::with('user')->get();
+        $lawyers = Lawyer::with('user')->paginate(10);
         return view('lawyers.index', compact('lawyers'));
     }
 
     /**
-     * Crear nuevo abogado
+     * Crear nuevo abogado y usuario relacionado
      */
     public function store(Request $request)
     {
+        DB::beginTransaction();
+
         try {
             $validated = $request->validate([
                 'nombre' => 'required|string|max:255',
@@ -81,19 +97,24 @@ class LawyerController extends Controller
             $lawyer->user_id = $user->id;
             $lawyer->save();
 
+            // Enviar credenciales por correo
             Mail::to($validated['correo'])->send(new SendCredentialsToLawyer($user, $validated['numeroDocumento']));
+
+            DB::commit();
 
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Abogado creado correctamente y credenciales enviadas.',
-                    'lawyer' => $lawyer
+                    'lawyer' => $lawyer->load('user')
                 ], 201);
             }
 
             return redirect()->route('dashboard')->with('success', 'Abogado creado y credenciales enviadas.');
 
         } catch (\Exception $e) {
+            DB::rollBack();
+
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -114,10 +135,12 @@ class LawyerController extends Controller
     }
 
     /**
-     * Actualizar abogado existente
+     * Actualizar abogado existente y su usuario relacionado
      */
     public function update(Request $request, Lawyer $lawyer)
     {
+        DB::beginTransaction();
+
         try {
             $validated = $request->validate([
                 'nombre' => 'required|string|max:255',
@@ -129,19 +152,40 @@ class LawyerController extends Controller
                 'especialidad' => 'nullable|string|max:255',
             ]);
 
-            $lawyer->update($validated);
+            $lawyer->update([
+                'nombre' => $validated['nombre'],
+                'apellido' => $validated['apellido'],
+                'tipo_documento' => $validated['tipoDocumento'],
+                'numero_documento' => $validated['numeroDocumento'],
+                'correo' => $validated['correo'],
+                'telefono' => $validated['telefono'] ?? null,
+                'especialidad' => $validated['especialidad'] ?? null,
+            ]);
+
+            // Actualizar también el usuario asociado
+            if ($lawyer->user) {
+                $lawyer->user->update([
+                    'name' => $validated['nombre'] . ' ' . $validated['apellido'],
+                    'email' => $validated['correo'],
+                    'numero_documento' => $validated['numeroDocumento'],
+                ]);
+            }
+
+            DB::commit();
 
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
                     'message' => 'Abogado actualizado correctamente.',
-                    'lawyer' => $lawyer
+                    'lawyer' => $lawyer->load('user')
                 ]);
             }
 
             return redirect()->route('lawyers.index')->with('success', 'Abogado actualizado correctamente.');
 
         } catch (\Exception $e) {
+            DB::rollBack();
+
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -153,8 +197,13 @@ class LawyerController extends Controller
         }
     }
 
+    /**
+     * Eliminar abogado y su usuario relacionado
+     */
     public function destroy(Request $request, Lawyer $lawyer)
     {
+        DB::beginTransaction();
+
         try {
             if ($lawyer->user_id) {
                 $user = User::find($lawyer->user_id);
@@ -164,6 +213,8 @@ class LawyerController extends Controller
             }
 
             $lawyer->delete();
+
+            DB::commit();
 
             if ($request->ajax()) {
                 return response()->json([
@@ -175,6 +226,8 @@ class LawyerController extends Controller
             return redirect()->route('dashboard')->with('success', 'Abogado eliminado exitosamente.');
 
         } catch (\Exception $e) {
+            DB::rollBack();
+
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -186,13 +239,16 @@ class LawyerController extends Controller
         }
     }
 
+    /**
+     * Exportar listado de abogados en PDF
+     */
     public function exportPDF()
     {
         $lawyers = Lawyer::orderBy('nombre')->get();
         $logoPath = public_path('img/LogoInsti.png');
 
         $pdf = Pdf::loadView('exports.lawyers-pdf', compact('lawyers', 'logoPath'))
-                ->setPaper('a4', 'portrait');
+            ->setPaper('a4', 'portrait');
 
         return $pdf->download('listado_abogados.pdf');
     }

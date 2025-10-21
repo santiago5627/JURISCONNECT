@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Lawyer; // Importa el modelo de abogados
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Routing\Controller;
 
 class DashboardController extends Controller
 {

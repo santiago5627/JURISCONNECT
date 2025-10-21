@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Proceso;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Routing\Controller;
+use App\Models\Lawyer;
 
 class LegalProcessController extends Controller
 {
@@ -72,7 +73,7 @@ class LegalProcessController extends Controller
 
         // Si es petición normal (formulario), redirigir
         return redirect()
-            ->route('procesos.index')
+            ->route('mis.procesos')
             ->with('success', 'Proceso judicial creado con éxito.');
 
     } catch (\Illuminate\Validation\ValidationException $e) {
@@ -107,6 +108,7 @@ class LegalProcessController extends Controller
         $proceso = Proceso::findOrFail($id);
         return response()->json($proceso);
     }
+
 
     /**
      * Mostrar formulario de edición
@@ -149,7 +151,7 @@ class LegalProcessController extends Controller
         $proceso->delete();
 
         return redirect()
-            ->route('procesos.index')
+            ->route('mis.procesos')
             ->with('success', 'Proceso eliminado correctamente.');
     }
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Lawyer; // Asegúrate de importar el modelo
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+
 
 class AdminController extends Controller
 {
@@ -66,12 +68,10 @@ class AdminController extends Controller
                     'message' => 'Error al cargar los datos: ' . $e->getMessage()
                 ], 500);
             }
-
             // Para peticiones normales, redirigir con error
             return back()->with('error', 'Error al cargar los datos');
         }
     }
-
     // Método adicional para búsqueda rápida (opcional)
     public function search(Request $request)
     {

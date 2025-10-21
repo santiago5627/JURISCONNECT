@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('procesos', function (Blueprint $table) {
+    Schema::create('procesos', function (Blueprint $table) {
     $table->id();
     $table->string('tipo_proceso', 100);
     $table->string('numero_radicado', 62)->unique();
@@ -22,6 +22,9 @@ return new class extends Migration
     $table->enum('estado', ['Pendiente', 'En curso', 'Finalizado' ])->default('Pendiente');
     $table->timestamps();
 });
+
+
+
     }
 
     /**
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('procesos');
+        Schema::dropIfExists('concepto_juridicos');
     }
 };
