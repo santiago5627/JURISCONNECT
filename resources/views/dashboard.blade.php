@@ -218,10 +218,10 @@
                         </div>
                         
                         <div class="stat-card">
-                            <div class="stat-icon">✅</div>
+                            <div class="stat-icon">🧩 </div>
                             <div class="stat-info">
                                 <h3>{{ $completed_cases ?? 0 }}</h3>
-                                <p>Casos Completados</p>
+                                <p>Casos Pendientes</p>
                             </div>
                         </div>
                     </div>

@@ -510,7 +510,6 @@
                 <i class="fas fa-arrow-left"></i>
                 Volver
             </a>
-           
         </div>
 
 <!-- Alerta de éxito (oculta por defecto) -->
@@ -594,7 +593,7 @@
                         </div>
                         <div class="info-content">
                             <p>Fecha Radicación</p>
-                            <p>{{ $proceso->created_at }}</p>
+                            <p>{{ $proceso->created_at->format('d/m/Y H:i') }}</p>
                         </div>
                     </div>
                 </div>
@@ -621,21 +620,6 @@
                 </div>
             </div>
         </div>
-
-<!-- Estado sin procesos (comentado para mostrar la versión con procesos) -->
-        <!--  
-        <div class="empty-state">
-            <div class="empty-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h3>¡Excelente trabajo!</h3>
-            <p>No tienes procesos pendientes de concepto jurídico.</p>
-            <a href="{{ route('mis.procesos') }}" class="action-btn">
-                <i class="fas fa-eye"></i>
-                Ver Todos Mis Procesos
-            </a>
-        </div>
-        -->
     </div>
 
     <script>

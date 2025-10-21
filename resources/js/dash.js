@@ -30,12 +30,12 @@ function showCustomAlert(type, title = '', message = '', showCancel = false, con
 
         const buttonsHTML = showCancel
             ? `<div class="alert-buttons">
-                   <button class="alert-button secondary" id="cancelAlertBtn">${cancelText}</button>
-                   <button class="alert-button confirm" id="confirmAlertBtn">${confirmText}</button>
-               </div>`
+                <button class="alert-button secondary" id="cancelAlertBtn">${cancelText}</button>
+                <button class="alert-button confirm" id="confirmAlertBtn">${confirmText}</button>
+                </div>`
             : `<div class="alert-buttons">
-                   <button class="alert-button confirm" id="confirmAlertBtn">${confirmText}</button>
-               </div>`;
+                <button class="alert-button confirm" id="confirmAlertBtn">${confirmText}</button>
+                </div>`;
 
         alertOverlay.innerHTML = `
             <div class="custom-alert" id="customAlert" role="dialog" aria-modal="true">
@@ -472,7 +472,7 @@ function setupImageUpload() {
 }
 
 
-/* ========= BÚSQUEDA AJAX ========= */
+/* ========= BÚSQUEDA AJAX -- BARRA DE BUSQUEDA ========= */
 let searchTimeout;
 function performSearch(searchTerm) {
     const params = new URLSearchParams();
@@ -518,6 +518,26 @@ function clearSearch() {
     if (input) input.value = '';
     performSearch('');
 }
+
+
+/* ========= FUNSION DE LETRAS EN MAYUSCULAS EN LOS NOMBRE Y APELLIDOS ========= */
+document.addEventListener("DOMContentLoaded", function() {
+    const campos = ["nombre", "apellido"];
+
+    campos.forEach(id => {
+        const input = document.getElementById(id);
+
+        input.addEventListener("blur", () => {
+            if (input.value.trim() !== "") {
+                // Convierte solo la primera letra a mayúscula
+                input.value = input.value
+                    .toLowerCase()
+                    .replace(/^\p{L}/u, c => c.toUpperCase());
+            }
+        });
+    });
+});
+
 
 /* ========= PAGINACIÓN AJAX ========= */
 function handleAjaxPagination() {
