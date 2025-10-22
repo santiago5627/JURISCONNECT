@@ -530,7 +530,7 @@ document.addEventListener('submit', async function(e) {
     }
 });
 
-// Edición de abogados
+// Edición de abogados<
 document.addEventListener("click", function(e) {
     if (e.target.classList.contains("btn-edit")) {
         const row = e.target.closest("tr");
@@ -624,6 +624,7 @@ document.getElementById("createLawyerModal").querySelector("form").addEventListe
     }
 
     // VERIFICACIÓN DE DUPLICADOS (opcional - si implementas el endpoint)
+    //
     const hasDuplicates = await checkForDuplicates(data);
     if (hasDuplicates) {
         return; // Detener si hay duplicados

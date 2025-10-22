@@ -180,7 +180,7 @@
         </div>
 
         <!-- Contenido Principal -->
-        <div class="main-content" id="mainContent">
+    <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
                 <div class="title-logo-container">

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"> <!-- pagina para ver los procesos asignados al abogado -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,17 +7,19 @@
     <title>Procesos Judiciales</title>
 </head>
 <body>
-    <div id="viewProcessModal" class="modal">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeProcessModal()">&times;</span>
-            <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">Datos del Proceso</h2>
-            <div id="processModalBody">
-                <p>Cargando datos...</p>
-            </div>
+<!-- Modal para ver datos del proceso -->
+<div id="viewProcessModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
+    <div class="modal-content" style="background:white; border-radius:16px; max-width:500px; margin:auto; padding:2rem; position:relative;">
+        <span class="close-button" onclick="closeProcessModal()" style="position:absolute; top:1rem; right:1rem; font-size:2rem; cursor:pointer;">&times;</span>
+        <h2 style="font-size:1.25rem; font-weight:600; margin-bottom:1rem;">Datos del Proceso</h2>
+        <div id="processModalBody">
+            <p>Cargando datos...</p>
         </div>
     </div>
+</div>
 
     <div class="container">
+<!-- Header Principal -->
         <div class="main-header">
             <div class="header-content">
                 <div class="header-left">
@@ -33,10 +35,19 @@
                 </div>
                 <div class="header-stats">
                     <span class="stats-label">Total:</span>
-                    <span class="stats-value">{{ count($procesos) }}</span>
+                    <span class="pagination-info">{{ $procesos->total() }}</span>
                 </div>
             </div>
 
+<!-- Mensaje de éxito (ejemplo) -->
+            <div class="success-message" style="display: none;">
+                <svg class="success-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p class="success-text">Proceso creado exitosamente</p>
+            </div>
+
+<!-- Barra de acciones -->
             <div class="actions-bar">
                 <div class="actions-content">
                     <div class="info-text">

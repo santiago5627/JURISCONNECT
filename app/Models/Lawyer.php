@@ -18,8 +18,8 @@ class Lawyer extends Model
         'apellido',
         'tipo_documento',
         'numero_documento',
-        'correo',
         'telefono',
+        'correo',
         'especialidad',
         'user_id',
     ];

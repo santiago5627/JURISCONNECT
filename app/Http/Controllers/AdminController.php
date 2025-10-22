@@ -15,7 +15,6 @@ class AdminController extends Controller
             // Iniciar query builder
             $query = Lawyer::query();
             $searchTerm = $request->get('search');
-
             // Aplicar búsqueda si existe el término de búsqueda
             if ($searchTerm) {
                 $query->where(function($q) use ($searchTerm) {
@@ -34,7 +33,6 @@ class AdminController extends Controller
                 $allLawyers = $query->get();
                 return response()->json($allLawyers);
             }
-
             // Obtener abogados paginados
             $lawyers = $query->paginate(10);
 
