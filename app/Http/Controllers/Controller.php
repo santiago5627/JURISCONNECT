@@ -150,6 +150,4 @@ class LawyerController extends Controller
 
         return redirect()->route('dashboard')->with('success', 'Abogado eliminado exitosamente.');
     }
-
-    // ... (métodos de exportación)
 }

@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->rememberToken();
             $table->timestamps();
-            $table->string('foto_perfil')->nullable();
+            $table->string('profile_photo')->nullable();
         });
     }
     
