@@ -30,9 +30,5 @@ class AbogadoUserSeeder extends Seeder   // 👈 Aquí debe llamarse AbogadoUser
             'email_verified_at' => now(),
             'role_id' => $lawyerRole->id,
         ]);
-
-        $this->command->info('Usuario abogado creado:');
-        $this->command->info('Email: abogado@example.com');
-        $this->command->info('Contraseña: 123456');
     }
 }

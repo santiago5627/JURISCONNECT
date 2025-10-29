@@ -34,9 +34,5 @@ public function run(): void
         'role_id' => $adminRole->id,
         'remember_token' => Str::random(10),
     ]);
-
-    $this->command->info('Usuario Admin creado:');
-    $this->command->info('Email: brendaModa45@gmail.com');
-    $this->command->info('Contraseña: admin123');
 }
 }

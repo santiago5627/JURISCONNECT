@@ -13,7 +13,7 @@ class ProcesoSeeder extends Seeder
      */
     public function run(): void
     {
-    // Crea 20 registros falsos
-        Proceso::factory()->count(40)->create();
+    // Crea 10 registros falsos
+        Proceso::factory()->count(10)->create();
     }
 }

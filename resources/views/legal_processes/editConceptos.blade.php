@@ -478,15 +478,6 @@
 
 <body>
     <div class="container">
-        <!-- Header -->
-        <div class="header">
-            <h2>Redactar Concepto Jurídico</h2>
-            <a href="{{ route('conceptos.create') }}" class="btn-back">
-                <i class="fas fa-arrow-left"></i> 
-                Volver a la Lista
-            </a>
-        </div>
-
         <!-- Alert -->
         <div id="successAlert" class="alert">
             <i class="fas fa-check-circle"></i>
@@ -577,12 +568,11 @@
                                 rows="12" 
                                 class="form-textarea"
                                 placeholder="Ingresa aquí el análisis jurídico detallado del proceso...
-
-Estructura sugerida:
-1. Análisis de hechos
-2. Marco jurídico aplicable
-3. Análisis legal
-4. Conclusiones"
+                                Estructura sugerida:
+                                1. Análisis de hechos
+                                2. Marco jurídico aplicable
+                                3. Análisis legal
+                                4. Conclusiones"
                                 required
                             ></textarea>
                             <div id="conceptoCounter" class="char-counter">0 caracteres</div>
@@ -595,9 +585,10 @@ Estructura sugerida:
                     <!-- Botones de Acción -->
                     <div class="btn-group">
                         <a href="{{ route('conceptos.create') }}" class="btn btn-cancel">
-                            <i class="fas fa-times"></i> 
-                            Cancelar
+                        <i class="fas fa-arrow-left"></i>
+                        Volver
                         </a>
+    
                         <div class="btn-actions">
                             <button type="button" onclick="guardarBorrador()" class="btn btn-draft">
                                 <i class="fas fa-save"></i> 
@@ -612,63 +603,6 @@ Estructura sugerida:
                 </form>
             </div>
         </div>
-
-        <!-- Panel de Ayuda -->
-        <div class="help-panel">
-            <div class="help-header">
-                <h6>
-                    <i class="fas fa-question-circle" style="color: #3b82f6;"></i> 
-                    Guía para Redactar el Concepto
-                </h6>
-            </div>
-            <div class="help-body">
-                <div class="help-grid">
-                    <div class="help-section">
-                        <h6>Estructura Sugerida:</h6>
-                        <div class="help-list">
-                            <div class="help-item success">
-                                <i class="fas fa-check" style="color: #10b981;"></i>
-                                <span>Análisis de hechos</span>
-                            </div>
-                            <div class="help-item success">
-                                <i class="fas fa-check" style="color: #10b981;"></i>
-                                <span>Marco jurídico aplicable</span>
-                            </div>
-                            <div class="help-item success">
-                                <i class="fas fa-check" style="color: #10b981;"></i>
-                                <span>Análisis legal</span>
-                            </div>
-                            <div class="help-item success">
-                                <i class="fas fa-check" style="color: #10b981;"></i>
-                                <span>Conclusiones</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="help-section">
-                        <h6>Consideraciones:</h6>
-                        <div class="help-list">
-                            <div class="help-item warning">
-                                <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
-                                <span>Fundamentar en normatividad vigente</span>
-                            </div>
-                            <div class="help-item warning">
-                                <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
-                                <span>Usar lenguaje técnico apropiado</span>
-                            </div>
-                            <div class="help-item warning">
-                                <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
-                                <span>Ser claro y preciso</span>
-                            </div>
-                            <div class="help-item warning">
-                                <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
-                                <span>Incluir jurisprudencia si aplica</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -724,6 +658,7 @@ Estructura sugerida:
                 }, 1000);
             }, 1500);
         }
+        
     </script>
 </body>
 </html>
