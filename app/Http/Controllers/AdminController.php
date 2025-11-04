@@ -33,8 +33,8 @@ class AdminController extends Controller
                 $allLawyers = $query->get();
                 return response()->json($allLawyers);
             }
-            // Obtener abogados paginados
-            $lawyers = $query->paginate(10);
+            // Obtener abogados paginados 
+            $lawyers = $query->orderBy('id', 'asc')->paginate(10);
 
             // Mantener parámetros de búsqueda en la paginación
             $lawyers->appends($request->query());

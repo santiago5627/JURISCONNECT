@@ -10,18 +10,21 @@ return new class extends Migration
     {
         Schema::create('concepto_juridicos', function (Blueprint $table) {
             $table->id();
-            $table->string('numero_radicado')->unique();
-            $table->string('tipo_proceso');
-            $table->string('demandante');
-            $table->string('demandado');
-            $table->date('fecha_radicacion')->nullable();
-            $table->enum('estado', ['pendiente', 'en curso', 'finalizado'])->default('pendiente');
+            $table->string('titulo');
+            $table->string('categoria');
+            $table->text('descripcion');
             
-            // Relación con abogado
+            // Relación con abogado (antes de timestamps)
             $table->foreignId('abogado_id')->constrained('users')->onDelete('cascade');
             
+            // timestamps siempre al final
             $table->timestamps();
         });
     }
 
+    public function down(): void
+    {
+        // Corrección: debe coincidir con el nombre de la tabla creada
+        Schema::dropIfExists('concepto_juridicos');
+    }
 };

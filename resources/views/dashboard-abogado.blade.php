@@ -32,7 +32,7 @@
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
             </div>
-
+            
             <nav class="nav-menu">
             </nav>
 

@@ -78,4 +78,12 @@ class Proceso extends Model
     {
         return $this->documento ? asset('storage/' . $this->documento) : null;
     }
+
+    /**
+     * Relación: Un proceso tiene un concepto jurídico
+     */
+    public function concepto()
+    {
+        return $this->hasOne(ConceptoJuridico::class, 'proceso_id');
+    }
 }

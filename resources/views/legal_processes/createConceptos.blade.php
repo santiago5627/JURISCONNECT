@@ -22,13 +22,15 @@
         </div>
 
         <!-- Alert -->
-        <div id="successAlert" class="alert">
-            <i class="fas fa-check-circle"></i>
-            <span>Concepto guardado exitosamente</span>
-            <button onclick="this.parentElement.classList.remove('show')">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
+        @if(session('success'))
+            <div id="successAlert" class="alert show">
+                <i class="fas fa-check-circle"></i>
+                <span>{{ session('success') }}</span>
+                <button onclick="this.parentElement.classList.remove('show')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
 
         <!-- Información del Proceso -->
         <div class="card">
@@ -106,16 +108,17 @@
                             type="text"
                             id="titulo"
                             name="titulo"
+                            value="{{ old('titulo') }}"
                             class="form-input"
                             placeholder="Ejemplo: Análisis de la responsabilidad civil en el caso"
                             required
                             maxlength="120"
-                            >
+                        >
                         <div class="form-help">
                             Escribe un título breve y descriptivo para el concepto (máx. 120 caracteres).
                         </div>
                     </div>
-                    <!-- Concepto Jurídico Principal -->
+                    <!-- Concepto Jurídico Principal --> 
                     <div class="form-group">
                         <label for="concepto" class="form-label">
                             <i class="fas fa-gavel" style="color: #3b82f6;"></i> 
@@ -128,23 +131,23 @@
                         <div class="textarea-container">
                             <textarea 
                                 id="concepto" 
-                                name="concepto" 
+                                name="concepto"
                                 rows="12" 
                                 class="form-textarea"
-                                placeholder="Ingresa aquí el análisis jurídico detallado del proceso...
-
-    Estructura sugerida:
-    1. Análisis de hechos
-    2. Marco jurídico aplicable
-    3. Análisis legal
-    4. Conclusiones"
                                 required
-                            ></textarea>
+                            >{{ old('concepto') }}</textarea>
                             <div id="conceptoCounter" class="char-counter">0 caracteres</div>
                         </div>
                         <div id="conceptoError" class="form-error">
                             El concepto debe tener al menos 50 caracteres.
                         </div>
+                        @error('concepto')
+                            <div class="form-error show">{{ $message }}</div>
+                        @enderror
+
+                        @if($errors->has('general'))
+                            <div class="form-error show">{{ $errors->first('general') }}</div>
+                        @endif
                     </div>
 
                     <!-- Botones de Acción -->
@@ -154,10 +157,6 @@
                             Cancelar
                         </a>
                         <div class="btn-actions">
-                            <button type="button" onclick="guardarBorrador()" class="btn btn-draft">
-                                <i class="fas fa-save"></i> 
-                                Guardar Borrador
-                            </button>
                             <button type="submit" id="submitBtn" disabled class="btn btn-submit">
                                 <i class="fas fa-check"></i> 
                                 Finalizar Concepto
@@ -261,21 +260,6 @@
                 }
             });
         });
-
-        function guardarBorrador() {
-            // Mostrar mensaje temporal
-            const originalText = event.target.innerHTML;
-            event.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
-            event.target.disabled = true;
-
-            setTimeout(() => {
-                event.target.innerHTML = '<i class="fas fa-check"></i> Guardado';
-                setTimeout(() => {
-                    event.target.innerHTML = originalText;
-                    event.target.disabled = false;
-                }, 1000);
-            }, 1500);
-        }
     </script>
 </body>
 </html>

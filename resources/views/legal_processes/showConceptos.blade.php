@@ -128,6 +128,10 @@
                         <i class="fas fa-edit"></i>
                         Redactar Concepto Jurídico
                     </a>
+                    <a href="{{ route('legal_processes.conceptos', $proceso->id) }}">
+                        <i class="fas fa-times"></i> 
+                        ver proceso
+                    </a>
                 </div>
             </div>
         </div>
