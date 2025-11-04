@@ -205,7 +205,7 @@ document.getElementById('formProceso').addEventListener('submit', async function
 
         if (result.success) {
             alert('Proceso creado exitosamente');
-            window.location.href = '{{ route("legal_processes.index") }}';
+            window.location.href = '{{ route("legal_processes.create") }}';
         } else {
             // Mostrar errores de validación
             if (result.errors) {
