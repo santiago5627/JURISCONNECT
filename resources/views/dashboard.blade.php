@@ -180,7 +180,7 @@
         </div>
 
         <!-- Contenido Principal -->
-        <div class="main-content" id="mainContent">
+    <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
                 <div class="title-logo-container">
@@ -204,7 +204,7 @@
                         <div class="stat-card">
                             <div class="stat-icon">👨‍💼</div>
                             <div class="stat-info">
-                                <h3>{{$totalLawyers}}</h3>
+                                <h3>{{ $totalLawyers }}</h3>
                                 <p>Abogados Registrados</p>
                             </div>
                         </div>
@@ -218,10 +218,10 @@
                         </div>
                         
                         <div class="stat-card">
-                            <div class="stat-icon">🧩 </div>
+                            <div class="stat-icon">✅</div>
                             <div class="stat-info">
                                 <h3>{{ $completed_cases ?? 0 }}</h3>
-                                <p>Casos Pendientes</p>
+                                <p>Casos Completados</p>
                             </div>
                         </div>
                     </div>
