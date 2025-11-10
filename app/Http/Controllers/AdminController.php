@@ -15,15 +15,16 @@ class AdminController extends Controller
             // Iniciar query builder
             $query = Lawyer::query();
             $searchTerm = $request->get('search');
+
             // Aplicar búsqueda si existe el término de búsqueda
             if ($searchTerm) {
                 $query->where(function($q) use ($searchTerm) {
                     $q->where('nombre', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
+                      ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
+                      ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
                       // Agrega más campos según tu modelo Lawyer
                 });
             }
@@ -33,8 +34,9 @@ class AdminController extends Controller
                 $allLawyers = $query->get();
                 return response()->json($allLawyers);
             }
-            // Obtener abogados paginados 
-            $lawyers = $query->orderBy('id', 'asc')->paginate(10);
+
+            // Obtener abogados paginados
+            $lawyers = $query->paginate(10);
 
             // Mantener parámetros de búsqueda en la paginación
             $lawyers->appends($request->query());
@@ -66,10 +68,12 @@ class AdminController extends Controller
                     'message' => 'Error al cargar los datos: ' . $e->getMessage()
                 ], 500);
             }
+
             // Para peticiones normales, redirigir con error
             return back()->with('error', 'Error al cargar los datos');
         }
     }
+
     // Método adicional para búsqueda rápida (opcional)
     public function search(Request $request)
     {
@@ -82,11 +86,11 @@ class AdminController extends Controller
 
             $lawyers = Lawyer::where(function($q) use ($searchTerm) {
                 $q->where('nombre', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
+                  ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
+                  ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
             })->limit(20)->get(['id', 'nombre', 'apellido', 'numero_documento']);
 
             return response()->json([
@@ -94,7 +98,7 @@ class AdminController extends Controller
                 'data' => $lawyers,
                 'count' => $lawyers->count()
             ]);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

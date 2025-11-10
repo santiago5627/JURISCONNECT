@@ -3,47 +3,55 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+//use Illuminate\Database\Eloquent\SoftDeletes; 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Models\Role;
 
 class User extends Authenticatable
 {
+    use HasFactory, Notifiable; 
+
     use HasFactory, Notifiable;
 
-    // Atributos que se pueden asignar masivamente
+    /**
+     * Los atributos que se pueden asignar masivamente.
+     */
     protected $fillable = [
         'name',
         'email',
         'password',
         'foto_perfil',
         'password_changed',
-        'avatar',
-        'role_id',
-        'profile_photos',
+        'avatar',          // Campo para avatar
+        'role_id',         // Rol del usuario
+        'profile_photos'   
     ];
-
-    // Accesor para la ruta de la foto de perfil
     public function getProfilePhotoPathAttribute()
-    {
-        return $this->foto_perfil ? asset('storage/' . $this->foto_perfil) : null;
-    }
+        {
+            return $this->foto_perfil ? asset('storage/' . $this->foto_perfil) : null;
+        }
 
-    // Atributos ocultos para la serialización
+    /**
+     * Los atributos que deben estar ocultos para la serialización.
+     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    // Casts correctamente definidos
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
-
-    // Relación con Role
-    public function role()
+    /**
+     * Obtener los atributos que deben ser convertidos.
+     */
+    protected function casts(): array
     {
-        return $this->belongsTo(Role::class, 'role_id');
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
+    public function role()
+{
+    return $this->belongsTo(Role::class, 'role_id');
+}
+
 }
