@@ -1,5 +1,8 @@
 <!-- Paginación -->
             <div class="pagination-container">
+                <div class="pagination-content">
+            </div>
+
 <!-- Paginación desktop -->
             <div class="pagination-desktop">
                 <style>
@@ -72,7 +75,7 @@
                         $lastPage = $lawyers->lastPage();
                         $start = max(1, $currentPage - 2);
                         $end = min($lastPage, $currentPage + 2);
-                    @endphp
+                    @endphp 
 
                     @if ($start > 1)
                         <a href="{{ $lawyers->url(1) }}" class="pagination-btn ajax-page">1</a>

@@ -13,7 +13,6 @@ class User extends Authenticatable
 
     use HasFactory, Notifiable;
 
-
     /**
      * Los atributos que se pueden asignar masivamente.
      */
@@ -56,5 +55,3 @@ class User extends Authenticatable
 }
 
 }
-
-

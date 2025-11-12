@@ -53,7 +53,7 @@
         title="Mostrar contraseña"
         onclick="togglePasswordVisibility()">
 
-        <!-- 👁️‍🗨️ Ojo cerrado (se ve primero) -->
+        <!--  Ojo cerrado (se ve primero) -->
         <svg xmlns="http://www.w3.org/2000/svg" 
 
             id="eyeClosed"cambio 
@@ -67,7 +67,7 @@
             <path d="M17.94 17.94A10.12 10.12 0 0 1 12 20c-7 0-11-8-11-8a19.44 19.44 0 0 1 4.24-5.94M9.9 4.24A9.77 9.77 0 0 1 12 4c7 0 11 8 11 8a19.44 19.44 0 0 1-4.24 5.94M1 1l22 22"/>
         </svg>
 
-        <!-- 👁️ Ojo abierto (oculto al inicio) -->
+        <!--  Ojo abierto (oculto al inicio) -->
         <svg xmlns="http://www.w3.org/2000/svg" 
             id="eyeOpen" 
             width="22" height="22" 
@@ -126,7 +126,7 @@
         const eyeClosed = document.getElementById('eyeClosed');
         const eyeOpen = document.getElementById('eyeOpen');
 
-        // 👁️‍🗨️ Aseguramos que cargue con ojo cerrado
+        //  Aseguramos que cargue con ojo cerrado
         eyeClosed.style.display = 'inline';
         eyeOpen.style.display = 'none';
 

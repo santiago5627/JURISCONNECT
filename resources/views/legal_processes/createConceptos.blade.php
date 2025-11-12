@@ -1,636 +1,265 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
+<html lang="es"><!-- pagina para redactar un concepto juridico para un proceso especifico -->
+<head> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Procesos Pendientes - CSS Puro</title>
+    <title>Redactar Concepto Jurídico</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* Reset y base */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            min-height: 100vh;
-            color: #1f2937;
-            line-height: 1.6;
-        }
-
-        /* Navbar */
-        .navbar {
-            background: #ffffff;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .nav-container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 64px;
-        }
-
-        .nav-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .nav-brand i {
-            color: #3b82f6;
-            font-size: 1.5rem;
-        }
-
-        .nav-brand span {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #111827;
-        }
-
-        /* Container principal */
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 2rem;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .header-content h1 {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 0.5rem;
-        }
-
-        .header-content p {
-            color: #6b7280;
-            font-size: 1rem;
-        }
-
-        .cancel-btn {
-            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .cancel-btn:hover {
-            background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Alertas */
-        .alert {
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .alert-success {
-            background-color: #f0fdf4;
-            border: 1px solid #bbf7d0;
-            color: #166534;
-        }
-
-        .alert-info {
-            background-color: #eff6ff;
-            border: 1px solid #bfdbfe;
-            color: #1e40af;
-        }
-
-        .alert i {
-            font-size: 1.125rem;
-        }
-
-        .alert-success i {
-            color: #16a34a;
-        }
-
-        .alert-info i {
-            color: #3b82f6;
-        }
-
-        .alert-close {
-            margin-left: auto;
-            background: none;
-            border: none;
-            color: inherit;
-            cursor: pointer;
-            padding: 0.25rem;
-        }
-
-        /* Cards de procesos */
-        .process-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .process-card {
-            background: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f3f4f6;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .process-card:hover {
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            transform: translateY(-2px);
-        }
-
-        /* Header de cada card */
-        .card-header {
-            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-            color: white;
-            padding: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-title {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .card-title-icon {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-        }
-
-        .card-title h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .status-badge {
-            background: #fbbf24;
-            color: #92400e;
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            font-size: 0.875rem;
-            font-weight: 600;
-        }
-
-        /* Contenido del card */
-        .card-body {
-            padding: 1.5rem;
-        }
-
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .info-section {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-        }
-
-        .info-item-blue {
-            background-color: #eff6ff;
-        }
-
-        .info-item-green {
-            background-color: #f0fdf4;
-        }
-
-        .info-item-purple {
-            background-color: #faf5ff;
-        }
-
-        .info-item-orange {
-            background-color: #fff7ed;
-        }
-
-        .info-item-red {
-            background-color: #fef2f2;
-        }
-
-        .info-icon {
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .info-icon-blue {
-            background-color: #dbeafe;
-            color: #2563eb;
-        }
-
-        .info-icon-green {
-            background-color: #dcfce7;
-            color: #16a34a;
-        }
-
-        .info-icon-purple {
-            background-color: #e9d5ff;
-            color: #9333ea;
-        }
-
-        .info-icon-orange {
-            background-color: #fed7aa;
-            color: #ea580c;
-        }
-
-        .info-icon-red {
-            background-color: #fecaca;
-            color: #dc2626;
-        }
-
-        .info-content p:first-child {
-            font-size: 0.875rem;
-            color: #6b7280;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .info-content p:last-child {
-            font-weight: 700;
-            color: #111827;
-        }
-
-        /* Footer del card */
-        .card-footer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #f3f4f6;
-            flex-wrap: wrap;
-        }
-
-        .timestamp {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        .action-btn {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-            color: white;
-            padding: 0.75rem 2rem;
-            border: none;
-            border-radius: 0.5rem;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-weight: 600;
-            font-size: 0.875rem;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .action-btn:hover {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        /* Recordatorio */
-        .reminder {
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-            border: 1px solid #fcd34d;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .reminder-content {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-
-        .reminder-icon {
-            background: #fde68a;
-            padding: 0.75rem;
-            border-radius: 50%;
-            color: #d97706;
-            font-size: 1.25rem;
-        }
-
-        .reminder-text h4 {
-            font-weight: 700;
-            color: #92400e;
-            margin-bottom: 0.5rem;
-        }
-
-        .reminder-text p {
-            color: #b45309;
-            line-height: 1.6;
-        }
-
-        /* Estado sin procesos */
-        .empty-state {
-            background: white;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            padding: 3rem;
-            text-align: center;
-        }
-
-        .empty-icon {
-            background: #dcfce7;
-            width: 96px;
-            height: 96px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-        }
-
-        .empty-icon i {
-            color: #16a34a;
-            font-size: 2.5rem;
-        }
-
-        .empty-state h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 1rem;
-        }
-
-        .empty-state p {
-            font-size: 1.125rem;
-            color: #6b7280;
-            margin-bottom: 2rem;
-        }
-
-        /* Animaciones */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out forwards;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            .header {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 1rem;
-            }
-
-            .header-content h1 {
-                font-size: 1.5rem;
-            }
-
-            .card-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .card-footer {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 1rem;
-            }
-
-            .action-btn {
-                justify-content: center;
-                width: 100%;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .card-header {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .nav-container {
-                padding: 0 0.5rem;
-            }
-
-            .nav-brand span {
-                font-size: 1rem;
-            }
-        }
-
-        /* Utilidades */
-        .hidden {
-            display: none;
-        }
-
-        .font-bold {
-            font-weight: 700;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-    </style>
+    <!-- Enlace a CSS corregido -->
+    <link rel="stylesheet" href="{{ asset('css/createCon.css') }}">
 </head>
-<body>
-<!-- Navbar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <i class="fas fa-balance-scale"></i>
-                <span>Sistema Jurídico</span>
-            </div>
-        </div>
-    </nav>
 
+<body>
     <div class="container">
-<!-- Header -->
+        <!-- Header -->
         <div class="header">
-            <div class="header-content">
-                <h1>Procesos Pendientes de Concepto Jurídico</h1>
-                <p>Gestiona los procesos que requieren análisis jurídico</p>
-            </div>
-            <a class="cancel-btn" href="{{ route('dashboard.abogado') }}">
-                <i class="fas fa-arrow-left"></i>
-                Volver
+            <h2>Redactar Concepto Jurídico</h2>
+            <a href="{{ route('conceptos.create') }}" class="btn-back">
+                <i class="fas fa-arrow-left"></i> 
+                Volver a la Lista
             </a>
         </div>
 
-<!-- Alerta de éxito (oculta por defecto) -->
-        <div id="success-alert" class="alert alert-success hidden">
-            <i class="fas fa-check-circle"></i>
-            <span>Operación realizada exitosamente.</span>
-            <button class="alert-close" onclick="closeAlert('success-alert')">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
+        <!-- Alert -->
+        @if(session('success'))
+            <div id="successAlert" class="alert show">
+                <i class="fas fa-check-circle"></i>
+                <span>{{ session('success') }}</span>
+                <button onclick="this.parentElement.classList.remove('show')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        @endif
 
-
-<!-- Info de procesos pendientes -->
-<div class="alert alert-info">
-    <i class="fas fa-info-circle"></i>
-    <div>
-        <p class="font-bold">Procesos Pendientes</p>
-        
-    </div>
-</div>
-
-<!-- Lista de Procesos -->
-<div class="process-grid">
-    @foreach($procesos as $proceso)
-        <div class="process-card fade-in-up">
+        <!-- Información del Proceso -->
+        <div class="card">
             <div class="card-header">
-                <div class="card-title">
-                    <div class="card-title-icon">
-                        <i class="fas fa-gavel"></i>
-                    </div>
-                    <h3>Proceso Legal</h3>
-                    <h3>{{ $proceso->id }}</h3>
-                </div>
-                <span class="status-badge">{{ $proceso->estado }}</span>
+                <h5>
+                    <i class="fas fa-info-circle"></i> 
+                    Información del Proceso
+                </h5>
+                <span class="badge">{{ $proceso->estado }}</span>
             </div>
             <div class="card-body">
-                <div class="card-grid">
-                    <div class="info-section">
-                        <div class="info-item info-item-blue">
-                            <div class="info-icon info-icon-blue">
-                                <i class="fas fa-hashtag"></i>
+                <div class="info-grid">
+                    <div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-hashtag" style="color: #3b82f6;"></i>
+                                Número de Radicado:
                             </div>
-                            <div class="info-content">
-                                <p>Radicado</p>
-                                <p>{{ $proceso->numero_radicado }}</p>
-                            </div>
+                            <div class="info-value primary">{{ $proceso->numero_radicado }}</div>
                         </div>
-                        <div class="info-item info-item-green">
-                            <div class="info-icon info-icon-green">
-                                <i class="fas fa-balance-scale"></i>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-balance-scale" style="color: #10b981;"></i>
+                                Tipo de Proceso:
                             </div>
-                            <div class="info-content">
-                                <p>Tipo de Proceso</p>
-                                <p>{{ $proceso->tipo_proceso }}</p>
-                            </div>
+                            <div class="info-value">{{ $proceso->tipo_proceso }}</div>
                         </div>
-                    </div>
-                    <div class="info-section">
-                        <div class="info-item info-item-orange">
-                            <div class="info-icon info-icon-orange">
-                                <i class="fas fa-user-plus"></i>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-calendar-alt" style="color: #8b5cf6;"></i>
+                                Fecha de Radicación:
                             </div>
-                            <div class="info-content">
-                                <p>Demandante</p>
-                                <p>{{ $proceso->demandante }}</p>
-                            </div>
-                        </div>
-                        <div class="info-item info-item-red">
-                            <div class="info-icon info-icon-red">
-                                <i class="fas fa-user-minus"></i>
-                            </div>
-                            <div class="info-content">
-                                <p>Demandado</p>
-                                <p>{{ $proceso->demandado }}</p>
-                            </div>
+                            <div class="info-value">{{ $proceso->created_at }}</div>
                         </div>
                     </div>
-                    <div class="info-item info-item-purple">
-                        <div class="info-icon info-icon-purple">
-                            <i class="fas fa-calendar-alt"></i>
+                    <div>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-user-plus" style="color: #f59e0b;"></i>
+                                Demandante:
+                            </div>
+                            <div class="info-value">{{ $proceso->demandante }}</div>
                         </div>
-                        <div class="info-content">
-                            <p>Fecha Radicación</p>
-                            <p>{{ $proceso->created_at->format('d/m/Y H:i') }}</p>
+                        <div class="info-item">
+                            <div class="info-label">
+                                <i class="fas fa-user-minus" style="color: #ef4444;"></i>
+                                Demandado:
+                            </div>
+                            <div class="info-value">{{ $proceso->demandado }}</div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer">
-                    <a href="{{ route('abogado.crear-concepto', $proceso->id) }}" class="action-btn">
-                        <i class="fas fa-edit"></i>
-                        Redactar Concepto Jurídico
-                    </a>
                 </div>
             </div>
         </div>
-    @endforeach
-</div>
 
-<!-- Recordatorio -->
-        <div class="reminder">
-            <div class="reminder-content">
-                <div class="reminder-icon">
-                    <i class="fas fa-lightbulb"></i>
-                </div>
-                <div class="reminder-text">
-                    <h4>Recordatorio Importante</h4>
-                    <p>Los conceptos jurídicos deben ser claros, precisos y fundamentados en la normatividad vigente. Asegúrate de incluir todas las referencias legales pertinentes y un análisis detallado del caso.</p>
+        <!-- Formulario del Concepto Jurídico -->
+        <div class="card">
+            <div class="card-header primary">
+                <h5>
+                    <i class="fas fa-pen-alt"></i> 
+                    Redactar Concepto Jurídico
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="conceptoForm" method="POST" action="{{ route('conceptos.store', $proceso->id) }}">
+                    @csrf
+                    <!-- Título del Concepto Jurídico -->
+                    <div class="form-group">
+                        <label for="titulo" class="form-label">
+                            <i class="fas fa-heading" style="color: #6366f1;"></i>
+                                Título del Concepto
+                            <span class="required">*</span>
+                        </label>
+                        <input
+                            type="text"
+                            id="titulo"
+                            name="titulo"
+                            value="{{ old('titulo') }}"
+                            class="form-input"
+                            placeholder="Ejemplo: Análisis de la responsabilidad civil en el caso"
+                            required
+                            maxlength="120"
+                        >
+                        <div class="form-help">
+                            Escribe un título breve y descriptivo para el concepto (máx. 120 caracteres).
+                        </div>
+                    </div>
+                    <!-- Concepto Jurídico Principal --> 
+                    <div class="form-group">
+                        <label for="concepto" class="form-label">
+                            <i class="fas fa-gavel" style="color: #3b82f6;"></i> 
+                            Concepto Jurídico 
+                            <span class="required">*</span>
+                        </label>
+                        <div class="form-help">
+                            Redacta un análisis jurídico completo y fundamentado del caso (mínimo 50 caracteres).
+                        </div>
+                        <div class="textarea-container">
+                            <textarea 
+                                id="concepto" 
+                                name="concepto"
+                                rows="12" 
+                                class="form-textarea"
+                                required
+                            >{{ old('concepto') }}</textarea>
+                            <div id="conceptoCounter" class="char-counter">0 caracteres</div>
+                        </div>
+                        <div id="conceptoError" class="form-error">
+                            El concepto debe tener al menos 50 caracteres.
+                        </div>
+                        @error('concepto')
+                            <div class="form-error show">{{ $message }}</div>
+                        @enderror
+
+                        @if($errors->has('general'))
+                            <div class="form-error show">{{ $errors->first('general') }}</div>
+                        @endif
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="btn-group">
+                        <a href="{{ route('conceptos.create') }}" class="btn btn-cancel">
+                            <i class="fas fa-times"></i> 
+                            Cancelar
+                        </a>
+                        <div class="btn-actions">
+                            <button type="submit" id="submitBtn" disabled class="btn btn-submit">
+                                <i class="fas fa-check"></i> 
+                                Finalizar Concepto
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Panel de Ayuda -->
+        <div class="help-panel">
+            <div class="help-header">
+                <h6>
+                    <i class="fas fa-question-circle" style="color: #3b82f6;"></i> 
+                    Guía para Redactar el Concepto
+                </h6>
+            </div>
+            <div class="help-body">
+                <div class="help-grid">
+                    <div class="help-section">
+                        <h6>Estructura Sugerida:</h6>
+                        <div class="help-list">
+                            <div class="help-item success">
+                                <i class="fas fa-check" style="color: #10b981;"></i>
+                                <span>Análisis de hechos</span>
+                            </div>
+                            <div class="help-item success">
+                                <i class="fas fa-check" style="color: #10b981;"></i>
+                                <span>Marco jurídico aplicable</span>
+                            </div>
+                            <div class="help-item success">
+                                <i class="fas fa-check" style="color: #10b981;"></i>
+                                <span>Análisis legal</span>
+                            </div>
+                            <div class="help-item success">
+                                <i class="fas fa-check" style="color: #10b981;"></i>
+                                <span>Conclusiones</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="help-section">
+                        <h6>Consideraciones:</h6>
+                        <div class="help-list">
+                            <div class="help-item warning">
+                                <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
+                                <span>Fundamentar en normatividad vigente</span>
+                            </div>
+                            <div class="help-item warning">
+                                <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
+                                <span>Usar lenguaje técnico apropiado</span>
+                            </div>
+                            <div class="help-item warning">
+                                <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
+                                <span>Ser claro y preciso</span>
+                            </div>
+                            <div class="help-item warning">
+                                <i class="fas fa-exclamation-triangle" style="color: #f59e0b;"></i>
+                                <span>Incluir jurisprudencia si aplica</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        function closeAlert(alertId) {
-            document.getElementById(alertId).classList.add('hidden');
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const conceptoTextarea = document.getElementById('concepto');
+            const counter = document.getElementById('conceptoCounter');
+            const submitBtn = document.getElementById('submitBtn');
+            const errorDiv = document.getElementById('conceptoError');
 
-        // Ejemplo para mostrar alerta de éxito
-        function showSuccessAlert() {
-            document.getElementById('success-alert').classList.remove('hidden');
-        }
+            // Contador de caracteres
+            conceptoTextarea.addEventListener('input', function() {
+                const length = this.value.length;
+                counter.textContent = length + ' caracteres';
+
+                // Cambiar color según la longitud
+                if (length < 50) {
+                    counter.className = 'char-counter error';
+                    submitBtn.disabled = true;
+                    errorDiv.classList.add('show');
+                    this.classList.add('error');
+                } else {
+                    counter.className = 'char-counter success';
+                    submitBtn.disabled = false;
+                    errorDiv.classList.remove('show');
+                    this.classList.remove('error');
+                }
+            });
+
+            // Trigger inicial
+            conceptoTextarea.dispatchEvent(new Event('input'));
+
+            // Confirmación antes de enviar
+            document.getElementById('conceptoForm').addEventListener('submit', function(e) {
+                if (!confirm('¿Estás seguro de que deseas finalizar este concepto? Una vez enviado, no podrás modificarlo.')) {
+                    e.preventDefault();
+                }
+            });
+        });
     </script>
 </body>
 </html>

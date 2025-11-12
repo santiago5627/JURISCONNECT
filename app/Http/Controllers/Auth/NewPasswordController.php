@@ -21,7 +21,7 @@ class NewPasswordController extends Controller
             'token' => $token,
             'email' => $request->email,
         ]);
-    }
+    } 
 
     /**
      * Procesa el restablecimiento de la contraseña.

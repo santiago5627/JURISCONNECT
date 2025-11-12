@@ -11,6 +11,10 @@ class Proceso extends Model
 
     protected $table = 'procesos';
 
+    protected $attributes = [
+        'estado' => 'pendiente', // Valor por defecto
+    ];
+
     protected $fillable = [
         'tipo_proceso',
         'numero_radicado',
@@ -73,5 +77,13 @@ class Proceso extends Model
     public function getDocumentoUrlAttribute()
     {
         return $this->documento ? asset('storage/' . $this->documento) : null;
+    }
+
+    /**
+     * Relación: Un proceso tiene un concepto jurídico
+     */
+    public function concepto()
+    {
+        return $this->hasOne(ConceptoJuridico::class, 'proceso_id');
     }
 }

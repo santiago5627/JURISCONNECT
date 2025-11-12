@@ -149,7 +149,7 @@
                 <div class="profile-pic" onclick="document.getElementById('fileInput').click();" 
                     style="cursor: pointer; position: relative;" 
                     title="Haz clic para cambiar tu foto">
-                    <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}" 
+                    <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/BlLSnT5oeFFF8wclgd0Br6yMXnf84tTq7KmojXkA.jpg') }}" 
                         id="profileImage" 
                         alt="Foto de perfil">
                     </div>

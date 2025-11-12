@@ -1,19 +1,38 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ConceptoJuridico extends Model
 {
     protected $fillable = [
-        'numero_radicado',
-        'tipo_proceso', 
-        'demandante',
-        'demandado',
-        'fecha_radicacion',
+        'titulo',
+        'categoria', 
+        'descripcion',
+        'abogado_id',
         'estado',
-        'abogado_id'
+        'concepto',
+        'fecha_radicacion',
+        // removed created_at, updated_at from fillable (Laravel los maneja)
     ];
-    
+
+    protected $casts = [
+        'fecha_radicacion' => 'date',
+    ];
+
+    // Relación con el abogado (usuario)
+    public function abogado(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'abogado_id');
+    }
+
+    // Relación con el proceso
+    public function proceso()
+    {
+        return $this->belongsTo(Proceso::class, 'proceso_id');
+    }
 }

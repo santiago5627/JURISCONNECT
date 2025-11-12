@@ -14,7 +14,7 @@
     <!-- Contenedor principal -->
 
     <div class="main-container">
-        
+
         <!-- Izquierda: Logo -->
         <div class="left-section">
             <img class="logo-jurisconnect" src="{{ asset('img/LogoJ.png') }}" alt="JurisConnect">

@@ -19,8 +19,8 @@ class AbogadoController extends Controller
      */
     public function index()
     {
-        $estadisticas = $this->getEstadisticas();
-        return view('dashboard-abogado', $estadisticas);
+        //$estadisticas = $this->getEstadisticas();
+        return view('dashboard-abogado',);
     }
 
     /**
@@ -214,7 +214,7 @@ class AbogadoController extends Controller
         try {
             $proceso = Proceso::findOrFail($id);
 
-            return view('legal_processes.editConceptos', compact('proceso'));
+            return view('legal_processes.createConceptos', compact('proceso'));
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Proceso no encontrado');

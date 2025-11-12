@@ -6,29 +6,27 @@
         <div class="card-body">
             {{-- Datos Generales --}}
             <h4>Datos Generales</h4>
-            <p><strong>Tipo de proceso:</strong> {{ $proceso->tipo_proceso }}</p>
-            <p><strong>Número de radicado:</strong> {{ $proceso->numero_radicado }}</p>
-            <p><strong>Fecha de radicación:</strong> {{ $proceso->fecha_radicacion ?? 'No registrada' }}</p>
-            <p><strong>Juzgado / Tribunal:</strong> {{ $proceso->juzgado ?? 'No registrado' }}</p>
-            <p><strong>Etapa procesal:</strong> {{ $proceso->etapa_procesal ?? 'No registrada' }}</p>
-
-            <hr>
-
+            <p><strong>Tipo de proceso:</strong> {{ $concepto->titulo }}</p>
+            <p><strong>Número de radicado:</strong> {{ $concepto->categoria }}</p>
+            <p><strong>Juzgado / Tribunal:</strong> {{ $concepto->descripcion ?? 'No registrado' }}</p>
+            <p><strong>Etapa procesal:</strong> {{ $concepto->estado ?? 'No registrada' }}</p>
+            <p><strong>Fecha de radicación:</strong> {{ $concepto->fecha_radicacion ?? 'No registrada' }}</p>
+ 
             {{-- Partes Involucradas --}}
             <h4>Partes Involucradas</h4>
             <p><strong>Demandante(s):</strong> {{ $proceso->demandante }}</p>
             <p><strong>Demandado(s):</strong> {{ $proceso->demandado }}</p>
-            <p><strong>Abogado(s):</strong> {{ $proceso->abogado ?? 'No registrado' }}</p>
+            <!-- <p><strong>Abogado(s):</strong> {{ $conceptos->abogado ?? 'No registrado' }}</p> -->
 
             <hr>
 
             {{-- Información Jurídica --}}
             <h4>Información Jurídica</h4>
-            <p><strong>Pretensiones:</strong> {{ $proceso->pretensiones ?? 'No registradas' }}</p>
-            <p><strong>Hechos:</strong> {{ $proceso->hechos ?? 'No registrados' }}</p>
-            <p><strong>Fundamentos de derecho:</strong> {{ $proceso->fundamentos_derecho ?? 'No registrados' }}</p>
-            <p><strong>Pruebas:</strong> {{ $proceso->pruebas ?? 'No registradas' }}</p>
-            <p><strong>Medidas cautelares:</strong> {{ $proceso->medidas_cautelares ?? 'No registradas' }}</p>
+            <p><strong>Pretensiones:</strong> {{ $concepto->pretensiones ?? 'No registradas' }}</p>
+            <p><strong>Hechos:</strong> {{ $concepto->hechos ?? 'No registrados' }}</p>
+            <p><strong>Fundamentos de derecho:</strong> {{ $concepto->fundamentos_derecho ?? 'No registrados' }}</p>
+            <p><strong>Pruebas:</strong> {{ $concepto->pruebas ?? 'No registradas' }}</p>
+            <p><strong>Medidas cautelares:</strong> {{ $concepto->medidas_cautelares ?? 'No registradas' }}</p>
 
             <hr>
 

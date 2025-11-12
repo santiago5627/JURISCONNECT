@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout> 
 
 <div class="container mt-4">
     <div class="row justify-content-center">

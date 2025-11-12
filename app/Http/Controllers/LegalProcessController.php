@@ -26,7 +26,7 @@ class LegalProcessController extends Controller
         $query->search($search); // Usa el scopeSearch del modelo Proceso
     }
 
-    $procesos = $query->latest()->paginate(10);
+    $procesos = Proceso::orderBy('id', 'asc')->paginate(10);
 
     // Si es AJAX, retorna solo la tabla
     if ($request->ajax()) {

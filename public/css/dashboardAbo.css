@@ -1,4 +1,4 @@
-        /* CSS Variables para un manejo de tema más sencillo */
+
         :root {
             --primary-color: #28a745;
             --primary-dark-color: #218838;
@@ -6,7 +6,7 @@
             --danger-dark-color: #c82333;
             --background-color: #f8f9fa;
             --sidebar-bg: #ffffff;
-            --text-color: #343a40;
+            --text-color: #343a40; 
             --text-muted-color: #6c757d;
             --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
             --transition-speed: 0.3s;
@@ -49,6 +49,32 @@
             transform: translateX(0);
         }
 
+        .profile {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .profile-pic img {
+            width: 90px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .profile h3 {
+            margin: 10px 0 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .profile p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--text-muted-color);
+        }
+
         .nav-menu {
             flex-grow: 1;
             display: flex;
@@ -87,7 +113,6 @@
             width: 70px;
             opacity: 0.7;
             margin-bottom: 20px;
-            margin-left: 75px;
         }
 
         .logout-btn {
@@ -158,7 +183,6 @@
             font-size: 1.1rem;
             color: var(--text-muted-color);
             margin-bottom: 30px;
-            padding-left: 500px;
         }
         
         .welcome-message strong {
@@ -167,19 +191,14 @@
         }
 
         .cards-container {
-            display: flex;
-            justify-content: center; /* Centra horizontalmente */
-            align-items: stretch; /* Asegura altura uniforme */
-            gap: 200px; /* Más separación entre tarjetas */
-            flex-wrap: wrap; /* Permite que se acomoden en móviles */
-            margin-top: 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
         }
 
         .dashboard-card {
-            flex: 1 1 300px; /* Ocupan mínimo 300px y se adaptan */
-            max-width: 350px; /* No se hacen demasiado grandes */
             background: #ffffff;
-            padding: 55px;
+            padding: 25px;
             border-radius: 12px;
             box-shadow: var(--card-shadow);
             text-align: center;
@@ -204,11 +223,12 @@
             font-weight: 600;
         }
 
-
-.dashboard-card p {
-    min-height: auto; /* Quita la altura forzada */
-    margin-bottom: 20px;
-}
+        .dashboard-card p {
+            color: var(--text-muted-color);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            min-height: 50px; /* Para alinear botones */
+        }
 
         .dashboard-card a {
             display: inline-block;
@@ -258,63 +278,3 @@
                 font-size: 1.4rem;
             }
         }
-        
-    /* Estilos para la foto de perfil clickeable */
-        /* Estilos para la foto de perfil clickeable */
-.profile-pic-clickable {
-    cursor: pointer;
-    position: relative;
-    width: 130px;
-    height: 130px;
-    margin: 0 auto 20px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 5px solid #28a745;
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
-    transition: all 0.4s ease;
-}
-
-.profile-pic-clickable:hover::before {
-    opacity: 1;
-}
-
-.profile-pic-clickable:hover {
-    transform: scale(1.08) translateY(-3px);
-    box-shadow: 0 10px 30px rgba(40, 167, 69, 0.5);
-    border-color: #20c997;
-}
-
-.profile-pic-clickable img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.4s ease;
-}
-
-.profile-pic-clickable:hover img {
-    transform: scale(1.1);
-}
-
-.profile {
-    text-align: center;
-    margin-bottom: 30px;
-    padding: 25px 15px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 15px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.profile h3 {
-    margin: 12px 0 8px;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #333;
-    letter-spacing: -0.5px;
-}
-
-.profile p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: #6c757d;
-    font-weight: 500;
-}
