@@ -69,7 +69,7 @@ class LawyerController extends Controller
             'tipoDocumento' => 'required|string|in:CC,CE,PAS',
             'numeroDocumento' => 'required|string|max:20|unique:lawyers,numero_documento',
             'correo' => 'required|email|unique:lawyers,correo',
-            'telefono' => 'nullable|string|max:20',
+            'telefono' => 'required|string|max:10',
             'especialidad' => 'nullable|string|max:255',
         ]);
 

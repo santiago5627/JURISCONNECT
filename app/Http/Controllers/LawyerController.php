@@ -13,90 +13,35 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Routing\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LawyersExport;
+
 
 class LawyerController extends Controller
 {
     /**
-     * Verificar duplicados en correo y número de documento
+     * Mapeo de campos frontend a backend
      */
-    public function checkDuplicates(Request $request)
-    {
-        try {
-            $duplicates = [];
-
-            // Verificar número de documento
-            if ($request->has('numero_documento') && $request->numero_documento) {
-                $query = Lawyer::where('numero_documento', $request->numero_documento);
-                
-                if ($request->has('current_id') && $request->current_id) {
-                    $query->where('id', '!=', $request->current_id);
-                }
-                
-                if ($query->exists()) {
-                    $duplicates[] = [
-                        'field' => 'numero_documento',
-                        'value' => $request->numero_documento,
-                        'message' => 'El número de documento ya está registrado'
-                    ];
-                }
-            }
-
-            // Verificar correo
-            if ($request->has('correo') && $request->correo) {
-                $query = Lawyer::where('correo', $request->correo);
-                
-                if ($request->has('current_id') && $request->current_id) {
-                    $query->where('id', '!=', $request->current_id);
-                }
-                
-                if ($query->exists()) {
-                    $duplicates[] = [
-                        'field' => 'correo',
-                        'value' => $request->correo,
-                        'message' => 'El correo electrónico ya está registrado'
-                    ];
-                }
-            }
-
-            // Verificar numero de telefono
-            if ($request->has('telefono') && $request->telefono) {
-                $query = Lawyer::where('telefono', $request->telefono);
-                
-                if ($request->has('current_id') && $request->current_id) {
-                    $query->where('id', '!=', $request->current_id);
-                }
-                
-                if ($query->exists()) {
-                    $duplicates[] = [
-                        'field' => 'telefono',
-                        'value' => $request->telefono   ,
-                        'message' => 'El correo electrónico ya está registrado'
-                    ];
-                }
-            }
-
-            return response()->json([
-                'success' => true,
-                'duplicates' => $duplicates,
-                'has_duplicates' => count($duplicates) > 0
-            ]);
-
-        } catch (\Exception $e) {
-            Log::error('Error en checkDuplicates', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
-            return response()->json([
-                'success' => false,
-                'error' => 'Error del servidor',
-                'message' => config('app.debug') ? $e->getMessage() : 'Error interno del servidor'
-            ], 500);
-        }
-    }
+    private const FIELD_MAP = [
+        'numeroDocumento' => 'numero_documento',
+        'numero_documento' => 'numero_documento',
+        'correo' => 'correo',
+        'telefono' => 'telefono',
+        'nombre' => 'nombre',
+        'apellido' => 'apellido'
+    ];
 
     /**
-     * Verificar si un campo específico ya existe
+     * Mensajes de duplicados por campo
+     */
+    private const DUPLICATE_MESSAGES = [
+        'numero_documento' => 'El número de documento ya está registrado',
+        'correo' => 'El correo electrónico ya está registrado',
+        'telefono' => 'El número de teléfono ya está registrado'
+    ];
+
+    /**
+     * Verificar si existe un campo específico
      */
     public function checkField(Request $request)
     {
@@ -104,14 +49,6 @@ class LawyerController extends Controller
             $field = $request->input('field');
             $value = $request->input('value');
             $currentId = $request->input('current_id');
-
-            // Log para debugging
-            Log::info('checkField llamado', [
-                'field' => $field,
-                'value' => $value,
-                'currentId' => $currentId,
-                'ip' => $request->ip()
-            ]);
 
             // Validación de entrada
             if (!$field || $value === null || trim($value) === '') {
@@ -121,17 +58,8 @@ class LawyerController extends Controller
                 ]);
             }
 
-            // Mapeo de nombres de campos del frontend al backend
-            $fieldMap = [
-                'numeroDocumento' => 'numero_documento',
-                'numero_documento' => 'numero_documento',
-                'correo' => 'correo',
-                'nombre' => 'nombre',
-                'apellido' => 'apellido'
-            ];
-
             // Verificar que el campo sea válido
-            if (!isset($fieldMap[$field])) {
+            if (!isset(self::FIELD_MAP[$field])) {
                 Log::warning('Campo no válido recibido', [
                     'field' => $field,
                     'ip' => $request->ip()
@@ -143,17 +71,8 @@ class LawyerController extends Controller
                 ]);
             }
 
-            $dbField = $fieldMap[$field];
-
-            // Construir query
-            $query = Lawyer::where($dbField, $value);
-            
-            // Si estamos editando, excluir el registro actual
-            if ($currentId && is_numeric($currentId)) {
-                $query->where('id', '!=', $currentId);
-            }
-
-            $exists = $query->exists();
+            $dbField = self::FIELD_MAP[$field];
+            $exists = $this->fieldExists($dbField, $value, $currentId);
 
             Log::info('Resultado de validación', [
                 'field' => $field,
@@ -171,25 +90,77 @@ class LawyerController extends Controller
             Log::error('Error en checkField', [
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString()
+                'line' => $e->getLine()
             ]);
             
             return response()->json([
                 'exists' => false,
-                'error' => 'Error del servidor',
-                'message' => config('app.debug') ? $e->getMessage() : 'Error interno'
+                'error' => 'Error del servidor'
             ], 500);
         }
     }
 
     /**
-     * Crear nuevo abogado y usuario relacionado
+     * Verificar múltiples campos por duplicados
+     */
+    public function checkDuplicates(Request $request)
+    {
+        try {
+            $duplicates = [];
+            $fieldsToCheck = ['numero_documento', 'correo', 'telefono'];
+            $currentId = $request->input('current_id');
+
+            foreach ($fieldsToCheck as $field) {
+                $value = $request->input($field);
+                
+                if ($value && $this->fieldExists($field, $value, $currentId)) {
+                    $duplicates[] = [
+                        'field' => $field,
+                        'value' => $value,
+                        'message' => self::DUPLICATE_MESSAGES[$field] ?? 'El campo ya está registrado'
+                    ];
+                }
+            }
+
+            return response()->json([
+                'success' => true,
+                'duplicates' => $duplicates,
+                'has_duplicates' => !empty($duplicates)
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error en checkDuplicates', [
+                'message' => $e->getMessage()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'error' => 'Error del servidor'
+            ], 500);
+        }
+    }
+
+    /**
+     * Helper: Verificar si un campo existe en la BD
+     */
+    private function fieldExists(string $field, $value, $currentId = null): bool
+    {
+        $query = Lawyer::where($field, $value);
+        
+        if ($currentId && is_numeric($currentId)) {
+            $query->where('id', '!=', $currentId);
+        }
+        
+        return $query->exists();
+    }
+
+    /**
+     * Crear nuevo abogado
      */
     public function store(Request $request)
     {
         DB::beginTransaction();
-
+        
         try {
             $validated = $request->validate([
                 'nombre' => 'required|string|max:255',
@@ -200,13 +171,23 @@ class LawyerController extends Controller
                 'telefono' => 'nullable|string|max:20',
                 'especialidad' => 'nullable|string|max:255',
             ], [
-                'numeroDocumento.unique' => 'El número de documento ya existe en el sistema',
-                'correo.unique' => 'El correo electrónico ya existe en el sistema',
+                'numeroDocumento.unique' => 'El número de documento ya existe',
+                'correo.unique' => 'El correo electrónico ya existe',
                 'nombre.required' => 'El nombre es obligatorio',
                 'apellido.required' => 'El apellido es obligatorio',
                 'tipoDocumento.required' => 'El tipo de documento es obligatorio',
             ]);
 
+            // Crear usuario
+            $user = User::create([
+                'name' => trim($validated['nombre']) . ' ' . trim($validated['apellido']),
+                'email' => trim(strtolower($validated['correo'])),
+                'password' => Hash::make($validated['numeroDocumento']),
+                'role_id' => 2,
+                'numero_documento' => trim($validated['numeroDocumento']),
+            ]);
+
+            // Crear abogado
             $lawyer = Lawyer::create([
                 'nombre' => trim($validated['nombre']),
                 'apellido' => trim($validated['apellido']),
@@ -215,53 +196,25 @@ class LawyerController extends Controller
                 'correo' => trim(strtolower($validated['correo'])),
                 'telefono' => $validated['telefono'] ?? null,
                 'especialidad' => $validated['especialidad'] ?? null,
+                'user_id' => $user->id,
             ]);
-
-            $user = User::create([
-                'name' => trim($validated['nombre']) . ' ' . trim($validated['apellido']),
-                'email' => trim(strtolower($validated['correo'])),
-                'password' => Hash::make($validated['numeroDocumento']),
-                'role_id' => 2,
-                'numero_documento' => trim($validated['numeroDocumento']),
-            ]);
-            
-            $lawyer->user_id = $user->id;
-            $lawyer->save();
-
-            // Enviar credenciales por correo
-            try {
-                Mail::to($validated['correo'])->send(new SendCredentialsToLawyer($user, $validated['numeroDocumento']));
-            } catch (\Exception $mailError) {
-                Log::warning('Error al enviar correo, pero abogado creado', [
-                    'lawyer_id' => $lawyer->id,
-                    'error' => $mailError->getMessage()
-                ]);
-            }
 
             DB::commit();
 
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Abogado creado correctamente y credenciales enviadas.',
-                    'lawyer' => $lawyer->load('user')
-                ], 201);
-            }
+            // Enviar credenciales por correo (fuera de la transacción)
+            $this->sendCredentials($validated['correo'], $user, $validated['numeroDocumento'], $lawyer->id);
 
-            return redirect()->route('dashboard')->with('success', 'Abogado creado y credenciales enviadas.');
+            return $this->successResponse(
+                $request,
+                'Abogado creado correctamente y credenciales enviadas.',
+                ['lawyer' => $lawyer],
+                201,
+                'dashboard'
+            );
 
         } catch (ValidationException $e) {
             DB::rollBack();
-
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error de validación',
-                    'errors' => $e->errors()
-                ], 422);
-            }
-            
-            return back()->withErrors($e->errors())->withInput();
+            return $this->validationErrorResponse($request, $e);
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -271,33 +224,21 @@ class LawyerController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
 
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error al crear abogado',
-                    'error' => config('app.debug') ? $e->getMessage() : 'Error interno del servidor'
-                ], 500);
-            }
-            
-            return back()->with('error', 'Error al crear abogado: ' . $e->getMessage())->withInput();
+            return $this->errorResponse(
+                $request,
+                'Error al crear abogado',
+                $e->getMessage()
+            );
         }
     }
 
     /**
-     * Mostrar formulario de edición
-     */
-    public function edit(Lawyer $lawyer)
-    {
-        return view('lawyers.edit', compact('lawyer'));
-    }
-
-    /**
-     * Actualizar abogado existente y su usuario relacionado
+     * Actualizar abogado existente
      */
     public function update(Request $request, Lawyer $lawyer)
     {
         DB::beginTransaction();
-
+        
         try {
             $validated = $request->validate([
                 'nombre' => 'required|string|max:255',
@@ -308,10 +249,11 @@ class LawyerController extends Controller
                 'telefono' => 'nullable|string|max:20',
                 'especialidad' => 'nullable|string|max:255',
             ], [
-                'numeroDocumento.unique' => 'El número de documento ya existe en el sistema',
-                'correo.unique' => 'El correo electrónico ya existe en el sistema',
+                'numeroDocumento.unique' => 'El número de documento ya existe',
+                'correo.unique' => 'El correo electrónico ya existe',
             ]);
 
+            // Actualizar abogado
             $lawyer->update([
                 'nombre' => trim($validated['nombre']),
                 'apellido' => trim($validated['apellido']),
@@ -322,7 +264,7 @@ class LawyerController extends Controller
                 'especialidad' => $validated['especialidad'] ?? null,
             ]);
 
-            // Actualizar también el usuario asociado
+            // Actualizar usuario asociado
             if ($lawyer->user) {
                 $lawyer->user->update([
                     'name' => trim($validated['nombre']) . ' ' . trim($validated['apellido']),
@@ -333,109 +275,86 @@ class LawyerController extends Controller
 
             DB::commit();
 
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Abogado actualizado correctamente.',
-                    'lawyer' => $lawyer->fresh()->load('user')
-                ]);
-            }
-
-            return redirect()->route('lawyers.index')->with('success', 'Abogado actualizado correctamente.');
+            return $this->successResponse(
+                $request,
+                'Abogado actualizado correctamente.',
+                ['lawyer' => $lawyer->fresh()->load('user')],
+                200,
+                'lawyers.index'
+            );
 
         } catch (ValidationException $e) {
             DB::rollBack();
-
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error de validación',
-                    'errors' => $e->errors()
-                ], 422);
-            }
-            
-            return back()->withErrors($e->errors())->withInput();
+            return $this->validationErrorResponse($request, $e);
 
         } catch (\Exception $e) {
             DB::rollBack();
             
             Log::error('Error al actualizar abogado', [
                 'lawyer_id' => $lawyer->id,
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'message' => $e->getMessage()
             ]);
 
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error al actualizar abogado',
-                    'error' => config('app.debug') ? $e->getMessage() : 'Error interno del servidor'
-                ], 500);
-            }
-            
-            return back()->with('error', 'Error al actualizar abogado: ' . $e->getMessage())->withInput();
+            return $this->errorResponse(
+                $request,
+                'Error al actualizar abogado',
+                $e->getMessage()
+            );
         }
     }
 
     /**
-     * Eliminar abogado y su usuario relacionado
+     * Eliminar abogado
      */
     public function destroy(Request $request, Lawyer $lawyer)
     {
         DB::beginTransaction();
-
+        
         try {
             $lawyerName = $lawyer->nombre . ' ' . $lawyer->apellido;
+            $lawyerId = $lawyer->id;
             
+            // Eliminar usuario asociado
             if ($lawyer->user_id) {
                 $user = User::find($lawyer->user_id);
-                if ($user) {
-                    $user->delete();
-                }
+                $user?->delete();
             }
 
             $lawyer->delete();
-
             DB::commit();
 
             Log::info('Abogado eliminado', [
-                'lawyer_id' => $lawyer->id,
+                'lawyer_id' => $lawyerId,
                 'name' => $lawyerName,
-                'deleted_by' => auth()->Auth::classuser()->email ?? 'unknown'
+                'deleted_by' => auth()->email ?? 'unknown'
             ]);
 
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Abogado eliminado exitosamente.'
-                ]);
-            }
-
-            return redirect()->route('dashboard')->with('success', 'Abogado eliminado exitosamente.');
+            return $this->successResponse(
+                $request,
+                'Abogado eliminado exitosamente.',
+                [],
+                200,
+                'dashboard'
+            );
 
         } catch (\Exception $e) {
             DB::rollBack();
             
             Log::error('Error al eliminar abogado', [
                 'lawyer_id' => $lawyer->id,
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'message' => $e->getMessage()
             ]);
 
-            if ($request->ajax() || $request->wantsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error al eliminar abogado',
-                    'error' => config('app.debug') ? $e->getMessage() : 'Error interno del servidor'
-                ], 500);
-            }
-            
-            return back()->with('error', 'Error al eliminar abogado: ' . $e->getMessage());
+            return $this->errorResponse(
+                $request,
+                'Error al eliminar abogado',
+                $e->getMessage()
+            );
         }
     }
 
     /**
-     * Exportar listado de abogados en PDF
+     * Exportar listado a PDF
      */
     public function exportPDF()
     {
@@ -450,11 +369,74 @@ class LawyerController extends Controller
             
         } catch (\Exception $e) {
             Log::error('Error al exportar PDF de abogados', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+                'message' => $e->getMessage()
             ]);
             
             return back()->with('error', 'Error al generar el PDF');
         }
+    }
+
+    // ========== MÉTODOS HELPERS ==========
+
+    /**
+     * Enviar credenciales por correo
+     */
+    private function sendCredentials(string $email, User $user, string $password, int $lawyerId): void
+    {
+        try {
+            Mail::to($email)->send(new SendCredentialsToLawyer($user, $password));
+        } catch (\Exception $e) {
+            Log::warning('Error al enviar correo, pero abogado creado', [
+                'lawyer_id' => $lawyerId,
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    /**
+     * Respuesta exitosa genérica
+     */
+    private function successResponse(Request $request, string $message, array $data = [], int $status = 200, string $route = null)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(array_merge([
+                'success' => true,
+                'message' => $message
+            ], $data), $status);
+        }
+
+        return redirect()->route($route ?? 'dashboard')->with('success', $message);
+    }
+
+    /**
+     * Respuesta de error de validación
+     */
+    private function validationErrorResponse(Request $request, ValidationException $e)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error de validación',
+                'errors' => $e->errors()
+            ], 422);
+        }
+        
+        return back()->withErrors($e->errors())->withInput();
+    }
+
+    /**
+     * Respuesta de error genérica
+     */
+    private function errorResponse(Request $request, string $message, string $error = null, int $status = 500)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => false,
+                'message' => $message,
+                'error' => config('app.debug') ? $error : 'Error interno del servidor'
+            ], $status);
+        }
+        
+        return back()->with('error', $message . ($error ? ': ' . $error : ''))->withInput();
     }
 }

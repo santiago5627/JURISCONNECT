@@ -22,11 +22,10 @@ class User extends Authenticatable
         'email',
         'password',
         'foto_perfil',
-        'foto_perfil',
         'password_changed',
         'avatar',          // Campo para avatar
         'role_id',         // Rol del usuario
-        'profile_photos'   // Foto de perfil (asegúrate que en la migración sea igual)
+        'profile_photos'   
     ];
     public function getProfilePhotoPathAttribute()
         {

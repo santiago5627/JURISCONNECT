@@ -160,7 +160,8 @@
             <div class="nav-menu">
                 <button class="nav-btn active" data-section="dashboard">
                     Dashboard
-                </button>
+                </button> 
+                
                 <button class="nav-btn" data-section="lawyers">
                     Gestión de Abogados
                 </button>
