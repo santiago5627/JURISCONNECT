@@ -78,7 +78,7 @@
         <div class="modal" id="editLawyerModal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Editar Abogado</h2>
+                    <h2>Editar Abogada</h2>
                     <button class="modal-close" id="closeEditModal">&times;</button>
                 </div>
                 <div class="modal-body">
@@ -160,7 +160,8 @@
             <div class="nav-menu">
                 <button class="nav-btn active" data-section="dashboard">
                     Dashboard
-                </button>
+                </button> 
+                
                 <button class="nav-btn" data-section="lawyers">
                     Gestión de Abogados
                 </button>

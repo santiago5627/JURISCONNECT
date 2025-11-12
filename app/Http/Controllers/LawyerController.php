@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Routing\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LawyersExport;
+
 
 class LawyerController extends Controller
 {
@@ -323,7 +326,7 @@ class LawyerController extends Controller
             Log::info('Abogado eliminado', [
                 'lawyer_id' => $lawyerId,
                 'name' => $lawyerName,
-                'deleted_by' => auth()->user()->email ?? 'unknown'
+                'deleted_by' => auth()->email ?? 'unknown'
             ]);
 
             return $this->successResponse(
