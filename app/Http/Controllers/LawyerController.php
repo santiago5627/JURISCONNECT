@@ -326,7 +326,7 @@ class LawyerController extends Controller
             Log::info('Abogado eliminado', [
                 'lawyer_id' => $lawyerId,
                 'name' => $lawyerName,
-                'deleted_by' => auth()->user()->email ?? 'unknown'
+                'deleted_by' => auth()->email ?? 'unknown'
             ]);
 
             return $this->successResponse(
