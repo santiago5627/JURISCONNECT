@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Routing\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\LawyersExport;
+
 
 class LawyerController extends Controller
 {

@@ -128,10 +128,12 @@
                         <i class="fas fa-edit"></i>
                         Redactar Concepto Jurídico
                     </a>
-                    <a href="{{ route('legal_processes.conceptos', $proceso->id) }}">
-                        <i class="fas fa-times"></i> 
-                        ver proceso
-                    </a>
+                    <a href="javascript:void(0);" onclick="openProcessModal ({{ $proceso->id }})" class="action-btn action-view" title="Ver detalles">
+                        <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                    </a> 
                 </div>
             </div>
         </div>
@@ -268,6 +270,64 @@ function clearSearch() {
     document.getElementById("searchInput").value = '';
     performSearch('');
 }
+
+// ===== ABRIR Y CERRAR MODAL DE PROCESO =====
+function openProcessModal(id) {
+            document.getElementById('viewProcessModal').style.display = 'flex';
+            const body = document.getElementById('processModalBody');
+            body.innerHTML = '<p>Cargando datos...</p>';
+
+            fetch(`/procesos/${id}`)
+                .then(res => res.json())
+                .then(data => {
+                    body.innerHTML = `
+                        <p><strong>Radicado:</strong> ${data.numero_radicado}</p>
+                        <p><strong>Tipo:</strong> ${data.tipo_proceso}</p>
+                        <p><strong>Demandante:</strong> ${data.demandante}</p>
+                        <p><strong>Demandado:</strong> ${data.demandado}</p>
+                        <p><strong>Descripción:</strong> ${data.descripcion ?? 'Sin descripción'}</p>
+                    `;
+                }) 
+                .catch(() => {
+                    body.innerHTML = '<p>Error al cargar los datos.</p>';
+                });
+        }
+
+        function closeProcessModal() {
+        document.getElementById('viewProcessModal').style.display = 'none';
+        }
+
+        //  Cerrar modal con la tecla ESC
+        document.addEventListener('keydown', function(event) {
+        const modal = document.getElementById('viewProcessModal');
+        if (event.key === 'Escape' && modal.style.display === 'flex') {
+            closeProcessModal();
+        }
+        });
+
+        function confirmDelete(id, nombre) {
+        Swal.fire({
+            title: 'Confirmar Eliminación',
+            html: `¿Estás seguro de eliminar el proceso de <b>${nombre}</b>?<br>Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Eliminar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true,
+            customClass: {
+                popup: 'custom-popup',
+                title: 'custom-title',
+                htmlContainer: 'custom-text',
+                confirmButton: 'custom-confirm',
+                cancelButton: 'custom-cancel',
+                icon: 'custom-icon'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(`delete-form-${id}`).submit();
+            }
+        });
+    }
     </script>
 </body>
 </html>

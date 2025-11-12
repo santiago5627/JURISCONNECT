@@ -2,10 +2,12 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Mail;
 
 class SendCredentialsToLawyer extends Mailable
 {
@@ -33,5 +35,18 @@ class SendCredentialsToLawyer extends Mailable
                         'plainPassword' => $this->plainPassword,
                         'resetUrl' => $this->resetUrl,
                     ]);
+    }
+
+    public function enviarAUsuario($id)
+    {
+        $usuario = User::findOrFail($id);
+        
+        try {
+            Mail::to($usuario->email)->send(new PasswordGenerated($usuario, $this->plainPassword));
+            
+            return back()->with('success', "Correo enviado exitosamente a {$usuario->email}");
+        } catch (\Exception $e) {
+            return back()->with('error', "Error al enviar correo: " . $e->getMessage());
+        }
     }
 }
