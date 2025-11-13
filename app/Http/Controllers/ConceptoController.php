@@ -32,7 +32,7 @@ class ConceptoController extends Controller
                       ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
                       ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
                       ->orWhere('created_at', 'LIKE', '%' . $searchTerm . '%');
-                      // Agrega más campos según tu modelo Lawyer
+                      // Agrega más campos según tu modelo Lawyer 
                 });
             }
 

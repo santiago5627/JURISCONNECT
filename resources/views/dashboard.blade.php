@@ -244,7 +244,7 @@
 
                     <div class="search-section">
                         <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
-                        <button class="search-btn" id="searchBtn">Buscar</button>
+                        <button class="search-btn" id="searchBtn">Buscar</button> 
                     </div>
 
                     <div class="action-buttons">

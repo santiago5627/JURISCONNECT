@@ -35,7 +35,7 @@
                 </div>
                 <div class="header-stats">
                     <span class="stats-label">Total:</span>
-                    <span class="pagination-info">{{ $procesos->total() }}</span>
+                    <span class="pagination-info" id="totalCount">{{ $procesos->total() }}</span>
                 </div>
             </div>
 
@@ -84,6 +84,84 @@
     </div>
 
     <script>
+        let searchTimeout;
+
+        // Inicializar eventos de búsqueda
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById("searchInput");
+            const searchBtn = document.getElementById("searchBtn");
+
+            // Búsqueda al escribir (con debounce)
+            if (searchInput) {
+                searchInput.addEventListener("input", function() {
+                    clearTimeout(searchTimeout);
+                    const searchTerm = this.value.trim();
+                    searchTimeout = setTimeout(() => {
+                        performSearch(searchTerm);
+                    }, 300);
+                });
+
+                // Búsqueda al presionar ENTER
+                searchInput.addEventListener("keypress", function(event) {
+                    if (event.key === 'Enter') {
+                        clearTimeout(searchTimeout);
+                        performSearch(this.value.trim());
+                    }
+                });
+            }
+
+            // Búsqueda al hacer click en botón
+            if (searchBtn) {
+                searchBtn.addEventListener("click", function() {
+                    const searchTerm = searchInput.value.trim();
+                    performSearch(searchTerm);
+                });
+            }
+        });
+
+        // Función principal de búsqueda AJAX
+        function performSearch(searchTerm) {
+            const params = new URLSearchParams();
+            if (searchTerm) {
+                params.append('search', searchTerm);
+            }
+            params.append('ajax', '1');
+
+            fetch(`{{ route('procesos.index') }}?${params.toString()}`, {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.html) {
+                    // Actualizar contenedor de tabla
+                    document.getElementById('procesosTableContainer').innerHTML = data.html;
+                    
+                    // Actualizar total de resultados
+                    if (data.total !== undefined) {
+                        document.getElementById('totalCount').textContent = data.total;
+                    }
+                } else {
+                    console.error('Error en búsqueda:', data.message || 'Error desconocido');
+                }
+            })
+            .catch(error => {
+                console.error('Error en la petición AJAX:', error);
+            });
+        }
+
+        // Función para limpiar búsqueda
+        function clearSearch() {
+            const searchInput = document.getElementById("searchInput");
+            if (searchInput) {
+                searchInput.value = '';
+                performSearch('');
+            }
+        }
+
         function openProcessModal(id) {
             document.getElementById('viewProcessModal').style.display = 'flex';
             const body = document.getElementById('processModalBody');
@@ -106,41 +184,40 @@
         }
 
         function closeProcessModal() {
-        document.getElementById('viewProcessModal').style.display = 'none';
+            document.getElementById('viewProcessModal').style.display = 'none';
         }
 
         //  Cerrar modal con la tecla ESC
         document.addEventListener('keydown', function(event) {
-        const modal = document.getElementById('viewProcessModal');
-        if (event.key === 'Escape' && modal.style.display === 'flex') {
-            closeProcessModal();
-        }
+            const modal = document.getElementById('viewProcessModal');
+            if (event.key === 'Escape' && modal.style.display === 'flex') {
+                closeProcessModal();
+            }
         });
 
         function confirmDelete(id, nombre) {
-        Swal.fire({
-            title: 'Confirmar Eliminación',
-            html: `¿Estás seguro de eliminar el proceso de <b>${nombre}</b>?<br>Esta acción no se puede deshacer.`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Eliminar',
-            cancelButtonText: 'Cancelar',
-            reverseButtons: true,
-            customClass: {
-                popup: 'custom-popup',
-                title: 'custom-title',
-                htmlContainer: 'custom-text',
-                confirmButton: 'custom-confirm',
-                cancelButton: 'custom-cancel',
-                icon: 'custom-icon'
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById(`delete-form-${id}`).submit();
-            }
-        });
-    }
-
+            Swal.fire({
+                title: 'Confirmar Eliminación',
+                html: `¿Estás seguro de eliminar el proceso de <b>${nombre}</b>?<br>Esta acción no se puede deshacer.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'custom-popup',
+                    title: 'custom-title',
+                    htmlContainer: 'custom-text',
+                    confirmButton: 'custom-confirm',
+                    cancelButton: 'custom-cancel',
+                    icon: 'custom-icon'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`delete-form-${id}`).submit();
+                }
+            });
+        }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

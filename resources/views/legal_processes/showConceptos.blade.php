@@ -129,10 +129,8 @@
                         Redactar Concepto Jurídico
                     </a>
                     <a href="javascript:void(0);" onclick="openProcessModal ({{ $proceso->id }})" class="action-btn action-view" title="Ver detalles">
-                        <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                        </svg>
+                        <i class="fa-regular fa-eye"></i>
+                        Ver Detalles
                     </a> 
                 </div>
             </div>
@@ -175,6 +173,72 @@
         </div>
         -->
     </div>
+
+    <!-- Modal para ver detalles del proceso -->
+<div id="viewProcessModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Detalles del Proceso</h2>
+            <button class="modal-close" onclick="closeProcessModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="processModalBody" class="modal-body">
+            <!-- Contenido cargado dinámicamente -->
+        </div>
+        <div class="modal-footer">
+            <button class="cancel-btn" onclick="closeProcessModal()">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    width: 90%;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+</style>
 
     <script>
         function closeAlert(alertId) {
@@ -329,5 +393,6 @@ function openProcessModal(id) {
         });
     }
     </script>
+    
 </body>
 </html>

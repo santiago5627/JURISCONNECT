@@ -20,20 +20,28 @@ class LegalProcessController extends Controller
     public function index(Request $request)
     {
     $query = \App\Models\Proceso::query();
-
+    
+    // Búsqueda
     if ($request->has('search') && $request->get('search')) {
         $search = $request->get('search');
-        $query->search($search); // Usa el scopeSearch del modelo Proceso
+        $query->where(function($q) use ($search) {
+            $q->where('numero_radicado', 'LIKE', '%' . $search . '%')
+              ->orWhere('demandante', 'LIKE', '%' . $search . '%')
+              ->orWhere('demandado', 'LIKE', '%' . $search . '%')
+              ->orWhere('tipo_proceso', 'LIKE', '%' . $search . '%')
+              ->orWhere('estado', 'LIKE', '%' . $search . '%');
+        });
     }
 
-    $procesos = Proceso::orderBy('id', 'asc')->paginate(10);
+    $procesos = $query->orderBy('id', 'asc')->paginate(10);
 
-    // Si es AJAX, retorna solo la tabla
-    if ($request->ajax()) {
-        $html = view('legal_processes.partials.process-cards', compact('procesos'))->render();
+    // Respuesta AJAX
+    if ($request->ajax() || $request->get('ajax')) {
+        $html = view('legal_processes.profile.partials.processes-table', compact('procesos'))->render();
         return response()->json([
-            'success' => true,
+            'success' => true, 
             'html' => $html,
+            'count' => $procesos->count()
         ]);
     }
 

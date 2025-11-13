@@ -397,7 +397,7 @@ class LawyerController extends Controller
      * Respuesta exitosa genérica
      */
     private function successResponse(Request $request, string $message, array $data = [], int $status = 200, string $route = null)
-    {
+    { 
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json(array_merge([
                 'success' => true,
