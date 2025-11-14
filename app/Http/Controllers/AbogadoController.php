@@ -19,7 +19,7 @@ class AbogadoController extends Controller
      */
     public function index()
     {
-        //$estadisticas = $this->getEstadisticas();
+        
         return view('dashboard-abogado',);
     }
 

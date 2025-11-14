@@ -71,13 +71,40 @@ class ConceptoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource
-     */
-    public function create() 
-    {
-        $procesos = Proceso::all();
-        return view('legal_processes.showConceptos', compact('procesos')); 
+ * Show the form for creating a new resource
+ */
+public function create(Request $request) 
+{
+    $query = Proceso::where('estado', 'Pendiente'); // Solo procesos pendientes
+
+    // Búsqueda
+    if ($request->has('search') && $request->get('search')) {
+        $search = $request->get('search');
+        $query->where(function($q) use ($search) {
+            $q->where('id', 'LIKE', '%' . $search . '%')
+              ->orWhere('numero_radicado', 'LIKE', '%' . $search . '%')
+              ->orWhere('demandante', 'LIKE', '%' . $search . '%')
+              ->orWhere('demandado', 'LIKE', '%' . $search . '%')
+              ->orWhere('tipo_proceso', 'LIKE', '%' . $search . '%')
+              ->orWhere('created_at', 'LIKE', '%' . $search . '%');
+        });
     }
+
+    $procesos = $query->orderBy('created_at', 'desc')->get();
+
+    // Respuesta AJAX
+    if ($request->ajax() || $request->get('ajax')) {
+        $processes = $procesos; // Renombrar para la vista parcial
+        $html = view('profile.partials.process-card', ['procesos' => $procesos])->render();
+        return response()->json([
+            'success' => true,
+            'html' => $html,
+            'total' => $procesos->count()
+        ]);
+    }
+
+    return view('legal_processes.showConceptos', compact('procesos')); 
+}
 
     /**
      * Guardar el concepto para un proceso específico

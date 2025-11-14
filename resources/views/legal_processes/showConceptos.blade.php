@@ -59,90 +59,7 @@
 
 <!-- Lista de Procesos -->
 <div class="process-grid">
-    @forelse($procesos as $proceso)
-        <div class="process-card fade-in-up">
-            <div class="card-header">
-                <div class="card-title">
-                    <div class="card-title-icon">
-                        <i class="fas fa-gavel"></i>
-                    </div>
-                    <h3>Proceso Legal</h3>
-                    <h3>{{ $proceso->id }}</h3>
-                </div>
-                <span class="status-badge">{{ $proceso->estado }}</span>
-            </div>
-            <div class="card-body">
-                <div class="card-grid">
-                    <div class="info-section">
-                        <div class="info-item info-item-blue">
-                            <div class="info-icon info-icon-blue">
-                                <i class="fas fa-hashtag"></i>
-                            </div>
-                            <div class="info-content">
-                                <p>Radicado</p>
-                                <p>{{ $proceso->numero_radicado }}</p>
-                            </div>
-                        </div>
-                        <div class="info-item info-item-green">
-                            <div class="info-icon info-icon-green">
-                                <i class="fas fa-balance-scale"></i>
-                            </div>
-                            <div class="info-content">
-                                <p>Tipo de Proceso</p>
-                                <p>{{ $proceso->tipo_proceso }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="info-section">
-                        <div class="info-item info-item-orange">
-                            <div class="info-icon info-icon-orange">
-                                <i class="fas fa-user-plus"></i>
-                            </div>
-                            <div class="info-content">
-                                <p>Demandante</p>
-                                <p>{{ $proceso->demandante }}</p>
-                            </div>
-                        </div>
-                        <div class="info-item info-item-red">
-                            <div class="info-icon info-icon-red">
-                                <i class="fas fa-user-minus"></i>
-                            </div>
-                            <div class="info-content">
-                                <p>Demandado</p>
-                                <p>{{ $proceso->demandado }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="info-item info-item-purple">
-                        <div class="info-icon info-icon-purple">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <div class="info-content">
-                            <p>Fecha Radicación</p>
-                            <p>{{ $proceso->created_at }}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <a href="{{ route('abogado.crear-concepto', $proceso->id) }}" class="action-btn">
-                        <i class="fas fa-edit"></i>
-                        Redactar Concepto Jurídico
-                    </a>
-                    <a href="javascript:void(0);" onclick="openProcessModal ({{ $proceso->id }})" class="action-btn action-view" title="Ver detalles">
-                        <i class="fa-regular fa-eye"></i>
-                        Ver Detalles
-                    </a> 
-                </div>
-            </div>
-        </div>
-    @empty
-        <div class="empty-state">
-            <div class="empty-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h3>No se encontraron procesos pendientes.</h3>
-        </div>
-    @endforelse
+    @include('profile.partials.process-card', ['proceso' => $procesos])
 </div>
 
 <!-- Recordatorio -->
@@ -157,21 +74,6 @@
                 </div>
             </div>
         </div>
-
-<!-- Estado sin procesos (comentado para mostrar la versión con procesos) -->
-        <!--  
-        <div class="empty-state">
-            <div class="empty-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h3>¡Excelente trabajo!</h3>
-            <p>No tienes procesos pendientes de concepto jurídico.</p>
-            <a href="{{ route('mis.procesos') }}" class="action-btn">
-                <i class="fas fa-eye"></i>
-                Ver Todos Mis Procesos
-            </a>
-        </div>
-        -->
     </div>
 
     <!-- Modal para ver detalles del proceso -->
@@ -251,92 +153,78 @@
         }
 
         // ===== FUNCIONALIDAD DE BÚSQUEDA AJAX =====
-// Búsqueda en tiempo real simplificada
-let searchTimeout;
+    let searchTimeout;
 
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById("searchInput");
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById("searchInput");
+        const searchBtn = document.getElementById("searchBtn");
 
-    if (searchInput) {
-        // Búsqueda en tiempo real mientras escribes
-        searchInput.addEventListener("input", function() {
-            clearTimeout(searchTimeout);
-            const searchTerm = this.value.trim();
+        if (searchInput) {
+            searchInput.addEventListener("input", function() {
+                clearTimeout(searchTimeout);
+                const searchTerm = this.value.trim();
+                searchTimeout = setTimeout(() => performSearch(searchTerm), 300);
+            });
 
-            searchTimeout = setTimeout(() => {
-                performSearch(searchTerm);
-            }, 300); // Esperar 300ms después de escribir
-        });
-    }
-});
-
-
-// Función principal de búsqueda
-function performSearch(searchTerm) {
-    // Preparar parámetros
-    const params = new URLSearchParams();
-    if (searchTerm) {
-        params.append('search', searchTerm);
-    }
-    params.append('ajax', '1');
-
-    // Hacer petición AJAX
-    fetch(`${window.location.pathname}?${params.toString()}`, {
-        method: 'GET',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success && data.html) {
-            // Actualizar tabla
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = data.html;
-
-            const newTableBody = tempDiv.querySelector('#tableBody');
-            const currentTableBody = document.querySelector('#tableBody');
-
-            if (newTableBody && currentTableBody) {
-                currentTableBody.innerHTML = newTableBody.innerHTML;
-            }
-
-            // Actualizar paginación si existe
-            const newPagination = tempDiv.querySelector('.pagination');
-            const currentPagination = document.querySelector('.pagination')?.parentElement;
-            if (currentPagination) {
-                if (newPagination) {
-                    currentPagination.innerHTML = newPagination.parentElement.innerHTML;
-                } else {
-                    currentPagination.innerHTML = '';
+            searchInput.addEventListener("keypress", function(event) {
+                if (event.key === 'Enter') {
+                    clearTimeout(searchTimeout);
+                    performSearch(this.value.trim());
                 }
-            }
-
-            // Actualizar URL
-            const newUrl = new URL(window.location);
-            if (searchTerm) {
-                newUrl.searchParams.set('search', searchTerm);
-            } else {
-                newUrl.searchParams.delete('search');
-            }
-            newUrl.searchParams.delete('page');
-            window.history.replaceState({}, '', newUrl.toString());
+            });
         }
-    })
-    .catch(error => {
-        console.error('Error en búsqueda:', error);
+
+        if (searchBtn) {
+            searchBtn.addEventListener("click", function() {
+                const searchTerm = document.getElementById("searchInput").value.trim();
+                performSearch(searchTerm);
+            });
+        }
     });
-}
 
-// Función para limpiar búsqueda (opcional)
-function clearSearch() {
-    document.getElementById("searchInput").value = '';
-    performSearch('');
-}
+    function performSearch(searchTerm) {
+        const params = new URLSearchParams();
+        if (searchTerm) params.append('search', searchTerm);
+        params.append('ajax', '1');
 
-// ===== ABRIR Y CERRAR MODAL DE PROCESO =====
-function openProcessModal(id) {
+        // Usar la ruta actual (o reemplaza por route('procesos.index'))
+        fetch(`${window.location.pathname}?${params.toString()}`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success && data.html) {
+                // Reemplaza el grid de tarjetas con el HTML devuelto
+                const grid = document.querySelector('.process-grid');
+                if (grid) {
+                    grid.innerHTML = data.html;
+                }
+
+                // Si el backend devuelve un total, actualiza el contador si existe
+                if (data.total !== undefined) {
+                    const totalEl = document.getElementById('totalCount');
+                    if (totalEl) totalEl.textContent = data.total;
+                }
+
+                // Actualizar URL sin recargar
+                const newUrl = new URL(window.location);
+                if (searchTerm) newUrl.searchParams.set('search', searchTerm);
+                else newUrl.searchParams.delete('search');
+                newUrl.searchParams.delete('page');
+                window.history.replaceState({}, '', newUrl.toString());
+            } else {
+                console.error('Respuesta inválida de búsqueda', data);
+            }
+        })
+        .catch(err => console.error('Error en búsqueda:', err));
+    }
+
+        // ===== ABRIR Y CERRAR MODAL DE PROCESO =====
+        function openProcessModal(id) {
             document.getElementById('viewProcessModal').style.display = 'flex';
             const body = document.getElementById('processModalBody');
             body.innerHTML = '<p>Cargando datos...</p>';
@@ -393,6 +281,6 @@ function openProcessModal(id) {
         });
     }
     </script>
-    
+
 </body>
 </html>

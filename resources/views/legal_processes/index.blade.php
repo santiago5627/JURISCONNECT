@@ -79,8 +79,9 @@
                 </div>
             </div>
         </div>
-    <!-- Incluir la tabla completa -->
-    @include('profile.partials.processes-table', ['proceso' => $procesos])
+    <div id="procesosTableContainer">
+        @include('profile.partials.processes-table', ['proceso' => $procesos])
+    </div>
     </div>
 
     <script>

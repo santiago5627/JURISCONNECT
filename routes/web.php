@@ -126,6 +126,7 @@ Route::middleware(['auth'])->group(function () {
         
         Route::get('/crear-concepto/{id}', [AbogadoController::class, 'mostrarFormularioConcepto'])
             ->name('crear-concepto');
+
     });
 
     // Rutas del ConceptoController

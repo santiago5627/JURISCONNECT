@@ -19,33 +19,34 @@ class LegalProcessController extends Controller
      */
     public function index(Request $request)
     {
-    $query = \App\Models\Proceso::query();
-    
-    // Búsqueda
-    if ($request->has('search') && $request->get('search')) {
-        $search = $request->get('search');
-        $query->where(function($q) use ($search) {
-            $q->where('numero_radicado', 'LIKE', '%' . $search . '%')
-              ->orWhere('demandante', 'LIKE', '%' . $search . '%')
-              ->orWhere('demandado', 'LIKE', '%' . $search . '%')
-              ->orWhere('tipo_proceso', 'LIKE', '%' . $search . '%')
-              ->orWhere('estado', 'LIKE', '%' . $search . '%');
-        });
-    }
+        $query = \App\Models\Proceso::query();
 
-    $procesos = $query->orderBy('id', 'asc')->paginate(10);
+        // Búsqueda
+        if ($request->has('search') && $request->get('search')) {
+            $search = $request->get('search');
+            $query->where(function($q) use ($search) {
+                $q->where('numero_radicado', 'LIKE', '%' . $search . '%')
+                  ->orWhere('demandante', 'LIKE', '%' . $search . '%')
+                  ->orWhere('demandado', 'LIKE', '%' . $search . '%')
+                  ->orWhere('tipo_proceso', 'LIKE', '%' . $search . '%')
+                  ->orWhere('estado', 'LIKE', '%' . $search . '%');
+            });
+        }
 
-    // Respuesta AJAX
-    if ($request->ajax() || $request->get('ajax')) {
-        $html = view('legal_processes.profile.partials.processes-table', compact('procesos'))->render();
-        return response()->json([
-            'success' => true, 
-            'html' => $html,
-            'count' => $procesos->count()
-        ]);
-    }
+        $procesos = $query->orderBy('id', 'asc')->paginate(10);
 
-    return view('legal_processes.index', compact('procesos'));
+        // Respuesta AJAX: usar la vista correcta y devolver 'total'
+        if ($request->ajax() || $request->get('ajax')) {
+            // corregir la ruta de la vista y la variable que espera el partial
+            $html = view('profile.partials.processes-table', ['procesos' => $procesos])->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'total' => $procesos->total()
+            ]);
+        }
+
+        return view('legal_processes.index', compact('procesos'));
     }   
 
     /**
