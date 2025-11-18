@@ -145,7 +145,7 @@ public function create(Request $request)
         'titulo' => 'required|string|max:255',
         'categoria' => 'required|string|max:255',
         'descripcion' => 'required|min:50'
-    ]);
+    ]);git 
 }
 
     /**

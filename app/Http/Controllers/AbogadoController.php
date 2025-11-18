@@ -209,7 +209,7 @@ class AbogadoController extends Controller
     /**
      * Mostrar formulario para concepto específico
      */
-    public function mostrarFormularioConcepto($id)
+    public function mostrarFormularioConcepto($id) 
     {
         try {
             $proceso = Proceso::findOrFail($id);
