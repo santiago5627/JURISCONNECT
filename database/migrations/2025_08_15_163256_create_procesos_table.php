@@ -19,7 +19,9 @@ return new class extends Migration
     $table->string('demandado', 255);
     $table->text('descripcion');
     $table->string('documento')->nullable();
-    $table->enum('estado', ['Pendiente', 'En curso', 'Finalizado' ])->default('Pendiente');
+    $table->enum('estado', ['radicado','Pendiente', 'primera_instancia', 'En curso', 'Finalizado','en_audiencia',
+    'pendiente_fallo', 'favorable_primera', 'desfavorable_primera', 'en_apelacion', 'conciliacion_pendiente', 'conciliado',
+    'sentencia_ejecutoriada', 'en_proceso_pago', 'terminado'])->default('Pendiente');
     $table->timestamps();
 });
     }
