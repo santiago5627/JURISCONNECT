@@ -1,4 +1,4 @@
-<x-app-layout>
+    <x-app-layout>
     <!-- Página para el dashboard de los administradores -->
     <x-slot name="header">
         <!-- Header vacío para evitar conflictos -->
@@ -149,7 +149,7 @@
                 <div class="profile-pic" onclick="document.getElementById('fileInput').click();" 
                     style="cursor: pointer; position: relative;" 
                     title="Haz clic para cambiar tu foto">
-                    <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/BlLSnT5oeFFF8wclgd0Br6yMXnf84tTq7KmojXkA.jpg') }}" 
+                    <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}" 
                         id="profileImage" 
                         alt="Foto de perfil">
                     </div>
@@ -201,31 +201,24 @@
                         <p>Resumen general del sistema JustConnect SENA</p>
                     </div>
                     
-                    <div class="dashboard-stats">
-                        <div class="stat-card">
-                            <div class="stat-icon">👨‍💼</div>
-                            <div class="stat-info">
-                                <h3>{{ $totalLawyers }}</h3>
-                                <p>Abogados Registrados</p>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-icon">📋</div>
-                            <div class="stat-info">
-                                <h3>{{ $cases_count ?? 0 }}</h3>
-                                <p>Casos Activos</p>
-                            </div>
-                        </div>
-                        
-                        <div class="stat-card">
-                            <div class="stat-icon">✅</div>
-                            <div class="stat-info">
-                                <h3>{{ $completed_cases ?? 0 }}</h3>
-                                <p>Casos Completados</p>
-                            </div>
-                        </div>
-                    </div>
+                <!-- En la sección DASHBOARD PRINCIPAL -->
+<div class="dashboard-stats">
+    <div class="stat-card" id="lawyersStatCard" style="cursor: pointer;">
+        <div class="stat-icon">👨‍💼</div>
+        <div class="stat-info">
+            <h3>{{ $totalLawyers }}</h3>
+            <p>Abogados Registrados</p>
+        </div>
+    </div>
+
+    <div class="stat-card" id="casesStatCard">
+        <div class="stat-icon">📋</div>
+        <div class="stat-info">
+            <h3>{{ $cases_count }}</h3>
+            <p>Procesos Judiciales</p>
+        </div>
+    </div>
+</div>
                     
                     <div class="dashboard-charts">
                         <div class="chart-container">
@@ -244,7 +237,6 @@
 
                     <div class="search-section">
                         <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
-                        <button class="search-btn" id="searchBtn">Buscar</button> 
                     </div>
 
                     <div class="action-buttons">
@@ -252,7 +244,7 @@
                         <a href="{{ route('lawyers.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
                         <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
-
+                    
                     @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
                 </div>
 

@@ -28,7 +28,7 @@ public function run(): void
     // Crear un usuario con ese rol
     User::firstOrCreate([
         
-        'email' => 'admin@sena.edu.co'
+        'email' => 'brendaModa45@gmail.com'
 
     ], [
         'name' => 'Admin',
@@ -36,9 +36,5 @@ public function run(): void
         'role_id' => $adminRole->id,
         'remember_token' => Str::random(10),
     ]);
-
-    $this->command->info('Usuario Admin creado:');
-    $this->command->info('Email: admin@sena.edu.co');
-    $this->command->info('Contraseña: admin123');
 }
 }
