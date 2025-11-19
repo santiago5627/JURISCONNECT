@@ -86,7 +86,6 @@ class ConceptoController extends Controller
                 'en_audiencia',
                 'pendiente_fallo',
                 'favorable_primera',
-
                 'desfavorable_primera',
                 'en_apelacion',
                 'conciliacion_pendiente',
