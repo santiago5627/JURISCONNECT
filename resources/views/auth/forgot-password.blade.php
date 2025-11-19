@@ -88,12 +88,6 @@
         }
     });
 
-    // Mostrar alerta si hay mensaje de éxito de Laravel
-    @if(session('status'))
-        document.addEventListener('DOMContentLoaded', function() {
-            showAlert();
-        });
-    @endif
     </script>
 </body>
 </html>

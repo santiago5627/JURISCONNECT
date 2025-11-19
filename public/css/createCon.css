@@ -465,3 +465,66 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* CONTENEDOR DEL CAMPO */
+        .form-group-modern {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* LABEL */
+        .form-label-modern {
+            font-weight: bold;
+            font-size: 16px;
+            color: #374151;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ICONO */
+        .icon-modern {
+            color: #6366f1;
+            font-size: 18px;
+        }
+
+        /* CAJA DEL INPUT */
+        .input-wrapper-modern {
+            background: #e6eeff;
+            /* azul suave */
+            border-radius: 10px;
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #d1d5db;
+        }
+
+        /* INPUT */
+        .form-input-modern {
+            width: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 15px;
+            color: #1f2937;
+        }
+
+        /* QUE EL PLACEHOLDER SE VEA SUAVE */
+        .form-input-modern::placeholder {
+            color: #6b7280;
+            opacity: 0.8;
+        }
+
+        /* TEXTO DE AYUDA */
+        .form-help-modern {
+            margin-top: 6px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        /* ROJO DEL REQUIRED */
+        .required {
+            color: #ef4444;
+        }

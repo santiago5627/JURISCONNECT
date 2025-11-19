@@ -1,16 +1,16 @@
-<x-app-layout> 
+<x-app-layout>
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow-lg border-0 rounded-3">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0"> Seleccionar Proceso para Concepto Jurídico</h3>
-                    <a href="{{ route('dashboard.abogado') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Cancelar</a>
-                </div>
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card shadow-lg border-0 rounded-3">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0"> Seleccionar Proceso para Concepto Jurídico</h3>
+                        <a href="{{ route('dashboard.abogado') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Cancelar</a>
+                    </div>
 
-                <div class="card-body">
-                    @if($procesos->count() > 0)
+                    <div class="card-body">
+                        @if($procesos->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-hover align-middle">
                                 <thead class="table-dark">
@@ -36,13 +36,13 @@
                                         </td>
                                         <td>
                                             @if($proceso->concepto_juridico)
-                                                <span class="badge bg-success"> Completado</span>
+                                            <span class="badge bg-success"> Completado</span>
                                             @else
-                                                <span class="badge bg-warning text-dark"> Pendiente</span>
+                                            <span class="badge bg-warning text-dark"> Pendiente</span>
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('abogado.crear-concepto', $proceso->id) }}" 
+                                            <a href="{{ route('abogado.crear-concepto', $proceso->id) }}"
                                                 class="btn btn-sm {{ $proceso->concepto_juridico ? 'btn-outline-success' : 'btn-outline-primary' }}">
                                                 {{ $proceso->concepto_juridico ? 'Ver / Editar' : 'Crear Concepto' }}
                                             </a>
@@ -52,15 +52,15 @@
                                 </tbody>
                             </table>
                         </div>
-                    @else
+                        @else
                         <div class="alert alert-info text-center">
                             <i class="bi bi-info-circle"></i> No tienes procesos asignados actualmente.
                         </div>
-                    @endif
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 </x-app-layout>
