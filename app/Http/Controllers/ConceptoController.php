@@ -141,9 +141,6 @@ class ConceptoController extends Controller
         }
     }
 
-    /**
-     * Guardar el concepto para un proceso específico
-     */
     public function store(Request $request, Proceso $proceso)
     {
         try {
@@ -165,9 +162,6 @@ class ConceptoController extends Controller
         }
     }
 
-    /**
-     * Mostrar el formulario para crear un concepto para un proceso específico
-     */
     public function verFormulario($procesoId)
     {
         try {
@@ -188,12 +182,9 @@ class ConceptoController extends Controller
     }
 
     // ===============================
-    // MÉTODOS PRIVADOS DE APOYO
+    // MÉTODOS PRIVADOS
     // ===============================
 
-    /**
-     * Validar datos del concepto
-     */
     private function validateConceptoData(Request $request)
     {
         $request->validate([
@@ -208,17 +199,11 @@ class ConceptoController extends Controller
         ]);
     }
 
-    /**
-     * Obtener proceso con sus relaciones
-     */
     private function getProcesoWithRelations($procesoId)
     {
         return Proceso::with(['cliente', 'abogado'])->findOrFail($procesoId);
     }
 
-    /**
-     * Verificar si ya existe un concepto para el proceso
-     */
     private function checkExistingConcepto($procesoId)
     {
         $conceptoExistente = ConceptoJuridico::where('proceso_id', $procesoId)->first();
@@ -242,9 +227,6 @@ class ConceptoController extends Controller
         ]);
     }
 
-    /**
-     * Actualizar estado del proceso
-     */
     private function updateProcesoEstado(Proceso $proceso)
     {
         $proceso->update(['estado' => 'con_concepto']);

@@ -478,3 +478,41 @@
         .text-center {
             text-align: center;
         }
+/* ===== Buscador Moderno ===== */
+.search-wrapper {
+    margin-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.search-group {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    padding: 6px 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    width: 300px; /* más pequeño */
+}
+
+.search-input-modern {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 6px;
+    font-size: 14px;
+}
+
+.search-button-modern {
+    border: none;
+    background: #4A73FF;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.search-button-modern:hover {
+    background: #365ee8;
+}

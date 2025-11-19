@@ -674,3 +674,54 @@
 .delete-btn:hover {
     background-color: #fecaca; /* Rojo más intenso al pasar el mouse */
 }
+/* CONTENEDOR */
+.search-section {
+    display: flex;
+    justify-content: flex-start; /* a la izquierda */
+    margin-bottom: 20px;
+}
+
+/* CAJA DEL BUSCADOR */
+.search-group-2 {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 8px 14px;
+    width: 450px;
+    border-radius: 14px;
+    border: 1px solid #dcdcdc;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    gap: 10px;
+}
+
+/* ICONO */
+.search-icon {
+    font-size: 16px;
+    color: #4A73FF;
+}
+
+/* INPUT */
+.search-input-2 {
+    flex: 1;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    font-size: 15px;
+    padding: 6px 0;
+}
+
+/* BOTÓN */
+.search-btn-2 {
+    background: #4A73FF;
+    color: #fff;
+    border: none;
+    padding: 7px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+}
+
+.search-btn-2:hover {
+    background: #365fe8;
+}

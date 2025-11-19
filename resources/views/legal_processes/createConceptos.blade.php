@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="es"><!-- pagina para redactar un concepto juridico para un proceso especifico -->
-<head> 
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redactar Concepto Jurídico</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Enlace a CSS corregido -->
+    <!-- Enlace a CSS -->
     <link rel="stylesheet" href="{{ asset('css/createCon.css') }}">
 </head>
 
@@ -16,27 +17,27 @@
         <div class="header">
             <h2>Redactar Concepto Jurídico</h2>
             <a href="{{ route('conceptos.create') }}" class="btn-back">
-                <i class="fas fa-arrow-left"></i> 
+                <i class="fas fa-arrow-left"></i>
                 Volver a la Lista
             </a>
         </div>
 
         <!-- Alert -->
         @if(session('success'))
-            <div id="successAlert" class="alert show">
-                <i class="fas fa-check-circle"></i>
-                <span>{{ session('success') }}</span>
-                <button onclick="this.parentElement.classList.remove('show')">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
+        <div id="successAlert" class="alert show">
+            <i class="fas fa-check-circle"></i>
+            <span>{{ session('success') }}</span>
+            <button onclick="this.parentElement.classList.remove('show')">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
         @endif
 
         <!-- Información del Proceso -->
         <div class="card">
             <div class="card-header">
                 <h5>
-                    <i class="fas fa-info-circle"></i> 
+                    <i class="fas fa-info-circle"></i>
                     Información del Proceso
                 </h5>
                 <span class="badge">{{ $proceso->estado }}</span>
@@ -90,75 +91,78 @@
         <div class="card">
             <div class="card-header primary">
                 <h5>
-                    <i class="fas fa-pen-alt"></i> 
+                    <i class="fas fa-pen-alt"></i>
                     Redactar Concepto Jurídico
                 </h5>
             </div>
             <div class="card-body">
-                <form id="conceptoForm" method="POST" action="{{ route('conceptos.store', $proceso->id) }}">
+             <form id="conceptoForm" method="POST" action="{{ route('abogado.conceptos.storeProceso', $proceso->id) }}">
+
                     @csrf
                     <!-- Título del Concepto Jurídico -->
-                    <div class="form-group">
-                        <label for="titulo" class="form-label">
-                            <i class="fas fa-heading" style="color: #6366f1;"></i>
-                                Título del Concepto
-                            <span class="required">*</span>
+                    <div class="form-group-modern">
+                        <label for="titulo" class="form-label-modern">
+                            <i class="fas fa-heading icon-modern"></i>
+                            Título del Concepto <span class="required">*</span>
                         </label>
-                        <input
-                            type="text"
-                            id="titulo"
-                            name="titulo"
-                            value="{{ old('titulo') }}"
-                            class="form-input"
-                            placeholder="Ejemplo: Análisis de la responsabilidad civil en el caso"
-                            required
-                            maxlength="120"
-                        >
-                        <div class="form-help">
-                            Escribe un título breve y descriptivo para el concepto (máx. 120 caracteres).
+
+                        <div class="input-wrapper-modern">
+                            <input
+                                type="text"
+                                id="titulo"
+                                name="titulo"
+                                value="{{ old('titulo') }}"
+                                class="form-input-modern"
+                                placeholder="Ejemplo: Análisis de la responsabilidad civil en el caso"
+                                maxlength="120"
+                                required>
                         </div>
+
+                        <p class="form-help-modern">
+                            Escribe un título breve y descriptivo para el concepto (máx. 120 caracteres).
+                        </p>
                     </div>
-                    <!-- Concepto Jurídico Principal --> 
+
+                    <!-- Concepto Jurídico Principal -->
                     <div class="form-group">
                         <label for="concepto" class="form-label">
-                            <i class="fas fa-gavel" style="color: #3b82f6;"></i> 
-                            Concepto Jurídico 
+                            <i class="fas fa-gavel" style="color: #3b82f6;"></i>
+                            Concepto Jurídico
                             <span class="required">*</span>
                         </label>
                         <div class="form-help">
                             Redacta un análisis jurídico completo y fundamentado del caso (mínimo 50 caracteres).
                         </div>
                         <div class="textarea-container">
-                            <textarea 
-                                id="concepto" 
+                            <textarea
+                                id="concepto"
                                 name="concepto"
-                                rows="12" 
+                                rows="12"
                                 class="form-textarea"
-                                required
-                            >{{ old('concepto') }}</textarea>
+                                required>{{ old('concepto') }}</textarea>
                             <div id="conceptoCounter" class="char-counter">0 caracteres</div>
                         </div>
                         <div id="conceptoError" class="form-error">
                             El concepto debe tener al menos 50 caracteres.
                         </div>
                         @error('concepto')
-                            <div class="form-error show">{{ $message }}</div>
+                        <div class="form-error show">{{ $message }}</div>
                         @enderror
 
                         @if($errors->has('general'))
-                            <div class="form-error show">{{ $errors->first('general') }}</div>
+                        <div class="form-error show">{{ $errors->first('general') }}</div>
                         @endif
                     </div>
 
                     <!-- Botones de Acción -->
                     <div class="btn-group">
                         <a href="{{ route('conceptos.create') }}" class="btn btn-cancel">
-                            <i class="fas fa-times"></i> 
+                            <i class="fas fa-times"></i>
                             Cancelar
                         </a>
                         <div class="btn-actions">
                             <button type="submit" id="submitBtn" disabled class="btn btn-submit">
-                                <i class="fas fa-check"></i> 
+                                <i class="fas fa-check"></i>
                                 Finalizar Concepto
                             </button>
                         </div>
@@ -171,7 +175,7 @@
         <div class="help-panel">
             <div class="help-header">
                 <h6>
-                    <i class="fas fa-question-circle" style="color: #3b82f6;"></i> 
+                    <i class="fas fa-question-circle" style="color: #3b82f6;"></i>
                     Guía para Redactar el Concepto
                 </h6>
             </div>
@@ -262,4 +266,5 @@
         });
     </script>
 </body>
+
 </html>

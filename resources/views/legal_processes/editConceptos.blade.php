@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -491,7 +492,7 @@
         <div class="card">
             <div class="card-header">
                 <h5>
-                    <i class="fas fa-info-circle"></i> 
+                    <i class="fas fa-info-circle"></i>
                     Información del Proceso
                 </h5>
                 <span class="badge">{{ $proceso->estado }}</span>
@@ -545,7 +546,7 @@
         <div class="card">
             <div class="card-header primary">
                 <h5>
-                    <i class="fas fa-pen-alt"></i> 
+                    <i class="fas fa-pen-alt"></i>
                     Redactar Concepto Jurídico
                 </h5>
             </div>
@@ -554,18 +555,18 @@
                     <!-- Concepto Jurídico Principal -->
                     <div class="form-group">
                         <label for="concepto" class="form-label">
-                            <i class="fas fa-gavel" style="color: #3b82f6;"></i> 
-                            Concepto Jurídico 
+                            <i class="fas fa-gavel" style="color: #3b82f6;"></i>
+                            Concepto Jurídico
                             <span class="required">*</span>
                         </label>
                         <div class="form-help">
                             Redacta un análisis jurídico completo y fundamentado del caso (mínimo 50 caracteres).
                         </div>
                         <div class="textarea-container">
-                            <textarea 
-                                id="concepto" 
-                                name="concepto" 
-                                rows="12" 
+                            <textarea
+                                id="concepto"
+                                name="concepto"
+                                rows="12"
                                 class="form-textarea"
                                 placeholder="Ingresa aquí el análisis jurídico detallado del proceso...
                                 Estructura sugerida:
@@ -573,8 +574,7 @@
                                 2. Marco jurídico aplicable
                                 3. Análisis legal
                                 4. Conclusiones"
-                                required
-                            ></textarea>
+                                required></textarea>
                             <div id="conceptoCounter" class="char-counter">0 caracteres</div>
                         </div>
                         <div id="conceptoError" class="form-error">
@@ -585,17 +585,17 @@
                     <!-- Botones de Acción -->
                     <div class="btn-group">
                         <a href="{{ route('conceptos.create') }}" class="btn btn-cancel">
-                        <i class="fas fa-arrow-left"></i>
-                        Volver
+                            <i class="fas fa-arrow-left"></i>
+                            Volver
                         </a>
-    
+
                         <div class="btn-actions">
                             <button type="button" onclick="guardarBorrador()" class="btn btn-draft">
-                                <i class="fas fa-save"></i> 
+                                <i class="fas fa-save"></i>
                                 Guardar Borrador
                             </button>
                             <button type="submit" id="submitBtn" disabled class="btn btn-submit">
-                                <i class="fas fa-check"></i> 
+                                <i class="fas fa-check"></i>
                                 Finalizar Concepto
                             </button>
                         </div>
@@ -604,61 +604,64 @@
             </div>
         </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const conceptoTextarea = document.getElementById('concepto');
-            const counter = document.getElementById('conceptoCounter');
-            const submitBtn = document.getElementById('submitBtn');
-            const errorDiv = document.getElementById('conceptoError');
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const conceptoTextarea = document.getElementById('concepto');
+                const counter = document.getElementById('conceptoCounter');
+                const submitBtn = document.getElementById('submitBtn');
+                const errorDiv = document.getElementById('conceptoError');
 
-            // Contador de caracteres
-            conceptoTextarea.addEventListener('input', function() {
-                const length = this.value.length;
-                counter.textContent = length + ' caracteres';
+                // Contador de caracteres
+                conceptoTextarea.addEventListener('input', function() {
+                    const length = this.value.length;
+                    counter.textContent = length + ' caracteres';
 
-                // Cambiar color según la longitud
-                if (length < 50) {
-                    counter.className = 'char-counter error';
-                    submitBtn.disabled = true;
-                    errorDiv.classList.add('show');
-                    this.classList.add('error');
-                } else {
-                    counter.className = 'char-counter success';
-                    submitBtn.disabled = false;
-                    errorDiv.classList.remove('show');
-                    this.classList.remove('error');
-                }
+                    // Cambiar color según la longitud
+                    if (length < 50) {
+                        counter.className = 'char-counter error';
+                        submitBtn.disabled = true;
+                        errorDiv.classList.add('show');
+                        this.classList.add('error');
+                    } else {
+                        counter.className = 'char-counter success';
+                        submitBtn.disabled = false;
+                        errorDiv.classList.remove('show');
+                        this.classList.remove('error');
+                    }
+                });
+
+                // Trigger inicial
+                conceptoTextarea.dispatchEvent(new Event('input'));
+
+                // Confirmación antes de enviar
+                document.getElementById('conceptoForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    if (confirm('¿Estás seguro de que deseas finalizar este concepto? Una vez enviado, no podrás modificarlo.')) {
+                        // Simular envío exitoso
+                        document.getElementById('successAlert').classList.add('show');
+                        window.scrollTo({
+                            top: 0,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
             });
 
-            // Trigger inicial
-            conceptoTextarea.dispatchEvent(new Event('input'));
+            function guardarBorrador() {
+                // Mostrar mensaje temporal
+                const originalText = event.target.innerHTML;
+                event.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                event.target.disabled = true;
 
-            // Confirmación antes de enviar
-            document.getElementById('conceptoForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                if (confirm('¿Estás seguro de que deseas finalizar este concepto? Una vez enviado, no podrás modificarlo.')) {
-                    // Simular envío exitoso
-                    document.getElementById('successAlert').classList.add('show');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            });
-        });
-
-        function guardarBorrador() {
-            // Mostrar mensaje temporal
-            const originalText = event.target.innerHTML;
-            event.target.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
-            event.target.disabled = true;
-            
-            setTimeout(() => {
-                event.target.innerHTML = '<i class="fas fa-check"></i> Guardado';
                 setTimeout(() => {
-                    event.target.innerHTML = originalText;
-                    event.target.disabled = false;
-                }, 1000);
-            }, 1500);
-        }
-        
-    </script>
+                    event.target.innerHTML = '<i class="fas fa-check"></i> Guardado';
+                    setTimeout(() => {
+                        event.target.innerHTML = originalText;
+                        event.target.disabled = false;
+                    }, 1000);
+                }, 1500);
+            }
+        </script>
 </body>
+
 </html>

@@ -127,7 +127,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/crear-concepto/{id}', [AbogadoController::class, 'mostrarFormularioConcepto'])
             ->name('crear-concepto');
 
+        Route::post('/procesos/{id}/conceptos', [ConceptoController::class, 'storeProceso'])
+    ->name('conceptos.storeProceso');
+    
+
     });
+
 
     // Rutas del ConceptoController
     Route::prefix('conceptos')->name('conceptos.')->group(function () {

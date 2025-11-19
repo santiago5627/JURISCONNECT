@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="es"> <!-- pagina para ver los procesos asignados al abogado -->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('css/procesos_judiciales.css') }}">
     <title>Procesos Judiciales</title>
 </head>
+
 <body>
-<!-- Modal para ver datos del proceso -->
-<div id="viewProcessModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
-    <div class="modal-content" style="background:white; border-radius:16px; max-width:500px; margin:auto; padding:2rem; position:relative;">
-        <span class="close-button" onclick="closeProcessModal()" style="position:absolute; top:1rem; right:1rem; font-size:2rem; cursor:pointer;">&times;</span>
-        <h2 style="font-size:1.25rem; font-weight:600; margin-bottom:1rem;">Datos del Proceso</h2>
-        <div id="processModalBody">
-            <p>Cargando datos...</p>
+    <!-- Modal para ver datos del proceso -->
+    <div id="viewProcessModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
+        <div class="modal-content" style="background:white; border-radius:16px; max-width:500px; margin:auto; padding:2rem; position:relative;">
+            <span class="close-button" onclick="closeProcessModal()" style="position:absolute; top:1rem; right:1rem; font-size:2rem; cursor:pointer;">&times;</span>
+            <h2 style="font-size:1.25rem; font-weight:600; margin-bottom:1rem;">Datos del Proceso</h2>
+            <div id="processModalBody">
+                <p>Cargando datos...</p>
+            </div>
         </div>
     </div>
-</div>
 
     <div class="container">
-<!-- Header Principal -->
+        <!-- Header Principal -->
         <div class="main-header">
             <div class="header-content">
                 <div class="header-left">
@@ -39,7 +41,7 @@
                 </div>
             </div>
 
-<!-- Mensaje de éxito (ejemplo) -->
+            <!-- Mensaje de éxito (ejemplo) -->
             <div class="success-message" style="display: none;">
                 <svg class="success-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -47,7 +49,7 @@
                 <p class="success-text">Proceso creado exitosamente</p>
             </div>
 
-<!-- Barra de acciones -->
+            <!-- Barra de acciones -->
             <div class="actions-bar">
                 <div class="actions-content">
                     <div class="info-text">
@@ -74,14 +76,26 @@
                     </div>
                 </div>
                 <div class="search-section">
-                    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar por nombre, apellido o número de radicado" >
-                    <button class="search-btn" id="searchBtn">Buscar</button>
+                    <div class="search-group-2">
+                        <i class="fas fa-search search-icon"></i>
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            class="search-input-2"
+                            placeholder="Buscar por nombre, apellido o número de radicado">
+
+                        <button class="search-btn-2" id="searchBtn">
+                            Buscar
+                        </button>
+                    </div>
                 </div>
+
             </div>
         </div>
-    <div id="procesosTableContainer">
-        @include('profile.partials.processes-table', ['proceso' => $procesos])
-    </div>
+        <div id="procesosTableContainer">
+            @include('profile.partials.processes-table', ['proceso' => $procesos])
+        </div>
     </div>
 
     <script>
@@ -129,29 +143,29 @@
             params.append('ajax', '1');
 
             fetch(`{{ route('procesos.index') }}?${params.toString()}`, {
-                method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.html) {
-                    // Actualizar contenedor de tabla
-                    document.getElementById('procesosTableContainer').innerHTML = data.html;
-                    
-                    // Actualizar total de resultados
-                    if (data.total !== undefined) {
-                        document.getElementById('totalCount').textContent = data.total;
+                    method: 'GET',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
                     }
-                } else {
-                    console.error('Error en búsqueda:', data.message || 'Error desconocido');
-                }
-            })
-            .catch(error => {
-                console.error('Error en la petición AJAX:', error);
-            });
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.html) {
+                        // Actualizar contenedor de tabla
+                        document.getElementById('procesosTableContainer').innerHTML = data.html;
+
+                        // Actualizar total de resultados
+                        if (data.total !== undefined) {
+                            document.getElementById('totalCount').textContent = data.total;
+                        }
+                    } else {
+                        console.error('Error en búsqueda:', data.message || 'Error desconocido');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en la petición AJAX:', error);
+                });
         }
 
         // Función para limpiar búsqueda
@@ -179,7 +193,7 @@
                         <p><strong>Demandado:</strong> ${data.demandado}</p>
                         <p><strong>Descripción:</strong> ${data.descripcion ?? 'Sin descripción'}</p>
                     `;
-                }) 
+                })
                 .catch(() => {
                     body.innerHTML = '<p>Error al cargar los datos.</p>';
                 });
@@ -224,4 +238,5 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
+
 </html>
