@@ -28,7 +28,7 @@ public function run(): void
     // Crear un usuario con ese rol
     User::firstOrCreate([
         
-        'email' => 'bsalinas1054@gmail.com'
+        'email' => 'brendaModa45@gmail.com'
 
     ], [
         'name' => 'Admin',
@@ -36,6 +36,5 @@ public function run(): void
         'role_id' => $adminRole->id,
         'remember_token' => Str::random(10),
     ]);
-
 }
 }
