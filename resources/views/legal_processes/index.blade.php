@@ -173,6 +173,7 @@
                 .then(data => {
                     body.innerHTML = `
                         <p><strong>Radicado:</strong> ${data.numero_radicado}</p>
+                        <p><strong>Estado:</strong> ${data.estado}</p>
                         <p><strong>Tipo:</strong> ${data.tipo_proceso}</p>
                         <p><strong>Demandante:</strong> ${data.demandante}</p>
                         <p><strong>Demandado:</strong> ${data.demandado}</p>
