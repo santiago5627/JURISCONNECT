@@ -219,14 +219,12 @@
         </div>
     </div>
 </div>
-                    
-                    <div class="dashboard-charts">
-                        <div class="chart-container">
-                            <h3>Actividad Reciente</h3>
-                            <p>Aquí se mostraría un gráfico de actividad reciente</p>
-                        </div>
-                    </div>
-                </div>
+    <!-- 🔽🔽🔽 TABLA OCULTA INICIALMENTE 🔽🔽🔽 -->
+    <div id="lawyersTableWrapper" style="display: none; margin-top: 30px;">
+        <h3>Listado de Abogados</h3>
+        @include('profile.partials.lawyers-table-simple', ['lawyers' => $lawyers])
+    </div>
+</div>
 
                 <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
                 <div class="section-content" id="lawyers-section">

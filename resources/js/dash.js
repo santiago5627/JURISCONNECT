@@ -781,23 +781,24 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Sistema de alertas y validaciones inicializado correctamente');
 });
 
-// Evento para la tarjeta de Abogados Registrados
-document.getElementById('lawyersStatCard').addEventListener('click', function() {
-    // Ocultar todas las secciones
-    document.querySelectorAll('.section-content').forEach(section => {
-        section.classList.remove('active');
-    });
-    
-    // Mostrar la sección de abogados
-    document.getElementById('lawyers-section').classList.add('active');
-    
-    // Actualizar los botones del menú lateral
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    
-    // Activar el botón de "Gestión de Abogados"
-    document.querySelector('[data-section="lawyers"]').classList.add('active');
+
+document.addEventListener("DOMContentLoaded", () => {
+    const statCard = document.getElementById("lawyersStatCard");
+    const tableWrapper = document.getElementById("lawyersTableWrapper");
+
+    if (statCard && tableWrapper) {
+        statCard.addEventListener("click", () => {
+            const isVisible = tableWrapper.style.display === "block";
+
+            // Toggle
+            tableWrapper.style.display = isVisible ? "none" : "block";
+
+            // Scroll suave cuando se despliega
+            if (!isVisible) {
+                tableWrapper.scrollIntoView({ behavior: "smooth" });
+            }
+        });
+    }
 });
 
 /* ========= Exponer funciones útiles globalmente (si las necesitas) ========= */

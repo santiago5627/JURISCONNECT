@@ -16,32 +16,35 @@ class AdminController extends Controller
             // Iniciar query builder
             $query = Lawyer::query();
             $searchTerm = $request->get('search');
-            
+
             // Aplicar búsqueda si existe el término de búsqueda
             if ($searchTerm) {
-                $query->where(function($q) use ($searchTerm) {
+                $query->where(function ($q) use ($searchTerm) {
                     $q->where('nombre', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
-                      // Agrega más campos según tu modelo Lawyer
+                        ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
+                    // Agrega más campos según tu modelo Lawyer
                 });
             }
-            
+
             // Si es una petición para obtener todos los datos (para búsqueda híbrida)
             if ($request->get('get_all') && $request->ajax()) {
                 $allLawyers = $query->get();
                 return response()->json($allLawyers);
             }
-            
+
             // Obtener abogados paginados
             $lawyers = $query->paginate(10);
 
+            // TABLA PEQUEÑA (mostrar todos)
+            $lawyersSimple = Lawyer::paginate(10);
+
             // Mantener parámetros de búsqueda en la paginación
             $lawyers->appends($request->query());
-            
+
             // Si es una petición AJAX, devolver solo la vista parcial
             if ($request->ajax()) {
                 $html = view('profile.partials.lawyers-table', compact('lawyers'))->render();
@@ -62,21 +65,20 @@ class AdminController extends Controller
             $cases_count = Proceso::count();
 
             // Para peticiones normales, devolver la vista completa
-            return view('dashboard', compact('lawyers', 'totalLawyers', 'cases_count'));
-
+            return view('dashboard', compact('lawyers', 'totalLawyers', 'lawyersSimple', 'cases_count'));
         } catch (\Exception $e) {
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Error al cargar los datos: ' . $e->getMessage()
-                ], 500);
+                ], 500);    
             }
-            
+
             // Para peticiones normales, redirigir con error
             return back()->with('error', 'Error al cargar los datos');
         }
     }
-    
+
     // Método adicional para búsqueda rápida (opcional)
     public function search(Request $request)
     {
@@ -87,21 +89,20 @@ class AdminController extends Controller
                 return response()->json([]);
             }
 
-            $lawyers = Lawyer::where(function($q) use ($searchTerm) {
+            $lawyers = Lawyer::where(function ($q) use ($searchTerm) {
                 $q->where('nombre', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
+                    ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
             })->limit(20)->get(['id', 'nombre', 'apellido', 'numero_documento']);
-            
+
             return response()->json([
                 'success' => true,
                 'data' => $lawyers,
                 'count' => $lawyers->count()
             ]);
-            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
