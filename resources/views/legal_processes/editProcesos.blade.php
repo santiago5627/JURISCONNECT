@@ -55,7 +55,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="estado" class="form-label">
-                                Tipo de Proceso <span class="required">*</span>
+                                Estado de proceso <span class="required">*</span>
                             </label>
                             <select class="form-select @error('estado') is-invalid @enderror" id="estado" name="estado" required>
                                 <option value="Pendiente" {{ old('estado', $proceso->estado) == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>

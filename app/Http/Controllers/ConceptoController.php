@@ -79,20 +79,21 @@ class ConceptoController extends Controller
         try {
             //  CORRECCIÓN: Filtrar por múltiples estados correctamente
             $query = Proceso::whereIn('estado', [
-                'Pendiente',
-                'primera_instancia',
-                'En curso',
+                'Radicado',
+                'Pendiente', 
+                'Primera instancia', 
+                'En curso', 
                 'Finalizado',
-                'en_audiencia',
-                'pendiente_fallo',
-                'favorable_primera',
-                'desfavorable_primera',
-                'en_apelacion',
-                'conciliacion_pendiente',
-                'conciliado',
-                'sentencia_ejecutoriada',
-                'en_proceso_pago',
-                'terminado'
+                'En audiencia',
+                'Pendiente fallo', 
+                'Favorable primera', 
+                'Desfavorable primera', 
+                'En apelacion', 
+                'Conciliacion pendiente', 
+                'Conciliado',
+                'Sentencia ejecutoriada', 
+                'En proceso pago', 
+                'Terminado'
             ]);
 
             // Búsqueda
@@ -218,11 +219,11 @@ class ConceptoController extends Controller
     private function createConceptoForProceso(Request $request, Proceso $proceso)
     {
         ConceptoJuridico::create([
-            'proceso_id' => $proceso->id,
+            'procesos_id' => $proceso->id,
             'titulo' => $request->titulo,
             'categoria' => $request->categoria,
             'descripcion' => $request->descripcion,
-            'user_id' => auth()->id()
+            'abogado_id' => auth()->id()
         ]);
     }
 

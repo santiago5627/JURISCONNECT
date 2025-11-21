@@ -10,9 +10,9 @@ class ProcesoFactory extends Factory
 {
     public function definition(): array
     {
-        $estados = ['radicado','Pendiente', 'primera_instancia', 'En curso', 'Finalizado','en_audiencia',
-    'pendiente_fallo', 'favorable_primera', 'desfavorable_primera', 'en_apelacion', 'conciliacion_pendiente', 'conciliado',
-    'sentencia_ejecutoriada', 'en_proceso_pago', 'terminado']; 
+        $estados = ['Radicado','Pendiente', 'Primera instancia', 'En curso', 'Finalizado','En audiencia',
+    'Pendiente fallo', 'Favorable primera', 'Desfavorable primera', 'En apelacion', 'Conciliacion pendiente', 'Conciliado',
+    'Sentencia ejecutoriada', 'En proceso pago', 'Terminado']; 
         $tipos = ['Civil', 'Laboral', 'Penal', 'Familia', 'Comercial'];
 
         return [
