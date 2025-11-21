@@ -7,6 +7,7 @@ use App\Models\Proceso;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Controller;
 use App\Models\Lawyer;
+use Illuminate\Support\Facades\Auth;
 
 class LegalProcessController extends Controller
 {
@@ -20,6 +21,10 @@ class LegalProcessController extends Controller
     public function index(Request $request)
     {
         $query = \App\Models\Proceso::query();
+
+    //Mostrar solo los procesos del abogado autenticado 
+        $query->where('lawyer_id', Auth::id());
+
 
         // Búsqueda
         if ($request->has('search') && $request->get('search')) {
@@ -60,18 +65,26 @@ class LegalProcessController extends Controller
     /**
      * Guardar nuevo proceso judicial
      */
-    public function store(Request $request)
+public function store(Request $request)
 {
     try {
+
         $validated = $this->validateProcesoData($request);
 
-        $validated['estado'] = 'Pendiente'; // Estado por defecto
+        // Estado por defecto
+        $validated['estado'] = 'Pendiente'; 
 
+        // ASIGNAR EL ABOGADO QUE CREA EL PROCESO
+        $validated['lawyer_id'] = Auth::user()->id;
+
+
+        // Manejar documento
         $this->handleDocumentUpload($request, $validated);
 
+        // Crear proceso
         $proceso = Proceso::create($validated);
 
-        // Si es petición AJAX/JSON, devolver JSON
+        // Si es petición AJAX
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
                 'success' => true,
@@ -80,12 +93,14 @@ class LegalProcessController extends Controller
             ], 201);
         }
 
-        // Si es petición normal (formulario), redirigir
+        // Redirección normal
         return redirect()
-            ->route('mis.procesos')
-            ->with('success', 'Proceso judicial creado con éxito.');
+        ->route('abogado.dashboard')
+        ->with('success', 'Proceso judicial creado con éxito.');
+
 
     } catch (\Illuminate\Validation\ValidationException $e) {
+
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
                 'success' => false,
@@ -94,9 +109,10 @@ class LegalProcessController extends Controller
             ], 422);
         }
 
-        throw $e; // Re-lanzar para que Laravel maneje normalmente
+        throw $e;
 
     } catch (\Exception $e) {
+
         if ($request->expectsJson() || $request->ajax()) {
             return response()->json([
                 'success' => false,
