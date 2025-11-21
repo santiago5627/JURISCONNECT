@@ -29,9 +29,9 @@
                     <div class="button-container">
                         <a href="{{ route('dashboard.abogado') }}" class="btn btn-cancel">
                             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                             </svg>
-                            Cancelar
+                            Volver
                         </a>
                         <button type="submit" class="btn btn-primary">
                             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">

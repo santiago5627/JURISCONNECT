@@ -76,19 +76,7 @@
                     </div>
                 </div>
                 <div class="search-section">
-                    <div class="search-group-2">
-                        <i class="fas fa-search search-icon"></i>
-
-                        <input
-                            type="text"
-                            id="searchInput"
-                            class="search-input-2"
-                            placeholder="Buscar por nombre, apellido o número de radicado">
-
-                        <button class="search-btn-2" id="searchBtn">
-                            Buscar
-                        </button>
-                    </div>
+                    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Buscar por nombre, apellido o número de radicado" >
                 </div>
 
             </div>
@@ -187,6 +175,8 @@
                 .then(data => {
                     body.innerHTML = `
                         <p><strong>Radicado:</strong> ${data.numero_radicado}</p>
+                        <p><strong>Fecha radicacion</strong> ${data.created_at}</p>
+                        <p><strong>Estado:</strong> ${data.estado}</p>
                         <p><strong>Tipo:</strong> ${data.tipo_proceso}</p>
                         <p><strong>Demandante:</strong> ${data.demandante}</p>
                         <p><strong>Demandado:</strong> ${data.demandado}</p>

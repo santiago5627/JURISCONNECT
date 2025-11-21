@@ -51,13 +51,39 @@
                     @csrf
                     @method('PUT')
                     <!-- Primera fila -->
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="estado" class="form-label">
+                                Estado de proceso <span class="required">*</span>
+                            </label>
+                            <select class="form-select @error('estado') is-invalid @enderror" id="estado" name="estado" required>
+                                <option value="Pendiente" {{ old('estado', $proceso->estado) == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
+                                <option value="primera_instancia" {{ old('estado', $proceso->estado) == 'primera_instancia' ? 'selected' : '' }}>primera instancia</option>
+                                <option value="En curso" {{ old('estado', $proceso->estado) == 'En curso' ? 'selected' : '' }}>En curso</option>
+                                <option value="Finalizado" {{ old('estado', $proceso->estado) == 'Finalizado' ? 'selected' : '' }}>Finalizado</option>
+                                <option value="en_audiencia" {{ old('estado', $proceso->estado) == 'en_audiencia' ? 'selected' : '' }}>en audiencia</option>
+                                <option value="pendiente_fallo" {{ old('estado', $proceso->estado) == 'pendiente_fallo' ? 'selected' : '' }}>pendiente fallo</option>
+                                <option value="favorable_primera" {{ old('estado', $proceso->estado) == 'favorable_primera' ? 'selected' : '' }}>favorable primera</option>
+                                <option value="desfavorable_primera" {{ old('estado', $proceso->estado) == 'desfavorable_primera' ? 'selected' : '' }}>desfavorable primera</option>
+                                <option value="en_apelacion" {{ old('estado', $proceso->estado) == 'en_apelacion' ? 'selected' : '' }}>en apelacion</option>
+                                <option value="conciliacion_pendiente" {{ old('estado', $proceso->estado) == 'conciliacion_pendiente' ? 'selected' : '' }}>conciliacion pendiente</option>
+                                <option value="conciliado" {{ old('estado', $proceso->estado) == 'conciliado' ? 'selected' : '' }}>conciliado</option>
+                                <option value="sentencia_ejecutoriada" {{ old('estado', $proceso->estado) == 'sentencia_ejecutoriada' ? 'selected' : '' }}>sentencia ejecutoriada</option>
+                                <option value="en_proceso_pago" {{ old('estado', $proceso->estado) == 'en_proceso_pago' ? 'selected' : '' }}>en proceso pago</option>
+                                <option value="terminado" {{ old('estado', $proceso->estado) == 'terminado' ? 'selected' : '' }}>terminado</option>
+                            </select>
+                            @error('estado')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="tipo_proceso" class="form-label">
                                 Tipo de Proceso <span class="required">*</span>
                             </label>
                             <select class="form-select @error('tipo_proceso') is-invalid @enderror" id="tipo_proceso" name="tipo_proceso" required>
-                                <option value="">Seleccionar tipo</option>
                                 <option value="Civil" {{ old('tipo_proceso', $proceso->tipo_proceso) == 'Civil' ? 'selected' : '' }}>Civil</option>
                                 <option value="Penal" {{ old('tipo_proceso', $proceso->tipo_proceso) == 'Penal' ? 'selected' : '' }}>Penal</option>
                                 <option value="Laboral" {{ old('tipo_proceso', $proceso->tipo_proceso) == 'Laboral' ? 'selected' : '' }}>Laboral</option>

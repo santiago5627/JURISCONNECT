@@ -7,6 +7,7 @@ use App\Models\Proceso;
 use App\Models\ConceptoJuridico;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ConceptoController extends Controller
 {
@@ -76,6 +77,11 @@ class ConceptoController extends Controller
 
 
         } catch (\Exception $e) {
+            Log::error('Error en ConceptoController@index', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -143,11 +149,21 @@ public function create(Request $request)
      */
     public function verFormulario($procesoId)
     {
-        $proceso = $this->getProcesoWithRelations($procesoId);
-        
-        $this->checkExistingConcepto($procesoId);
-        
-        return view('legal_processes.showConceptos', compact('proceso'));
+        try {
+            $proceso = $this->getProcesoWithRelations($procesoId);
+            
+            $this->checkExistingConcepto($procesoId);
+            
+            return view('legal_processes.showConceptos', compact('proceso'));
+
+        } catch (\Exception $e) {
+            Log::error('Error al cargar formulario de concepto', [
+                'proceso_id' => $procesoId,
+                'message' => $e->getMessage()
+            ]);
+
+            return back()->with('error', 'Error al cargar el formulario');
+        }
     }
 
     // ===============================
@@ -182,7 +198,7 @@ public function create(Request $request)
         $conceptoExistente = ConceptoJuridico::where('proceso_id', $procesoId)->first();
         
         if ($conceptoExistente) {
-            abort(redirect()->back()->with('error', 'Ya existe un concepto para este proceso.'));
+            abort(403, 'Ya existe un concepto para este proceso.');
         }
     }
 
@@ -213,26 +229,35 @@ public function create(Request $request)
             $searchTerm = $request->get('term');
 
             if (!$searchTerm) {
-                return response()->json([]);
+                return response()->json([
+                    'success' => true,
+                    'data' => [],
+                    'count' => 0
+                ]);
             }
 
-            $lawyers = ConceptoJuridico::where(function($q) use ($searchTerm) {
+            $procesos = Proceso::where(function($q) use ($searchTerm) {
                 $q->where('id', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('estado', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('tipo_proceso', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
-                  ->orWhere('created_at', 'LIKE', '%' . $searchTerm . '%');
-            })->limit(20)->get(['id', 'demandante', 'demandado', 'numero_radicado']);
+                ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
+                ->orWhere('tipo_proceso', 'LIKE', '%' . $searchTerm . '%');
+            })
+            ->limit(20)
+            ->get(['id', 'numero_radicado', 'demandante', 'demandado', 'estado']);
 
             return response()->json([
                 'success' => true,
-                'data' => $lawyers,
-                'count' => $lawyers->count()
+                'data' => $procesos,
+                'count' => $procesos->count()
             ]);
             
         } catch (\Exception $e) {
+            Log::error('Error en búsqueda de procesos', [
+                'term' => $searchTerm ?? 'N/A',
+                'message' => $e->getMessage()
+            ]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error en la búsqueda: ' . $e->getMessage()

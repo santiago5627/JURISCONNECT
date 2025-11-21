@@ -14,7 +14,7 @@
             <div class="card-body">
                 <div class="card-grid">
                     <div class="info-section">
-                        <div class="info-item info-item-blue">
+                        <div class="info-item info-item-blue"> 
                             <div class="info-icon info-icon-blue">
                                 <i class="fas fa-hashtag"></i>
                             </div>

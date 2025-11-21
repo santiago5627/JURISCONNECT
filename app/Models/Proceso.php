@@ -27,11 +27,13 @@ class Proceso extends Model
         'fecha_fin',
         'user_id',
         'lawyer_id',
+        'created_at',
     ];
 
     protected $casts = [
         'fecha_inicio' => 'date',
         'fecha_fin' => 'date',
+        'created_at' => 'datetime:d-m-Y',
     ];
 
     /**
