@@ -145,7 +145,7 @@ class ConceptoController extends Controller
     {
         try {
             $this->validateConceptoData($request);
-            
+
             $this->createConceptoForProceso($request, $proceso);
             $this->updateProcesoEstado($proceso);
 
