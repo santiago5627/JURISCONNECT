@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('concepto_juridicos', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
-            $table->string('categoria');
+            //$table->string('categoria');
             $table->text('descripcion');
             
             // Relación con abogado (antes de timestamps)

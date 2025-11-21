@@ -26,6 +26,7 @@ class ConceptoController extends Controller
     // Crear concepto relacionado al proceso
     $concepto = new ConceptoJuridico();
     $concepto->proceso_id = $id;
+    $concepto->abogado_id = auth()->id();
     $concepto->titulo = $validated['titulo'];
     $concepto->descripcion = $validated['concepto'];
     $concepto->save();
@@ -205,13 +206,15 @@ public function create(Request $request)
     /**
      * Crear concepto jurídico para el proceso
      */
-    private function createConceptoForProceso(Request $request)
+    private function createConceptoForProceso(Request $request, Proceso $proceso)
     {
-        $concepto = new ConceptoJuridico();
-        $concepto->titulo = $request->titulo;
-        $concepto->categoria = $request->categoria;
-        $concepto->descripcion = $request->descripcion;
-        $concepto->save();
+        ConceptoJuridico::create([
+            'proceso_id' => $proceso->id,
+            'titulo' => $request->titulo,
+            'categoria' => $request->categoria,
+            'descripcion' => $request->descripcion,
+            'abogado_id' => auth()->id() // <-- changed from user_id
+        ]);
     }
 
     /**

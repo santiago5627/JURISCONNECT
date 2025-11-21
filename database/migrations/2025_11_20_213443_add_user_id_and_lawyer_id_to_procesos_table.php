@@ -1,33 +1,24 @@
 <?php
 
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up()
+    public function up(): void
     {
-        Schema::table('procesos', function (Blueprint $table) {
-            // Agregar campos
-            $table->unsignedBigInteger('user_id')->nullable()->after('estado');
-            $table->unsignedBigInteger('lawyer_id')->nullable()->after('user_id');
-
-            // Foráneas
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('lawyer_id')->references('id')->on('users')->onDelete('set null');
+        Schema::table('concepto_juridicos', function (Blueprint $table) {
+            $table->foreignId('proceso_id')->after('abogado_id')->constrained('procesos')->onDelete('cascade');
         });
     }
 
-    public function down()
+    public function down(): void
     {
-        Schema::table('procesos', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropForeign(['lawyer_id']);
-            $table->dropColumn(['user_id', 'lawyer_id']);
+        Schema::table('concepto_juridicos', function (Blueprint $table) {
+            $table->dropForeign(['proceso_id']);
+            $table->dropColumn('proceso_id');
         });
     }
 };
