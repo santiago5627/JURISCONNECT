@@ -2,23 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
-
 
 class AbogadoDashboardController extends Controller
 {
-    //
     public function index()
-{
-    $user = \Illuminate\Support\Facades\Auth::user();
-    if (!$user) {
-        abort(403, 'Usuario no autenticado.');
+    {
+        $user = Auth::user();
+
+        if (!$user) {
+            abort(403, 'Usuario no autenticado.');
+        }
+
+        // Obtener SOLO los procesos donde lawyer_id = id del abogado
+        $procesos = $user->procesosAsignados;
+
+        return view('dashboard.abogado', compact('procesos'));
     }
-    $procesos = $user->procesosAsignados; // relación en el modelo User
-
-    return view('dashboard.abogado', compact('procesos'));
 }
-
-}
-

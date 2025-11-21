@@ -33,7 +33,7 @@
                 <i class="fas fa-arrow-left"></i>
                 Cancelar
             </a>
-            <!-- busqueda -->
+
             <!-- Buscador moderno -->
             <div class="search-wrapper">
                 <div class="search-group">
@@ -50,7 +50,7 @@
 
         </div>
 
-        <!-- Alerta de éxito (oculta por defecto) -->
+        <!-- Alerta de éxito -->
         <div id="success-alert" class="alert alert-success hidden">
             <i class="fas fa-check-circle"></i>
             <span>Operación realizada exitosamente.</span>
@@ -59,13 +59,11 @@
             </button>
         </div>
 
-
         <!-- Info de procesos pendientes -->
         <div class="alert alert-info">
             <i class="fas fa-info-circle"></i>
             <div>
                 <p class="font-bold">Procesos Pendientes</p>
-
             </div>
         </div>
 
@@ -97,9 +95,7 @@
                     <i class="fas fa-times"></i>
                 </button>
             </div>
-            <div id="processModalBody" class="modal-body">
-                <!-- Contenido cargado dinámicamente -->
-            </div>
+            <div id="processModalBody" class="modal-body"></div>
             <div class="modal-footer">
                 <button class="cancel-btn" onclick="closeProcessModal()">Cerrar</button>
             </div>
@@ -119,39 +115,6 @@
             align-items: center;
             z-index: 1000;
         }
-
-        .modal-content {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            width: 90%;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .modal-body {
-            padding: 20px;
-        }
-
-        .modal-footer {
-            padding: 15px 20px;
-            border-top: 1px solid #eee;
-            text-align: right;
-        }
     </style>
 
     <script>
@@ -159,12 +122,7 @@
             document.getElementById(alertId).classList.add('hidden');
         }
 
-        // Ejemplo para mostrar alerta de éxito
-        function showSuccessAlert() {
-            document.getElementById('success-alert').classList.remove('hidden');
-        }
-
-        // ===== FUNCIONALIDAD DE BÚSQUEDA AJAX =====
+        // ===== FUNCIONALIDAD DE BÚSQUEDA =====
         let searchTimeout;
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -176,13 +134,6 @@
                     clearTimeout(searchTimeout);
                     const searchTerm = this.value.trim();
                     searchTimeout = setTimeout(() => performSearch(searchTerm), 300);
-                });
-
-                searchInput.addEventListener("keypress", function(event) {
-                    if (event.key === 'Enter') {
-                        clearTimeout(searchTimeout);
-                        performSearch(this.value.trim());
-                    }
                 });
             }
 
@@ -199,47 +150,23 @@
             if (searchTerm) params.append('search', searchTerm);
             params.append('ajax', '1');
 
-            // Usar la ruta actual (o reemplaza por route('procesos.index'))
             fetch(`${window.location.pathname}?${params.toString()}`, {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success && data.html) {
-                        // Reemplaza el grid de tarjetas con el HTML devuelto
-                        const grid = document.querySelector('.process-grid');
-                        if (grid) {
-                            grid.innerHTML = data.html;
-                        }
-
-                        // Si el backend devuelve un total, actualiza el contador si existe
-                        if (data.total !== undefined) {
-                            const totalEl = document.getElementById('totalCount');
-                            if (totalEl) totalEl.textContent = data.total;
-                        }
-
-                        // Actualizar URL sin recargar
-                        const newUrl = new URL(window.location);
-                        if (searchTerm) newUrl.searchParams.set('search', searchTerm);
-                        else newUrl.searchParams.delete('search');
-                        newUrl.searchParams.delete('page');
-                        window.history.replaceState({}, '', newUrl.toString());
-                    } else {
-                        console.error('Respuesta inválida de búsqueda', data);
-                    }
-                })
-                .catch(err => console.error('Error en búsqueda:', err));
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success && data.html) {
+                    document.querySelector('.process-grid').innerHTML = data.html;
+                }
+            });
         }
 
-        // ===== ABRIR Y CERRAR MODAL DE PROCESO =====
+        // ===== MODAL =====
         function openProcessModal(id) {
             document.getElementById('viewProcessModal').style.display = 'flex';
             const body = document.getElementById('processModalBody');
-            body.innerHTML = '<p>Cargando datos...</p>';
+            body.innerHTML = '<p>Cargando...</p>';
 
             fetch(`/procesos/${id}`)
                 .then(res => res.json())
@@ -250,6 +177,21 @@
                         <p><strong>Demandante:</strong> ${data.demandante}</p>
                         <p><strong>Demandado:</strong> ${data.demandado}</p>
                         <p><strong>Descripción:</strong> ${data.descripcion ?? 'Sin descripción'}</p>
+
+                        <hr>
+                        <h3>Conceptos Jurídicos</h3>
+
+                        ${
+                            data.conceptos.length === 0
+                            ? '<p>No hay conceptos redactados aún.</p>'
+                            : data.conceptos.map(c => `
+                                <div class="card mb-2" style="padding:10px;border:1px solid #ddd;border-radius:6px;">
+                                    <h4>${c.titulo}</h4>
+                                    <p>${c.descripcion}</p>
+                                    <p><small>Redactado por: ${c.abogado?.name ?? 'Desconocido'}</small></p>
+                                </div>
+                            `).join('')
+                        }
                     `;
                 })
                 .catch(() => {
@@ -259,38 +201,6 @@
 
         function closeProcessModal() {
             document.getElementById('viewProcessModal').style.display = 'none';
-        }
-
-        //  Cerrar modal con la tecla ESC
-        document.addEventListener('keydown', function(event) {
-            const modal = document.getElementById('viewProcessModal');
-            if (event.key === 'Escape' && modal.style.display === 'flex') {
-                closeProcessModal();
-            }
-        });
-
-        function confirmDelete(id, nombre) {
-            Swal.fire({
-                title: 'Confirmar Eliminación',
-                html: `¿Estás seguro de eliminar el proceso de <b>${nombre}</b>?<br>Esta acción no se puede deshacer.`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Eliminar',
-                cancelButtonText: 'Cancelar',
-                reverseButtons: true,
-                customClass: {
-                    popup: 'custom-popup',
-                    title: 'custom-title',
-                    htmlContainer: 'custom-text',
-                    confirmButton: 'custom-confirm',
-                    cancelButton: 'custom-cancel',
-                    icon: 'custom-icon'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById(`delete-form-${id}`).submit();
-                }
-            });
         }
     </script>
 

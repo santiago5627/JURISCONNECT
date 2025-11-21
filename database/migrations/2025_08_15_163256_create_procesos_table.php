@@ -21,6 +21,12 @@ return new class extends Migration
     $table->string('documento')->nullable();
     $table->enum('estado', ['Pendiente', 'En curso', 'Finalizado' ])->default('Pendiente');
     $table->timestamps();
+    $table->unsignedBigInteger('user_id')->nullable();
+    $table->unsignedBigInteger('lawyer_id')->nullable();
+    $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+    $table->foreign('lawyer_id')->references('id')->on('users')->onDelete('set null');
+
+
 });
     }
 
