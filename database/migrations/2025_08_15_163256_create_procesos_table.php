@@ -23,6 +23,12 @@ return new class extends Migration
     'Pendiente fallo', 'Favorable primera', 'Desfavorable primera', 'En apelacion', 'Conciliacion pendiente', 'Conciliado',
     'Sentencia ejecutoriada', 'En proceso pago', 'Terminado'])->default('Pendiente'); 
     $table->timestamps();
+    $table->unsignedBigInteger('user_id')->nullable();
+    $table->unsignedBigInteger('lawyer_id')->nullable();
+    $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+    $table->foreign('lawyer_id')->references('id')->on('users')->onDelete('set null');
+
+
 });
     }
 
