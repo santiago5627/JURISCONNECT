@@ -252,10 +252,32 @@
                         <p><strong>Descripción:</strong> ${data.descripcion ?? 'Sin descripción'}</p>
                     `;
                 })
-                .catch(() => {
-                    body.innerHTML = '<p>Error al cargar los datos.</p>';
-                });
+                .catch(err => console.error('Error en búsqueda:', err));
         }
+
+        // ===== ABRIR Y CERRAR MODAL DE PROCESO =====
+        function openProcessModal(id) {
+    document.getElementById('viewProcessModal').style.display = 'flex';
+    const body = document.getElementById('processModalBody');
+    body.innerHTML = '<p>Cargando datos...</p>';
+
+    // Cambiar la ruta para recuperar un registro de concepto_juridicos
+    fetch(`/concepto_juridicos/${id}`)
+        .then(res => {
+            if (!res.ok) throw new Error('No se encontró el concepto');
+            return res.json();
+        })
+        .then(data => {
+            body.innerHTML = `
+                <p><strong>Título:</strong> ${data.titulo ?? 'N/A'}</p>
+                <p><strong>Fecha:</strong> ${data.created_at}</p>
+                <p><strong>Contenido:</strong> ${data.descripcion ?? 'Sin contenido'}</p>
+            `;
+        })
+        .catch(() => {
+            body.innerHTML = '<p>Error al cargar los datos.</p>';
+        });
+}
 
         function closeProcessModal() {
             document.getElementById('viewProcessModal').style.display = 'none';

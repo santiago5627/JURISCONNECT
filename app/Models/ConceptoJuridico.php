@@ -23,6 +23,10 @@ class ConceptoJuridico extends Model
     protected $casts = [
         'fecha_radicacion' => 'date',
     ];
+    
+    protected $attributes = [
+    'abogado_id' => null, // O un valor por defecto
+];
 
     // Relación con el abogado (usuario)
     public function abogado(): BelongsTo

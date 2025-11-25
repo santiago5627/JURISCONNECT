@@ -64,6 +64,10 @@
                     </div>
                 </div>
                 <div class="card-footer">
+                    <a href="{{ route('procesos.edit', $proceso->id) }}" class="action-btn" title="Editar">
+                                Editar Proceso
+                        <i class="fas fa-edit"></i>
+                            </a>
                     <a href="{{ route('abogado.crear-concepto', $proceso->id) }}" class="action-btn">
                         <i class="fas fa-edit"></i>
                         Redactar Concepto Jurídico
@@ -78,7 +82,7 @@
     @empty
         <div class="empty-state">
             <div class="empty-icon">
-                <i class="fas fa-check-circle"></i>
+                <i class="fa-solid fa-circle-xmark"></i>
             </div>
             <h3>No se encontraron procesos pendientes.</h3>
         </div>

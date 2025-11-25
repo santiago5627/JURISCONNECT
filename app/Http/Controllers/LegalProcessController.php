@@ -124,7 +124,6 @@ public function store(Request $request)
         throw $e;
     }
 }
-
     /**
      * Mostrar un proceso específico
      */
