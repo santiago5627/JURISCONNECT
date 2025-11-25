@@ -237,25 +237,27 @@
 
         // ===== ABRIR Y CERRAR MODAL DE PROCESO =====
         function openProcessModal(id) {
-            document.getElementById('viewProcessModal').style.display = 'flex';
-            const body = document.getElementById('processModalBody');
-            body.innerHTML = '<p>Cargando datos...</p>';
+    document.getElementById('viewProcessModal').style.display = 'flex';
+    const body = document.getElementById('processModalBody');
+    body.innerHTML = '<p>Cargando datos...</p>';
 
-            fetch(`/procesos/${id}`)
-                .then(res => res.json())
-                .then(data => {
-                    body.innerHTML = `
-                        <p><strong>Radicado:</strong> ${data.numero_radicado}</p>
-                        <p><strong>Tipo:</strong> ${data.tipo_proceso}</p>
-                        <p><strong>Demandante:</strong> ${data.demandante}</p>
-                        <p><strong>Demandado:</strong> ${data.demandado}</p>
-                        <p><strong>Descripción:</strong> ${data.descripcion ?? 'Sin descripción'}</p>
-                    `;
-                })
-                .catch(() => {
-                    body.innerHTML = '<p>Error al cargar los datos.</p>';
-                });
-        }
+    // Cambiar la ruta para recuperar un registro de concepto_juridicos
+    fetch(`/concepto_juridicos/${id}`)
+        .then(res => {
+            if (!res.ok) throw new Error('No se encontró el concepto');
+            return res.json();
+        })
+        .then(data => {
+            body.innerHTML = `
+                <p><strong>Título:</strong> ${data.titulo ?? 'N/A'}</p>
+                <p><strong>Fecha:</strong> ${data.created_at}</p>
+                <p><strong>Contenido:</strong> ${data.descripcion ?? 'Sin contenido'}</p>
+            `;
+        })
+        .catch(() => {
+            body.innerHTML = '<p>Error al cargar los datos.</p>';
+        });
+}
 
         function closeProcessModal() {
             document.getElementById('viewProcessModal').style.display = 'none';

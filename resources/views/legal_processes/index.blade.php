@@ -59,6 +59,11 @@
                         <span>Administre sus procesos judiciales desde esta vista</span>
                     </div>
 
+                    <div class="action-buttons">
+                        <a href="{{ route('procesos.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
+                        <a href="{{ route('procesos.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
+                    </div>
+
                     <div class="button-group">
                         <a href="{{ route('dashboard.abogado') }}" class="btn btn-secondary">
                             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
