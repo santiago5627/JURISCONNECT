@@ -235,7 +235,7 @@
                 .catch(err => console.error('Error en búsqueda:', err));
         }
 
-        // ===== ABRIR Y CERRAR MODAL DE PROCESO =====
+        // ===== ABRIR Y CERRAR MODAL DE PROCESO =====  
         function openProcessModal(id) {
             document.getElementById('viewProcessModal').style.display = 'flex';
             const body = document.getElementById('processModalBody');
