@@ -7,6 +7,7 @@
             <div class="pagination-desktop">
                 <style>
                 /* Estilos de Paginación */
+                
 .pagination-btn {
     padding: 0.5rem 1rem;
     border-radius: 8px;

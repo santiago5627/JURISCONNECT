@@ -654,7 +654,7 @@ tr:hover td {
 }
 
 .alert-success .alert-icon {
-    background: linear-gradient(135deg, #1e8511, #1e8511);
+    background: linear-gradient(135deg, #198754, #0f6d43);
 }
 .alert-error .alert-icon {
     background: linear-gradient(135deg, #dc3545, #b61d2b);

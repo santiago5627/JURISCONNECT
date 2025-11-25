@@ -82,15 +82,21 @@
                                 </svg>
                             </a>
 
-                            <form action="{{ route('procesos.destroy', $proceso->id) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar este proceso?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="action-btn action-delete" title="Eliminar">
-                            <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                            </svg>
-                            </button>
-                        </form>
+                         <form action="{{ route('procesos.destroy', $proceso->id) }}" 
+      method="POST"
+      class="form-delete-proceso"
+      data-nombre="{{ $proceso->demandante }}">
+    @csrf
+    @method('DELETE')
+
+    <button type="submit" class="action-btn action-delete" title="Eliminar">
+        <svg class="action-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+        </svg>
+    </button>
+</form>
+
                         </div>
                     </td>
                 </tr>
@@ -100,6 +106,66 @@
                 </tr>
             @endforelse
                     </tbody>
+
+            <div id="alertOverlay" class="alert-overlay hidden"></div>
+
+            <div id="customAlert" class="alert-modal hidden">
+                <div class="alert-icon">
+                    ⚠️
+                </div>
+                <h2 id="alertTitle">Confirmar Eliminación</h2>
+                <p id="alertMessage">
+                    ¿Estás seguro de eliminar este registro? Esta acción no se puede deshacer.
+                </p>
+
+                <div class="alert-buttons">
+                    <button id="alertCancel" class="btn-cancel">Cancelar</button>
+                    <button id="alertConfirm" class="btn-confirm">Eliminar</button>
+                </div>
+            </div>
+
+<<script>
+// Función para mostrar el modal
+function showDeleteConfirm(name, onConfirm) {
+    const overlay = document.getElementById('alertOverlay');
+    const modal = document.getElementById('customAlert');
+    const title = document.getElementById('alertTitle');
+    const message = document.getElementById('alertMessage');
+    const cancelBtn = document.getElementById('alertCancel');
+    const confirmBtn = document.getElementById('alertConfirm');
+
+    title.textContent = "Confirmar Eliminación";
+    message.textContent = `¿Estás seguro de eliminar el proceso de ${name}? Esta acción no se puede deshacer.`;
+
+    overlay.classList.remove('hidden');
+    modal.classList.remove('hidden');
+
+    cancelBtn.onclick = () => {
+        overlay.classList.add('hidden');
+        modal.classList.add('hidden');
+    };
+
+    confirmBtn.onclick = () => {
+        overlay.classList.add('hidden');
+        modal.classList.add('hidden');
+        onConfirm(); 
+    };
+}
+
+// Interceptar formularios de eliminar
+document.querySelectorAll('.form-delete-proceso').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault(); // Detiene el envío inmediato
+
+        let nombre = form.dataset.nombre || "este proceso";
+
+        showDeleteConfirm(nombre, () => {
+            form.submit(); // Enviar después de confirmar
+        });
+    });
+});
+</script>
+
 
                 </table>
             </div>
@@ -204,3 +270,127 @@
                 </div>
             </div>
         </div>
+
+        <style>
+
+/* Fondo desenfocado con animación suave */
+.alert-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(0px);
+    z-index: 990;
+    opacity: 0;
+
+    animation: overlayFade 0.25s ease forwards;
+}
+
+/* Oculto */
+.hidden {
+    display: none;
+}
+
+/* Modal con animación sutil */
+.alert-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    width: 420px;
+    background: #fff;
+    border-radius: 18px;
+    padding: 28px;
+    text-align: center;
+    z-index: 999;
+    box-shadow: 0px 6px 25px rgba(0,0,0,0.15);
+
+    opacity: 0;
+    animation: modalAppear 0.28s ease-out forwards;
+}
+
+/* Icono */
+.alert-icon {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+/* Título */
+.alert-modal h2 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+/* Mensaje */
+.alert-modal p {
+    font-size: 15px;
+    color: #555;
+    margin-bottom: 26px;
+}
+
+/* Botones */
+.alert-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+}
+
+.btn-cancel,
+.btn-confirm {
+    padding: 10px 22px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s ease, transform 0.12s ease;
+}
+
+.btn-cancel {
+    background: #eaeaea;
+}
+
+.btn-confirm {
+    background: #009EEB;
+    color: white;
+}
+
+/* Hover limpio y elegante */
+.btn-cancel:hover {
+    background: #dcdcdc;
+}
+
+.btn-confirm:hover {
+    background: #008cd0;
+}
+
+.btn-cancel:active,
+.btn-confirm:active {
+    transform: scale(0.97);
+}
+
+/* Animaciones */
+
+@keyframes overlayFade {
+    from {
+        opacity: 0;
+        backdrop-filter: blur(0px);
+    }
+    to {
+        opacity: 1;
+        backdrop-filter: blur(3px);
+    }
+}
+
+@keyframes modalAppear {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+
+        </style>

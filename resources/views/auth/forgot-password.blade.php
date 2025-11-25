@@ -66,36 +66,37 @@
     </div>
 
     <script>
-        // Mostrar alerta
-        function showAlert() {
-            const overlay = document.getElementById('alertOverlay');
-            if (overlay) overlay.style.display = 'flex';
-        }
+// Mostrar alerta
+function showAlert() {
+    const overlay = document.getElementById('alertOverlay');
+    if (overlay) overlay.style.display = 'flex';
+}
 
-        function closeAlert() {
-            const overlay = document.getElementById('alertOverlay');
-            if (overlay) overlay.style.display = 'none';
-        }
+function closeAlert() {
+    const overlay = document.getElementById('alertOverlay');
+    if (overlay) overlay.style.display = 'none';
+}
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const overlay = document.getElementById('alertOverlay');
-            if (!overlay) return;
+document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('alertOverlay');
+    if (!overlay) return;
 
-            overlay.addEventListener('click', function(e) {
-                if (e.target === overlay) closeAlert();
-            });
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeAlert();
+    });
 
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') closeAlert();
-            });
-        });
-    </script>
-    {{-- Mostrar alerta si Laravel envió correo --}}
-    @if (session('status'))
-    <script>
-        showAlert();
-    </script>
-    @endif
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeAlert();
+    });
+});
+</script>
+
+{{-- Mostrar alerta si Laravel envió correo --}}
+@if (session('status'))
+<script>
+    showAlert();
+</script>
+@endif
 </body>
 
 </html>
