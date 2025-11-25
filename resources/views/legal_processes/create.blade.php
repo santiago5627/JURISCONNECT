@@ -29,7 +29,7 @@
                     <div class="button-container">
                         <a href="{{ route('dashboard.abogado') }}" class="btn btn-cancel">
                             <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                             </svg>
                             Volver
                         </a>
@@ -187,41 +187,41 @@
 </html>
 
 <script>
-document.getElementById('formProceso').addEventListener('submit', async function(e) {
-    e.preventDefault();
+    document.getElementById('formProceso').addEventListener('submit', async function(e) {
+        e.preventDefault();
 
-    const formData = new FormData(this);
+        const formData = new FormData(this);
 
-    try {
-        const response = await fetch('{{ route("procesos.store") }}', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: formData
-        });
+        try {
+            const response = await fetch('{{ route("procesos.store") }}', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            });
 
-        const result = await response.json();
+            const result = await response.json();
 
-        if (result.success) {
-            alert('Proceso creado exitosamente');
-            window.location.href = '{{ route("dashboard.abogado") }}'; // ← AQUÍ EL CAMBIO
-        } else {
-            if (result.errors) {
-                let errores = '';
-                for (let campo in result.errors) {
-                    errores += result.errors[campo].join('\n') + '\n';
-                }
-                alert('Errores:\n' + errores);
+            if (result.success) {
+                alert('Proceso creado exitosamente');
+                window.location.href = '{{ route("dashboard.abogado") }}'; // ← AQUÍ EL CAMBIO
             } else {
-                alert('Error: ' + result.message);
+                if (result.errors) {
+                    let errores = '';
+                    for (let campo in result.errors) {
+                        errores += result.errors[campo].join('\n') + '\n';
+                    }
+                    alert('Errores:\n' + errores);
+                } else {
+                    alert('Error: ' + result.message);
+                }
             }
-        }
 
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error de conexión');
-    }
-});
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error de conexión');
+        }
+    });
 </script>
