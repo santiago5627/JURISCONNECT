@@ -19,10 +19,16 @@ return new class extends Migration
     $table->string('demandado', 255);
     $table->text('descripcion');
     $table->string('documento')->nullable();
-    $table->enum('estado', ['radicado','Pendiente', 'primera_instancia', 'En curso', 'Finalizado','en_audiencia',
-    'pendiente_fallo', 'favorable_primera', 'desfavorable_primera', 'en_apelacion', 'conciliacion_pendiente', 'conciliado',
-    'sentencia_ejecutoriada', 'en_proceso_pago', 'terminado'])->default('Pendiente'); 
+    $table->enum('estado', ['Radicado','Pendiente', 'Primera instancia', 'En curso', 'Finalizado','En audiencia',
+    'Pendiente fallo', 'Favorable primera', 'Desfavorable primera', 'En apelacion', 'Conciliacion pendiente', 'Conciliado',
+    'Sentencia ejecutoriada', 'En proceso pago', 'Terminado'])->default('Pendiente'); 
     $table->timestamps();
+    $table->unsignedBigInteger('user_id')->nullable();
+    $table->unsignedBigInteger('lawyer_id')->nullable();
+    $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+    $table->foreign('lawyer_id')->references('id')->on('users')->onDelete('set null');
+
+
 });
     }
 

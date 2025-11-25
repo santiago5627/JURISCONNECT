@@ -17,12 +17,16 @@ class ConceptoJuridico extends Model
         'estado',
         'concepto',
         'fecha_radicacion',
-        // removed created_at, updated_at from fillable (Laravel los maneja)
+        
     ];
 
     protected $casts = [
         'fecha_radicacion' => 'date',
     ];
+    
+    protected $attributes = [
+    'abogado_id' => null, // O un valor por defecto
+];
 
     // Relación con el abogado (usuario)
     public function abogado(): BelongsTo

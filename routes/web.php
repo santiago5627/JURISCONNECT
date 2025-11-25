@@ -11,6 +11,7 @@ use App\Exports\LawyersExport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ConceptoController;
+use App\Exports\ProcesosExport;
 
 // ===================================================================
 // RUTA POR DEFECTO
@@ -89,6 +90,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{proceso}/edit', [LegalProcessController::class, 'edit'])->name('edit');
         Route::put('/{proceso}', [LegalProcessController::class, 'update'])->name('update');
         Route::delete('/{proceso}', [LegalProcessController::class, 'destroy'])->name('destroy');
+        // Exportaciones
+        Route::get('/export-pdf', [ProcesosExport::class, 'exportaPDF'])
+            ->name('procesos.export.pdf');
+        
+        Route::get('/export-excel', function () { 
+            return Excel::download(new ProcesosExport, 'Procesos.xlsx'); 
+        })->name('procesos.export.excel');
         
         // Conceptos relacionados con procesos (rutas específicas al final)
         Route::get('/{proceso}/concepto', [AbogadoController::class, 'mostrarFormularioConcepto'])
@@ -99,7 +107,9 @@ Route::middleware(['auth'])->group(function () {
         
         Route::put('/{proceso}/conceptos/{concepto}', [AbogadoController::class, 'updateConcepto'])
             ->name('conceptos.update');
+        
     });
+
 
     // Rutas alternativas para procesos (compatibilidad con vistas antiguas)
     Route::get('/mis-procesos', [LegalProcessController::class, 'index'])
@@ -129,8 +139,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('/procesos/{id}/conceptos', [ConceptoController::class, 'storeProceso'])
     ->name('conceptos.storeProceso');
+    Route::get('/concepto_juridicos/{id}', [ConceptoController::class, 'show'])->name('concepto_juridicos.show');
     
-
     });
 
 

@@ -15,13 +15,34 @@ class ConceptoController extends Controller
     // MÉTODOS PRINCIPALES
     // ===============================
 
+    public function storeProceso(Request $request, $id)
+{
+    // Validación
+    $validated = $request->validate([
+        'titulo' => 'required|string|max:120',
+        'concepto' => 'required|string|min:50',
+    ]);
+
+    // Crear concepto relacionado al proceso
+    $concepto = new ConceptoJuridico();
+    $concepto->proceso_id = $id;
+    $concepto->abogado_id = auth()->id();
+    $concepto->titulo = $validated['titulo'];
+    $concepto->descripcion = $validated['concepto'];
+    $concepto->save();
+
+    return back()->with('success', 'Concepto jurídico creado correctamente.');
+}
+
+
     public function index(Request $request)
     {
         try {
+            // Iniciar query builder
             $query = Proceso::query();
             $searchTerm = $request->get('search');
 
-            // Aplicar búsqueda si existe
+            // Aplicar búsqueda si existe el término de búsqueda
             if ($searchTerm) {
                 $query->where(function($q) use ($searchTerm) {
                     $q->where('id', 'LIKE', '%' . $searchTerm . '%')
@@ -30,17 +51,20 @@ class ConceptoController extends Controller
                       ->orWhere('tipo_proceso', 'LIKE', '%' . $searchTerm . '%')
                       ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
                       ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhereRaw("to_char(created_at, 'YYYY-MM-DD') LIKE ?", ['%' . $searchTerm . '%']);
+                      ->orWhere('created_at', 'LIKE', '%' . $searchTerm . '%');
+                      // Agrega más campos según tu modelo Lawyer 
                 });
             }
 
-            // Obtener procesos paginados
+            // Obtener abogados paginados
             $procesos = $query->paginate(10);
+
+            // Mantener parámetros de búsqueda en la paginación
             $procesos->appends($request->query());
 
-            // Respuesta AJAX
+            // Si es una petición AJAX, devolver solo la vista parcial
             if ($request->ajax()) {
-                $html = view('profile.partials.lawyers-table', compact('procesos'))->render();
+                $html = view('profile.partials.lawyers-table', compact('lawyers'))->render();
 
                 return response()->json([
                     'html' => $html,
@@ -52,7 +76,6 @@ class ConceptoController extends Controller
                 ]);
             }
 
-            return view('concepto.index', compact('procesos'));
 
         } catch (\Exception $e) {
             Log::error('Error en ConceptoController@index', [
@@ -67,100 +90,64 @@ class ConceptoController extends Controller
                 ], 500);
             }
 
+            // Para peticiones normales, redirigir con error
             return back()->with('error', 'Error al cargar los datos');
         }
     }
 
     /**
-     * Mostrar formulario para crear conceptos
+ * Show the form for creating a new resource
+ */
+public function create(Request $request) 
+{
+    $query = Proceso::where('estado', 'Pendiente'); // Solo procesos pendientes
+
+    // Búsqueda
+    if ($request->has('search') && $request->get('search')) {
+        $search = $request->get('search');
+        $query->where(function($q) use ($search) {
+            $q->where('id', 'LIKE', '%' . $search . '%')
+              ->orWhere('numero_radicado', 'LIKE', '%' . $search . '%')
+              ->orWhere('demandante', 'LIKE', '%' . $search . '%')
+              ->orWhere('demandado', 'LIKE', '%' . $search . '%')
+              ->orWhere('tipo_proceso', 'LIKE', '%' . $search . '%')
+              ->orWhere('created_at', 'LIKE', '%' . $search . '%');
+        });
+    }
+
+    $procesos = $query->orderBy('created_at', 'desc')->get();
+
+    // Respuesta AJAX
+    if ($request->ajax() || $request->get('ajax')) {
+        $processes = $procesos; // Renombrar para la vista parcial
+        $html = view('profile.partials.process-card', ['procesos' => $procesos])->render();
+        return response()->json([
+            'success' => true,
+            'html' => $html,
+            'total' => $procesos->count()
+        ]);
+    }
+
+    return view('legal_processes.showConceptos', compact('procesos')); 
+}
+
+    /**
+     * Guardar el concepto para un proceso específico
      */
-    public function create(Request $request) 
-    {
-        try {
-            //  CORRECCIÓN: Filtrar por múltiples estados correctamente
-            $query = Proceso::whereIn('estado', [
-                'Pendiente',
-                'primera_instancia',
-                'En curso',
-                'Finalizado',
-                'en_audiencia',
-                'pendiente_fallo',
-                'favorable_primera',
-                'desfavorable_primera',
-                'en_apelacion',
-                'conciliacion_pendiente',
-                'conciliado',
-                'sentencia_ejecutoriada',
-                'en_proceso_pago',
-                'terminado'
-            ]);
-
-            // Búsqueda
-            if ($request->has('search') && $request->get('search')) {
-                $search = $request->get('search');
-                $query->where(function($q) use ($search) {
-                    $q->where('id', 'LIKE', '%' . $search . '%')
-                    ->orWhere('numero_radicado', 'LIKE', '%' . $search . '%')
-                    ->orWhere('estado', 'LIKE', '%' . $search . '%')
-                    ->orWhere('demandante', 'LIKE', '%' . $search . '%')
-                    ->orWhere('demandado', 'LIKE', '%' . $search . '%')
-                    ->orWhere('tipo_proceso', 'LIKE', '%' . $search . '%')
-                    ->orWhereRaw("to_char(created_at, 'YYYY-MM-DD') LIKE ?", ['%' . $search . '%']);
-                });
-            }
-
-            $procesos = $query->orderBy('created_at', 'desc')->get();
-
-            // Respuesta AJAX
-            if ($request->ajax() || $request->get('ajax')) {
-                $html = view('profile.partials.process-card', ['procesos' => $procesos])->render();
-                return response()->json([
-                    'success' => true,
-                    'html' => $html,
-                    'total' => $procesos->count()
-                ]);
-            }
-
-            return view('legal_processes.showConceptos', compact('procesos'));
-
-        } catch (\Exception $e) {
-            Log::error('Error en ConceptoController@create', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-
-            if ($request->ajax()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error al cargar procesos: ' . $e->getMessage()
-                ], 500);
-            }
-
-            return back()->with('error', 'Error al cargar los procesos');
-        }
-    }
-
     public function store(Request $request, Proceso $proceso)
-    {
-        try {
-            $this->validateConceptoData($request);
-            
-            $this->createConceptoForProceso($request, $proceso);
-            $this->updateProcesoEstado($proceso);
+{
+    $this->validateConceptoData($request);
+    
+    $this->createConceptoForProceso($request, $proceso);
+    $this->updateProcesoEstado($proceso);
 
-            return redirect()->route('abogado.dashboard')
-                            ->with('success', 'Concepto jurídico creado exitosamente.');
+    return redirect()->route('abogado.dashboard')
+                    ->with('success', 'Concepto jurídico creado exitosamente.');
+}
 
-        } catch (\Exception $e) {
-            Log::error('Error al crear concepto', [
-                'proceso_id' => $proceso->id,
-                'message' => $e->getMessage()
-            ]);
-
-            return back()->with('error', 'Error al crear el concepto jurídico')->withInput();
-        }
-    }
-
+    /**
+     * Mostrar el formulario para crear un concepto para un proceso específico
+     */
     public function verFormulario($procesoId)
     {
         try {
@@ -181,28 +168,32 @@ class ConceptoController extends Controller
     }
 
     // ===============================
-    // MÉTODOS PRIVADOS
+    // MÉTODOS PRIVADOS DE APOYO
     // ===============================
 
+    /**
+     * Validar datos del concepto
+     */
     private function validateConceptoData(Request $request)
-    {
-        $request->validate([
-            'titulo' => 'required|string|max:255',
-            'categoria' => 'required|string|max:255',
-            'descripcion' => 'required|string|min:50'
-        ], [
-            'titulo.required' => 'El título es obligatorio',
-            'categoria.required' => 'La categoría es obligatoria',
-            'descripcion.required' => 'La descripción es obligatoria',
-            'descripcion.min' => 'La descripción debe tener al menos 50 caracteres'
-        ]);
-    }
+{
+    $request->validate([
+        'titulo' => 'required|string|max:255',
+        'categoria' => 'required|string|max:255',
+        'descripcion' => 'required|min:50'
+    ]);
+}
 
+    /**
+     * Obtener proceso con sus relaciones
+     */
     private function getProcesoWithRelations($procesoId)
     {
         return Proceso::with(['cliente', 'abogado'])->findOrFail($procesoId);
     }
 
+    /**
+     * Verificar si ya existe un concepto para el proceso
+     */
     private function checkExistingConcepto($procesoId)
     {
         $conceptoExistente = ConceptoJuridico::where('proceso_id', $procesoId)->first();
@@ -222,18 +213,19 @@ class ConceptoController extends Controller
             'titulo' => $request->titulo,
             'categoria' => $request->categoria,
             'descripcion' => $request->descripcion,
-            'user_id' => auth()->id()
+            'abogado_id' => auth()->id() // <-- changed from user_id
         ]);
     }
 
+    /**
+     * Actualizar estado del proceso
+     */
     private function updateProcesoEstado(Proceso $proceso)
     {
         $proceso->update(['estado' => 'con_concepto']);
     }
 
-    /**
-     * Búsqueda rápida
-     */
+    // Método adicional para búsqueda rápida (opcional)
     public function search(Request $request)
     {
         try {

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 //use Illuminate\Database\Eloquent\SoftDeletes; 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Proceso;
+
 
 class User extends Authenticatable
 {
@@ -36,9 +38,14 @@ class User extends Authenticatable
     }
 
     public function role()
-    {
-        return $this->belongsTo(Role::class, 'role_id');
-    }
+{
+    return $this->belongsTo(Role::class, 'role_id');
+}
+public function procesosAsignados()
+{
+    return $this->hasMany(Proceso::class, 'lawyer_id');
+}
+
 
     // ⭐ Relación necesaria para que funcione el seeder
     public function lawyers()

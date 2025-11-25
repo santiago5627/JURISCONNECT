@@ -374,7 +374,7 @@
         }
 
         .empty-icon {
-            background: #dcfce7;
+            background: #fcdcdc;
             width: 96px;
             height: 96px;
             border-radius: 50%;
@@ -385,7 +385,7 @@
         }
 
         .empty-icon i {
-            color: #16a34a;
+            color: #d41919;
             font-size: 2.5rem;
         }
 
