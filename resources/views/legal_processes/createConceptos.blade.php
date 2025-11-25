@@ -96,7 +96,7 @@
                 </h5>
             </div>
             <div class="card-body">
-             <form id="conceptoForm" method="POST" action="{{ route('abogado.conceptos.storeProceso', $proceso->id) }}">
+                <form id="conceptoForm" method="POST" action="{{ route('abogado.conceptos.storeProceso', $proceso->id) }}">
 
                     @csrf
                     <!-- Título del Concepto Jurídico -->

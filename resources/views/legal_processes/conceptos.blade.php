@@ -1,58 +1,58 @@
 <x-app-layout>
-<div class="container">
-    <h1 class="mb-4">Detalles del Proceso Judicial</h1>
+    <div class="container">
+        <h1 class="mb-4">Detalles del Proceso Judicial</h1>
 
-    <div class="card">
-        <div class="card-body">
-            {{-- Datos Generales --}}
-            <h4>Datos Generales</h4>
-            <p><strong>Tipo de proceso:</strong> {{ $concepto->titulo }}</p>
-            <p><strong>Número de radicado:</strong> {{ $concepto->categoria }}</p>
-            <p><strong>Juzgado / Tribunal:</strong> {{ $concepto->descripcion ?? 'No registrado' }}</p>
-            <p><strong>Etapa procesal:</strong> {{ $concepto->estado ?? 'No registrada' }}</p>
-            <p><strong>Fecha de radicación:</strong> {{ $concepto->fecha_radicacion ?? 'No registrada' }}</p>
- 
-            {{-- Partes Involucradas --}}
-            <h4>Partes Involucradas</h4>
-            <p><strong>Demandante(s):</strong> {{ $proceso->demandante }}</p>
-            <p><strong>Demandado(s):</strong> {{ $proceso->demandado }}</p>
-            <!-- <p><strong>Abogado(s):</strong> {{ $conceptos->abogado ?? 'No registrado' }}</p> -->
+        <div class="card">
+            <div class="card-body">
+                {{-- Datos Generales --}}
+                <h4>Datos Generales</h4>
+                <p><strong>Tipo de proceso:</strong> {{ $concepto->titulo }}</p>
+                <p><strong>Número de radicado:</strong> {{ $concepto->categoria }}</p>
+                <p><strong>Juzgado / Tribunal:</strong> {{ $concepto->descripcion ?? 'No registrado' }}</p>
+                <p><strong>Etapa procesal:</strong> {{ $concepto->estado ?? 'No registrada' }}</p>
+                <p><strong>Fecha de radicación:</strong> {{ $concepto->fecha_radicacion ?? 'No registrada' }}</p>
 
-            <hr>
+                {{-- Partes Involucradas --}}
+                <h4>Partes Involucradas</h4>
+                <p><strong>Demandante(s):</strong> {{ $proceso->demandante }}</p>
+                <p><strong>Demandado(s):</strong> {{ $proceso->demandado }}</p>
+                <!-- <p><strong>Abogado(s):</strong> {{ $conceptos->abogado ?? 'No registrado' }}</p> -->
 
-            {{-- Información Jurídica --}}
-            <h4>Información Jurídica</h4>
-            <p><strong>Pretensiones:</strong> {{ $concepto->pretensiones ?? 'No registradas' }}</p>
-            <p><strong>Hechos:</strong> {{ $concepto->hechos ?? 'No registrados' }}</p>
-            <p><strong>Fundamentos de derecho:</strong> {{ $concepto->fundamentos_derecho ?? 'No registrados' }}</p>
-            <p><strong>Pruebas:</strong> {{ $concepto->pruebas ?? 'No registradas' }}</p>
-            <p><strong>Medidas cautelares:</strong> {{ $concepto->medidas_cautelares ?? 'No registradas' }}</p>
+                <hr>
 
-            <hr>
+                {{-- Información Jurídica --}}
+                <h4>Información Jurídica</h4>
+                <p><strong>Pretensiones:</strong> {{ $concepto->pretensiones ?? 'No registradas' }}</p>
+                <p><strong>Hechos:</strong> {{ $concepto->hechos ?? 'No registrados' }}</p>
+                <p><strong>Fundamentos de derecho:</strong> {{ $concepto->fundamentos_derecho ?? 'No registrados' }}</p>
+                <p><strong>Pruebas:</strong> {{ $concepto->pruebas ?? 'No registradas' }}</p>
+                <p><strong>Medidas cautelares:</strong> {{ $concepto->medidas_cautelares ?? 'No registradas' }}</p>
 
-            {{-- Documentos --}}
-            <h4>Documentos</h4>
-            @if($proceso->documento)
+                <hr>
+
+                {{-- Documentos --}}
+                <h4>Documentos</h4>
+                @if($proceso->documento)
                 <a href="{{ asset('storage/' . $proceso->documento) }}" target="_blank" class="btn btn-sm btn-primary">
                     Ver documento adjunto
                 </a>
-            @else
+                @else
                 <p>No hay documento adjunto</p>
-            @endif
+                @endif
 
-            <hr>
+                <hr>
 
-            {{-- Seguimiento --}}
-            <h4>Seguimiento</h4>
-            <p><strong>Estado actual:</strong> {{ $proceso->estado ?? 'No registrado' }}</p>
-            <p><strong>Observaciones:</strong> {{ $proceso->observaciones ?? 'No registradas' }}</p>
+                {{-- Seguimiento --}}
+                <h4>Seguimiento</h4>
+                <p><strong>Estado actual:</strong> {{ $proceso->estado ?? 'No registrado' }}</p>
+                <p><strong>Observaciones:</strong> {{ $proceso->observaciones ?? 'No registradas' }}</p>
 
-            <div class="mt-4">
-                <a href="{{ route('procesos.edit', $proceso->id) }}" class="btn btn-warning">Editar</a>
-                <a href="{{ route('procesos.index') }}" class="btn btn-secondary">Volver al listado</a>
+                <div class="mt-4">
+                    <a href="{{ route('procesos.edit', $proceso->id) }}" class="btn btn-warning">Editar</a>
+                    <a href="{{ route('procesos.index') }}" class="btn btn-secondary">Volver al listado</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </x-app-layout>

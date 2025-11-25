@@ -135,68 +135,59 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label for="editApellido">Apellido:</label>
-                            <input type="text" id="editApellido" name="apellido" required>
-                        </div>
+                            <div class="form-group">
+                                <label for="editApellido">Apellido:</label>
+                                <input type="text" id="editApellido" name="apellido" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="editTipoDocumento">Tipo de Documento:</label>
-                            <select id="editTipoDocumento" name="tipoDocumento" required>
-                                <option value="">Seleccione...</option>
-                                <option value="CC">Cédula de Ciudadanía</option>
-                                <option value="CE">Cédula de Extranjería</option>
-                                <option value="PAS">Pasaporte</option>
-                            </select>
-                        </div>
+                            <div class="form-group">
+                                <label for="editTipoDocumento">Tipo de Documento:</label>
+                                <select id="editTipoDocumento" name="tipoDocumento" required>
+                                    <option value="">Seleccione...</option>
+                                    <option value="CC">Cédula de Ciudadanía</option>
+                                    <option value="CE">Cédula de Extranjería</option>
+                                    <option value="PAS">Pasaporte</option>
+                                </select>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="editNumeroDocumento">Número de Documento:</label>
-                            <input type="text" id="editNumeroDocumento" name="numeroDocumento" required>
-                        </div>
+                            <div class="form-group">
+                                <label for="editNumeroDocumento">Número de Documento:</label>
+                                <input type="text" id="editNumeroDocumento" name="numeroDocumento" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="editCorreo">Correo:</label>
-                            <input type="email" id="editCorreo" name="correo" required>
-                        </div>
+                            <div class="form-group">
+                                <label for="editCorreo">Correo:</label>
+                                <input type="email" id="editCorreo" name="correo" required>
+                            </div>
 
-                        <div class="form-group">
-                            <label for="editTelefono">Teléfono:</label>
-                            <input type="tel" id="editTelefono" name="telefono">
-                        </div>
+                            <div class="form-group">
+                                <label for="editTelefono">Teléfono:</label>
+                                <input type="tel" id="editTelefono" name="telefono">
+                            </div>
 
-                        <div class="form-group">
-                            <label for="editEspecialidad">Especialidad:</label>
-                            <input type="text" id="editEspecialidad" name="especialidad">
-                        </div>
+                            <div class="form-group">
+                                <label for="editEspecialidad">Especialidad:</label>
+                                <input type="text" id="editEspecialidad" name="especialidad">
+                            </div>
 
-                        <div class="form-actions">
-                            <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
-                            <button type="submit" class="btn-submit">Guardar Cambios</button>
-                        </div>
-                    </form>
+                            <div class="form-actions">
+                                <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
+                                <button type="submit" class="btn-submit">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <div class="profile">
-                <!-- Input file oculto para la foto de perfil -->
-                <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
+            <!-- Sidebar -->
+            <div class="sidebar" id="sidebar">
+                <div class="profile">
+                    <!-- Input file oculto para la foto de perfil -->
+                    <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
 
-                <!-- Indicador de carga (oculto por defecto) -->
-                <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
-                    Subiendo...
-                </div>
-
-                <!-- Contenedor de la foto de perfil -->
-                <div class="profile-pic" onclick="document.getElementById('fileInput').click();" 
-                    style="cursor: pointer; position: relative;" 
-                    title="Haz clic para cambiar tu foto">
-                    <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}" 
-                        id="profileImage" 
-                        alt="Foto de perfil">
+                    <!-- Indicador de carga (oculto por defecto) -->
+                    <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+                        Subiendo...
                     </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
@@ -221,34 +212,35 @@
                 <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo SENA">
             </div>
 
-            <!-- Botón de Cerrar Sesión -->
-            <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
-                @csrf
-                <button type="submit" class="logout-btn">
-                    Cerrar Sesión
-                </button>
-            </form>
-        </div>
+                <div class="nav-menu">
+                    <button class="nav-btn active" data-section="dashboard">
+                        Dashboard
+                    </button>
 
-        <!-- Contenido Principal -->
-    <div class="main-content" id="mainContent">
-            <div class="header">
-                <button class="hamburger" id="hamburgerBtn">☰</button>
-                <div class="title-logo-container">
-                    <h1 class="title">JustConnect SENA</h1>
+                    <button class="nav-btn" data-section="lawyers">
+                        Gestión de Abogados
+                    </button>
                 </div>
-                <div class="logo-container">
-                    <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo Empresa" class="logo">
+
+                <div class="sena-logo">
+                    <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo SENA">
                 </div>
+
+                <!-- Botón de Cerrar Sesión -->
+                <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
+                    @csrf
+                    <button type="submit" class="logout-btn">
+                        Cerrar Sesión
+                    </button>
+                </form>
             </div>
 
-            <div class="content-panel">
-
-                <!-- SECCIÓN DASHBOARD PRINCIPAL -->
-                <div class="section-content active" id="dashboard-section">
-                    <div class="section-header">
-                        <h2>Dashboard Principal</h2>
-                        <p>Resumen general del sistema JustConnect SENA</p>
+            <!-- Contenido Principal -->
+            <div class="main-content" id="mainContent">
+                <div class="header">
+                    <button class="hamburger" id="hamburgerBtn">☰</button>
+                    <div class="title-logo-container">
+                        <h1 class="title">JustConnect SENA</h1>
                     </div>
                     
                 <!-- En la sección DASHBOARD PRINCIPAL -->
@@ -296,6 +288,7 @@
                         <p>Administrar el registro de asistentes jurídicos del sistema</p>
                     </div>
 
+
                     <div class="search-section">
                         <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchAssistantsInput">
                     </div>
@@ -314,9 +307,15 @@
                         <p>Administrar el registro de abogados del sistema</p>
                     </div>
 
-                    <div class="search-section">
-                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
-                    </div>
+                <div class="content-panel">
+
+
+                    <!-- SECCIÓN DASHBOARD PRINCIPAL -->
+                    <div class="section-content active" id="dashboard-section">
+                        <div class="section-header">
+                            <h2>Dashboard Principal</h2>
+                            <p>Resumen general del sistema JustConnect SENA</p>
+                        </div>
 
                     <div class="action-buttons">
                         <button class="btn-primary" id="createBtn">CREAR NUEVO USUARIO</button>

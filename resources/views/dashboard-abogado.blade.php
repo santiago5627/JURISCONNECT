@@ -25,14 +25,14 @@
 
                 <!-- Contenedor de la foto de perfil -->
                 <div class="profile-pic profile-pic-clickable" onclick="document.getElementById('fileInput').click();" title="Haz clic para cambiar tu foto">
-                    <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}" 
-                        id="profileImage" 
+                    <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}"
+                        id="profileImage"
                         alt="Foto de perfil">
                 </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
             </div>
-            
+
             <nav class="nav-menu">
             </nav>
 
@@ -58,32 +58,37 @@
                 <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo Sena Verde">
             </header>
 
-            <div class="content-panel">
-                <p class="welcome-message">Bienvenido, <strong>{{ Auth::user()->name }}</strong>. Gestiona tus procesos y conceptos jurídicos desde aquí.</p>
+            <div class="w-full text-center px-4 mt-4 md:mt-10">
+                <p class="text-gray-700 text-lg md:text-xl font-medium leading-snug">
+                    Bienvenido, <span class="font-semibold text-green-700">{{ auth()->user()->name }}</span>.
+                    Gestiona tus procesos y conceptos jurídicos desde aquí.
+                </p>
+            </div>
 
-                <div class="cards-container">
-                    <div class="dashboard-card">
-                        <div class="card-icon">⚖️</div>
-                        <h3>Registrar Proceso</h3>
-                        <p>Inicia un nuevo expediente jurídico y asígnale los detalles correspondientes en el sistema.</p>
-                        <a href="{{ route('legal_processes.create') }}">Registrar</a>
-                    </div>
 
-                    <div class="dashboard-card">
-                        <div class="card-icon">📂</div>
-                        <h3>Mis Procesos</h3>
-                        <p>Consulta, actualiza y da seguimiento a todos los procesos jurídicos que tienes asignados.</p>
-                        <a href="{{ route('mis.procesos') }}">Ver Procesos</a>
-                    </div>
+            <div class="cards-container">
+                <div class="dashboard-card">
+                    <div class="card-icon">⚖️</div>
+                    <h3>Registrar Proceso</h3>
+                    <p>Inicia un nuevo expediente jurídico y asígnale los detalles correspondientes en el sistema.</p>
+                    <a href="{{ route('legal_processes.create') }}">Registrar</a>
+                </div>
 
-                    <div class="dashboard-card">
-                        <div class="card-icon">✍️</div>
-                        <h3>Conceptos Jurídicos</h3>
-                        <p>Emite, clasifica y gestiona los conceptos jurídicos para mantener un registro organizado.</p>
-                        <a href="{{ route('conceptos.create') }}">Ver Conceptos</a>
-                    </div>
+                <div class="dashboard-card">
+                    <div class="card-icon">📂</div>
+                    <h3>Mis Procesos</h3>
+                    <p>Consulta, actualiza y da seguimiento a todos los procesos jurídicos que tienes asignados.</p>
+                    <a href="{{ route('mis.procesos') }}">Ver Procesos</a>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-icon">✍️</div>
+                    <h3>Conceptos Jurídicos</h3>
+                    <p>Emite, clasifica y gestiona los conceptos jurídicos para mantener un registro organizado.</p>
+                    <a href="{{ route('conceptos.create') }}">Ver Conceptos</a>
                 </div>
             </div>
-        </main>
+    </div>
+    </main>
     </div>
 </x-app-layout>

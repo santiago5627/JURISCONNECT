@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>JurisConnect SENA - Recuperar Contraseña</title>
@@ -94,6 +95,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Fondo -->
     <div class="background-image">
@@ -265,4 +267,5 @@
     @endif
 
 </body>
+
 </html>
