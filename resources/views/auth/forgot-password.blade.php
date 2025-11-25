@@ -64,30 +64,36 @@
     </div>
 
     <script>
-    // Función para mostrar la alerta
-    function showAlert() {
-        document.getElementById('alertOverlay').style.display = 'flex';
-    }
+// Mostrar alerta
+function showAlert() {
+    const overlay = document.getElementById('alertOverlay');
+    if (overlay) overlay.style.display = 'flex';
+}
 
-    // Función para cerrar la alerta
-    function closeAlert() {
-        document.getElementById('alertOverlay').style.display = 'none';
-    }
+function closeAlert() {
+    const overlay = document.getElementById('alertOverlay');
+    if (overlay) overlay.style.display = 'none';
+}
 
-    // Cerrar alerta al hacer clic fuera de ella
-    document.getElementById('alertOverlay').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeAlert();
-        }
+document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('alertOverlay');
+    if (!overlay) return;
+
+    overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeAlert();
     });
 
-    // Cerrar alerta con tecla Escape
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeAlert();
-        }
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeAlert();
     });
+});
+</script>
 
-    </script>
+{{-- Mostrar alerta si Laravel envió correo --}}
+@if (session('status'))
+<script>
+    showAlert();
+</script>
+@endif
 </body>
 </html>

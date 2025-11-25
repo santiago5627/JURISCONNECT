@@ -17,6 +17,8 @@ public function run(): void
             AbogadoUserSeeder::class,  // Tu nuevo seeder de abogados
             ProcesoSeeder::class,
             LawyerSeeder::class,
+            AssistantSeeder::class,
+            AssistantLawyerSeeder::class,
             // Puedes agregar más seeders aquí
         ]);
 

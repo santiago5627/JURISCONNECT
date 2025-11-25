@@ -1,4 +1,4 @@
-    <x-app-layout>
+<x-app-layout>
     <!-- Página para el dashboard de los administradores -->
     <x-slot name="header">
         <!-- Header vacío para evitar conflictos -->
@@ -15,64 +15,101 @@
         <!-- Overlay para móviles -->
         <div class="overlay" id="overlay"></div>      
 
-        <!-- Modal para crear nuevo abogado -->
-        <div class="modal" id="createLawyerModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2>Crear Nuevo Abogado</h2>
-                    <button class="modal-close" id="closeModal">&times;</button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{ route('lawyers.store') }}" method="POST">
-                        @csrf
-                        <div class="form-group">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" id="nombre" name="nombre" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="apellido">Apellido:</label>
-                            <input type="text" id="apellido" name="apellido" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="tipoDocumento">Tipo de Documento:</label>
-                            <select id="tipoDocumento" name="tipoDocumento" required>
-                                <option value="">Seleccione...</option>
-                                <option value="CC">Cédula de Ciudadanía</option>
-                                <option value="CE">Cédula de Extranjería</option>
-                                <option value="PAS">Pasaporte</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="numeroDocumento">Número de Documento:</label>
-                            <input type="text" id="numeroDocumento" name="numeroDocumento" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="correo">Correo Electrónico:</label>
-                            <input type="email" id="correo" name="correo" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="telefono">Teléfono:</label>
-                            <input type="tel" id="telefono" name="telefono">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="especialidad">Especialidad:</label>
-                            <input type="text" id="especialidad" name="especialidad" placeholder="Ej: Derecho Civil, Penal, etc.">
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
-                            <button type="submit" class="btn-submit">Crear Abogado</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    
+    
+    
+        <!-- Modal para crear nuevo usuario -->
+<div class="modal" id="createLawyerModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Crear Nuevo Usuario</h2>
+            <button class="modal-close" id="closeModal">&times;</button>
         </div>
+        <div class="modal-body">
+            <form action="{{ route('lawyers.store') }}" method="POST">
+                @csrf
+                <div class="form-group">
+                        <label for="tipodeusuario">Usuario:</label>
+                        <select id="tipodeusuario" name="tipodeusuario" required>
+                            <option value="">Seleccione...</option>
+                            <option value="assistant">Asistente Jurídico</option>
+                            <option value="lawyer">Abogado</option>
+                        </select>
+                </div>
+
+                <!-- Contenedor dinámico para seleccionar abogados -->
+<div class="form-group" id="lawyerSelectContainer" style="display: none;">
+
+    <label>Abogados asignados:</label>
+
+    <div id="lawyerList">
+        <!-- Aquí se insertarán los selects dinámicos -->
+    </div>
+
+    <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">
+        + Agregar Abogado
+    </button>
+</div>
+
+<select class="lawyer-select" style="display:none;">
+    <option value="">Seleccione abogado...</option>
+    @foreach($abogados as $lawyer)
+        <option value="{{ $lawyer->id }}">
+            {{ $lawyer->nombre }} {{ $lawyer->apellido }}
+        </option>
+    @endforeach
+</select>
+
+                
+                <div class="form-group">
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="apellido">Apellido:</label>
+                    <input type="text" id="apellido" name="apellido" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipoDocumento">Tipo de Documento:</label>
+                    <select id="tipoDocumento" name="tipoDocumento" required>
+                        <option value="">Seleccione...</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PAS">Pasaporte</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="numeroDocumento">Número de Documento:</label>
+                    <input type="text" id="numeroDocumento" name="numeroDocumento" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="correo">Correo Electrónico:</label>
+                    <input type="email" id="correo" name="correo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono">Teléfono:</label>
+                    <input type="tel" id="telefono" name="telefono">
+                </div>
+
+                <div class="form-group">
+                    <label for="especialidad">Especialidad:</label>
+                    <input type="text" id="especialidad" name="especialidad" placeholder="Ej: Derecho Civil, Penal, etc.">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
+                    <button type="submit" class="btn-submit">Crear Usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
         <!-- Modal para editar abogado -->
         <div class="modal" id="editLawyerModal">
@@ -88,6 +125,14 @@
                         <div class="form-group">
                             <label for="editNombre">Nombre:</label>
                             <input type="text" id="editNombre" name="nombre" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="editipodeusuario">Usuario:</label>
+                            <select id="editipodeusuario" name="tipodeusuario" required>
+                                <option value="assistant">Asistente Juridico</option>
+                                <option value="lawyer">Abogado</option>
+                            </select>
                         </div>
 
                         <div class="form-group">
@@ -165,7 +210,12 @@
                 <button class="nav-btn" data-section="lawyers">
                     Gestión de Abogados
                 </button>
+
+                <button class="nav-btn" data-section="assistants">
+                    Gestión de Asistentes
+                </button>
             </div>
+
 
             <div class="sena-logo">
                 <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo SENA">
@@ -204,7 +254,7 @@
                 <!-- En la sección DASHBOARD PRINCIPAL -->
 <div class="dashboard-stats">
     <div class="stat-card" id="lawyersStatCard" style="cursor: pointer;">
-        <div class="stat-icon">👨‍💼</div>
+        <div class="stat-icon">👨‍⚖️</div>
         <div class="stat-info">
             <h3>{{ $totalLawyers }}</h3>
             <p>Abogados Registrados</p>
@@ -218,15 +268,27 @@
             <p>Procesos Judiciales</p>
         </div>
     </div>
+
+    <div class="stat-card" id="assistantsStatCard" style="cursor: pointer;">
+        <div class="stat-icon">👨‍💼</div>
+        <div class="stat-info">
+            <h3>{{ $totalAsistentes }}</h3>
+            <p>Asistentes Juridicos</p>
+        </div>
+    </div>
 </div>
-                    
-                    <div class="dashboard-charts">
-                        <div class="chart-container">
-                            <h3>Actividad Reciente</h3>
-                            <p>Aquí se mostraría un gráfico de actividad reciente</p>
-                        </div>
-                    </div>
-                </div>
+    <!-- 🔽🔽🔽 TABLA OCULTA INICIALMENTE 🔽🔽🔽 -->
+    <div id="lawyersTableWrapper" style="display: none; margin-top: 30px;">
+        <h3>Listado de Abogados</h3>
+        @include('profile.partials.lawyers-table-simple', ['lawyers' => $lawyers])
+    </div>
+
+    <!-- 🔽🔽🔽 TABLA DE ASISTENTES OCULTA INICIALMENTE 🔽🔽🔽 -->
+    <div id="assistantsTableWrapper" style="display: none; margin-top: 30px;">
+        <h3>Listado de Asistentes Jurídicos</h3>
+        @include('profile.partials.assistants-table-simple', ['assistants' => $assistants])
+    </div>
+</div>
 
                 <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
                 <div class="section-content" id="lawyers-section">
@@ -240,53 +302,48 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button class="btn-primary" id="createBtn">CREAR NUEVO ABOGADO</button>
+                        <button class="btn-primary" id="createBtn">CREAR NUEVO USUARIO</button>
                         <a href="{{ route('lawyers.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
                         <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
                     
                     @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
+                    
                 </div>
 
-                <!-- SECCIÓN CONFIGURACIÓN -->
-                <div class="section-content" id="settings-section">
+                <!-- SECCIÓN GESTIÓN DE ASISTENTES JURÍDICOS -->
+                <div class="section-content" id="assistants-section">
                     <div class="section-header">
-                        <h2>Configuración del Sistema</h2>
-                        <p>Configuraciones generales y preferencias</p>
+                        <h2>Gestión de Asistentes Jurídicos</h2>
+                        <p>Administrar el registro de asistentes jurídicos del sistema</p>
                     </div>
+
+                    <div class="search-section">
+                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchAssistantsInput">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-primary" id="createAssistantBtn">CREAR NUEVO ASISTENTE</button>
+                        <a href=>EXPORTAR EXCEL</a>
+                        <a href=>EXPORTAR PDF</a>
+                    </div>
+                    @include('profile.partials.assistants-table', ['assistants' => $assistants])
                     
-                    <div class="settings-grid">
-                        <div class="setting-card">
-                            <h3>Configuración General</h3>
-                            <div class="setting-item">
-                                <label>Nombre del Sistema:</label>
-                                <input type="text" value="JustConnect SENA" class="form-control">
-                            </div>
-                            <div class="setting-item">
-                                <label>Email de Contacto:</label>
-                                <input type="email" value="admin@justconnect.sena.edu.co" class="form-control">
-                            </div>
-                        </div>
-                        
-                        <div class="setting-card">
-                            <h3>Notificaciones</h3>
-                            <div class="setting-item">
-                                <label>
-                                    <input type="checkbox" checked> Notificar nuevos registros
-                                </label>
-                            </div>
-                            <div class="setting-item">
-                                <label>
-                                    <input type="checkbox" checked> Reportes automáticos
-                                </label>
-                            </div>
-                        </div>
+                </div>
                     </div>
                 </div>
+                
             </div>
+            
         </div>
+        
     </div>
+
+    
 
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
+
+    
+
 </x-app-layout>

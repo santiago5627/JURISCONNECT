@@ -10,6 +10,16 @@
 </head>
 
 <body>
+    <!-- Overlay de alertas personalizadas -->
+    <div id="alertOverlay" class="alert-overlay">
+        <div id="customAlert" class="custom-alert">
+            <div id="alertIcon" class="alert-icon"></div>
+            <h2 id="alertTitle" class="alert-title"></h2>
+            <p id="alertMessage" class="alert-message"></p>
+            <div id="alertButtons" class="alert-buttons"></div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="form-wrapper">
             <!-- Header -->
@@ -25,22 +35,6 @@
                         Crear Nuevo Proceso Judicial
                     </h1>
                     <p>Complete los datos del proceso judicial</p>
-                    <!-- Botones -->
-                    <div class="button-container">
-                        <a href="{{ route('dashboard.abogado') }}" class="btn btn-cancel">
-                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                            </svg>
-                            Volver
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Crear Proceso Judicial
-                        </button>
-                    </div>
-
             </div>
             <div class="form-content">
                 <!-- Mensajes de error -->
@@ -162,7 +156,24 @@
                         <p class="file-help">Formatos permitidos: PDF, DOC, DOCX. Tamaño máximo: 10MB</p>
                     </div>
                 </div>
+                                <!-- Botones -->
+                    <div class="button-container">
+                        <a href="{{ route('dashboard.abogado') }}" class="btn btn-cancel">
+                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                            Volver
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Crear Proceso Judicial
+                        </button>
+                    </div>
                 </form>
+                    
+
             </div>
         </div>
     </div>
@@ -171,41 +182,237 @@
 </html>
 
 <script>
-document.getElementById('formProceso').addEventListener('submit', async function(e) {
-    e.preventDefault();
+// Envío del formulario con AJAX después de validación
+function submitFormularioAjax() {
+    const formData = new FormData(document.getElementById('formProceso'));
 
-    const formData = new FormData(this);
-
-    try {
-        const response = await fetch('{{ route("procesos.store") }}', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: formData
-        });
-
-        const result = await response.json();
-
+    fetch('{{ route("procesos.store") }}', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
         if (result.success) {
-            alert('Proceso creado exitosamente');
-            window.location.href = '{{ route("dashboard.abogado") }}'; // ← AQUÍ EL CAMBIO
+            showAlert('success', '¡Éxito!', 'Proceso creado exitosamente. Redirigiendo...');
+            setTimeout(() => {
+                window.location.href = '{{ route("dashboard.abogado") }}';
+            }, 1500);
         } else {
             if (result.errors) {
-                let errores = '';
+                let errores = [];
                 for (let campo in result.errors) {
-                    errores += result.errors[campo].join('\n') + '\n';
+                    errores.push(result.errors[campo].join(', '));
                 }
-                alert('Errores:\n' + errores);
+                showAlert('error', 'Errores de validación', errores.join('\n'));
             } else {
-                alert('Error: ' + result.message);
+                showAlert('error', 'Error', result.message || 'Error desconocido');
             }
         }
-
-    } catch (error) {
+    })
+    .catch(error => {
         console.error('Error:', error);
-        alert('Error de conexión');
-    }
-});
+        showAlert('error', 'Error de conexión', 'No se pudo conectar con el servidor');
+    });
+}
+
+// Función para mostrar alertas personalizadas
+        function showAlert(type, title, message, buttons = null) {
+            const overlay = document.getElementById('alertOverlay');
+            const alert = document.getElementById('customAlert');
+            const icon = document.getElementById('alertIcon');
+            const alertTitle = document.getElementById('alertTitle');
+            const alertMessage = document.getElementById('alertMessage');
+            const alertButtons = document.getElementById('alertButtons');
+
+            // Remover clases anteriores
+            alert.className = 'custom-alert';
+            alert.classList.add(`alert-${type}`);
+
+            // Configurar icono según el tipo
+            const icons = {
+                success: '✓',
+                error: '✕',
+                warning: '⚠',
+                info: 'ℹ'
+            };
+            icon.textContent = icons[type] || '✓';
+
+            // Configurar contenido
+            alertTitle.textContent = title;
+            alertMessage.textContent = message;
+
+            // Configurar botones
+            if (buttons) {
+                alertButtons.innerHTML = buttons;
+            } else {
+                alertButtons.innerHTML = `<button class="alert-button ${type}" onclick="closeAlert()">Aceptar</button>`;
+            }
+
+            // Mostrar overlay
+            overlay.classList.add('show');
+        }
+
+        // Función para cerrar alerta
+        function closeAlert() {
+            const overlay = document.getElementById('alertOverlay');
+            overlay.classList.remove('show');
+        }
+
+        // Cerrar con ESC o click fuera
+        document.getElementById('alertOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeAlert();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeAlert();
+        });
+
+        // Validación del formulario
+        function validarFormulario(e) {
+            e.preventDefault();
+            
+            // Limpiar errores previos
+            document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+            document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(el => {
+                el.classList.remove('error', 'success');
+            });
+
+            let errores = [];
+            let valido = true;
+
+            // Validar tipo de proceso
+            const tipoProceso = document.getElementById('tipo_proceso');
+            if (!tipoProceso.value) {
+                errores.push('Debe seleccionar un tipo de proceso');
+                tipoProceso.classList.add('error');
+                document.getElementById('error_tipo_proceso').textContent = 'Campo requerido';
+                valido = false;
+            } else {
+                tipoProceso.classList.add('success');
+            }
+
+            // Validar número de radicado
+            const numeroRadicado = document.getElementById('numero_radicado');
+            if (!numeroRadicado.value.trim()) {
+                errores.push('El número de radicado es obligatorio');
+                numeroRadicado.classList.add('error');
+                document.getElementById('error_numero_radicado').textContent = 'Campo requerido';
+                valido = false;
+            } else {
+                numeroRadicado.classList.add('success');
+            }
+
+            // Validar demandante
+            const demandante = document.getElementById('demandante');
+            if (!demandante.value.trim()) {
+                errores.push('El nombre del demandante es obligatorio');
+                demandante.classList.add('error');
+                document.getElementById('error_demandante').textContent = 'Campo requerido';
+                valido = false;
+            } else {
+                demandante.classList.add('success');
+            }
+
+            // Validar demandado
+            const demandado = document.getElementById('demandado');
+            if (!demandado.value.trim()) {
+                errores.push('El nombre del demandado es obligatorio');
+                demandado.classList.add('error');
+                document.getElementById('error_demandado').textContent = 'Campo requerido';
+                valido = false;
+            } else {
+                demandado.classList.add('success');
+            }
+
+            // Validar descripción
+            const descripcion = document.getElementById('descripcion');
+            if (!descripcion.value.trim()) {
+                errores.push('La descripción del caso es obligatoria');
+                descripcion.classList.add('error');
+                document.getElementById('error_descripcion').textContent = 'Campo requerido';
+                valido = false;
+            } else if (descripcion.value.trim().length < 20) {
+                errores.push('La descripción debe tener al menos 20 caracteres');
+                descripcion.classList.add('error');
+                document.getElementById('error_descripcion').textContent = 'Mínimo 20 caracteres';
+                valido = false;
+            } else {
+                descripcion.classList.add('success');
+            }
+
+            // Validar documento (opcional pero validar formato si existe)
+            const documento = document.getElementById('documento');
+            if (documento.files.length > 0) {
+                const file = documento.files[0];
+                const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+                const maxSize = 10 * 1024 * 1024; // 10MB
+
+                if (!allowedTypes.includes(file.type)) {
+                    errores.push('El documento debe ser PDF, DOC o DOCX');
+                    documento.classList.add('error');
+                    document.getElementById('error_documento').textContent = 'Formato no permitido';
+                    valido = false;
+                } else if (file.size > maxSize) {
+                    errores.push('El documento no debe superar 10MB');
+                    documento.classList.add('error');
+                    document.getElementById('error_documento').textContent = 'Archivo muy grande';
+                    valido = false;
+                } else {
+                    documento.classList.add('success');
+                }
+            }
+
+            // Mostrar resultado de la validación
+            if (!valido) {
+                let mensajeErrores = errores.length > 1 
+                    ? `Se encontraron ${errores.length} errores:\n\n${errores.map((e, i) => `${i + 1}. ${e}`).join('\n')}`
+                    : errores[0];
+
+                showAlert('error', '¡Error de Validación!', mensajeErrores);
+                
+                // Scroll al primer error
+                const primerError = document.querySelector('.error');
+                if (primerError) {
+                    primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            } else {
+                // Formulario válido - Enviar directamente
+                enviarFormulario();
+            }
+
+            return false;
+        }
+
+        // Función para enviar el formulario
+        function enviarFormulario() {
+            submitFormularioAjax();
+        }
+
+        // Asignar evento al formulario
+        document.getElementById('formProceso').addEventListener('submit', validarFormulario);
+
+        // Limpiar errores al escribir
+        document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(input => {
+            input.addEventListener('input', function() {
+                this.classList.remove('error');
+                const errorSpan = document.getElementById('error_' + this.id);
+                if (errorSpan) {
+                    errorSpan.textContent = '';
+                }
+            });
+        });
+
+        // Demo: Botones para probar las alertas    
+        function testAlerts() {
+            console.log('Alertas disponibles:');
+            console.log('1. showAlert("success", "Éxito", "Operación completada")');
+            console.log('2. showAlert("error", "Error", "Algo salió mal")');
+            console.log('3. showAlert("warning", "Advertencia", "Tenga cuidado")');
+            console.log('4. showAlert("info", "Información", "Datos importantes")');
+        }
+        
 </script>
