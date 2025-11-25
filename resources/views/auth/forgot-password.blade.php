@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>JurisConnect SENA - Recuperar Contraseña</title>
     <link rel="stylesheet" href="{{ asset('/css/recuperar.css') }}">
 </head>
+
 <body>
     <!-- Fondo -->
     <div class="background-image">
@@ -56,7 +58,7 @@
             </div>
             <h3 class="custom-alert-title">¡Correo Enviado!</h3>
             <p class="custom-alert-message">
-                Hemos enviado las instrucciones de recuperación a tu correo electrónico. 
+                Hemos enviado las instrucciones de recuperación a tu correo electrónico.
                 Por favor revisa tu bandeja de entrada y sigue las instrucciones.
             </p>
             <button class="custom-alert-btn" onclick="closeAlert()">Entendido</button>
@@ -96,4 +98,5 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 @endif
 </body>
+
 </html>
