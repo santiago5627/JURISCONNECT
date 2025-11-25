@@ -289,7 +289,24 @@
         @include('profile.partials.assistants-table-simple', ['assistants' => $assistants])
     </div>
 </div>
+                <!-- SECCIÓN GESTIÓN DE ASISTENTES JURÍDICOS -->
+                <div class="section-content" id="assistants-section">
+                    <div class="section-header">
+                        <h2>Gestión de Asistentes Jurídicos</h2>
+                        <p>Administrar el registro de asistentes jurídicos del sistema</p>
+                    </div>
 
+                    <div class="search-section">
+                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchAssistantsInput">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-primary" id="createAssistantBtn">CREAR NUEVO ASISTENTE</button>
+                        <a href=>EXPORTAR EXCEL</a>
+                        <a href=>EXPORTAR PDF</a>
+                    </div>
+                    @include('profile.partials.assistants-table', ['assistants' => $assistants])
+                    
                 <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
                 <div class="section-content" id="lawyers-section">
                     <div class="section-header">
@@ -310,37 +327,13 @@
                     @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
                     
                 </div>
-
-                <!-- SECCIÓN GESTIÓN DE ASISTENTES JURÍDICOS -->
-                <div class="section-content" id="assistants-section">
-                    <div class="section-header">
-                        <h2>Gestión de Asistentes Jurídicos</h2>
-                        <p>Administrar el registro de asistentes jurídicos del sistema</p>
-                    </div>
-
-                    <div class="search-section">
-                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchAssistantsInput">
-                    </div>
-
-                    <div class="action-buttons">
-                        <button class="btn-primary" id="createAssistantBtn">CREAR NUEVO ASISTENTE</button>
-                        <a href=>EXPORTAR EXCEL</a>
-                        <a href=>EXPORTAR PDF</a>
-                    </div>
-                    @include('profile.partials.assistants-table', ['assistants' => $assistants])
-                    
-                </div>
+                
                     </div>
                 </div>
                 
             </div>
-            
         </div>
-        
     </div>
-
-    
-
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
 

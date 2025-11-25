@@ -26,7 +26,7 @@ class ConceptoController extends Controller
     // Crear concepto relacionado al proceso
     $concepto = new ConceptoJuridico();
     $concepto->proceso_id = $id;
-    $concepto->abogado_id = auth()->id();
+    $concepto->abogado_id = Auth::id();
     $concepto->titulo = $validated['titulo'];
     $concepto->descripcion = $validated['concepto'];
     $concepto->save();
@@ -46,12 +46,12 @@ class ConceptoController extends Controller
             if ($searchTerm) {
                 $query->where(function($q) use ($searchTerm) {
                     $q->where('id', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('estado', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('tipo_proceso', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
-                      ->orWhere('created_at', 'LIKE', '%' . $searchTerm . '%');
+                    ->orWhere('estado', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('tipo_proceso', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('created_at', 'LIKE', '%' . $searchTerm . '%');
                       // Agrega más campos según tu modelo Lawyer 
                 });
             }
@@ -107,11 +107,11 @@ public function create(Request $request)
         $search = $request->get('search');
         $query->where(function($q) use ($search) {
             $q->where('id', 'LIKE', '%' . $search . '%')
-              ->orWhere('numero_radicado', 'LIKE', '%' . $search . '%')
-              ->orWhere('demandante', 'LIKE', '%' . $search . '%')
-              ->orWhere('demandado', 'LIKE', '%' . $search . '%')
-              ->orWhere('tipo_proceso', 'LIKE', '%' . $search . '%')
-              ->orWhere('created_at', 'LIKE', '%' . $search . '%');
+            ->orWhere('numero_radicado', 'LIKE', '%' . $search . '%')
+            ->orWhere('demandante', 'LIKE', '%' . $search . '%')
+            ->orWhere('demandado', 'LIKE', '%' . $search . '%')
+            ->orWhere('tipo_proceso', 'LIKE', '%' . $search . '%')
+            ->orWhere('created_at', 'LIKE', '%' . $search . '%');
         });
     }
 
@@ -213,7 +213,7 @@ public function create(Request $request)
             'titulo' => $request->titulo,
             'categoria' => $request->categoria,
             'descripcion' => $request->descripcion,
-            'abogado_id' => auth()->id() // <-- changed from user_id
+            'abogado_id' => Auth::id()
         ]);
     }
 
