@@ -29,25 +29,25 @@
                 <h1>Procesos Pendientes de Concepto Jurídico</h1>
                 <p>Gestiona los procesos que requieren análisis jurídico</p>
             </div>
-            <a class="cancel-btn" href="{{ route('dashboard.abogado') }}">
-                <i class="fas fa-arrow-left"></i>
-                Cancelar
-            </a>
             <!-- busqueda -->
             <!-- Buscador moderno -->
             <div class="search-wrapper">
                 <div class="search-group">
                     <input
-                        type="text"
-                        id="searchInput"
-                        class="search-input-modern"
-                        placeholder="Buscar por ID, radicado o fecha...">
+                    type="text"
+                    id="searchInput"
+                    class="search-input-modern"
+                    placeholder="Buscar por ID, radicado o fecha...">
                     <button id="searchBtn" class="search-button-modern">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
             </div>
-
+            
+            <a class="cancel-btn" href="{{ route('dashboard.abogado') }}">
+                <i class="fas fa-arrow-left"></i>
+                Cancelar
+            </a>
         </div>
 
         <!-- Alerta de éxito (oculta por defecto) -->

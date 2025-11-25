@@ -6,6 +6,7 @@ use App\Models\Lawyer; // Asegúrate de importar el modelo
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\Proceso;
+use App\Models\Assistant;
 
 
 class AdminController extends Controller
@@ -42,6 +43,8 @@ class AdminController extends Controller
             // TABLA PEQUEÑA (mostrar todos)
             $lawyersSimple = Lawyer::paginate(10);
 
+            $abogados = Lawyer::all();
+
             // Mantener parámetros de búsqueda en la paginación
             $lawyers->appends($request->query());
 
@@ -64,14 +67,29 @@ class AdminController extends Controller
 
             $cases_count = Proceso::count();
 
+            $totalAsistentes = Assistant::count();
+
+            $assistants = Assistant::with('lawyers')->paginate(10); // tabla principal paginada
+            $assistantsSimple = Assistant::with('lawyers')->get(); // tabla pequeña (si la necesitas)
+
+
             // Para peticiones normales, devolver la vista completa
-            return view('dashboard', compact('lawyers', 'totalLawyers', 'lawyersSimple', 'cases_count'));
+            return view('dashboard', compact(
+                'lawyers',
+                'totalLawyers',
+                'abogados',
+                'lawyersSimple',
+                'cases_count',
+                'totalAsistentes',
+                'assistants',
+                'assistantsSimple'
+            ));
         } catch (\Exception $e) {
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Error al cargar los datos: ' . $e->getMessage()
-                ], 500);    
+                ], 500);
             }
 
             // Para peticiones normales, redirigir con error
