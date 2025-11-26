@@ -135,59 +135,68 @@
                             </select>
                         </div>
 
-                            <div class="form-group">
-                                <label for="editApellido">Apellido:</label>
-                                <input type="text" id="editApellido" name="apellido" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="editApellido">Apellido:</label>
+                            <input type="text" id="editApellido" name="apellido" required>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="editTipoDocumento">Tipo de Documento:</label>
-                                <select id="editTipoDocumento" name="tipoDocumento" required>
-                                    <option value="">Seleccione...</option>
-                                    <option value="CC">Cédula de Ciudadanía</option>
-                                    <option value="CE">Cédula de Extranjería</option>
-                                    <option value="PAS">Pasaporte</option>
-                                </select>
-                            </div>
+                        <div class="form-group">
+                            <label for="editTipoDocumento">Tipo de Documento:</label>
+                            <select id="editTipoDocumento" name="tipoDocumento" required>
+                                <option value="">Seleccione...</option>
+                                <option value="CC">Cédula de Ciudadanía</option>
+                                <option value="CE">Cédula de Extranjería</option>
+                                <option value="PAS">Pasaporte</option>
+                            </select>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="editNumeroDocumento">Número de Documento:</label>
-                                <input type="text" id="editNumeroDocumento" name="numeroDocumento" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="editNumeroDocumento">Número de Documento:</label>
+                            <input type="text" id="editNumeroDocumento" name="numeroDocumento" required>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="editCorreo">Correo:</label>
-                                <input type="email" id="editCorreo" name="correo" required>
-                            </div>
+                        <div class="form-group">
+                            <label for="editCorreo">Correo:</label>
+                            <input type="email" id="editCorreo" name="correo" required>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="editTelefono">Teléfono:</label>
-                                <input type="tel" id="editTelefono" name="telefono">
-                            </div>
+                        <div class="form-group">
+                            <label for="editTelefono">Teléfono:</label>
+                            <input type="tel" id="editTelefono" name="telefono">
+                        </div>
 
-                            <div class="form-group">
-                                <label for="editEspecialidad">Especialidad:</label>
-                                <input type="text" id="editEspecialidad" name="especialidad">
-                            </div>
+                        <div class="form-group">
+                            <label for="editEspecialidad">Especialidad:</label>
+                            <input type="text" id="editEspecialidad" name="especialidad">
+                        </div>
 
-                            <div class="form-actions">
-                                <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
-                                <button type="submit" class="btn-submit">Guardar Cambios</button>
-                            </div>
-                        </form>
-                    </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
+                            <button type="submit" class="btn-submit">Guardar Cambios</button>
+                        </div>
+                    </form>
                 </div>
             </div>
+        </div>
 
-            <!-- Sidebar -->
-            <div class="sidebar" id="sidebar">
-                <div class="profile">
-                    <!-- Input file oculto para la foto de perfil -->
-                    <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="profile">
+                <!-- Input file oculto para la foto de perfil -->
+                <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
 
-                    <!-- Indicador de carga (oculto por defecto) -->
-                    <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
-                        Subiendo...
+                <!-- Indicador de carga (oculto por defecto) -->
+                <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+                    Subiendo...
+                </div>
+
+                <!-- Contenedor de la foto de perfil -->
+                <div class="profile-pic" onclick="document.getElementById('fileInput').click();" 
+                    style="cursor: pointer; position: relative;" 
+                    title="Haz clic para cambiar tu foto">
+                    <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}" 
+                        id="profileImage" 
+                        alt="Foto de perfil">
                     </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
@@ -212,114 +221,114 @@
                 <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo SENA">
             </div>
 
-                <div class="nav-menu">
-                    <button class="nav-btn active" data-section="dashboard">
-                        Dashboard
-                    </button>
+            <!-- Botón de Cerrar Sesión -->
+            <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
+                @csrf
+                <button type="submit" class="logout-btn">
+                    Cerrar Sesión
+                </button>
+            </form>
+        </div>
 
-                    <button class="nav-btn" data-section="lawyers">
-                        Gestión de Abogados
-                    </button>
+        <!-- Contenido Principal -->
+    <div class="main-content" id="mainContent">
+            <div class="header">
+                <button class="hamburger" id="hamburgerBtn">☰</button>
+                <div class="title-logo-container">
+                    <h1 class="title">JustConnect SENA</h1>
                 </div>
-
-                <div class="sena-logo">
-                    <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo SENA">
+                <div class="logo-container">
+                    <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo Empresa" class="logo">
                 </div>
-
-                <!-- Botón de Cerrar Sesión -->
-                <form method="POST" action="{{ route('logout') }}" style="width: 100%;">
-                    @csrf
-                    <button type="submit" class="logout-btn">
-                        Cerrar Sesión
-                    </button>
-                </form>
             </div>
 
-            <!-- Contenido Principal -->
-            <div class="main-content" id="mainContent">
-                <div class="header">
-                    <button class="hamburger" id="hamburgerBtn">☰</button>
-                    <div class="title-logo-container">
-                        <h1 class="title">JustConnect SENA</h1>
-                    </div>
+                    <div class="content-panel">
+
+                        <!-- SECCIÓN DASHBOARD PRINCIPAL -->
+                        <div class="section-content active" id="dashboard-section">
+                            <div class="section-header">
+                                <h2>Dashboard Principal</h2>
+                                <p>Resumen general del sistema JustConnect SENA</p>
+                            </div>
                     
-                <!-- En la sección DASHBOARD PRINCIPAL -->
-<div class="dashboard-stats">
-    <div class="stat-card" id="lawyersStatCard" style="cursor: pointer;">
-        <div class="stat-icon">👨‍⚖️</div>
-        <div class="stat-info">
-            <h3>{{ $totalLawyers }}</h3>
-            <p>Abogados Registrados</p>
-        </div>
-    </div>
+                            <!-- En la sección DASHBOARD PRINCIPAL -->
+                            <div class="dashboard-stats">
+                            <div class="stat-card" id="lawyersStatCard" style="cursor: pointer;">
+                                <div class="stat-icon">👨‍⚖️</div>
+                                <div class="stat-info">
+                                <h3>{{ $totalLawyers }}</h3>
+                                <p>Abogados Registrados</p>
+                                </div>
+                            </div>
 
-    <div class="stat-card" id="casesStatCard">
-        <div class="stat-icon">📋</div>
-        <div class="stat-info">
-            <h3>{{ $cases_count }}</h3>
-            <p>Procesos Judiciales</p>
-        </div>
-    </div>
+                                <div class="stat-card" id="casesStatCard">
+                                <div class="stat-icon">📋</div>
+                                <div class="stat-info">
+                                <h3>{{ $cases_count }}</h3>
+                                <p>Procesos Judiciales</p>
+                                </div>
+                                </div>
 
-    <div class="stat-card" id="assistantsStatCard" style="cursor: pointer;">
-        <div class="stat-icon">👨‍💼</div>
-        <div class="stat-info">
-            <h3>{{ $totalAsistentes }}</h3>
-            <p>Asistentes Juridicos</p>
-        </div>
-    </div>
-</div>
-    <!-- 🔽🔽🔽 TABLA OCULTA INICIALMENTE 🔽🔽🔽 -->
-    <div id="lawyersTableWrapper" style="display: none; margin-top: 30px;">
-        <h3>Listado de Abogados</h3>
-        @include('profile.partials.lawyers-table-simple', ['lawyers' => $lawyers])
-    </div>
+                                <div class="stat-card" id="assistantsStatCard" style="cursor: pointer;">
+                                <div class="stat-icon">👨‍💼</div>
+                                <div class="stat-info">
+                                <h3>{{ $totalAsistentes }}</h3>
+                                <p>Asistentes Juridicos</p>
+                                </div>
+                                </div>
+                            </div>
+                            <!-- 🔽🔽🔽 TABLA OCULTA INICIALMENTE 🔽🔽🔽 -->
+                            <div id="lawyersTableWrapper" style="display: none; margin-top: 30px;">
+                            <h3>Listado de Abogados</h3>
+                            @include('profile.partials.lawyers-table-simple', ['lawyers' => $lawyers])
+                            </div>
 
-    <!-- 🔽🔽🔽 TABLA DE ASISTENTES OCULTA INICIALMENTE 🔽🔽🔽 -->
-    <div id="assistantsTableWrapper" style="display: none; margin-top: 30px;">
-        <h3>Listado de Asistentes Jurídicos</h3>
-        @include('profile.partials.assistants-table-simple', ['assistants' => $assistants])
-    </div>
-</div>
-
-                <div class="content-panel">
-
-                    <!-- SECCIÓN DASHBOARD PRINCIPAL -->
-                    <div class="section-content active" id="dashboard-section">
-                        <div class="section-header">
-                            <h2>Dashboard Principal</h2>
-                            <p>Resumen general del sistema JustConnect SENA</p>
+                            <!-- 🔽🔽🔽 TABLA DE ASISTENTES OCULTA INICIALMENTE 🔽🔽🔽 -->
+                            <div id="assistantsTableWrapper" style="display: none; margin-top: 30px;">
+                            <h3>Listado de Asistentes Jurídicos</h3>
+                            @include('profile.partials.assistants-table-simple', ['assistants' => $assistants])
+                            </div>
                         </div>
 
-                    <div class="action-buttons">
-                        <button class="btn-primary" id="createBtn">CREAR NUEVO USUARIO</button>
-                        <a href="{{ route('lawyers.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
-                        <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
-                    </div>
-                    
-                    @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
-                    
-                </div>
+                        <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
+                        <div class="section-content" id="lawyers-section">
+                            <div class="section-header">
+                                <h2>Gestión de Abogados</h2>
+                                <p>Administrar el registro de abogados del sistema</p>
+                            </div>
 
-                <!-- SECCIÓN GESTIÓN DE ASISTENTES JURÍDICOS -->
-                <div class="section-content" id="assistants-section">
-                    <div class="section-header">
-                        <h2>Gestión de Asistentes Jurídicos</h2>
-                        <p>Administrar el registro de asistentes jurídicos del sistema</p>
-                    </div>
+                            <div class="search-section">
+                                <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
+                            </div>
 
-                    <div class="search-section">
-                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchAssistantsInput">
-                    </div>
+                            <div class="action-buttons">
+                                <button class="btn-primary" id="createBtn">CREAR NUEVO USUARIO</button>
+                                <a href="{{ route('lawyers.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
+                                <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
+                            </div>
+                            @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
 
-                    <div class="action-buttons">
-                        <button class="btn-primary" id="createAssistantBtn">CREAR NUEVO ASISTENTE</button>
-                        <a href=>EXPORTAR EXCEL</a>
-                        <a href=>EXPORTAR PDF</a>
-                    </div>
-                    @include('profile.partials.assistants-table', ['assistants' => $assistants])
-                    
-                </div>
+                        </div>
+
+                        <!-- SECCIÓN GESTIÓN DE ASISTENTES JURÍDICOS -->
+                        <div class="section-content" id="assistants-section">
+                            <div class="section-header">
+                                <h2>Gestión de Asistentes Jurídicos</h2>
+                                <p>Administrar el registro de asistentes jurídicos del sistema</p>
+                            </div>
+
+                            <div class="search-section">
+                                <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchAssistantsInput">
+                            </div>
+
+                            <div class="action-buttons">
+                                <button class="btn-primary" id="createAssistantBtn">CREAR NUEVO ASISTENTE</button>
+                                <a href=>EXPORTAR EXCEL</a>
+                                <a href=>EXPORTAR PDF</a>
+                            </div>
+                            @include('profile.partials.assistants-table', ['assistants' => $assistants])
+                        </div>
+
                     </div>
                 </div>
                 
@@ -328,12 +337,6 @@
         </div>
         
     </div>
-
-    
-
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
-
-    
-
 </x-app-layout>

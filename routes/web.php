@@ -22,7 +22,7 @@ Route::get('/', function () {
 
 // ===================================================================
 // RUTAS DE AUTENTICACIÓN
-// ===================================================================
+// =================================================================== 
 require __DIR__ . '/auth.php';
 
 // ===================================================================
@@ -82,6 +82,13 @@ Route::middleware(['auth'])->group(function () {
     // PROCESOS LEGALES
     // ===============================================================
     Route::prefix('procesos')->name('procesos.')->group(function () {
+        // Exportaciones
+        Route::get('/export-pdf', [ProcesosExport::class, 'exportPDF'])
+            ->name('export.pdf');
+
+        Route::get('/export-excel', function () { 
+            return Excel::download(new ProcesosExport, 'Procesos.xlsx'); 
+        })->name('export.excel');
         // CRUD de procesos
         Route::get('/', [LegalProcessController::class, 'index'])->name('index');
         Route::get('/create', [LegalProcessController::class, 'create'])->name('create');
@@ -90,13 +97,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{proceso}/edit', [LegalProcessController::class, 'edit'])->name('edit');
         Route::put('/{proceso}', [LegalProcessController::class, 'update'])->name('update');
         Route::delete('/{proceso}', [LegalProcessController::class, 'destroy'])->name('destroy');
-        // Exportaciones
-        Route::get('/export-pdf', [ProcesosExport::class, 'exportaPDF'])
-            ->name('procesos.export.pdf');
-        
-        Route::get('/export-excel', function () { 
-            return Excel::download(new ProcesosExport, 'Procesos.xlsx'); 
-        })->name('procesos.export.excel');
         
         // Conceptos relacionados con procesos (rutas específicas al final)
         Route::get('/{proceso}/concepto', [AbogadoController::class, 'mostrarFormularioConcepto'])

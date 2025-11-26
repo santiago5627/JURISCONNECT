@@ -95,23 +95,19 @@ public function headings(): array
     /**
      * Exportar listado a PDF
      */
-    public function exportaPDF()
-{
-    try {
-        $procesos = Proceso::orderBy('numero_radicado')->get();
-        $logoPath = public_path('img/LogoInsti.png');
+    public function exportPDF()
+    {
+        try {
+            $procesos = Proceso::orderBy('numero_radicado')->get();
+            $logoPath = public_path('img/LogoInsti.png');
 
-        $pdf = Pdf::loadView('exports.procesos-pdf', compact('procesos', 'logoPath'))
-            ->setPaper('a4', 'portrait');
+            $pdf = Pdf::loadView('exports.procesos-pdf', compact('procesos', 'logoPath'))
+                ->setPaper('a4', 'portrait');
 
-        return $pdf->download('listado_procesos_' . date('Y-m-d') . '.pdf');
-        
-    } catch (\Exception $e) {
-        Log::error('Error al exportar PDF de procesos', [
-            'message' => $e->getMessage()
-        ]);
-        
-        return back()->with('error', 'Error al generar el PDF');
+            return $pdf->download('listado_procesos_' . date('Y-m-d') . '.pdf');
+        } catch (\Exception $e) {
+            Log::error('Error al exportar PDF de procesos', ['message' => $e->getMessage()]);
+            return back()->with('error', 'Error al generar el PDF');
+        }
     }
-}
 }

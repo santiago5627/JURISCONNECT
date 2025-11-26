@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="action-buttons">
-                        <a href="{{ route('procesos.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
+                        <a href="{{ route('procesos.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a> 
                         <a href="{{ route('procesos.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
 

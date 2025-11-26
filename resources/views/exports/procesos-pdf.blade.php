@@ -34,23 +34,22 @@
     <table>
         <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Tipo Doc</th>
-                <th>Documento</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Especialidad</th>
+                <th>Radicado</th>
+                <th>Tipo</th>
+                <th>Demandante</th>
+                <th>Demandado</th>
+                <th>Estado</th>
+                <th>Fecha</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($lawyers as $lawyer)
+            @foreach($procesos as $proceso)
             <tr>
                 <td>{{ $proceso->numero_radicado }}</td>
                 <td>{{ $proceso->tipo_proceso }}</td>
                 <td>{{ $proceso->demandante }}</td>
                 <td>{{ $proceso->demandado }}</td>
-                <td>{{ $proceso->setado }}</td>
+                <td>{{ $proceso->estado }}</td>
                 <td>{{ $proceso->created_at }}</td>
                 
             </tr>

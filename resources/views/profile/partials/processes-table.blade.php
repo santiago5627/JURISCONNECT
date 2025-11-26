@@ -124,7 +124,7 @@
                 </div>
             </div>
 
-<<script>
+<script>
 // Función para mostrar el modal
 function showDeleteConfirm(name, onConfirm) {
     const overlay = document.getElementById('alertOverlay');
