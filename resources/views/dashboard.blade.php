@@ -333,9 +333,7 @@
                 </div>
                 
             </div>
-            
         </div>
-        
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
