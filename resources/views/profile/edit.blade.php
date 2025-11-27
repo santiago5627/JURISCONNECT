@@ -72,10 +72,13 @@
                                     id="estado" 
                                     name="estado" 
                                     required>
-                                <option value="">Seleccione un estado</option>
-                                <option value="pendiente" {{ old('estado', $proceso->estado) == 'pendiente' ? 'selected' : '' }}>Pendiente</option>
-                                <option value="en_proceso" {{ old('estado', $proceso->estado) == 'en_proceso' ? 'selected' : '' }}>En Proceso</option>
-                                <option value="finalizado" {{ old('estado', $proceso->estado) == 'finalizado' ? 'selected' : '' }}>Finalizado</option>
+                                <select name="estado" required>
+                                    <option value="activo" {{ $proceso->estado == 'activo' ? 'selected' : '' }}>Activo</option>
+                                    <option value="en_proceso" {{ $proceso->estado == 'en_proceso' ? 'selected' : '' }}>En Proceso</option>
+                                    <option value="suspendido" {{ $proceso->estado == 'suspendido' ? 'selected' : '' }}>Suspendido</option>
+                                    <option value="terminado" {{ $proceso->estado == 'terminado' ? 'selected' : '' }}>Terminado</option>
+                                    <option value="archivado" {{ $proceso->estado == 'archivado' ? 'selected' : '' }}>Archivado</option>
+                                </select>
                             </select>
                             @error('estado')
                                 <div class="invalid-feedback">{{ $message }}</div>

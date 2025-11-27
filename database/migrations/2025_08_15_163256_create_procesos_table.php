@@ -19,9 +19,7 @@ return new class extends Migration
     $table->string('demandado', 255);
     $table->text('descripcion');
     $table->string('documento')->nullable();
-    $table->enum('estado', ['Radicado','Pendiente', 'Primera instancia', 'En curso', 'Finalizado','En audiencia',
-    'Pendiente fallo', 'Favorable primera', 'Desfavorable primera', 'En apelacion', 'Conciliacion pendiente', 'Conciliado',
-    'Sentencia ejecutoriada', 'En proceso pago', 'Terminado'])->default('Pendiente'); 
+    $table->enum('estado', ['en_proceso', 'suspendido', 'terminado', 'archivado'])->default('Pendiente'); 
     $table->timestamps();
     $table->unsignedBigInteger('user_id')->nullable();
     $table->unsignedBigInteger('lawyer_id')->nullable();
