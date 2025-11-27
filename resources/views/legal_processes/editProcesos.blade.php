@@ -59,19 +59,19 @@
                             </label>
                             <select class="form-select @error('estado') is-invalid @enderror" id="estado" name="estado" required>
                                 <option value="Pendiente" {{ old('estado', $proceso->estado) == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
-                                <option value="primera_instancia" {{ old('estado', $proceso->estado) == 'primera_instancia' ? 'selected' : '' }}>primera instancia</option>
+                                <option value="Primera instancia" {{ old('estado', $proceso->estado) == 'Primera instancia' ? 'selected' : '' }}>primera instancia</option>
                                 <option value="En curso" {{ old('estado', $proceso->estado) == 'En curso' ? 'selected' : '' }}>En curso</option>
                                 <option value="Finalizado" {{ old('estado', $proceso->estado) == 'Finalizado' ? 'selected' : '' }}>Finalizado</option>
-                                <option value="en_audiencia" {{ old('estado', $proceso->estado) == 'en_audiencia' ? 'selected' : '' }}>en audiencia</option>
-                                <option value="pendiente_fallo" {{ old('estado', $proceso->estado) == 'pendiente_fallo' ? 'selected' : '' }}>pendiente fallo</option>
-                                <option value="favorable_primera" {{ old('estado', $proceso->estado) == 'favorable_primera' ? 'selected' : '' }}>favorable primera</option>
-                                <option value="desfavorable_primera" {{ old('estado', $proceso->estado) == 'desfavorable_primera' ? 'selected' : '' }}>desfavorable primera</option>
-                                <option value="en_apelacion" {{ old('estado', $proceso->estado) == 'en_apelacion' ? 'selected' : '' }}>en apelacion</option>
-                                <option value="conciliacion_pendiente" {{ old('estado', $proceso->estado) == 'conciliacion_pendiente' ? 'selected' : '' }}>conciliacion pendiente</option>
-                                <option value="conciliado" {{ old('estado', $proceso->estado) == 'conciliado' ? 'selected' : '' }}>conciliado</option>
-                                <option value="sentencia_ejecutoriada" {{ old('estado', $proceso->estado) == 'sentencia_ejecutoriada' ? 'selected' : '' }}>sentencia ejecutoriada</option>
-                                <option value="en_proceso_pago" {{ old('estado', $proceso->estado) == 'en_proceso_pago' ? 'selected' : '' }}>en proceso pago</option>
-                                <option value="terminado" {{ old('estado', $proceso->estado) == 'terminado' ? 'selected' : '' }}>terminado</option>
+                                <option value="En audiencia" {{ old('estado', $proceso->estado) == 'En audiencia' ? 'selected' : '' }}>en audiencia</option>
+                                <option value="Pendiente fallo" {{ old('estado', $proceso->estado) == 'Pendiente fallo' ? 'selected' : '' }}>pendiente fallo</option>
+                                <option value="Favorable primera" {{ old('estado', $proceso->estado) == 'Favorable primera' ? 'selected' : '' }}>favorable primera</option>
+                                <option value="Desfavorable primera" {{ old('estado', $proceso->estado) == 'Desfavorable primera' ? 'selected' : '' }}>desfavorable primera</option>
+                                <option value="En apelacion" {{ old('estado', $proceso->estado) == 'En apelacion' ? 'selected' : '' }}>en apelacion</option>
+                                <option value="Conciliacion pendiente" {{ old('estado', $proceso->estado) == 'Conciliacion pendiente' ? 'selected' : '' }}>conciliacion pendiente</option>
+                                <option value="Conciliado" {{ old('estado', $proceso->estado) == 'Conciliado' ? 'selected' : '' }}>conciliado</option>
+                                <option value="Sentencia ejecutoriada" {{ old('estado', $proceso->estado) == 'Sentencia ejecutoriada' ? 'selected' : '' }}>sentencia ejecutoriada</option>
+                                <option value="En proceso pago" {{ old('estado', $proceso->estado) == 'En proceso pago' ? 'selected' : '' }}>en proceso pago</option>
+                                <option value="Terminado" {{ old('estado', $proceso->estado) == 'Terminado' ? 'selected' : '' }}>terminado</option>
                             </select>
                             @error('estado')
                             <div class="invalid-feedback">{{ $message }}</div>

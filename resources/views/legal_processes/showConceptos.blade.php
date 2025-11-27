@@ -235,26 +235,6 @@
                 .catch(err => console.error('Error en búsqueda:', err));
         }
 
-        // ===== ABRIR Y CERRAR MODAL DE PROCESO =====  
-        function openProcessModal(id) {
-            document.getElementById('viewProcessModal').style.display = 'flex';
-            const body = document.getElementById('processModalBody');
-            body.innerHTML = '<p>Cargando datos...</p>';
-
-            fetch(`/procesos/${id}`)
-                .then(res => res.json())
-                .then(data => {
-                    body.innerHTML = `
-                        <p><strong>Radicado:</strong> ${data.numero_radicado}</p>
-                        <p><strong>Tipo:</strong> ${data.tipo_proceso}</p>
-                        <p><strong>Demandante:</strong> ${data.demandante}</p>
-                        <p><strong>Demandado:</strong> ${data.demandado}</p>
-                        <p><strong>Descripción:</strong> ${data.descripcion ?? 'Sin descripción'}</p>
-                    `;
-                })
-                .catch(err => console.error('Error en búsqueda:', err));
-        }
-
         // ===== ABRIR Y CERRAR MODAL DE PROCESO =====
         function openProcessModal(id) {
     document.getElementById('viewProcessModal').style.display = 'flex';
@@ -272,6 +252,7 @@
                 <p><strong>Título:</strong> ${data.titulo ?? 'N/A'}</p>
                 <p><strong>Fecha:</strong> ${data.created_at}</p>
                 <p><strong>Contenido:</strong> ${data.descripcion ?? 'Sin contenido'}</p>
+                <p><strong>Proceso Asociado:</strong> ${data.proceso ? data.proceso.numero_radicado : 'N/A'}</p>
             `;
         })
         .catch(() => {
