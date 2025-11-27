@@ -31,7 +31,7 @@ class ConceptoJuridico extends Model
     // Relación con el abogado (usuario)
     public function abogado(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'abogado_id');
+        return $this->belongsTo(User::class, 'lawyer_id');
     }
 
     // Relación con el proceso
