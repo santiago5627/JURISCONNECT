@@ -12,22 +12,36 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('procesos', function (Blueprint $table) {
-    $table->id();
-    $table->string('tipo_proceso', 100);
-    $table->string('numero_radicado', 62)->unique();
-    $table->string('demandante', 255);
-    $table->string('demandado', 255);
-    $table->text('descripcion');
-    $table->string('documento')->nullable();
-    $table->enum('estado', ['en_proceso', 'suspendido', 'terminado', 'archivado'])->default('Pendiente'); 
-    $table->timestamps();
-    $table->unsignedBigInteger('user_id')->nullable();
-    $table->unsignedBigInteger('lawyer_id')->nullable();
-    $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
-    $table->foreign('lawyer_id')->references('id')->on('users')->onDelete('set null');
-
-
-});
+            $table->id();
+            $table->string('tipo_proceso', 100);
+            $table->string('numero_radicado', 62)->unique();
+            $table->string('demandante', 255);
+            $table->string('demandado', 255);
+            $table->text('descripcion');
+            $table->string('documento')->nullable();
+            $table->enum('estado', [
+                'Radicado',
+                'Pendiente',
+                'Primera instancia',
+                'En curso',
+                'Finalizado',
+                'En audiencia',
+                'Pendiente fallo',
+                'Favorable primera',
+                'Desfavorable primera',
+                'En apelacion',
+                'Conciliacion pendiente',
+                'Conciliado',
+                'Sentencia ejecutoriada',
+                'En proceso pago',
+                'Terminado'
+            ]);
+            $table->timestamps();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('lawyer_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('lawyer_id')->references('id')->on('users')->onDelete('set null');
+        });
     }
 
     /**

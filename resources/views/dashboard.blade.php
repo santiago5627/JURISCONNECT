@@ -297,6 +297,8 @@
                         <a href=>EXPORTAR PDF</a>
                     </div>
                     @include('profile.partials.assistants-table', ['assistants' => $assistants])
+
+                    </div>
                     
                 <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
                 <div class="section-content" id="lawyers-section">
@@ -319,7 +321,7 @@
                     
                 </div>
                 
-                    </div>
+                    
                 </div>
                 
             </div>

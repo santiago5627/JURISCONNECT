@@ -6,8 +6,10 @@
                     <div class="card-title-icon">
                         <i class="fas fa-gavel"></i>
                     </div>
-                    <h3>Proceso Legal</h3>
-                    <h3>{{ $proceso->id }}</h3>
+                    <h2 class="titulo-proceso" data-numero="{{ $loop->iteration }}">
+    Proceso Legal {{ $loop->iteration }}
+</h2>
+
                 </div>
                 <span class="status-badge">{{ $proceso->estado }}</span>
             </div>
@@ -88,3 +90,29 @@
         </div>
     @endforelse
 </div>
+
+<script>
+document.getElementById('searchInput')?.addEventListener('input', function() {
+    let valor = this.value.trim();
+    let cards = document.querySelectorAll('.process-card');
+
+    cards.forEach(card => {
+        let titulo = card.querySelector('.titulo-proceso');
+        let numero = titulo.getAttribute('data-numero');
+
+        if (valor === '') {
+            card.style.display = 'block';
+            return;
+        }
+
+        if (!isNaN(valor)) {
+            // Buscar por número de Proceso Legal
+            card.style.display = (numero === valor) ? 'block' : 'none';
+        } else {
+            // Buscar por texto normal
+            let contenido = card.innerText.toLowerCase();
+            card.style.display = contenido.includes(valor.toLowerCase()) ? 'block' : 'none';
+        }
+    });
+});
+</script>
