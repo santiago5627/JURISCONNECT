@@ -139,9 +139,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::post('/procesos/{id}/conceptos', [ConceptoController::class, 'storeProceso'])
     ->name('conceptos.storeProceso');
-    Route::get('/concepto_juridicos/{id}', [ConceptoController::class, 'show'])->name('concepto_juridicos.show');
     
-    });
+});
+Route::get('/concepto_juridicos/{id}', [ConceptoController::class, 'show'])->name('concepto.show');
 
 
     // Rutas del ConceptoController

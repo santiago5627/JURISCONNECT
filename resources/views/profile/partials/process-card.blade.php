@@ -72,10 +72,17 @@
                         <i class="fas fa-edit"></i>
                         Redactar Concepto Jurídico
                     </a>
-                    <a href="javascript:void(0);" onclick="openProcessModal ({{ $proceso->id }})" class="action-btn action-view" title="Ver detalles">
-                        <i class="fa-regular fa-eye"></i>
-                        Ver Detalles
-                    </a> 
+                    @forelse($proceso->conceptos ?? [] as $concepto)
+    <a href="javascript:void(0);" 
+       onclick="openProcessModal({{ $concepto->id }})" 
+       class="action-btn action-view" 
+       title="Ver detalles">
+        <i class="fa-regular fa-eye"></i>
+        Ver Detalles
+    </a>
+@empty
+    <p class="text-muted small mb-0">No hay conceptos jurídicos aún</p>
+@endforelse
                 </div>
             </div>
         </div>

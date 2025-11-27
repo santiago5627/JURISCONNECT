@@ -100,7 +100,23 @@ class ConceptoController extends Controller
  */
 public function create(Request $request) 
 {
-    $query = Proceso::where('estado', 'Pendiente'); // Solo procesos pendientes
+    $query = Proceso::whereIn('estado', [
+                'Radicado',
+                'Pendiente', 
+                'Primera instancia', 
+                'En curso', 
+                'Finalizado',
+                'En audiencia',
+                'Pendiente fallo', 
+                'Favorable primera', 
+                'Desfavorable primera', 
+                'En apelacion', 
+                'Conciliacion pendiente', 
+                'Conciliado',
+                'Sentencia ejecutoriada', 
+                'En proceso pago', 
+                'Terminado'
+            ]);
 
     // Búsqueda
     if ($request->has('search') && $request->get('search')) {
@@ -115,7 +131,9 @@ public function create(Request $request)
         });
     }
 
-    $procesos = $query->orderBy('created_at', 'desc')->get();
+    $procesos = Proceso::with('conceptos')
+    ->orderBy('created_at', 'desc')
+    ->get();
 
     // Respuesta AJAX
     if ($request->ajax() || $request->get('ajax')) {
@@ -165,6 +183,17 @@ public function create(Request $request)
 
             return back()->with('error', 'Error al cargar el formulario');
         }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        // Traer concepto con proceso y abogado (ajusta relaciones según tu modelo)
+        $concepto = \App\Models\ConceptoJuridico::with(['proceso', 'abogado'])->findOrFail($id);
+
+        return response()->json($concepto);
     }
 
     // ===============================

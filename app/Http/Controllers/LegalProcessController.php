@@ -25,7 +25,6 @@ class LegalProcessController extends Controller
     //Mostrar solo los procesos del abogado autenticado 
         $query->where('lawyer_id', Auth::id());
 
-
         // Búsqueda
         if ($request->has('search') && $request->get('search')) {
             $search = $request->get('search');
