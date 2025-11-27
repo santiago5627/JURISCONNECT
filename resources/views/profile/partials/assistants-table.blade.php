@@ -8,7 +8,6 @@
                 <th>N° Documento</th>
                 <th>Correo</th>
                 <th>Teléfono</th>
-                <th>Especialidad</th>
                 <th>Abogados Asignados</th>
                 <th>Acciones</th>
             </tr>
@@ -22,7 +21,6 @@
                 <td>{{ $assistant->numero_documento }}</td>
                 <td>{{ $assistant->correo }}</td>
                 <td>{{ $assistant->telefono ?? 'N/A' }}</td>
-                <td>{{ $assistant->especialidad ?? 'N/A' }}</td>
                 <td>
                     @if($assistant->lawyers && $assistant->lawyers->count() > 0)
                         <ul style="margin: 0; padding-left: 20px;">
@@ -54,8 +52,6 @@
             @endforelse
         </tbody>
     </table>
-    
-    
                         <!-- Incluir la paginación -->
     @include('profile.partials.pagination', ['items' => $lawyers])
 </div>

@@ -1082,6 +1082,7 @@ document.addEventListener("DOMContentLoaded", function () {
     addLawyerBtn.addEventListener("click", addLawyerSelect);
 });
 
+
 /* ========= Exponer funciones útiles globalmente (si las necesitas) ========= */
 window.showCustomAlert = showCustomAlert;
 window.hideCustomAlert = hideCustomAlert;

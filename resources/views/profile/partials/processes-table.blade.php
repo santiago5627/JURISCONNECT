@@ -8,14 +8,6 @@
                         <tr>
                             <th>
                                 <div class="header-content-cell">
-                                    <span></span>
-                                    <svg class="header-icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
-                                    </svg>
-                                </div>
-                            </th>
-                            <th>
-                                <div class="header-content-cell">
                                     <span>Radicado</span>
                                     <svg class="header-icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -60,7 +52,6 @@
                     <tbody class="table-body" id=tableBody>
             @forelse($procesos as $proceso)
                 <tr>
-                    <td class="border border-gray-300 px-4 py-2">{{ $proceso->id }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $proceso->numero_radicado }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $proceso->tipo_proceso }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $proceso->demandante }}</td>
