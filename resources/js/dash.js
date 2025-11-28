@@ -1082,6 +1082,109 @@ document.addEventListener("DOMContentLoaded", function () {
     addLawyerBtn.addEventListener("click", addLawyerSelect);
 });
 
+document.addEventListener("click", function (e) {
+
+    // EDITAR ASISTENTE
+    if (e.target.classList.contains("btn-edit-assistant")) {
+
+        const btn = e.target;
+
+        const id = btn.dataset.id;
+
+        // Llenar campos
+        editAssistantNombre.value = btn.dataset.nombre;
+        editAssistantApellido.value = btn.dataset.apellido;
+        editAssistantTipoDocumento.value = btn.dataset.tipo_documento;
+        editAssistantNumeroDocumento.value = btn.dataset.numero_documento;
+        editAssistantCorreo.value = btn.dataset.correo;
+        editAssistantTelefono.value = btn.dataset.telefono || '';
+
+        // Ruta del formulario
+        editAssistantForm.action = `/assistants/${id}`;
+
+        // Cargar abogados asignados
+        const container = document.getElementById("assignedLawyersContainer");
+        container.innerHTML = '';
+
+        let lawyers = JSON.parse(btn.dataset.lawyers || '[]');
+
+        lawyers.forEach(lawyerId => {
+            addLawyerSelect(lawyerId);
+        });
+
+        // Mostrar modal
+        editAssistantModal.style.display = "flex";
+    }
+
+    // CERRAR MODAL
+    if (e.target.id === "closeEditAssistantModal" || e.target.id === "cancelEditBtn") {
+        editAssistantModal.style.display = "none";
+    }
+
+    // AGREGA SELECT DE ABOGADO
+    if (e.target.id === "addLawyerBtn") {
+        addLawyerSelect();
+    }
+
+});
+
+// Función para crear select abogado
+function addLawyerSelect(selectedId = null) {
+
+    const baseSelect = document.querySelector(".lawyer-select");
+    const container = document.getElementById("assignedLawyersContainer");
+
+    const select = baseSelect.cloneNode(true);
+    select.style.display = "block";
+    select.name = "lawyers[]";
+
+    if(selectedId){
+        select.value = selectedId;
+    }
+
+    // Botón eliminar abogado
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.textContent = "Eliminar";
+    removeBtn.onclick = () => {
+        select.parentElement.remove();
+    };
+
+    const wrapper = document.createElement("div");
+    wrapper.appendChild(select);
+    wrapper.appendChild(removeBtn);
+
+    container.appendChild(wrapper);
+}
+
+document.querySelector('#form-update').addEventListener('submit', function(e){
+    e.preventDefault(); // evitar que el formulario recargue la página
+
+    let formData = new FormData(this);
+
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success){
+            // Mensaje pequeño tipo notificación
+            const msg = document.createElement('div');
+            msg.innerText = data.message;
+            msg.classList.add('notification-success'); // puedes darle estilo en CSS
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 2000); // se elimina solo después de 2s
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(err => console.log(err));
+});
+
 
 /* ========= Exponer funciones útiles globalmente (si las necesitas) ========= */
 window.showCustomAlert = showCustomAlert;

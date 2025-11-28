@@ -117,45 +117,6 @@ class ConceptoController extends Controller
         // 🔴 AQUÍ ESTÁ EL CAMBIO IMPORTANTE
         $procesos = $query->orderBy('created_at', 'asc')->get(); // VIEJOS PRIMERO ✅
 
- * Show the form for creating a new resource
- */
-public function create(Request $request) 
-{
-    $query = Proceso::whereIn('estado', [
-                'Radicado',
-                'Pendiente', 
-                'Primera instancia', 
-                'En curso', 
-                'Finalizado',
-                'En audiencia',
-                'Pendiente fallo', 
-                'Favorable primera', 
-                'Desfavorable primera', 
-                'En apelacion', 
-                'Conciliacion pendiente', 
-                'Conciliado',
-                'Sentencia ejecutoriada', 
-                'En proceso pago', 
-                'Terminado'
-            ]);
-
-    // Búsqueda
-    if ($request->has('search') && $request->get('search')) {
-        $search = $request->get('search');
-        $query->where(function($q) use ($search) {
-            $q->where('id', 'LIKE', '%' . $search . '%')
-            ->orWhere('numero_radicado', 'LIKE', '%' . $search . '%')
-            ->orWhere('demandante', 'LIKE', '%' . $search . '%')
-            ->orWhere('demandado', 'LIKE', '%' . $search . '%')
-            ->orWhere('tipo_proceso', 'LIKE', '%' . $search . '%')
-            ->orWhere('created_at', 'LIKE', '%' . $search . '%');
-        });
-    }
-
-    $procesos = Proceso::with('conceptos')
-    ->orderBy('created_at', 'desc')
-    ->get();
-
         // Respuesta AJAX
         if ($request->ajax() || $request->get('ajax')) {
             $processes = $procesos; // Renombrar para la vista parcial
@@ -203,17 +164,6 @@ public function create(Request $request)
 
             return back()->with('error', 'Error al cargar el formulario');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        // Traer concepto con proceso y abogado (ajusta relaciones según tu modelo)
-        $concepto = \App\Models\ConceptoJuridico::with(['proceso', 'abogado'])->findOrFail($id);
-
-        return response()->json($concepto);
     }
 
     // ===============================
