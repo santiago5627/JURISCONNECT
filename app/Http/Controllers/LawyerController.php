@@ -448,6 +448,7 @@ class LawyerController extends Controller
             Log::error('Error al eliminar asistente', [
                 'assistant_id' => $assistant->id,
                 'message' => $e->getMessage()
+
             ]);
 
             return $this->errorResponse(

@@ -10,7 +10,7 @@ class LawyerFactory extends Factory
 {
     public function definition(): array
     {
-        $tipos_documento = ['CC', 'CE', 'TI', 'NIT'];
+        $tipos_documento = ['CC', 'CE', 'PAS'];
         $especialidades = ['Civil', 'Laboral', 'Penal', 'Familia', 'Comercial'];
 
         return [

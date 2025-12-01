@@ -85,7 +85,6 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/assistants/{assistant}', [LawyerController::class, 'updateAssistant'])
         ->name('assistants.update');
 
-
     // ===============================================================
     // PROCESOS LEGALES
     // ===============================================================
