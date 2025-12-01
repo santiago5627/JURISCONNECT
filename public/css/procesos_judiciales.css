@@ -446,7 +446,7 @@
             text-decoration: none;
         }
 
-        .action-btn:hover svg {
+        .action-btn:hover svg { 
             transform: scale(1.1);
         }
 
