@@ -88,4 +88,9 @@ class Proceso extends Model
     {
         return $this->hasOne(ConceptoJuridico::class, 'proceso_id');
     }
+
+    public function conceptos()
+    {
+        return $this->hasMany(ConceptoJuridico::class);
+    }
 }
