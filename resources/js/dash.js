@@ -667,7 +667,7 @@ function handleAjaxPagination() {
     if (!lawyersSection) return;
 
     // Delegation
-    lawyersSection.addEventListener("click", function (e) {
+    lawyersSection.addEventListener("click", function (e) { 
         const link = e.target.closest(".pagination-btn.ajax-page");
         if (!link) return;
         e.preventDefault();

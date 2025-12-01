@@ -221,107 +221,110 @@
     </form>
 </div>
 
-<!-- Contenido Principal -->
-<div class="main-content" id="mainContent">
-    <div class="header">
-        <button class="hamburger" id="hamburgerBtn">☰</button>
-        <div class="title-logo-container">
-            <h1 class="title">JustConnect SENA</h1>
-        </div>
-        <div class="logo-container">
-            <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo Empresa" class="logo">
+        <!-- Contenido Principal -->
+    <div class="main-content" id="mainContent">
+            <div class="header">
+                <button class="hamburger" id="hamburgerBtn">☰</button>
+                <div class="title-logo-container">
+                    <h1 class="title">JustConnect SENA</h1>
+                </div>
+                <div class="logo-container">
+                    <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo Empresa" class="logo">
+                </div>
+            </div>
+
+            <div class="content-panel">
+
+                <!-- SECCIÓN DASHBOARD PRINCIPAL -->
+                <div class="section-content active" id="dashboard-section">
+                    <div class="section-header">
+                        <h2>Dashboard Principal</h2>
+                        <p>Resumen general del sistema JustConnect SENA</p>
+                    </div>
+                    
+                <!-- En la sección DASHBOARD PRINCIPAL -->
+<div class="dashboard-stats">
+    <div class="stat-card" id="lawyersStatCard" style="cursor: pointer;">
+        <div class="stat-icon">👨‍⚖️</div>
+        <div class="stat-info">
+            <h3>{{ $totalLawyers }}</h3>
+            <p>Abogados Registrados</p>
         </div>
     </div>
 
-    <div class="content-panel">
-        <!-- SECCIÓN DASHBOARD PRINCIPAL -->
-        <div class="section-content active" id="dashboard-section">
-            <div class="section-header">
-                <h2>Dashboard Principal</h2>
-                <p>Resumen general del sistema JustConnect SENA</p>
-            </div>
-            <!-- En la sección DASHBOARD PRINCIPAL -->
-            <div class="dashboard-stats">
-                <div class="stat-card" id="lawyersStatCard" style="cursor: pointer;">
-                    <div class="stat-icon">👨‍⚖️</div>
-                    <div class="stat-info">
-                        <h3>{{ $totalLawyers }}</h3>
-                        <p>Abogados Registrados</p>
-                    </div>
-                </div>
-
-                <div class="stat-card" id="casesStatCard">
-                    <div class="stat-icon">📋</div>
-                    <div class="stat-info">
-                        <h3>{{ $cases_count }}</h3>
-                        <p>Procesos Judiciales</p>
-                    </div>
-                </div>
-
-                <div class="stat-card" id="assistantsStatCard" style="cursor: pointer;">
-                    <div class="stat-icon">👨‍💼</div>
-                    <div class="stat-info">
-                        <h3>{{ $totalAsistentes }}</h3>
-                        <p>Asistentes Juridicos</p>
-                    </div>
-                </div>
-            </div>
-            <!-- 🔽🔽🔽 TABLA OCULTA INICIALMENTE 🔽🔽🔽 -->
-            <div id="lawyersTableWrapper" style="display: none; margin-top: 30px;">
-                <h3>Listado de Abogados</h3>
-                @include('profile.partials.lawyers-table-simple', ['lawyers' => $lawyers])
-            </div>
-
-            <!-- 🔽🔽🔽 TABLA DE ASISTENTES OCULTA INICIALMENTE 🔽🔽🔽 -->
-            <div id="assistantsTableWrapper" style="display: none; margin-top: 30px;">
-                <h3>Listado de Asistentes Jurídicos</h3>
-                @include('profile.partials.assistants-table-simple', ['assistants' => $assistants])
-            </div>
+    <div class="stat-card" id="casesStatCard">
+        <div class="stat-icon">📋</div>
+        <div class="stat-info">
+            <h3>{{ $cases_count }}</h3>
+            <p>Procesos Judiciales</p>
         </div>
+    </div>
 
-        <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
-        <div class="section-content" id="lawyers-section">
-            <div class="section-header">
-                <h2>Gestión de Abogados</h2>
-                <p>Administrar el registro de abogados del sistema</p>
-            </div>
-
-            <div class="search-section">
-                <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
-            </div>
-
-            <div class="action-buttons">
-                <button class="btn-primary" id="createBtn">CREAR NUEVO USUARIO</button>
-                    <a href="{{ route('lawyers.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
-                    <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
-            </div>
-                @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
-        </div>
-
-        <!-- SECCIÓN GESTIÓN DE ASISTENTES JURÍDICOS -->
-        <div class="section-content" id="assistants-section">
-            <div class="section-header">
-                <h2>Gestión de Asistentes Jurídicos</h2>
-                <p>Administrar el registro de asistentes jurídicos del sistema</p>
-            </div>
-
-            <div class="search-section">
-                <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchAssistantsInput">
-            </div>
-
-            <div class="action-buttons">
-                <button class="btn-primary" id="createAssistantBtn">CREAR NUEVO ASISTENTE</button>
-                    <a href="{{route('lawyers.export.excel')}}" class="btn-success">EXPORTAR EXCEL</a>
-                    <a href="{{route('lawyers.export.pdf')}}" class="btn-danger">EXPORTAR PDF</a>
-            </div>
-                @include('profile.partials.assistants-table', ['assistants' => $assistants])
+    <div class="stat-card" id="assistantsStatCard" style="cursor: pointer;">
+        <div class="stat-icon">👨‍💼</div>
+        <div class="stat-info">
+            <h3>{{ $totalAsistentes }}</h3>
+            <p>Asistentes Juridicos</p>
         </div>
     </div>
 </div>
+    <!-- 🔽🔽🔽 TABLA OCULTA INICIALMENTE 🔽🔽🔽 -->
+    <div id="lawyersTableWrapper" style="display: none; margin-top: 30px;">
+        <h3>Listado de Abogados</h3>
+        @include('profile.partials.lawyers-table-simple', ['lawyers' => $lawyers])
+    </div>
 
+    <!-- 🔽🔽🔽 TABLA DE ASISTENTES OCULTA INICIALMENTE 🔽🔽🔽 -->
+    <div id="assistantsTableWrapper" style="display: none; margin-top: 30px;">
+        <h3>Listado de Asistentes Jurídicos</h3>
+        @include('profile.partials.assistants-table-simple', ['assistants' => $assistants])
+    </div>
+</div>
+                <!-- SECCIÓN GESTIÓN DE ASISTENTES JURÍDICOS -->
+                <div class="section-content" id="assistants-section">
+                    <div class="section-header">
+                        <h2>Gestión de Asistentes Jurídicos</h2>
+                        <p>Administrar el registro de asistentes jurídicos del sistema</p>
+                    </div>
+
+                    <div class="search-section">
+                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchAssistantsInput">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-primary" id="createAssistantBtn">CREAR NUEVO ASISTENTE</button>
+                        <a href="{{ route('asistente.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
+                        <a href="{{ route('asistente.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
+                    </div>
+                    @include('profile.partials.assistants-table', ['assistants' => $assistants])
+                </div>
+
+                <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
+                <div class="section-content" id="lawyers-section">
+                    <div class="section-header">
+                        <h2>Gestión de Abogados</h2>
+                        <p>Administrar el registro de abogados del sistema</p>
+                    </div>
+
+                    <div class="search-section">
+                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn-primary" id="createBtn">CREAR NUEVO USUARIO</button>
+                        <a href="{{ route('lawyers.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
+                        <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
+                    </div>
+                    @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
+                </div>
+                
+                </div>
+                
             </div>
         </div>
     </div>
+
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
+
 </x-app-layout>

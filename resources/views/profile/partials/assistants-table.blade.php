@@ -54,8 +54,7 @@
             @endforelse
         </tbody>
     </table>
-    
-    
+
                         <!-- Incluir la paginación -->
     @include('profile.partials.pagination', ['items' => $lawyers])
 </div>
