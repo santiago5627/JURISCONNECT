@@ -12,6 +12,9 @@ class AssistantFactory extends Factory
 
     public function definition(): array
     {
+
+        $tipos_documento = ['CC', 'CE','PAS'];
+
         // Crear usuario con rol de asistente
         $user = User::factory()->create([
             'role_id' => 3, // Ajusta si tu rol assistant tiene otro ID
@@ -22,7 +25,7 @@ class AssistantFactory extends Factory
 
             'nombre' => $this->faker->firstName(),
             'apellido' => $this->faker->lastName(),
-            'tipo_documento' => $this->faker->randomElement(['CC', 'NIT', 'CE']),
+            'tipo_documento'   => $this->faker->randomElement($tipos_documento),
             'numero_documento' => $this->faker->unique()->numerify('##########'),
             'correo' => $this->faker->unique()->safeEmail(),
             'telefono'         => $this->faker->phoneNumber(),

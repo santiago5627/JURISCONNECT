@@ -45,6 +45,7 @@
                         <option value="CC">Cédula de Ciudadanía</option>
                         <option value="CE">Cédula de Extranjería</option>
                         <option value="PAS">Pasaporte</option>
+
                     </select>
                 </div>
 
@@ -211,19 +212,90 @@
                     <input type="tel" id="editTelefono" name="telefono">
                 </div>
 
-                <div class="form-group">
-                    <label for="editEspecialidad">Especialidad:</label>
-                    <input type="text" id="editEspecialidad" name="especialidad">
-                </div>
+                        <div class="form-group">
+                            <label for="editEspecialidad">Especialidad:</label>
+                            <input type="text" id="editEspecialidad" name="especialidad">
+                        </div>
 
-                <div class="form-actions">
-                    <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
-                    <button type="submit" class="btn-submit">Guardar Cambios</button>
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
+                            <button type="submit" class="btn-submit">Guardar Cambios</button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
-    </div>
-</div>
+
+        <!-- Modal para editar asistente -->
+        <div class="modal" id="editAssistantModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Editar Asistente</h2>
+                    <button class="modal-close" id="closeEditAssistantModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="editAssistantForm" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-group">
+                            <label for="editNombre">Nombre:</label>
+                            <input type="text" id="editAssistantNombre" name="nombre" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editApellido">Apellido:</label>
+                            <input type="text" id="editAssistantApellido" name="apellido" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editTipoDocumento">Tipo de Documento:</label>
+                            <select id="editAssistantTipoDocumento" name="tipo_documento" required>
+                                <option value="">Seleccione...</option>
+                                <option value="CC">Cédula de Ciudadanía</option>
+                                <option value="CE">Cédula de Extranjería</option>
+                                <option value="PAS">Pasaporte</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editNumeroDocumento">Número de Documento:</label>
+                            <input type="text" id="editAssistantNumeroDocumento" name="numero_documento" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editCorreo">Correo:</label>
+                            <input type="email" id="editAssistantCorreo" name="correo" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editTelefono">Teléfono:</label>
+                            <input type="tel" id="editAssistantTelefono" name="telefono">
+                        </div>
+
+                        <select class="lawyer-select" style="display:none;">
+                            <option value="">Seleccione abogado...</option>
+                            @foreach($abogados as $lawyer)
+                            <option value="{{ $lawyer->id }}">
+                                {{ $lawyer->nombre }} {{ $lawyer->apellido }}
+                            </option>
+                            @endforeach
+                        </select>
+
+                        <div class="form-group">
+                            <label>Abogados asignados:</label>
+                            <div id="assignedLawyersContainer"></div>
+                            <button type="button" id="addLawyerBtn">+ Agregar abogado</button>
+                        </div>
+
+
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
+                            <button type="submit" class="btn-submit">Guardar Cambios</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
 <!-- Sidebar -->
 <div class="sidebar" id="sidebar">
@@ -373,9 +445,12 @@
                 </div>
                 
                 </div>
-                
+
+
             </div>
+
         </div>
+    </div>
     </div>
 
     <!-- Scripts -->
