@@ -196,6 +196,7 @@
 .btn-success,
 .btn-danger {
     padding: 12px 24px;
+    margin-left: 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;

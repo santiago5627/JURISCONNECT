@@ -357,6 +357,10 @@
             margin-top: 6px;
             animation: fadeIn 0.25s ease;
         }
+        
+/* ==============================================
+   ===        ALERTAS CUSTOMIZADAS (UPGRADED) ===
+   ============================================== */
 
         /* Overlay de alertas */
         .alert-overlay {
