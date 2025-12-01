@@ -216,7 +216,7 @@ function submitFormularioAjax() {
     });
 }
 
-// Función para mostrar alertas personalizadas
+    // Función para mostrar alertas personalizadas
         function showAlert(type, title, message, buttons = null) {
             const overlay = document.getElementById('alertOverlay');
             const alert = document.getElementById('customAlert');

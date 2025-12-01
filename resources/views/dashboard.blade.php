@@ -356,8 +356,8 @@
 
                     <div class="action-buttons">
                         <button class="btn-primary" id="createAssistantBtn">CREAR NUEVO ASISTENTE</button>
-                        <a href=>EXPORTAR EXCEL</a>
-                        <a href=>EXPORTAR PDF</a>
+                        <a href="{{ route('procesos.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a> 
+                        <a href="{{ route('procesos.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
                     @include('profile.partials.assistants-table', ['assistants' => $assistants])
 

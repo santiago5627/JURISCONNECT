@@ -196,6 +196,7 @@
 .btn-success,
 .btn-danger {
     padding: 12px 24px;
+    margin-left: 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -445,7 +446,7 @@
             text-decoration: none;
         }
 
-        .action-btn:hover svg {
+        .action-btn:hover svg { 
             transform: scale(1.1);
         }
 
