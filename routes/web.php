@@ -42,10 +42,10 @@ Route::middleware(['auth'])->group(function () {
     // ===============================================================
     Route::get('/dashboard', [AdminController::class, 'index'])
         ->name('dashboard');
-    
+
     Route::get('/dashboard/abogado', [AbogadoController::class, 'index'])
         ->name('dashboard.abogado');
-    
+
     Route::get('/dashboard/asistente', [AsistenteController::class, 'index'])
         ->name('dashboard.asistente');
 
@@ -64,20 +64,27 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('lawyers')->name('lawyers.')->group(function () {
         Route::post('/check-duplicates', [LawyerController::class, 'checkDuplicates'])
             ->name('check-duplicates');
-        
+
         Route::post('/check-field', [LawyerController::class, 'checkField'])
             ->name('check-field');
-        
+
         Route::get('/export-pdf', [LawyerController::class, 'exportPDF'])
             ->name('export.pdf');
-        
-        Route::get('/export-excel', function () { 
-            return Excel::download(new LawyersExport, 'abogados.xlsx'); 
+
+        Route::get('/export-excel', function () {
+            return Excel::download(new LawyersExport, 'abogados.xlsx');
         })->name('export.excel');
     });
-    
+
     // Resource de abogados (cubre: index, create, store, show, edit, update, destroy)
     Route::resource('lawyers', LawyerController::class);
+
+    Route::delete('/assistants/{assistant}', [LawyerController::class, 'destroyAsist'])
+        ->name('assistants.destroy');
+
+    Route::put('/assistants/{assistant}', [LawyerController::class, 'updateAssistant'])
+        ->name('assistants.update');
+
 
     // ===============================================================
     // PROCESOS LEGALES
@@ -87,8 +94,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/export-pdf', [ProcesosExport::class, 'exportPDF'])
             ->name('export.pdf');
 
-        Route::get('/export-excel', function () { 
-            return Excel::download(new ProcesosExport, 'Procesos.xlsx'); 
+        Route::get('/export-excel', function () {
+            return Excel::download(new ProcesosExport, 'Procesos.xlsx');
         })->name('export.excel');
         // CRUD de procesos
         Route::get('/', [LegalProcessController::class, 'index'])->name('index');
@@ -98,24 +105,23 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{proceso}/edit', [LegalProcessController::class, 'edit'])->name('edit');
         Route::put('/{proceso}', [LegalProcessController::class, 'update'])->name('update');
         Route::delete('/{proceso}', [LegalProcessController::class, 'destroy'])->name('destroy');
-        
+
         // Conceptos relacionados con procesos (rutas específicas al final)
         Route::get('/{proceso}/concepto', [AbogadoController::class, 'mostrarFormularioConcepto'])
             ->name('concepto.create');
-        
+
         Route::post('/{proceso}/concepto', [AbogadoController::class, 'guardarConcepto'])
             ->name('concepto.store');
-        
+
         Route::put('/{proceso}/conceptos/{concepto}', [AbogadoController::class, 'updateConcepto'])
             ->name('conceptos.update');
-        
     });
 
 
     // Rutas alternativas para procesos (compatibilidad con vistas antiguas)
     Route::get('/mis-procesos', [LegalProcessController::class, 'index'])
         ->name('mis.procesos');
-    
+
     Route::get('/legal-processes/create', [LegalProcessController::class, 'create'])
         ->name('legal_processes.create');
 
@@ -125,24 +131,23 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('abogado')->name('abogado.')->group(function () {
         Route::get('/mis-procesos', [AbogadoController::class, 'misProcesos'])
             ->name('misConceptos');
-        
+
         Route::get('/procesos', [AbogadoController::class, 'listarProcesos'])
             ->name('listar-procesos');
-        
+
         Route::post('/finalizar-proceso/{id}', [AbogadoController::class, 'finalizarProceso'])
             ->name('finalizar-proceso');
-        
+
         Route::post('/proceso/{id}/concepto', [AbogadoController::class, 'guardarConcepto'])
             ->name('guardar-concepto');
-        
+
         Route::get('/crear-concepto/{id}', [AbogadoController::class, 'mostrarFormularioConcepto'])
             ->name('crear-concepto');
 
         Route::post('/procesos/{id}/conceptos', [ConceptoController::class, 'storeProceso'])
-    ->name('conceptos.storeProceso');
-    
-});
-Route::get('/concepto_juridicos/{id}', [ConceptoController::class, 'show'])->name('concepto.show');
+            ->name('conceptos.storeProceso');
+    });
+    Route::get('/concepto_juridicos/{id}', [ConceptoController::class, 'show'])->name('concepto.show');
 
     // Rutas del ConceptoController
     Route::prefix('conceptos')->name('conceptos.')->group(function () {

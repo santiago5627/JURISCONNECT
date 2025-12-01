@@ -19,7 +19,18 @@ const editLawyerForm = document.getElementById("editLawyerForm");
 const closeEditModalBtn = document.getElementById("closeEditModal");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
 
-/* ========= ALERTAS PERSONALIZADAS ========= */
+/* ========= ALERTAS PERSONALIZADAS (VERSIÓN MEJORADA) ========= */
+
+/**
+ * Función principal para mostrar alertas personalizadas
+ * @param {string} type - Tipo de alerta: 'success', 'error', 'warning', 'info'
+ * @param {string} title - Título de la alerta
+ * @param {string} message - Mensaje de la alerta
+ * @param {boolean} showCancel - Mostrar botón de cancelar
+ * @param {string} confirmText - Texto del botón de confirmación
+ * @param {string} cancelText - Texto del botón de cancelar
+ * @returns {Promise<boolean>} - Retorna true si confirma, false si cancela
+ */
 function showCustomAlert(
     type,
     title = "",
@@ -28,105 +39,82 @@ function showCustomAlert(
     confirmText = "Aceptar",
     cancelText = "Cancelar"
 ) {
-    // Crear overlay si no existe
-    let alertOverlay = document.getElementById("alertOverlay");
-    if (!alertOverlay) {
+    return new Promise((resolve) => {
+        // Crear overlay si no existe
+        let alertOverlay = document.getElementById("alertOverlay");
+        if (alertOverlay) {
+            alertOverlay.remove();
+        }
+
+        // Crear nuevo overlay
         alertOverlay = document.createElement("div");
         alertOverlay.id = "alertOverlay";
         alertOverlay.className = "alert-overlay";
 
+        // Configurar iconos según el tipo
+        const icons = {
+            success: '✓',
+            error: '✕',
+            warning: '⚠',
+            info: 'ℹ'
+        };
+
+        // Configurar títulos por defecto
+        const defaultTitles = {
+            success: '¡Éxito!',
+            error: '¡Error!',
+            warning: '¡Atención!',
+            info: 'Información'
+        };
+
+        // Configurar mensajes por defecto
+        const defaultMessages = {
+            success: 'Operación completada exitosamente',
+            error: 'Algo salió mal. Inténtalo de nuevo.',
+            warning: 'Verifica la información antes de continuar.',
+            info: 'Proceso en desarrollo.'
+        };
+
+        const icon = icons[type] || icons.info;
+        const alertTitle = title || defaultTitles[type] || defaultTitles.info;
+        const alertMessage = message || defaultMessages[type] || defaultMessages.info;
+
+        // Crear botones
         const buttonsHTML = showCancel
             ? `<div class="alert-buttons">
                 <button class="alert-button secondary" id="cancelAlertBtn">${cancelText}</button>
-                <button class="alert-button confirm" id="confirmAlertBtn">${confirmText}</button>
-                </div>`
+                <button class="alert-button ${type}" id="confirmAlertBtn">${confirmText}</button>
+               </div>`
             : `<div class="alert-buttons">
-                <button class="alert-button confirm" id="confirmAlertBtn">${confirmText}</button>
-                </div>`;
+                <button class="alert-button ${type}" id="confirmAlertBtn">${confirmText}</button>
+               </div>`;
 
         alertOverlay.innerHTML = `
-            <div class="custom-alert" id="customAlert" role="dialog" aria-modal="true">
-                <div class="alert-icon" id="alertIcon"></div>
-                <div class="alert-title" id="alertTitle"></div>
-                <div class="alert-message" id="alertMessage"></div>
+            <div class="custom-alert alert-${type}" id="customAlert" role="dialog" aria-modal="true">
+                <div class="alert-icon">${icon}</div>
+                <div class="alert-title">${alertTitle}</div>
+                <div class="alert-message">${alertMessage}</div>
                 ${buttonsHTML}
             </div>
         `;
+
         document.body.appendChild(alertOverlay);
 
-        // Agregar estilos mínimos si no existen
-        if (!document.getElementById("customAlertStyles")) {
-            const style = document.createElement("style");
-            style.id = "customAlertStyles";
-            style.textContent = `
-                .alert-overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);z-index:2000;opacity:0;pointer-events:none;transition:opacity .2s}
-                .alert-overlay.show{opacity:1;pointer-events:auto}
-                .custom-alert{min-width:300px;max-width:90%;background:#fff;border-radius:8px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,.15);text-align:left}
-                .alert-icon{font-size:24px;margin-bottom:8px}
-                .alert-title{font-weight:700;margin-bottom:6px}
-                .alert-message{white-space:pre-wrap;margin-bottom:12px}
-                .alert-buttons{display:flex;gap:8px;justify-content:flex-end}
-                .alert-button{padding:8px 12px;border-radius:6px;border:0;cursor:pointer}
-                .alert-button.secondary{background:#eee}
-                .alert-button.confirm{background:#2d9cdb;color:#fff}
-                .custom-alert.alert-success .alert-icon{color:green}
-                .custom-alert.alert-error .alert-icon{color:red}
-                .custom-alert.alert-warning .alert-icon{color:#e6a700}
-                .custom-alert.alert-info .alert-icon{color:#2d9cdb}
-            `;
-            document.head.appendChild(style);
-        }
-    }
-
-    const alert = document.getElementById("customAlert");
-    const icon = document.getElementById("alertIcon");
-    const titleEl = document.getElementById("alertTitle");
-    const messageEl = document.getElementById("alertMessage");
-
-    // Configurar según el tipo
-    alert.className = `custom-alert alert-${type}`;
-
-    switch (type) {
-        case "success":
-            icon.textContent = "✔";
-            titleEl.textContent = title || "¡Éxito!";
-            messageEl.textContent =
-                message || "Operación completada exitosamente";
-            break;
-        case "error":
-            icon.textContent = "❌";
-            titleEl.textContent = title || "¡Error!";
-            messageEl.textContent =
-                message || "Algo salió mal. Inténtalo de nuevo.";
-            break;
-        case "warning":
-            icon.textContent = "⚠️";
-            titleEl.textContent = title || "¡Atención!";
-            messageEl.textContent =
-                message || "Verifica la información antes de continuar.";
-            break;
-        case "info":
-        default:
-            icon.textContent = "ℹ";
-            titleEl.textContent = title || "Información";
-            messageEl.textContent = message || "Proceso en desarrollo.";
-            break;
-    }
-
-    alertOverlay.classList.add("show");
-
-    return new Promise((resolve) => {
-        const confirmBtn = document.getElementById("confirmAlertBtn");
-        const cancelBtn = document.getElementById("cancelAlertBtn");
+        // Mostrar con animación
+        setTimeout(() => alertOverlay.classList.add('show'), 10);
 
         const cleanup = () => {
-            alertOverlay.classList.remove("show");
-            // esperar animación y remover del DOM
+            alertOverlay.classList.remove('show');
             setTimeout(() => {
-                if (alertOverlay.parentNode)
+                if (alertOverlay && alertOverlay.parentNode) {
                     alertOverlay.parentNode.removeChild(alertOverlay);
-            }, 250);
+                }
+            }, 350);
         };
+
+        // Event listeners para botones
+        const confirmBtn = document.getElementById("confirmAlertBtn");
+        const cancelBtn = document.getElementById("cancelAlertBtn");
 
         if (confirmBtn) {
             confirmBtn.onclick = () => {
@@ -151,18 +139,100 @@ function showCustomAlert(
             }
         };
         document.addEventListener("keydown", escHandler);
+
+        // Cerrar al hacer click fuera del modal
+        alertOverlay.addEventListener('click', function(e) {
+            if (e.target === alertOverlay) {
+                cleanup();
+                resolve(false);
+            }
+        });
     });
 }
 
-function hideCustomAlert() {
+/**
+ * Función simplificada para mostrar alertas (compatible con código antiguo)
+ * @param {string} type - Tipo de alerta
+ * @param {string} title - Título
+ * @param {string} message - Mensaje
+ * @param {string|null} buttons - HTML de botones personalizados (opcional)
+ */
+function showAlert(type, title, message, buttons = null) {
+    // Si se proporcionan botones personalizados, usar la versión antigua
+    if (buttons) {
+        return showCustomAlert(type, title, message, false, "Aceptar", "Cancelar");
+    }
+    
+    // Usar la nueva versión mejorada
+    return showCustomAlert(type, title, message, false, "Aceptar", "Cancelar");
+}
+
+/**
+ * Cerrar alerta manualmente
+ */
+function closeAlert() {
     const overlayEl = document.getElementById("alertOverlay");
     if (overlayEl) {
         overlayEl.classList.remove("show");
         setTimeout(() => {
-            if (overlayEl.parentNode)
+            if (overlayEl && overlayEl.parentNode) {
                 overlayEl.parentNode.removeChild(overlayEl);
-        }, 250);
+            }
+        }, 350);
     }
+}
+
+/**
+ * Alias de closeAlert para compatibilidad
+ */
+function hideCustomAlert() {
+    closeAlert();
+}
+
+// ========================================
+// FUNCIONES DE CONVENIENCIA
+// ========================================
+
+/**
+ * Alerta de éxito rápida
+ */
+function alertSuccess(message, title = "¡Éxito!") {
+    return showCustomAlert('success', title, message, false, "Aceptar");
+}
+
+/**
+ * Alerta de error rápida
+ */
+function alertError(message, title = "¡Error!") {
+    return showCustomAlert('error', title, message, false, "Entendido");
+}
+
+/**
+ * Alerta de advertencia rápida
+ */
+function alertWarning(message, title = "¡Atención!") {
+    return showCustomAlert('warning', title, message, false, "De acuerdo");
+}
+
+/**
+ * Alerta de información rápida
+ */
+function alertInfo(message, title = "Información") {
+    return showCustomAlert('info', title, message, false, "Ok");
+}
+
+/**
+ * Alerta de confirmación con botones Sí/No
+ */
+async function alertConfirm(message, title = "¿Continuar?") {
+    return await showCustomAlert('info', title, message, true, "Confirmar", "Cancelar");
+}
+
+/**
+ * Alerta de eliminación peligrosa
+ */
+async function alertDelete(message, title = "¿Eliminar?") {
+    return await showCustomAlert('error', title, message, true, "Eliminar", "Cancelar");
 }
 
 /* ========= MANEJO DE DUPLICADOS Y VALIDACIONES ========= */
@@ -1081,6 +1151,110 @@ document.addEventListener("DOMContentLoaded", function () {
 
     addLawyerBtn.addEventListener("click", addLawyerSelect);
 });
+
+document.addEventListener("click", function (e) {
+
+    // EDITAR ASISTENTE
+    if (e.target.classList.contains("btn-edit-assistant")) {
+
+        const btn = e.target;
+
+        const id = btn.dataset.id;
+
+        // Llenar campos
+        editAssistantNombre.value = btn.dataset.nombre;
+        editAssistantApellido.value = btn.dataset.apellido;
+        editAssistantTipoDocumento.value = btn.dataset.tipo_documento;
+        editAssistantNumeroDocumento.value = btn.dataset.numero_documento;
+        editAssistantCorreo.value = btn.dataset.correo;
+        editAssistantTelefono.value = btn.dataset.telefono || '';
+
+        // Ruta del formulario
+        editAssistantForm.action = `/assistants/${id}`;
+
+        // Cargar abogados asignados
+        const container = document.getElementById("assignedLawyersContainer");
+        container.innerHTML = '';
+
+        let lawyers = JSON.parse(btn.dataset.lawyers || '[]');
+
+        lawyers.forEach(lawyerId => {
+            addLawyerSelect(lawyerId);
+        });
+
+        // Mostrar modal
+        editAssistantModal.style.display = "flex";
+    }
+
+    // CERRAR MODAL
+    if (e.target.id === "closeEditAssistantModal" || e.target.id === "cancelEditBtn") {
+        editAssistantModal.style.display = "none";
+    }
+
+    // AGREGA SELECT DE ABOGADO
+    if (e.target.id === "addLawyerBtn") {
+        addLawyerSelect();
+    }
+
+});
+
+// Función para crear select abogado
+function addLawyerSelect(selectedId = null) {
+
+    const baseSelect = document.querySelector(".lawyer-select");
+    const container = document.getElementById("assignedLawyersContainer");
+
+    const select = baseSelect.cloneNode(true);
+    select.style.display = "block";
+    select.name = "lawyers[]";
+
+    if(selectedId){
+        select.value = selectedId;
+    }
+
+    // Botón eliminar abogado
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.textContent = "Eliminar";
+    removeBtn.onclick = () => {
+        select.parentElement.remove();
+    };
+
+    const wrapper = document.createElement("div");
+    wrapper.appendChild(select);
+    wrapper.appendChild(removeBtn);
+
+    container.appendChild(wrapper);
+}
+
+document.querySelector('#form-update').addEventListener('submit', function(e){
+    e.preventDefault(); // evitar que el formulario recargue la página
+
+    let formData = new FormData(this);
+
+    fetch(this.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success){
+            // Mensaje pequeño tipo notificación
+            const msg = document.createElement('div');
+            msg.innerText = data.message;
+            msg.classList.add('notification-success'); // puedes darle estilo en CSS
+            document.body.appendChild(msg);
+            setTimeout(() => msg.remove(), 2000); // se elimina solo después de 2s
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(err => console.log(err));
+});
+
 
 /* ========= Exponer funciones útiles globalmente (si las necesitas) ========= */
 window.showCustomAlert = showCustomAlert;

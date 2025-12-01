@@ -1,9 +1,14 @@
+        :root {
+            --color-success: #198754; /* Verde estándar para éxito */
+            --color-danger: #dc3545; /* Rojo estándar para peligro */
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 50%, #e8eaf6 100%);
@@ -172,7 +177,80 @@
             text-decoration: none;
             cursor: pointer;
             transition: all 0.2s ease;
-            border: none;
+            border: none;   
+        }
+
+     /* ========================================
+   DISEÑO MEJORADO BOTONES EXPORTAR
+   ======================================== */
+
+/* Variables necesarias */
+:root {
+    --color-success: #198754;
+    --color-danger: #dc3545;
+    --border-radius-md: 10px;
+    --transition-smooth: all 0.3s ease;
+}
+
+/* Estilos base para botones de exportar */
+.btn-success,
+.btn-danger {
+    padding: 12px 24px;
+    margin-left: 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* Espacio entre ícono y texto */
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón Success (EXPORTAR EXCEL) - Opción 1: Elegante y Profesional */
+.btn-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    color: #155724;
+    border: 2px solid #b8dacc;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+    color: white;
+    border-color: #1e7e34;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.btn-success:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+        /* Botón Danger (EXPORTAR PDF) */
+        .btn-danger {
+            background: linear-gradient(135deg, #f8d7da 0%, #f1b0b7 100%);
+            color: #721c24;
+            border: 2px solid #f1aeb5;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            border-color: #bd2130;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-danger:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
         }
 
         .btn-secondary {
@@ -205,6 +283,7 @@
             height: 1rem;
             margin-right: 0.5rem;
         }
+        
 
         .table-container {
             background: white;
@@ -367,7 +446,7 @@
             text-decoration: none;
         }
 
-        .action-btn:hover svg {
+        .action-btn:hover svg { 
             transform: scale(1.1);
         }
 

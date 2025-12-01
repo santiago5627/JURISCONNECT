@@ -21,15 +21,16 @@ class AdminController extends Controller
             // Aplicar búsqueda si existe el término de búsqueda
             if ($searchTerm) {
                 $query->where(function ($q) use ($searchTerm) {
-                    $q->where('nombre', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('apellido', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('numero_documento', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('correo', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('telefono', 'LIKE', '%' . $searchTerm . '%')
-                        ->orWhere('especialidad', 'LIKE', '%' . $searchTerm . '%');
-                    // Agrega más campos según tu modelo Lawyer
+                    $q->where('nombre', 'ILIKE', '%' . $searchTerm . '%')
+                        ->orWhere('apellido', 'ILIKE', '%' . $searchTerm . '%')
+                        ->orWhere('tipo_documento', 'ILIKE', '%' . $searchTerm . '%')
+                        ->orWhere('numero_documento', 'ILIKE', '%' . $searchTerm . '%')
+                        ->orWhere('correo', 'ILIKE', '%' . $searchTerm . '%')
+                        ->orWhere('telefono', 'ILIKE', '%' . $searchTerm . '%')
+                        ->orWhere('especialidad', 'ILIKE', '%' . $searchTerm . '%');
                 });
             }
+
 
             // Si es una petición para obtener todos los datos (para búsqueda híbrida)
             if ($request->get('get_all') && $request->ajax()) {

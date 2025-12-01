@@ -262,6 +262,8 @@ class LawyerController extends Controller
 
                 DB::commit();
 
+                $this->sendCredentials($validated['correo'], $user, $validated['numeroDocumento'], $assistant->id);
+
                 return $this->successResponse(
                     $request,
                     'Asistente creado correctamente.',
@@ -399,6 +401,126 @@ class LawyerController extends Controller
             return $this->errorResponse(
                 $request,
                 'Error al eliminar abogado',
+                $e->getMessage()
+            );
+        }
+    }
+
+    /**
+     * Eliminar asistente jurídico
+     */
+    public function destroyAsist(Request $request, Assistant $assistant)
+    {
+        DB::beginTransaction();
+
+        try {
+            $assistantName = $assistant->nombre . ' ' . $assistant->apellido;
+            $assistantId = $assistant->id;
+
+            // Eliminar usuario asociado (si existe)
+            if ($assistant->user_id) {
+                $user = User::find($assistant->user_id);
+                $user?->delete();
+            }
+
+            // Si tiene relación con abogados y solo quieres quitar la relación:
+            $assistant->lawyers()->detach(); // opcional pero recomendado
+
+            $assistant->delete();
+            DB::commit();
+
+            Log::info('Asistente eliminado', [
+                'assistant_id' => $assistantId,
+                'name' => $assistantName,
+                'deleted_by' => auth()->email ?? 'unknown'
+            ]);
+
+            return $this->successResponse(
+                $request,
+                'Asistente eliminado exitosamente.',
+                [],
+                200,
+                'dashboard'
+            );
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Log::error('Error al eliminar asistente', [
+                'assistant_id' => $assistant->id,
+                'message' => $e->getMessage()
+            ]);
+
+            return $this->errorResponse(
+                $request,
+                'Error al eliminar asistente',
+                $e->getMessage()
+            );
+        }
+    }
+
+    public function updateAssistant(Request $request, Assistant $assistant)
+    {
+        DB::beginTransaction();
+
+        try {
+            $validated = $request->validate([
+                'nombre' => 'required|string|max:255',
+                'apellido' => 'required|string|max:255',
+                'tipo_documento' => 'required|string|max:50',
+                'numero_documento' => 'required|string|max:50|unique:assistants,numero_documento,' . $assistant->id,
+                'correo' => 'required|email|max:255|unique:assistants,correo,' . $assistant->id . '|unique:users,email,' . ($assistant->user_id ?? 'NULL'),
+                'telefono' => 'nullable|string|max:20',
+                'lawyers' => 'array',
+                'lawyers.*' => 'exists:lawyers,id',
+            ]);
+
+
+            $assistant->update([
+                'nombre' => $validated['nombre'],
+                'apellido' => $validated['apellido'],
+                'tipo_documento' => $validated['tipo_documento'],
+                'numero_documento' => $validated['numero_documento'],
+                'correo' => strtolower($validated['correo']),
+                'telefono' => $validated['telefono'] ?? null,
+            ]);
+
+
+
+            if ($assistant->user) {
+                $assistant->user->update([
+                    'name' => $validated['nombre'] . ' ' . $validated['apellido'],
+                    'email' => strtolower($validated['correo']),
+                    'numero_documento' => $validated['numero_documento'],
+                ]);
+            }
+
+
+            // ✅ ACTUALIZAR abogados relacionados
+            $assistant->lawyers()->sync($request->lawyers ?? []);
+
+            DB::commit();
+
+
+            return $this->successResponse(
+                $request,
+                'Asistente actualizado correctamente.',
+                ['assistant' => $assistant->fresh()->load('user', 'lawyers')],
+                200
+            );
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return $this->validationErrorResponse($request, $e);
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            Log::error('Error al actualizar asistente', [
+                'assistant_id' => $assistant->id,
+                'message' => $e->getMessage()
+            ]);
+
+            return $this->errorResponse(
+                $request,
+                'Error al actualizar asistente',
                 $e->getMessage()
             );
         }
