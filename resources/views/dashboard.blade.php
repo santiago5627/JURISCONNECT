@@ -15,58 +15,32 @@
         <!-- Overlay para móviles -->
         <div class="overlay" id="overlay"></div>      
 
-        <!-- Modal para crear nuevo usuario -->
+<!-- MODAL PARA CREAR ABOGADO -->
 <div class="modal" id="createLawyerModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2>Crear Nuevo Usuario</h2>
+            <h2>Crear Nuevo Abogado</h2>
             <button class="modal-close" id="closeModal">&times;</button>
         </div>
+
         <div class="modal-body">
             <form action="{{ route('lawyers.store') }}" method="POST">
                 @csrf
-                <div class="form-group">
-                        <label for="tipodeusuario">Usuario:</label>
-                        <select id="tipodeusuario" name="tipodeusuario" required>
-                            <option value="">Seleccione...</option>
-                            <option value="assistant">Asistente Jurídico</option>
-                            <option value="lawyer">Abogado</option>
-                        </select>
-                </div>
-
-                <!-- Contenedor dinámico para seleccionar abogados -->
-                <div class="form-group" id="lawyerSelectContainer" style="display: none;">
-                    <label>Abogados asignados:</label>
-                    <div id="lawyerList">
-                    <!-- Aquí se insertarán los selects dinámicos -->
-                    </div>
-                    <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">
-                        + Agregar Abogado
-                    </button>
-                </div>
-
-                <select class="lawyer-select" style="display:none;">
-                    <option value="">Seleccione abogado...</option>
-                    @foreach($abogados as $lawyer)
-                    <option value="{{ $lawyer->id }}">
-                    {{ $lawyer->nombre }} {{ $lawyer->apellido }}
-                    </option>
-                    @endforeach
-                </select>
+                <input type="hidden" name="tipodeusuario" value="lawyer">
 
                 <div class="form-group">
-                    <label for="nombre">Nombre:</label>
-                    <input type="text" id="nombre" name="nombre" required>
+                    <label for="nombre_lawyer">Nombre:</label>
+                    <input type="text" id="nombre_lawyer" name="nombre" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="apellido">Apellido:</label>
-                    <input type="text" id="apellido" name="apellido" required>
+                    <label for="apellido_lawyer">Apellido:</label>
+                    <input type="text" id="apellido_lawyer" name="apellido" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="tipoDocumento">Tipo de Documento:</label>
-                    <select id="tipoDocumento" name="tipoDocumento" required>
+                    <label for="tipoDocumento_lawyer">Tipo de Documento:</label>
+                    <select id="tipoDocumento_lawyer" name="tipoDocumento" required>
                         <option value="">Seleccione...</option>
                         <option value="CC">Cédula de Ciudadanía</option>
                         <option value="CE">Cédula de Extranjería</option>
@@ -76,33 +50,112 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="numeroDocumento">Número de Documento:</label>
-                    <input type="text" id="numeroDocumento" name="numeroDocumento" required>
+                    <label for="numeroDocumento_lawyer">Número de Documento:</label>
+                    <input type="text" id="numeroDocumento_lawyer" name="numeroDocumento" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="correo">Correo Electrónico:</label>
-                    <input type="email" id="correo" name="correo" required>
+                    <label for="correo_lawyer">Correo Electrónico:</label>
+                    <input type="email" id="correo_lawyer" name="correo" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="telefono">Teléfono:</label>
-                    <input type="tel" id="telefono" name="telefono">
+                    <label for="telefono_lawyer">Teléfono:</label>
+                    <input type="tel" id="telefono_lawyer" name="telefono">
                 </div>
 
                 <div class="form-group">
-                    <label for="especialidad">Especialidad:</label>
-                    <input type="text" id="especialidad" name="especialidad" placeholder="Ej: Derecho Civil, Penal, etc.">
+                    <label for="especialidad_lawyer">Especialidad:</label>
+                    <input type="text" id="especialidad_lawyer" name="especialidad">
                 </div>
 
                 <div class="form-actions">
                     <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
-                    <button type="submit" class="btn-submit">Crear Usuario</button>
+                    <button type="submit" class="btn-submit">Crear Abogado</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- MODAL PARA CREAR ASISTENTE -->
+<div class="modal" id="modalAsistente">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Crear Nuevo Asistente</h2>
+            <button class="modal-close" id="closeAsistente">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form action="{{ route('lawyers.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="tipodeusuario" value="assistant">
+
+                <div class="form-group">
+                    <label for="nombre_assistant">Nombre:</label>
+                    <input type="text" id="nombre_assistant" name="nombre" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="apellido_assistant">Apellido:</label>
+                    <input type="text" id="apellido_assistant" name="apellido" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipoDocumento_assistant">Tipo de Documento:</label>
+                    <select id="tipoDocumento_assistant" name="tipoDocumento" required>
+                        <option value="">Seleccione...</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PAS">Pasaporte</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="numeroDocumento_assistant">Número de Documento:</label>
+                    <input type="text" id="numeroDocumento_assistant" name="numeroDocumento" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="correo_assistant">Correo Electrónico:</label>
+                    <input type="email" id="correo_assistant" name="correo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="telefono_assistant">Teléfono:</label>
+                    <input type="tel" id="telefono_assistant" name="telefono">
+                </div>
+
+          <!-- Contenedor dinámico -->
+<div class="form-group" id="lawyerSelectContainer">
+    <label>Abogados asignados:</label>
+    <div id="lawyerList"></div>
+
+    <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">
+        + Agregar Abogado
+    </button>
+</div>
+
+<!-- SELECT base oculto para clonar -->
+<select class="lawyer-select" id=".lawyer-select" style="display:none;">
+    <option value="">Seleccione abogado...</option>
+    @foreach($abogados as $lawyer)
+        <option value="{{ $lawyer->id }}">
+            {{ $lawyer->nombre }} {{ $lawyer->apellido }}
+        </option>
+    @endforeach
+</select>
+
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="cancelAsistente">Cancelar</button>
+                    <button type="submit" class="btn-submit">Crear Asistente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 <!-- Modal para editar abogado -->
 <div class="modal" id="editLawyerModal">
@@ -111,6 +164,7 @@
             <h2>Editar Abogada</h2>
             <button class="modal-close" id="closeEditModal">&times;</button>
         </div>
+
         <div class="modal-body">
             <form id="editLawyerForm" method="POST">
                 @csrf
@@ -365,9 +419,9 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button class="btn-primary" id="createAssistantBtn">CREAR NUEVO ASISTENTE</button>
-                        <a href="{{ route('asistente.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
-                        <a href="{{ route('asistente.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
+                        <button class="btn-primary" id="btnOpenAsistente">CREAR NUEVO ASISTENTE</button>
+                        <a href="{{ route('procesos.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a> 
+                        <a href="{{ route('procesos.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
                     @include('profile.partials.assistants-table', ['assistants' => $assistants])
                 </div>
