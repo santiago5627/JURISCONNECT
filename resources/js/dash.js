@@ -470,11 +470,10 @@ function setupRealTimeValidation(fieldName, inputElement) {
                         inputElement.classList.remove("success");
                         showFieldError(
                             inputElement,
-                            `Este ${
-                                fieldName === "numeroDocumento" ||
+                            `Este ${fieldName === "numeroDocumento" ||
                                 fieldName === "numero_documento"
-                                    ? "número de documento"
-                                    : "correo"
+                                ? "número de documento"
+                                : "correo"
                             } ya está registrado`
                         );
                     } else {
@@ -759,7 +758,7 @@ function handleAjaxPagination() {
     if (!lawyersSection) return;
 
     // Delegation
-    lawyersSection.addEventListener("click", function (e) { 
+    lawyersSection.addEventListener("click", function (e) {
         const link = e.target.closest(".pagination-btn.ajax-page");
         if (!link) return;
         e.preventDefault();
@@ -952,8 +951,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             "error",
                             "Error de Actualización",
                             "Error al actualizar: " +
-                                (error.message ||
-                                    "Verifica que todos los campos estén correctos.")
+                            (error.message ||
+                                "Verifica que todos los campos estén correctos.")
                         );
                 }
             } catch (err) {
@@ -983,7 +982,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     "warning",
                     "Campos Incompletos",
                     "Por favor, completa todos los campos obligatorios:\n\n" +
-                        validationErrors.join("\n")
+                    validationErrors.join("\n")
                 );
                 return;
             }
@@ -1022,7 +1021,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             "error",
                             "Error al Crear",
                             "Error al guardar: " +
-                                (error.message || "Verifica los campos.")
+                            (error.message || "Verifica los campos.")
                         );
                 }
             } catch (err) {
@@ -1164,6 +1163,34 @@ document.addEventListener("DOMContentLoaded", function () {
     addLawyerBtn.addEventListener("click", addLawyerSelect);
 });
 
+
+const btnOpenAsistente = document.getElementById("btnOpenAsistente");
+const modalAsistente = document.getElementById("modalAsistente");
+const btnCloseAsistente = document.getElementById("closeAsistente");
+const btnCancelAsistente = document.getElementById("cancelAsistente");
+
+function openAssistantModal() {
+    modalAsistente.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+
+function closeAssistantModal() {
+    modalAsistente.classList.remove("active");
+    document.body.style.overflow = "auto";
+}
+
+if (btnOpenAsistente) {
+    btnOpenAsistente.addEventListener("click", openAssistantModal);
+}
+
+if (btnCloseAsistente) {
+    btnCloseAsistente.addEventListener("click", closeAssistantModal);
+}
+
+if (btnCancelAsistente) {
+    btnCancelAsistente.addEventListener("click", closeAssistantModal);
+}
+
 document.addEventListener("click", function (e) {
 
     // EDITAR ASISTENTE
@@ -1220,7 +1247,7 @@ function addLawyerSelect(selectedId = null) {
     select.style.display = "block";
     select.name = "lawyers[]";
 
-    if(selectedId){
+    if (selectedId) {
         select.value = selectedId;
     }
 
@@ -1239,7 +1266,7 @@ function addLawyerSelect(selectedId = null) {
     container.appendChild(wrapper);
 }
 
-document.querySelector('#form-update').addEventListener('submit', function(e){
+document.querySelector('#form-update').addEventListener('submit', function (e) {
     e.preventDefault(); // evitar que el formulario recargue la página
 
     let formData = new FormData(this);
@@ -1251,49 +1278,21 @@ document.querySelector('#form-update').addEventListener('submit', function(e){
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
         }
     })
-    .then(res => res.json())
-    .then(data => {
-        if(data.success){
-            // Mensaje pequeño tipo notificación
-            const msg = document.createElement('div');
-            msg.innerText = data.message;
-            msg.classList.add('notification-success'); // puedes darle estilo en CSS
-            document.body.appendChild(msg);
-            setTimeout(() => msg.remove(), 2000); // se elimina solo después de 2s
-        } else {
-            alert('Error: ' + data.message);
-        }
-    })
-    .catch(err => console.log(err));
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                // Mensaje pequeño tipo notificación
+                const msg = document.createElement('div');
+                msg.innerText = data.message;
+                msg.classList.add('notification-success'); // puedes darle estilo en CSS
+                document.body.appendChild(msg);
+                setTimeout(() => msg.remove(), 2000); // se elimina solo después de 2s
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(err => console.log(err));
 });
-
-
-const btnOpenAsistente = document.getElementById("btnOpenAsistente");
-const modalAsistente = document.getElementById("modalAsistente");
-const btnCloseAsistente = document.getElementById("closeAsistente");
-const btnCancelAsistente = document.getElementById("cancelAsistente");
-
-function openAssistantModal() {
-    modalAsistente.classList.add("active");
-    document.body.style.overflow = "hidden";
-}
-
-function closeAssistantModal() {
-    modalAsistente.classList.remove("active");
-    document.body.style.overflow = "auto";
-}
-
-if (btnOpenAsistente) {
-    btnOpenAsistente.addEventListener("click", openAssistantModal);
-}
-
-if (btnCloseAsistente) {
-    btnCloseAsistente.addEventListener("click", closeAssistantModal);
-}
-
-if (btnCancelAsistente) {
-    btnCancelAsistente.addEventListener("click", closeAssistantModal);
-}
 
 
 
