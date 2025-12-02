@@ -162,6 +162,7 @@
                             <label for="editEspecialidad">Especialidad:</label>
                             <input type="text" id="editEspecialidad" name="especialidad">
                         </div>
+                        
 
                         <div class="form-actions">
                             <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
@@ -213,6 +214,7 @@
                             <input type="email" id="editAssistantCorreo" name="correo" required>
                         </div>
 
+
                         <div class="form-group">
                             <label for="editTelefono">Teléfono:</label>
                             <input type="tel" id="editAssistantTelefono" name="telefono">
@@ -232,7 +234,6 @@
                             <div id="assignedLawyersContainer"></div>
                             <button type="button" id="addLawyerBtn">+ Agregar abogado</button>
                         </div>
-
 
                         <div class="form-actions">
                             <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
@@ -391,7 +392,6 @@
                 </div>
                 
                 </div>
-
 
             </div>
 
