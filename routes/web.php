@@ -14,7 +14,7 @@
     use App\Exports\ProcesosExport;
 
     // ===================================================================
-    // RUTA POR DEFECTO
+    // RUTA POR DEFECTOpor que es turistico somondoco boyaca
     // ===================================================================
     Route::get('/', function () {
         return redirect()->route('login');
