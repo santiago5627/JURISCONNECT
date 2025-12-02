@@ -53,31 +53,32 @@ function showCustomAlert(
 
         // Configurar iconos según el tipo
         const icons = {
-            success: '✓',
-            error: '✕',
-            warning: '⚠',
-            info: 'ℹ'
+            success: "✓",
+            error: "✕",
+            warning: "⚠",
+            info: "ℹ",
         };
 
         // Configurar títulos por defecto
         const defaultTitles = {
-            success: '¡Éxito!',
-            error: '¡Error!',
-            warning: '¡Atención!',
-            info: 'Información'
+            success: "¡Éxito!",
+            error: "¡Error!",
+            warning: "¡Atención!",
+            info: "Información",
         };
 
         // Configurar mensajes por defecto
         const defaultMessages = {
-            success: 'Operación completada exitosamente',
-            error: 'Algo salió mal. Inténtalo de nuevo.',
-            warning: 'Verifica la información antes de continuar.',
-            info: 'Proceso en desarrollo.'
+            success: "Operación completada exitosamente",
+            error: "Algo salió mal. Inténtalo de nuevo.",
+            warning: "Verifica la información antes de continuar.",
+            info: "Proceso en desarrollo.",
         };
 
         const icon = icons[type] || icons.info;
         const alertTitle = title || defaultTitles[type] || defaultTitles.info;
-        const alertMessage = message || defaultMessages[type] || defaultMessages.info;
+        const alertMessage =
+            message || defaultMessages[type] || defaultMessages.info;
 
         // Crear botones
         const buttonsHTML = showCancel
@@ -101,10 +102,10 @@ function showCustomAlert(
         document.body.appendChild(alertOverlay);
 
         // Mostrar con animación
-        setTimeout(() => alertOverlay.classList.add('show'), 10);
+        setTimeout(() => alertOverlay.classList.add("show"), 10);
 
         const cleanup = () => {
-            alertOverlay.classList.remove('show');
+            alertOverlay.classList.remove("show");
             setTimeout(() => {
                 if (alertOverlay && alertOverlay.parentNode) {
                     alertOverlay.parentNode.removeChild(alertOverlay);
@@ -141,7 +142,7 @@ function showCustomAlert(
         document.addEventListener("keydown", escHandler);
 
         // Cerrar al hacer click fuera del modal
-        alertOverlay.addEventListener('click', function(e) {
+        alertOverlay.addEventListener("click", function (e) {
             if (e.target === alertOverlay) {
                 cleanup();
                 resolve(false);
@@ -160,9 +161,16 @@ function showCustomAlert(
 function showAlert(type, title, message, buttons = null) {
     // Si se proporcionan botones personalizados, usar la versión antigua
     if (buttons) {
-        return showCustomAlert(type, title, message, false, "Aceptar", "Cancelar");
+        return showCustomAlert(
+            type,
+            title,
+            message,
+            false,
+            "Aceptar",
+            "Cancelar"
+        );
     }
-    
+
     // Usar la nueva versión mejorada
     return showCustomAlert(type, title, message, false, "Aceptar", "Cancelar");
 }
@@ -197,42 +205,56 @@ function hideCustomAlert() {
  * Alerta de éxito rápida
  */
 function alertSuccess(message, title = "¡Éxito!") {
-    return showCustomAlert('success', title, message, false, "Aceptar");
+    return showCustomAlert("success", title, message, false, "Aceptar");
 }
 
 /**
  * Alerta de error rápida
  */
 function alertError(message, title = "¡Error!") {
-    return showCustomAlert('error', title, message, false, "Entendido");
+    return showCustomAlert("error", title, message, false, "Entendido");
 }
 
 /**
  * Alerta de advertencia rápida
  */
 function alertWarning(message, title = "¡Atención!") {
-    return showCustomAlert('warning', title, message, false, "De acuerdo");
+    return showCustomAlert("warning", title, message, false, "De acuerdo");
 }
 
 /**
  * Alerta de información rápida
  */
 function alertInfo(message, title = "Información") {
-    return showCustomAlert('info', title, message, false, "Ok");
+    return showCustomAlert("info", title, message, false, "Ok");
 }
 
 /**
  * Alerta de confirmación con botones Sí/No
  */
 async function alertConfirm(message, title = "¿Continuar?") {
-    return await showCustomAlert('info', title, message, true, "Confirmar", "Cancelar");
+    return await showCustomAlert(
+        "info",
+        title,
+        message,
+        true,
+        "Confirmar",
+        "Cancelar"
+    );
 }
 
 /**
  * Alerta de eliminación peligrosa
  */
 async function alertDelete(message, title = "¿Eliminar?") {
-    return await showCustomAlert('error', title, message, true, "Eliminar", "Cancelar");
+    return await showCustomAlert(
+        "error",
+        title,
+        message,
+        true,
+        "Eliminar",
+        "Cancelar"
+    );
 }
 
 /* ========= MANEJO DE DUPLICADOS Y VALIDACIONES ========= */
@@ -1109,22 +1131,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-    const userType = document.getElementById("tipodeusuario");
+
     const lawyerContainer = document.getElementById("lawyerSelectContainer");
     const lawyerList = document.getElementById("lawyerList");
     const addLawyerBtn = document.getElementById("addLawyerBtn");
 
     const lawyerTemplate = document.querySelector(".lawyer-select");
-
-    // Mostrar select de abogados solo si elige asistente
-    userType.addEventListener("change", function () {
-        if (this.value === "assistant") {
-            lawyerContainer.style.display = "block";
-        } else {
-            lawyerContainer.style.display = "none";
-            lawyerList.innerHTML = ""; // limpiar selects si cambia a abogado
-        }
-    });
 
     function addLawyerSelect() {
         const wrapper = document.createElement("div");
@@ -1151,6 +1163,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
     addLawyerBtn.addEventListener("click", addLawyerSelect);
 });
+
+
+const btnOpenAsistente = document.getElementById("btnOpenAsistente");
+const modalAsistente = document.getElementById("modalAsistente");
+const btnCloseAsistente = document.getElementById("closeAsistente");
+const btnCancelAsistente = document.getElementById("cancelAsistente");
+
+function openAssistantModal() {
+    modalAsistente.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+
+function closeAssistantModal() {
+    modalAsistente.classList.remove("active");
+    document.body.style.overflow = "auto";
+}
+
+if (btnOpenAsistente) {
+    btnOpenAsistente.addEventListener("click", openAssistantModal);
+}
+
+if (btnCloseAsistente) {
+    btnCloseAsistente.addEventListener("click", closeAssistantModal);
+}
+
+if (btnCancelAsistente) {
+    btnCancelAsistente.addEventListener("click", closeAssistantModal);
+}
+
 
 
 /* ========= Exponer funciones útiles globalmente (si las necesitas) ========= */

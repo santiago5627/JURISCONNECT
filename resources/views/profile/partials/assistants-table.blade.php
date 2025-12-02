@@ -35,7 +35,7 @@
                 <td>
                     <div class="action-buttons-cell">
                         <button class="btn-edit" data-id="{{ $assistant->id }}">Editar</button>
-                        <form action="{{ route('lawyers.destroy', $assistant->id) }}" method="POST" style="display: inline;">
+                        <form action="{{ route('asistentes.destroy', $assistant->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn-delete" onclick="return confirm('¿Está seguro de eliminar este asistente?')">Eliminar</button>
@@ -56,3 +56,20 @@
     @include('profile.partials.pagination', ['items' => $lawyers])
 </div>
 
+@if(session('success'))
+    <div data-success-message="{{ session('success') }}" style="display: none;"></div>
+@endif
+
+@if(session('update'))
+    <div data-update-message="{{ session('update') }}" style="display: none;"></div>
+@endif
+
+@if(session('delete'))
+    <div data-delete-message="{{ session('delete') }}" style="display: none;"></div>
+@endif
+
+@if(session('error'))
+    <div data-error-message="{{ session('error') }}" style="display: none;"></div>
+@endif  
+
+<script src="{{ asset('js/asistentes.js') }}"></script>
