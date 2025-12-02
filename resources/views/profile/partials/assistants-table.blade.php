@@ -33,25 +33,14 @@
                     @endif
                 </td>
                 <td>
-                    <button class="btn-edit-assistant"
-                        data-id="{{ $assistant->id }}"
-                        data-nombre="{{ $assistant->nombre }}"
-                        data-apellido="{{ $assistant->apellido }}"
-                        data-tipo_documento="{{ $assistant->tipo_documento }}"
-                        data-numero_documento="{{ $assistant->numero_documento }}"
-                        data-correo="{{ $assistant->correo }}"
-                        data-telefono="{{ $assistant->telefono }}"
-                        data-lawyers='@json($assistant->lawyers->pluck("id"))'>
-                        Editar
-                    </button>
-                    <form action="{{ route('assistants.destroy', $assistant->id) }}"
-                        method="POST"
-                        class="delete-assistant-form"
-                        style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn-delete">Eliminar</button>
-                    </form>
+                    <div class="action-buttons-cell">
+                        <button class="btn-edit" data-id="{{ $assistant->id }}">Editar</button>
+                        <form action="{{ route('asistentes.destroy', $assistant->id) }}" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn-delete">Eliminar</button>
+                        </form>
+
                 </td>
             </tr>
             @empty
@@ -64,77 +53,24 @@
         </tbody>
     </table>
 
-    <!-- Paginación corregida -->
-    <div id="assistantsPagination">
-        @include('profile.partials.pagination', ['items' => $assistants])
-    </div>
+                        <!-- Incluir la paginación -->
+    @include('profile.partials.pagination', ['items' => $lawyers])
 </div>
 
-<script>
-    
-    // ==========================================
-    // PAGINACIÓN AJAX (Evita recarga de página)
-    // ==========================================
-    
-    function handleAjaxPagination() {
-    const lawyersSection = document.querySelector("#assistants-section");
-    if (!lawyersSection) return;
+@if(session('success'))
+    <div data-success-message="{{ session('success') }}" style="display: none;"></div>
+@endif
 
-    // Delegation
-    lawyersSection.addEventListener("click", function (e) { 
-        const link = e.target.closest(".pagination-btn.ajax-page");
-        if (!link) return;
-        e.preventDefault();
+@if(session('update'))
+    <div data-update-message="{{ session('update') }}" style="display: none;"></div>
+@endif
 
-        const url = link.getAttribute("href");
-        if (!url || url === "#") return;
+@if(session('delete'))
+    <div data-delete-message="{{ session('delete') }}" style="display: none;"></div>
+@endif
 
-        const container = lawyersSection.querySelector(".table-wrapper");
-        if (container) {
-            container.style.opacity = "0.5";
-            container.style.pointerEvents = "none";
-        }
+@if(session('error'))
+    <div data-error-message="{{ session('error') }}" style="display: none;"></div>
+@endif  
 
-        fetch(url, {
-            method: "GET",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest",
-                Accept: "application/json",
-            },
-        })
-            .then(async (resp) => {
-                if (!resp.ok)
-                    throw new Error(`HTTP error! status: ${resp.status}`);
-                return resp.json();
-            })
-            .then((data) => {
-                if (data.success && data.html) {
-                    const tableContainer =
-                        lawyersSection.querySelector(".table-wrapper");
-                    if (tableContainer) tableContainer.outerHTML = data.html;
-                    if (window.history && window.history.pushState)
-                        window.history.pushState({}, "", url);
-                    // re-inicializa eventos en nuevo contenido si es necesario
-                    handleAjaxPagination();
-                } else {
-                    throw new Error(
-                        data.message || "Formato de respuesta inválido"
-                    );
-                }
-            })
-            .catch((error) => {
-                console.error("Error completo:", error);
-                if (container) {
-                    container.innerHTML = `<div class="alert alert-danger"><strong>Error:</strong> ${error.message}<br><small>Revisa la consola para más detalles</small></div>`;
-                }
-            })
-            .finally(() => {
-                if (container) {
-                    container.style.opacity = "1";
-                    container.style.pointerEvents = "auto";
-                }
-            });
-    });
-}
-    
-</script>
+<script src="{{ asset('js/asistentes.js') }}"></script>
