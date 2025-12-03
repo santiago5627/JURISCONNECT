@@ -413,7 +413,7 @@
                     </div>
 
                     <div class="search-section">
-                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchAssistantsInput">
+                       <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
                     </div>
 
                     <div class="action-buttons">
@@ -445,7 +445,6 @@
                     @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
 
                 </div>
-
 
             </div>
 
