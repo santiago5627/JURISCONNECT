@@ -757,7 +757,9 @@ function handleAjaxPagination() {
     // Aplicar a AMBAS secciones: lawyers y assistants
     const sections = [
         document.querySelector("#lawyers-section"),
-        document.querySelector("#assistants-section")
+        document.querySelector("#assistants-section"),
+        document.querySelector("#lawyersTableWrapper"),
+        document.querySelector("#assistantsTableWrapper")
     ];
 
     sections.forEach(section => {
