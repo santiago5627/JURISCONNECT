@@ -422,7 +422,6 @@
                         <a href="{{ route('procesos.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
                     @include('profile.partials.assistants-table', ['assistants' => $assistants])
-
                 </div>
 
                 <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
@@ -454,6 +453,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
+    
 
 
 

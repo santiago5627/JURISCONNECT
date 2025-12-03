@@ -1,4 +1,4 @@
-<div class="table-container table-wrapper">
+<div class="table-wrapper">
     <table class="lawyers-table">
         <thead>
             <tr>
@@ -61,7 +61,9 @@
         </tbody>
     </table>
                         <!-- Incluir la paginación -->
-    @include('profile.partials.pagination', ['items' => $lawyers])
+    <div id="assistantsPagination">
+        @include('profile.partials.pagination', ['items' => $lawyers])
+    </div>
 </div>
 
 @if(session('success'))
