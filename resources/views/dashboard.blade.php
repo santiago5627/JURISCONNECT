@@ -351,9 +351,8 @@
                         <a href="{{ route('procesos.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
                     @include('profile.partials.assistants-table', ['assistants' => $assistants])
+                </div>
 
-                    </div>
-                    
                 <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
                 <div class="section-content" id="lawyers-section">
                     <div class="section-header">
@@ -361,30 +360,25 @@
                         <p>Administrar el registro de abogados del sistema</p>
                     </div>
 
-            <div class="search-section">
-                <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
-            </div>
+                    <div class="search-section">
+                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
+                    </div>
 
                     <div class="action-buttons">
                         <button class="btn-primary" id="createBtn">CREAR NUEVO USUARIO</button>
                         <a href="{{ route('lawyers.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
                         <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
-                    
                     @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
-                    
                 </div>
                 
-                    
                 </div>
                 
             </div>
         </div>
     </div>
-    
+
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
-
-    
 
 </x-app-layout>

@@ -4,10 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use App\Models\Assistant;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Log;
 
 
 class AsistenteController extends Controller
 {
+
     // En tu controlador de asistentes
 
 // Para crear
@@ -36,5 +40,10 @@ public function destroy($id)
     return redirect()->route('asistentes.index')
         ->with('delete', 'Asistente jurídico eliminado exitosamente');
 }
+
+    public function index()
+    {
+        return app(AbogadoController::class)->index();
+    }
 }
 //solucion temporal
