@@ -33,18 +33,9 @@
                     @endif
                 </td>
                 <td>
-                        <button class="btn-edit-assistant"
-                            data-id="{{ $assistant->id }}"
-                            data-nombre="{{ $assistant->nombre }}"
-                            data-apellido="{{ $assistant->apellido }}"
-                            data-tipo_documento="{{ $assistant->tipo_documento }}"
-                            data-numero_documento="{{ $assistant->numero_documento }}"
-                            data-correo="{{ $assistant->correo }}"
-                            data-telefono="{{ $assistant->telefono }}"
-                            data-lawyers='@json($assistant->lawyers->pluck("id"))'>
-                            Editar
-                        </button>
-                        <form action="{{ route('asistentes.destroy', $assistant->id) }}" method="POST" style="display: inline;">
+                    <div class="action-buttons-cell">
+                        <button class="btn-edit" data-id="{{ $assistant->id }}">Editar</button>
+                        <form action="{{ route('asistentes.destroy', $assistant->id) }}" method="POST" style="display: inline;" class="delete-form">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn-delete" onclick="return confirm('¿Está seguro de eliminar este asistente?')">Eliminar</button>
@@ -60,10 +51,12 @@
             @endforelse
         </tbody>
     </table>
-                        <!-- Incluir la paginación -->
-    @include('profile.partials.pagination', ['items' => $lawyers])
+    
+    <!-- Incluir la paginación -->
+    @include('profile.partials.pagination', ['items' => $assistants])
 </div>
 
+<!-- Mensajes de sesión para alertas -->
 @if(session('success'))
     <div data-success-message="{{ session('success') }}" style="display: none;"></div>
 @endif
@@ -78,6 +71,6 @@
 
 @if(session('error'))
     <div data-error-message="{{ session('error') }}" style="display: none;"></div>
-@endif  
+@endif
 
 <script src="{{ asset('js/asistentes.js') }}"></script>
