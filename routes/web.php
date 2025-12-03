@@ -81,9 +81,6 @@
         Route::delete('/asistentes/{assistant}', [LawyerController::class, 'destroyAsist'])
             ->name('asistentes.destroy');
 
-
-
-
         // ===============================================================
         // PROCESOS LEGALES
         // ===============================================================
