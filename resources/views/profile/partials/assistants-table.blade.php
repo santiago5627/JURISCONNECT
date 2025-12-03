@@ -35,27 +35,29 @@
                 <td>
                     <div class="action-buttons-cell">
                         <button class="btn-edit" data-id="{{ $assistant->id }}">Editar</button>
-                        <form action="{{ route('asistentes.destroy', $assistant->id) }}" method="POST" style="display: inline;">
+                        <form action="{{ route('asistentes.destroy', $assistant->id) }}" method="POST" style="display: inline;" class="delete-form">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn-delete" onclick="return confirm('¿Está seguro de eliminar este asistente?')">Eliminar</button>
+                            <button type="submit" class="btn-delete">Eliminar</button>
                         </form>
                     </div>
                 </td>
             </tr>
             @empty
             <tr>
-                <td colspan="10" style="text-align: center; padding: 20px;">
+                <td colspan="8" style="text-align: center; padding: 20px;">
                     No hay asistentes jurídicos registrados
                 </td>
             </tr>
             @endforelse
         </tbody>
     </table>
-                        <!-- Incluir la paginación -->
-    @include('profile.partials.pagination', ['items' => $lawyers])
+    
+    <!-- Incluir la paginación -->
+    @include('profile.partials.pagination', ['items' => $assistants])
 </div>
 
+<!-- Mensajes de sesión para alertas -->
 @if(session('success'))
     <div data-success-message="{{ session('success') }}" style="display: none;"></div>
 @endif
@@ -70,6 +72,7 @@
 
 @if(session('error'))
     <div data-error-message="{{ session('error') }}" style="display: none;"></div>
-@endif  
+@endif
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/asistentes.js') }}"></script>
