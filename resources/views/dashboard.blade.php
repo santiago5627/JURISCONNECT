@@ -155,7 +155,6 @@
             </div>
         </div>
 
-
         <!-- Modal para editar abogado -->
         <div class="modal" id="editLawyerModal">
             <div class="modal-content">
@@ -393,7 +392,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- 🔽🔽🔽 TABLA OCULTA INICIALMENTE 🔽🔽🔽 -->
+                    <!-- 🔽🔽🔽 TABLA DE ABOGADOS OCULTA INICIALMENTE 🔽🔽🔽 -->
                     <div id="lawyersTableWrapper" style="display: none; margin-top: 30px;">
                         <h3>Listado de Abogados</h3>
                         @include('profile.partials.lawyers-table-simple', ['lawyers' => $lawyers])
@@ -413,13 +412,13 @@
                     </div>
 
                     <div class="search-section">
-                       <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
+                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
                     </div>
 
                     <div class="action-buttons">
                         <button class="btn-primary" id="btnOpenAsistente">CREAR NUEVO ASISTENTE</button>
-                        <a href="{{ route('procesos.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
-                        <a href="{{ route('procesos.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
+                        <a href="{{ route('asistente.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
+                        <a href="{{ route('asistente.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
                     @include('profile.partials.assistants-table', ['assistants' => $assistants])
                 </div>
@@ -440,13 +439,9 @@
                         <a href="{{ route('lawyers.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
                         <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
-
                     @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
-
                 </div>
-
             </div>
-
         </div>
     </div>
     </div>

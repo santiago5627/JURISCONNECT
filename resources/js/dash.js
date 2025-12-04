@@ -759,7 +759,8 @@ function handleAjaxPagination() {
         document.querySelector("#lawyers-section"),
         document.querySelector("#assistants-section"),
         document.querySelector("#lawyersTableWrapper"),
-        document.querySelector("#assistantsTableWrapper")
+        document.querySelector("#assistantsTableWrapper"),
+        
     ];
 
     sections.forEach(section => {
@@ -769,7 +770,7 @@ function handleAjaxPagination() {
             const link = e.target.closest(".pagination-btn.ajax-page");
             if (!link) return;
             e.preventDefault();
-
+ 
             const url = link.getAttribute("href");
             if (!url || url === "#") return;
 

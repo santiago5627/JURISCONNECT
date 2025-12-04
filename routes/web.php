@@ -12,6 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ConceptoController;
 use App\Exports\ProcesosExport;
+use App\Exports\AssistantExport;
 
 // ===================================================================
 // RUTA POR DEFECTO
@@ -155,4 +156,17 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/procesos/{proceso}/conceptos', [ConceptoController::class, 'store'])
             ->name('store');
     });
+
+    // ===============================================================
+    // Asistentes (LAWYERS)
+    // ===============================================================
+Route::prefix('asistente')->name('asistente.')->group(function () {
+        // Exportaciones
+        Route::get('/export-pdf', [AssistantExport::class, 'exportPDF'])
+            ->name('export.pdf');
+
+        Route::get('/export-excel', function () { 
+            return Excel::download(new AssistantExport, 'Procesos.xlsx'); 
+        })->name('export.excel');
+        });
 });
