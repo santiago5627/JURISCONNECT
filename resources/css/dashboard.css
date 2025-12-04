@@ -115,6 +115,66 @@ body {
     justify-content: center;
 }
 
+.remove-lawyer {
+    background-color: #e74c3c; /* Rojo bonito */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s ease-in-out;
+}
+
+.remove-lawyer:hover {
+    background-color: #c0392b; /* Más oscuro al pasar el mouse */
+    transform: scale(1.03);
+}
+
+.remove-lawyer:active {
+    transform: scale(0.97);
+}
+
+.lawyer-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.lawyer-wrapper select {
+    flex: 1;
+}
+
+.remove-lawyer {
+    padding: 8px 15px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.remove-lawyer:hover {
+    background-color: #c82333;
+}
+
+
+
+.modal-content-asistente{
+    background-color: var(--color-surface);
+    border-radius: var(--border-radius-lg);
+    width: 90%;
+    max-width: 550px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideIn 0.3s ease-in-out;
+    margin-left: 35%;
+    margin-top: 2%;
+}
+
 .modal-content {
     background-color: var(--color-surface);
     border-radius: var(--border-radius-lg);
@@ -125,6 +185,7 @@ body {
     box-shadow: var(--shadow-lg);
     animation: slideIn 0.3s ease-in-out;
 }
+
 
 .modal-header {
     display: flex;
@@ -594,6 +655,7 @@ tr:hover td {
 }
 
 .btn-edit,
+.btn-edit-assistant,
 .btn-delete {
     padding: 6px 12px;
     border-radius: var(--border-radius-sm);
@@ -606,8 +668,13 @@ tr:hover td {
     color: white;
 }
 
+.btn-edit-assistant,
 .btn-edit {
     background: var(--color-success);
+}
+
+.btn-edit-assistant:hover {
+    background: #157347;
 }
 .btn-edit:hover {
     background: #157347;
@@ -930,7 +997,8 @@ tr:hover td {
         padding: var(--spacing-2); 
         font-size: 0.8rem; 
     }
-    
+
+    .btn-edit-assistant,
     .btn-edit, .btn-delete { 
         padding: 4px 8px; 
     }

@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
 <div class="table-container table-wrapper">
     <table class="lawyers-table">
         <thead>
@@ -33,9 +41,18 @@
                     @endif
                 </td>
                 <td>
-                    <div class="action-buttons-cell">
-                        <button class="btn-edit" data-id="{{ $assistant->id }}">Editar</button>
-                        <form action="{{ route('asistentes.destroy', $assistant->id) }}" method="POST" style="display: inline;" class="delete-form">
+                        <button class="btn-edit-assistant"
+                            data-id="{{ $assistant->id }}"
+                            data-nombre="{{ $assistant->nombre }}"
+                            data-apellido="{{ $assistant->apellido }}"
+                            data-tipo_documento="{{ $assistant->tipo_documento }}"
+                            data-numero_documento="{{ $assistant->numero_documento }}"
+                            data-correo="{{ $assistant->correo }}"
+                            data-telefono="{{ $assistant->telefono }}"
+                            data-lawyers='@json($assistant->lawyers->pluck("id"))'>
+                            Editar
+                        </button>
+                        <form action="{{ route('asistentes.destroy', $assistant->id) }}" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn-delete" onclick="return confirm('¿Está seguro de eliminar este asistente?')">Eliminar</button>
@@ -51,12 +68,10 @@
             @endforelse
         </tbody>
     </table>
-    
-    <!-- Incluir la paginación -->
-    @include('profile.partials.pagination', ['items' => $assistants])
+                        <!-- Incluir la paginación -->
+    @include('profile.partials.pagination', ['items' => $lawyers])
 </div>
 
-<!-- Mensajes de sesión para alertas -->
 @if(session('success'))
     <div data-success-message="{{ session('success') }}" style="display: none;"></div>
 @endif
@@ -71,6 +86,8 @@
 
 @if(session('error'))
     <div data-error-message="{{ session('error') }}" style="display: none;"></div>
-@endif
+@endif  
 
 <script src="{{ asset('js/asistentes.js') }}"></script>
+</body>
+</html>
