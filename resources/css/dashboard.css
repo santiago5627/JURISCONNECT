@@ -92,6 +92,35 @@ body {
 }
 
 
+/* Contenedor de cada fila de abogado + botón eliminar */
+.lawyer-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+/* Select ocupa el espacio disponible */
+.lawyer-wrapper select {
+    flex: 1;
+}
+
+/* Botón Eliminar */
+.remove-lawyer {
+    padding: 8px 16px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+    transition: background-color 0.3s ease;
+}
+
+.remove-lawyer:hover {
+    background-color: #c82333;
+}
 /*  ==============================================
     ===           ESTILOS DEL MODAL            ===
     ==============================================
@@ -114,52 +143,6 @@ body {
     align-items: center;
     justify-content: center;
 }
-
-.remove-lawyer {
-    background-color: #e74c3c; /* Rojo bonito */
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: 0.2s ease-in-out;
-}
-
-.remove-lawyer:hover {
-    background-color: #c0392b; /* Más oscuro al pasar el mouse */
-    transform: scale(1.03);
-}
-
-.remove-lawyer:active {
-    transform: scale(0.97);
-}
-
-.lawyer-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-.lawyer-wrapper select {
-    flex: 1;
-}
-
-.remove-lawyer {
-    padding: 8px 15px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    white-space: nowrap;
-}
-
-.remove-lawyer:hover {
-    background-color: #c82333;
-}
-
 
 
 .modal-content-asistente{

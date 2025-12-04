@@ -281,7 +281,7 @@
                             @endforeach
                         </select>
 
-                        <div class="form-group">
+                        <div id="assignedLawyersContainer">
                             <label>Abogados asignados:</label>
                             <div id="assignedLawyersContainer"></div>
                             <button type="button" id="addLawyerBtn">+ Agregar abogado</button>
