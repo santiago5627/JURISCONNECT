@@ -285,6 +285,7 @@
                             <label>Abogados asignados:</label>
                             <div id="assignedLawyersContainer"></div>
                             <button type="button" id="addLawyerBtn">+ Agregar abogado</button>
+                            <button type="button" class="btn-cancel">Eliminar</button>
                         </div>
                         
 

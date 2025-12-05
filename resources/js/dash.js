@@ -1094,59 +1094,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // clic en la tarjeta de abogados
     lawyersCard.addEventListener("click", () => {
-        // cerrar la otra
         if (assistantsWrapper.style.display === "block") {
             slideToggle(assistantsWrapper);
         }
-        // abrir/cerrar esta
         slideToggle(lawyersWrapper);
     });
 
     // clic en la tarjeta de asistentes
     assistantsCard.addEventListener("click", () => {
-        // cerrar la otra
         if (lawyersWrapper.style.display === "block") {
             slideToggle(lawyersWrapper);
         }
-        // abrir/cerrar esta
         slideToggle(assistantsWrapper);
     });
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const lawyerContainer = document.getElementById("lawyerSelectContainer");
-    const lawyerList = document.getElementById("lawyerList");
-    const addLawyerBtn = document.getElementById("addLawyerBtn");
-
-    const lawyerTemplate = document.querySelector(".lawyer-select");
-
-    function addLawyerSelect() {
-        const wrapper = document.createElement("div");
-        wrapper.style.display = "flex";
-        wrapper.style.gap = "10px";
-        wrapper.style.marginBottom = "8px";
-        wrapper.style.alignItems = "center";
-
-        const newSelect = lawyerTemplate.cloneNode(true);
-        newSelect.style.display = "block";
-        newSelect.style.flex = "1";
-        newSelect.name = "lawyers[]";
-
-        const deleteBtn = document.createElement("button");
-        deleteBtn.type = "button";
-        deleteBtn.textContent = "Eliminar";
-        deleteBtn.classList.add("btn-cancel");
-
-        deleteBtn.addEventListener("click", () => wrapper.remove());
-
-        wrapper.appendChild(newSelect);
-        wrapper.appendChild(deleteBtn);
-
-        lawyerList.appendChild(wrapper);
-    }
-
-    addLawyerBtn.addEventListener("click", addLawyerSelect);
 });
 
 
@@ -1198,16 +1158,6 @@ document.addEventListener("click", function (e) {
         // Ruta
         editAssistantForm.action = `/assistants/${id}`;
 
-        // Limpiar abogados cargados
-        const container = document.getElementById("assignedLawyersContainer");
-        container.innerHTML = '';
-
-        // Obtener abogados asignados
-        let lawyers = JSON.parse(btn.dataset.lawyers || '[]');
-
-        // Añadir selects
-        lawyers.forEach(lawyerId => addLawyerSelectEdit(lawyerId));
-
         // Mostrar modal
         editAssistantModal.style.display = "flex";
     }
@@ -1218,22 +1168,7 @@ document.addEventListener("click", function (e) {
     if (e.target.id === "closeEditAssistantModal" || e.target.id === "cancelEditBtn") {
         editAssistantModal.style.display = "none";
     }
-
-    /* =============================
-       =   AGREGAR SELECT ABOGADO  =
-       ============================= */
-    if (e.target.id === "addLawyerBtnEdit") {
-        addLawyerSelectEdit();
-    }
-
-    /* =============================
-       =  ELIMINAR SELECT ABOGADO  =
-       ============================= */
-    if (e.target.classList.contains("remove-lawyer")) {
-        e.target.closest(".lawyer-wrapper").remove();
-    }
 });
-
 
 /* ===========================================
    =   FUNCIÓN AGREGAR SELECT DE ABOGADO (EDITAR)     =

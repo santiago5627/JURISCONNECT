@@ -72,6 +72,7 @@
     @include('profile.partials.pagination', ['items' => $lawyers])
 </div>
 
+<!-- Mensajes de sesión para alertas -->
 @if(session('success'))
     <div data-success-message="{{ session('success') }}" style="display: none;"></div>
 @endif
@@ -86,8 +87,9 @@
 
 @if(session('error'))
     <div data-error-message="{{ session('error') }}" style="display: none;"></div>
-@endif  
+@endif
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/asistentes.js') }}"></script>
 </body>
 </html>
