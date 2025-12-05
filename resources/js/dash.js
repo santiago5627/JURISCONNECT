@@ -738,65 +738,88 @@ document.addEventListener("DOMContentLoaded", function () {
 
 /* ========= PAGINACIÓN AJAX ========= */
 function handleAjaxPagination() {
-    const lawyersSection = document.querySelector("#lawyers-section");
-    if (!lawyersSection) return;
+    // Aplicar a AMBAS secciones: lawyers y assistants
+    const sections = [
+        document.querySelector("#lawyers-section"),
+        document.querySelector("#assistants-section"),
+        document.querySelector("#lawyersTableWrapper"),
+        document.querySelector("#assistantsTableWrapper"),
+        
+    ];
 
-    // Delegation
-    lawyersSection.addEventListener("click", function (e) {
-        const link = e.target.closest(".pagination-btn.ajax-page");
-        if (!link) return;
-        e.preventDefault();
+    sections.forEach(section => {
+        if (!section) return;
 
-        const url = link.getAttribute("href");
-        if (!url || url === "#") return;
+        section.addEventListener("click", function (e) {
+            const link = e.target.closest(".pagination-btn.ajax-page");
+            if (!link) return;
+            e.preventDefault();
+ 
+            const url = link.getAttribute("href");
+            if (!url || url === "#") return;
 
-        const container = lawyersSection.querySelector(".table-container");
-        if (container) {
-            container.style.opacity = "0.5";
-            container.style.pointerEvents = "none";
-        }
+            // Buscar el contenedor de tabla (puede ser .table-container o .table-wrapper)
+            const container = section.querySelector(".table-container, .table-wrapper");
+            if (container) {
+                container.style.opacity = "0.5";
+                container.style.pointerEvents = "none";
+            }
 
-        fetch(url, {
-            method: "GET",
-            headers: {
-                "X-Requested-With": "XMLHttpRequest",
-                Accept: "application/json",
-            },
-        })
-            .then(async (resp) => {
-                if (!resp.ok)
-                    throw new Error(`HTTP error! status: ${resp.status}`);
-                return resp.json();
+            fetch(url, {
+                method: "GET",
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest",
+                    Accept: "application/json",
+                },
             })
-            .then((data) => {
-                if (data.success && data.html) {
-                    const tableContainer =
-                        lawyersSection.querySelector(".table-container");
-                    if (tableContainer) tableContainer.outerHTML = data.html;
-                    if (window.history && window.history.pushState)
-                        window.history.pushState({}, "", url);
-                    // re-inicializa eventos en nuevo contenido si es necesario
-                    handleAjaxPagination();
-                } else {
-                    throw new Error(
-                        data.message || "Formato de respuesta inválido"
-                    );
-                }
-            })
-            .catch((error) => {
-                console.error("Error completo:", error);
-                if (container) {
-                    container.innerHTML = `<div class="alert alert-danger"><strong>Error:</strong> ${error.message}<br><small>Revisa la consola para más detalles</small></div>`;
-                }
-            })
-            .finally(() => {
-                if (container) {
-                    container.style.opacity = "1";
-                    container.style.pointerEvents = "auto";
-                }
-            });
+                .then(async (resp) => {
+                    if (!resp.ok)
+                        throw new Error(`HTTP error! status: ${resp.status}`);
+                    return resp.json();
+                })
+                .then((data) => {
+                    if (data.success && data.html) {
+                        // Reemplazar TODO el contenedor (tabla + paginación)
+                        const newContainer = document.createElement("div");
+                        newContainer.innerHTML = data.html;
+                        const newContent = newContainer.querySelector(".table-container, .table-wrapper");
+                        
+                        if (container && newContent) {
+                            container.replaceWith(newContent);
+                        }
+
+                        // Actualizar URL sin recargar
+                        if (window.history && window.history.pushState)
+                            window.history.pushState({}, "", url);
+
+                        // Re-inicializar paginación para el nuevo contenido
+                        handleAjaxPagination();
+                    } else {
+                        throw new Error(
+                            data.message || "Formato de respuesta inválido"
+                        );
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error en paginación AJAX:", error);
+                    if (container) {
+                        container.innerHTML = `<div class="alert alert-danger" style="padding: 20px; color: red;"><strong>Error:</strong> ${error.message}</div>`;
+                        container.style.opacity = "1";
+                        container.style.pointerEvents = "auto";
+                    }
+                })
+                .finally(() => {
+                    if (container) {
+                        container.style.opacity = "1";
+                        container.style.pointerEvents = "auto";
+                    }
+                });
+        });
     });
 }
+
+// ...existing code...
+
 
 /* ========= EVENTOS GLOBALES (inicialización única) ========= */
 document.addEventListener("DOMContentLoaded", function () {
