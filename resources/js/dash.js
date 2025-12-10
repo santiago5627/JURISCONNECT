@@ -1136,6 +1136,40 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+
+    const lawyerContainer = document.getElementById("lawyerSelectContainer");
+    const lawyerList = document.getElementById("lawyerList");
+    const addLawyerBtn = document.getElementById("addLawyerBtn");
+
+    const lawyerTemplate = document.querySelector(".lawyer-select");
+
+    function addLawyerSelect() {
+        const wrapper = document.createElement("div");
+        wrapper.style.display = "flex";
+        wrapper.style.gap = "10px";
+        wrapper.style.marginBottom = "8px";
+
+        const newSelect = lawyerTemplate.cloneNode(true);
+        newSelect.style.display = "block";
+        newSelect.name = "lawyers[]";
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.type = "button";
+        deleteBtn.textContent = "Eliminar";
+        deleteBtn.classList.add("btn-cancel");
+
+        deleteBtn.addEventListener("click", () => wrapper.remove());
+
+        wrapper.appendChild(newSelect);
+        wrapper.appendChild(deleteBtn);
+
+        lawyerList.appendChild(wrapper);
+    }
+
+    addLawyerBtn.addEventListener("click", addLawyerSelect);
+});
+
 const btnOpenAsistente = document.getElementById("btnOpenAsistente");
 const modalAsistente = document.getElementById("modalAsistente");
 const btnCloseAsistente = document.getElementById("closeAsistente");
@@ -1164,8 +1198,9 @@ if (btnCancelAsistente) {
 }
 
 document.addEventListener("click", function (e) {
+
     /* =============================
-       =    EDITAR ASISTENTE       =
+       =    EDITAR ASISTENTE
        ============================= */
     if (e.target.classList.contains("btn-edit-assistant")) {
         const btn = e.target;
@@ -1182,33 +1217,50 @@ document.addEventListener("click", function (e) {
         // Ruta
         editAssistantForm.action = `/assistants/${id}`;
 
+        // Contenedor de abogados
+        const container = document.getElementById("assignedLawyersContainer");
+        container.innerHTML = '';
+
+        // Cargar abogados asignados
+        let lawyers = JSON.parse(btn.dataset.lawyers || '[]');
+        lawyers.forEach(lawyerId => addLawyerSelect(lawyerId));
+
         // Mostrar modal
         editAssistantModal.style.display = "flex";
     }
 
     /* =============================
-       =       CERRAR MODAL        =
+       =       CERRAR MODAL
        ============================= */
-    if (
-        e.target.id === "closeEditAssistantModal" ||
-        e.target.id === "cancelEditBtn"
-    ) {
+    if (e.target.id === "closeEditAssistantModal" ||
+        e.target.id === "cancelEditBtn") {
         editAssistantModal.style.display = "none";
     }
-    // AGREGA SELECT DE ABOGADO
+
+    /* =============================
+       =   AGREGAR SELECT ABOGADO
+       ============================= */
     if (e.target.id === "addLawyerBtn") {
         addLawyerSelect();
     }
+
+    /* =============================
+       =   ELIMINAR ABOGADO
+       ============================= */
+    if (e.target.classList.contains("remove-lawyer")) {
+        e.target.parentElement.remove();
+    }
 });
 
+
 /* ===========================================
-   =   FUNCIÓN AGREGAR SELECT DE ABOGADO (EDITAR)     =
+   =   FUNCIÓN AGREGAR SELECT DE ABOGADO
    =========================================== */
 function addLawyerSelect(selectedId = null) {
     const baseSelect = document.querySelector(".lawyer-select");
     const container = document.getElementById("assignedLawyersContainer");
 
-    // Clonar select
+    // Clonar select base
     const select = baseSelect.cloneNode(true);
     select.style.display = "block";
     select.style.flex = "1";
@@ -1216,7 +1268,7 @@ function addLawyerSelect(selectedId = null) {
 
     if (selectedId) select.value = selectedId;
 
-    // Contenedor de cada fila
+    // Contenedor fila
     const wrapper = document.createElement("div");
     wrapper.classList.add("lawyer-wrapper");
     wrapper.style.display = "flex";
@@ -1224,13 +1276,13 @@ function addLawyerSelect(selectedId = null) {
     wrapper.style.gap = "10px";
     wrapper.style.marginBottom = "10px";
 
-    // Botón eliminar
+    // Botón eliminar (MISMAS CLASES)
     const removeBtn = document.createElement("button");
     removeBtn.type = "button";
     removeBtn.textContent = "Eliminar";
     removeBtn.classList.add("remove-lawyer", "btn-cancel");
 
-    // Añadir
+    // Insertar
     wrapper.appendChild(select);
     wrapper.appendChild(removeBtn);
     container.appendChild(wrapper);

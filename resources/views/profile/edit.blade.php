@@ -38,7 +38,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="descripcion" class="form-label">Descripción *</label>
+                            <label for="descripcion" class="form-label"> *</label>
                             <textarea class="form-control @error('descripcion') is-invalid @enderror" 
                                     id="descripcion" 
                                     name="descripcion" 
