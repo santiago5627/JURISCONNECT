@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Listado de Abogados</title>
+    <title>Listado de Procesos</title>
     <style>
         body {
             font-family: sans-serif;
@@ -30,7 +30,7 @@
 </head>
 
 <body>
-    <h2>Listado de Abogados</h2>
+    <h2>Listado de Procesos</h2>
     <table>
         <thead>
             <tr>

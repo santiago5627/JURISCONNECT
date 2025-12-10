@@ -42,6 +42,6 @@
         </tbody>
     </table>
     <!-- Incluir la paginación -->
-    @include('profile.partials.pagination', ['items' => $lawyers])
+    @include('profile.partials.pagination', ['items' => $assistants])
     
 </div>

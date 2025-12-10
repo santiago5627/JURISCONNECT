@@ -349,7 +349,7 @@
         <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
-                <div class="title-logo-container">
+                <div class="title-logo-container"> 
                     <h1 class="title">JustConnect SENA</h1>
                 </div>
                 <div class="logo-container">
@@ -447,9 +447,6 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/dash.js') }}"></script>
+    <script type="module" src="/resources/js/dash.js"></script>
     
-
-
-
 </x-app-layout>

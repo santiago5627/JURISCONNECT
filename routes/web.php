@@ -166,7 +166,7 @@ Route::prefix('asistente')->name('asistente.')->group(function () {
             ->name('export.pdf');
 
         Route::get('/export-excel', function () { 
-            return Excel::download(new AssistantExport, 'Procesos.xlsx'); 
+            return Excel::download(new AssistantExport, 'Asistentes.xlsx'); 
         })->name('export.excel');
         });
 });

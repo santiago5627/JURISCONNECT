@@ -21,16 +21,6 @@ const cancelEditBtn = document.getElementById("cancelEditBtn");
 
 /* ========= ALERTAS PERSONALIZADAS (VERSIÓN MEJORADA) ========= */
 
-/**
- * Función principal para mostrar alertas personalizadas
- * @param {string} type - Tipo de alerta: 'success', 'error', 'warning', 'info'
- * @param {string} title - Título de la alerta
- * @param {string} message - Mensaje de la alerta
- * @param {boolean} showCancel - Mostrar botón de cancelar
- * @param {string} confirmText - Texto del botón de confirmación
- * @param {string} cancelText - Texto del botón de cancelar
- * @returns {Promise<boolean>} - Retorna true si confirma, false si cancela
- */
 function showCustomAlert(
     type,
     title = "",
@@ -151,13 +141,6 @@ function showCustomAlert(
     });
 }
 
-/**
- * Función simplificada para mostrar alertas (compatible con código antiguo)
- * @param {string} type - Tipo de alerta
- * @param {string} title - Título
- * @param {string} message - Mensaje
- * @param {string|null} buttons - HTML de botones personalizados (opcional)
- */
 function showAlert(type, title, message, buttons = null) {
     // Si se proporcionan botones personalizados, usar la versión antigua
     if (buttons) {
@@ -470,10 +453,11 @@ function setupRealTimeValidation(fieldName, inputElement) {
                         inputElement.classList.remove("success");
                         showFieldError(
                             inputElement,
-                            `Este ${fieldName === "numeroDocumento" ||
+                            `Este ${
+                                fieldName === "numeroDocumento" ||
                                 fieldName === "numero_documento"
-                                ? "número de documento"
-                                : "correo"
+                                    ? "número de documento"
+                                    : "correo"
                             } ya está registrado`
                         );
                     } else {
@@ -760,22 +744,25 @@ function handleAjaxPagination() {
         document.querySelector("#assistants-section"),
         document.querySelector("#lawyersTableWrapper"),
         document.querySelector("#assistantsTableWrapper"),
-        
     ];
 
-    sections.forEach(section => {
+    sections.forEach((section) => {
         if (!section) return;
 
         section.addEventListener("click", function (e) {
             const link = e.target.closest(".pagination-btn.ajax-page");
             if (!link) return;
             e.preventDefault();
- 
+
             const url = link.getAttribute("href");
             if (!url || url === "#") return;
 
             // Buscar el contenedor de tabla (puede ser .table-container o .table-wrapper)
-            const container = section.querySelector(".table-container, .table-wrapper");
+            const container =
+                section.querySelector(".table-container") ||
+                section.querySelector(".table-wrapper") ||
+                section;
+
             if (container) {
                 container.style.opacity = "0.5";
                 container.style.pointerEvents = "none";
@@ -798,8 +785,10 @@ function handleAjaxPagination() {
                         // Reemplazar TODO el contenedor (tabla + paginación)
                         const newContainer = document.createElement("div");
                         newContainer.innerHTML = data.html;
-                        const newContent = newContainer.querySelector(".table-container, .table-wrapper");
-                        
+                        const newContent = newContainer.querySelector(
+                            ".table-container, .table-wrapper"
+                        );
+
                         if (container && newContent) {
                             container.replaceWith(newContent);
                         }
@@ -835,7 +824,6 @@ function handleAjaxPagination() {
 }
 
 // ...existing code...
-
 
 /* ========= EVENTOS GLOBALES (inicialización única) ========= */
 document.addEventListener("DOMContentLoaded", function () {
@@ -974,8 +962,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             "error",
                             "Error de Actualización",
                             "Error al actualizar: " +
-                            (error.message ||
-                                "Verifica que todos los campos estén correctos.")
+                                (error.message ||
+                                    "Verifica que todos los campos estén correctos.")
                         );
                 }
             } catch (err) {
@@ -1005,7 +993,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     "warning",
                     "Campos Incompletos",
                     "Por favor, completa todos los campos obligatorios:\n\n" +
-                    validationErrors.join("\n")
+                        validationErrors.join("\n")
                 );
                 return;
             }
@@ -1044,7 +1032,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             "error",
                             "Error al Crear",
                             "Error al guardar: " +
-                            (error.message || "Verifica los campos.")
+                                (error.message || "Verifica los campos.")
                         );
                 }
             } catch (err) {
@@ -1133,59 +1121,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // clic en la tarjeta de abogados
     lawyersCard.addEventListener("click", () => {
-        // cerrar la otra
         if (assistantsWrapper.style.display === "block") {
             slideToggle(assistantsWrapper);
         }
-        // abrir/cerrar esta
         slideToggle(lawyersWrapper);
     });
 
     // clic en la tarjeta de asistentes
     assistantsCard.addEventListener("click", () => {
-        // cerrar la otra
         if (lawyersWrapper.style.display === "block") {
             slideToggle(lawyersWrapper);
         }
-        // abrir/cerrar esta
         slideToggle(assistantsWrapper);
     });
 });
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const lawyerContainer = document.getElementById("lawyerSelectContainer");
-    const lawyerList = document.getElementById("lawyerList");
-    const addLawyerBtn = document.getElementById("addLawyerBtn");
-
-    const lawyerTemplate = document.querySelector(".lawyer-select");
-
-    function addLawyerSelect() {
-        const wrapper = document.createElement("div");
-        wrapper.style.display = "flex";
-        wrapper.style.gap = "10px";
-        wrapper.style.marginBottom = "8px";
-
-        const newSelect = lawyerTemplate.cloneNode(true);
-        newSelect.style.display = "block";
-        newSelect.name = "lawyers[]";
-
-        const deleteBtn = document.createElement("button");
-        deleteBtn.type = "button";
-        deleteBtn.textContent = "Eliminar";
-        deleteBtn.classList.add("btn-cancel");
-
-        deleteBtn.addEventListener("click", () => wrapper.remove());
-
-        wrapper.appendChild(newSelect);
-        wrapper.appendChild(deleteBtn);
-
-        lawyerList.appendChild(wrapper);
-    }
-
-    addLawyerBtn.addEventListener("click", addLawyerSelect);
-});
-
 
 const btnOpenAsistente = document.getElementById("btnOpenAsistente");
 const modalAsistente = document.getElementById("modalAsistente");
@@ -1215,109 +1164,114 @@ if (btnCancelAsistente) {
 }
 
 document.addEventListener("click", function (e) {
-
-    // EDITAR ASISTENTE
+    /* =============================
+       =    EDITAR ASISTENTE       =
+       ============================= */
     if (e.target.classList.contains("btn-edit-assistant")) {
-
         const btn = e.target;
-
         const id = btn.dataset.id;
 
-        // Llenar campos
+        // Llenar campos del formulario
         editAssistantNombre.value = btn.dataset.nombre;
         editAssistantApellido.value = btn.dataset.apellido;
         editAssistantTipoDocumento.value = btn.dataset.tipo_documento;
         editAssistantNumeroDocumento.value = btn.dataset.numero_documento;
         editAssistantCorreo.value = btn.dataset.correo;
-        editAssistantTelefono.value = btn.dataset.telefono || '';
+        editAssistantTelefono.value = btn.dataset.telefono || "";
 
-        // Ruta del formulario
+        // Ruta
         editAssistantForm.action = `/assistants/${id}`;
-
-        // Cargar abogados asignados
-        const container = document.getElementById("assignedLawyersContainer");
-        container.innerHTML = '';
-
-        let lawyers = JSON.parse(btn.dataset.lawyers || '[]');
-
-        lawyers.forEach(lawyerId => {
-            addLawyerSelect(lawyerId);
-        });
 
         // Mostrar modal
         editAssistantModal.style.display = "flex";
     }
 
-    // CERRAR MODAL
-    if (e.target.id === "closeEditAssistantModal" || e.target.id === "cancelEditBtn") {
+    /* =============================
+       =       CERRAR MODAL        =
+       ============================= */
+    if (
+        e.target.id === "closeEditAssistantModal" ||
+        e.target.id === "cancelEditBtn"
+    ) {
         editAssistantModal.style.display = "none";
     }
-
     // AGREGA SELECT DE ABOGADO
     if (e.target.id === "addLawyerBtn") {
         addLawyerSelect();
     }
-
 });
 
-// Función para crear select abogado
+/* ===========================================
+   =   FUNCIÓN AGREGAR SELECT DE ABOGADO (EDITAR)     =
+   =========================================== */
 function addLawyerSelect(selectedId = null) {
-
     const baseSelect = document.querySelector(".lawyer-select");
     const container = document.getElementById("assignedLawyersContainer");
 
+    // Clonar select
     const select = baseSelect.cloneNode(true);
     select.style.display = "block";
+    select.style.flex = "1";
     select.name = "lawyers[]";
 
-    if (selectedId) {
-        select.value = selectedId;
-    }
+    if (selectedId) select.value = selectedId;
 
-    // Botón eliminar abogado
+    // Contenedor de cada fila
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("lawyer-wrapper");
+    wrapper.style.display = "flex";
+    wrapper.style.alignItems = "center";
+    wrapper.style.gap = "10px";
+    wrapper.style.marginBottom = "10px";
+
+    // Botón eliminar
     const removeBtn = document.createElement("button");
     removeBtn.type = "button";
     removeBtn.textContent = "Eliminar";
-    removeBtn.onclick = () => {
-        select.parentElement.remove();
-    };
+    removeBtn.classList.add("remove-lawyer", "btn-cancel");
 
-    const wrapper = document.createElement("div");
+    // Añadir
     wrapper.appendChild(select);
     wrapper.appendChild(removeBtn);
-
     container.appendChild(wrapper);
 }
 
-document.querySelector('#form-update').addEventListener('submit', function (e) {
-    e.preventDefault(); // evitar que el formulario recargue la página
+/* ===========================================
+   =    ENVÍO AJAX DEL FORMULARIO UPDATE      =
+   =========================================== */
+document.querySelector("#form-update").addEventListener("submit", function (e) {
+    e.preventDefault();
 
-    let formData = new FormData(this);
+    let form = this;
+    let formData = new FormData(form);
 
-    fetch(this.action, {
-        method: 'POST',
-        body: formData,
+    fetch(form.action, {
+        method: "POST",
+        body: formData, // No agregar headers de tipo JSON !
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
+            "X-CSRF-TOKEN": document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content"),
+        },
     })
-        .then(res => res.json())
-        .then(data => {
+        .then((res) => res.json())
+        .then((data) => {
             if (data.success) {
-                // Mensaje pequeño tipo notificación
-                const msg = document.createElement('div');
+                const msg = document.createElement("div");
                 msg.innerText = data.message;
-                msg.classList.add('notification-success'); // puedes darle estilo en CSS
+                msg.classList.add("notification-success");
+
                 document.body.appendChild(msg);
-                setTimeout(() => msg.remove(), 2000); // se elimina solo después de 2s
+
+                setTimeout(() => msg.remove(), 2000);
+
+                editAssistantModal.style.display = "none";
             } else {
-                alert('Error: ' + data.message);
+                alert("Error: " + data.message);
             }
         })
-        .catch(err => console.log(err));
+        .catch((err) => console.error(err));
 });
-
-
 
 /* ========= Exponer funciones útiles globalmente (si las necesitas) ========= */
 window.showCustomAlert = showCustomAlert;

@@ -62,7 +62,7 @@
     </table>
                         <!-- Incluir la paginación -->
     <div id="assistantsPagination">
-        @include('profile.partials.pagination', ['items' => $lawyers])
+        @include('profile.partials.pagination', ['items' => $assistants])
     </div>
 </div>
 
@@ -83,3 +83,4 @@
 @endif  
 
 <script src="{{ asset('js/asistentes.js') }}"></script>
+<script type="module" src="/resources/js/main.js"></script>
