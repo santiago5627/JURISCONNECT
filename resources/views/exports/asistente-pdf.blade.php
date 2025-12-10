@@ -30,7 +30,7 @@
 </head>
 
 <body>
-    <h2>Listado de Abogados</h2>
+    <h2>Listado de Asistentes</h2>
     <table>
         <thead>
             <tr>
@@ -49,6 +49,7 @@
                 <td>{{ $assistant->apellido }}</td>
                 <td>{{ $assistant->correo }}</td>
                 <td>{{ $assistant->telefono }}</td>
+                <td>{{ $assistant->tipo_documento }}</td>
             </tr>
             @endforeach
         </tbody>
