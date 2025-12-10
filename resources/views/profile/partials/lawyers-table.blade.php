@@ -15,7 +15,6 @@
         <tbody id="tableBody">
             @foreach($lawyers ?? [] as $lawyer)
             <tr data-id="{{ $lawyer->id }}">
-                <!-- <td>{{ $lawyer->id }}</td> recuesrda borrar esto para la demostracion y para la version final o comentarlo -->
                 <td>{{ $lawyer->nombre }}</td>
                 <td>{{ $lawyer->apellido }}</td>
                 <td>{{ $lawyer->tipo_documento }}</td>
@@ -54,7 +53,50 @@
         </tbody>
     </table>
 
-    <!-- Incluir la paginación -->
     @include('profile.partials.pagination', ['items' => $lawyers])
-
 </div>
+
+
+<style>
+    .abogado-nombre {
+        font-size: inherit;
+        color: inherit;
+        font-weight: normal;
+        margin-left: 6px;
+    }
+</style>
+<script>
+document.getElementById('searchInput')?.addEventListener('input', function() {
+    let valor = this.value.trim().toLowerCase();
+    let cards = document.querySelectorAll('.process-card');
+
+    cards.forEach(card => {
+        let titulo = card.querySelector('.titulo-proceso');
+        let numero = titulo?.getAttribute('data-numero') ?? '';
+        let contenido = card.innerText.toLowerCase();
+
+        // Nombre abogado
+        let abogado = card.querySelector('.abogado-nombre')?.innerText.toLowerCase() ?? '';
+
+        // Especialidad abogado
+        let especialidad = card.querySelector('.abogado-especialidad')?.innerText.toLowerCase() ?? '';
+
+        if (valor === '') {
+            card.style.display = 'block';
+            return;
+        }
+
+        // Lógica de búsqueda
+        if (
+            numero.includes(valor) ||
+            contenido.includes(valor) ||
+            abogado.includes(valor) ||
+            especialidad.includes(valor)
+        ) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+</script>

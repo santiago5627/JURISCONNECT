@@ -167,33 +167,6 @@ function showSuccessAlert() {
 // ===== FUNCIONALIDAD DE BÚSQUEDA AJAX =====
 let searchTimeout;
 
-document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById("searchInput");
-        const searchBtn = document.getElementById("searchBtn");
-
-        if (searchInput) {
-            searchInput.addEventListener("input", function() {
-                clearTimeout(searchTimeout);
-                const searchTerm = this.value.trim();
-                searchTimeout = setTimeout(() => performSearch(searchTerm), 300);
-            });
-
-        searchInput.addEventListener("keypress", function(event) {
-            if (event.key === 'Enter') {
-                clearTimeout(searchTimeout);
-                performSearch(this.value.trim());
-                }
-            });
-        }
-
-        if (searchBtn) {
-            searchBtn.addEventListener("click", function() {
-            const searchTerm = document.getElementById("searchInput").value.trim();
-            performSearch(searchTerm);
-            });
-        }
-    });
-
 function performSearch(searchTerm) {
         const params = new URLSearchParams();
         if (searchTerm) params.append('search', searchTerm);

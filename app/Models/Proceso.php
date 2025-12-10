@@ -93,4 +93,6 @@ class Proceso extends Model
     {
         return $this->hasMany(ConceptoJuridico::class);
     }
+    
+    
 }

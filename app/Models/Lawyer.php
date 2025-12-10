@@ -9,7 +9,7 @@ class Lawyer extends Model
 {
     use HasFactory;
 
-    protected $table = 'lawyers'; // Ajusta según tu tabla
+    protected $table = 'lawyers';
 
     protected $fillable = [
         'nombre',
@@ -22,6 +22,20 @@ class Lawyer extends Model
         'user_id',
     ];
 
-    // Si usas timestamps
     public $timestamps = true;
+
+    public function assistants()
+    {
+        return $this->belongsToMany(
+            Assistant::class,
+            'assistant_lawyer',
+            'lawyer_id',
+            'assistant_id'
+        );
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

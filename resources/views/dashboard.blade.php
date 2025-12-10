@@ -284,7 +284,7 @@
                         <div class="form-group">
                             <label>Abogados asignados:</label>
                             <div id="assignedLawyersContainer"></div>
-                            <button type="button" id="addLawyerBtn">+ Agregar abogado</button>
+                            <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">+ Agregar abogado</button>
                         </div>
 
                         <div class="form-actions">
@@ -418,8 +418,8 @@
 
                     <div class="action-buttons">
                         <button class="btn-primary" id="btnOpenAsistente">CREAR NUEVO ASISTENTE</button>
-                        <a href="{{ route('procesos.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
-                        <a href="{{ route('procesos.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
+                        <a href="{{ route('asistente.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
+                        <a href="{{ route('asistente.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
                     @include('profile.partials.assistants-table', ['assistants' => $assistants])
 
