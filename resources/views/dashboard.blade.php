@@ -160,11 +160,12 @@
             </div>
         </div>
 
+
         <!-- Modal para editar abogado -->
         <div class="modal" id="editLawyerModal">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Editar Abogado</h2>
+                    <h2>Editar Abogada</h2>
                     <button class="modal-close" id="closeEditModal">&times;</button>
                 </div>
 
@@ -285,12 +286,11 @@
                             @endforeach
                         </select>
 
-                        <div id="assignedLawyersContainer">
+                        <div class="form-group">
                             <label>Abogados asignados:</label>
                             <div id="assignedLawyersContainer"></div>
                             <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">+ Agregar abogado</button>
                         </div>
-                        
 
                         <div class="form-actions">
                             <button type="button" class="btn-cancel" id="cancelEditBtn">Cancelar</button>
@@ -398,7 +398,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- 🔽🔽🔽 TABLA DE ABOGADOS OCULTA INICIALMENTE 🔽🔽🔽 -->
+                    <!-- 🔽🔽🔽 TABLA OCULTA INICIALMENTE 🔽🔽🔽 -->
                     <div id="lawyersTableWrapper" style="display: none; margin-top: 30px;">
                         <h3>Listado de Abogados</h3>
                         @include('profile.partials.lawyers-table-simple', ['lawyers' => $lawyers])
@@ -410,16 +410,15 @@
                         @include('profile.partials.assistants-table-simple', ['assistants' => $assistants])
                     </div>
                 </div>
-
-            <!-- SECCIÓN GESTIÓN DE ASISTENTES JURÍDICOS -->
-                        <div class="section-content" id="assistants-section">
+                <!-- SECCIÓN GESTIÓN DE ASISTENTES JURÍDICOS -->
+                <div class="section-content" id="assistants-section">
                     <div class="section-header">
                         <h2>Gestión de Asistentes Jurídicos</h2>
                         <p>Administrar el registro de asistentes jurídicos del sistema</p>
                     </div>
 
                     <div class="search-section">
-                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="assistantSearchInput">
+                       <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
                     </div>
 
                     <div class="action-buttons">
@@ -428,6 +427,7 @@
                         <a href="{{ route('asistente.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
                     @include('profile.partials.assistants-table', ['assistants' => $assistants])
+
                 </div>
 
                 <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
@@ -442,17 +442,22 @@
                     </div>
 
                     <div class="action-buttons">
-                        <button class="btn-primary" id="createBtn">CREAR NUEVO USUARIO</button>
+                        <button class="btn-primary" id="createBtn">CREAR NUEVO ABOGADO</button>
                         <a href="{{ route('lawyers.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
                         <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
+
                     @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
+
                 </div>
+
+            </div>
+
+        </div>
+    </div>
+    </div>
 
     <!-- Scripts -->
     <script src="{{ asset('js/dash.js') }}"></script>
-    
-
-
 
 </x-app-layout>
