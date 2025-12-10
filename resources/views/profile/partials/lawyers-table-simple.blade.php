@@ -24,7 +24,7 @@
             @endforeach
         </tbody>
     </table>
-    
+
         <!-- Incluir la paginación -->
 @include('profile.partials.pagination', [
     'items' => $lawyersSimple,
