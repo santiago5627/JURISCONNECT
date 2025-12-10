@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Listado de Abogados</title>
+    <title>Listado de Procesos</title>
     <style>
         body {
             font-family: sans-serif;

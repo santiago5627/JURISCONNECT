@@ -148,10 +148,10 @@
                         </div>
                     </div>
 
-                    <!-- Descripción -->
+                    <!--  -->
                     <div class="form-group full-width">
                         <label for="descripcion" class="form-label">
-                            Descripción <span class="required">*</span>
+                             <span class="required">*</span> 
                         </label>
                         <textarea class="form-textarea @error('descripcion') is-invalid @enderror"
                             id="descripcion"

@@ -44,7 +44,7 @@
             <!-- Mensaje de éxito (ejemplo) -->
             <div class="success-message" style="display: none;">
                 <svg class="success-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
                 </svg>
                 <p class="success-text">Proceso creado exitosamente</p>
             </div>
@@ -60,7 +60,7 @@
                     </div>
 
                     <div class="action-buttons">
-                        <a href="{{ route('procesos.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a> 
+                        <a href="{{ route('procesos.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
                         <a href="{{ route('procesos.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
 
@@ -72,11 +72,18 @@
                             Volver al Dashboard
                         </a>
 
+                        @if(Auth::user()->role_id == 2)
                         <a href="{{ route('procesos.create') }}" class="btn btn-primary">
-                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
+                            <svg class="btn-icon" ...></svg>
                             Nuevo Proceso
+                        </a>
+                        @else
+                        <button class="btn btn-primary" disabled style="background: gray; cursor:not-allowed;">
+                            No tienes permisos
+                        </button>
+                        @endif
+
+
                         </a>
                     </div>
                 </div>
@@ -170,6 +177,8 @@
             }
         }
 
+        // Función para ver los datos del proceso en un modal
+
         function openProcessModal(id) {
             document.getElementById('viewProcessModal').style.display = 'flex';
             const body = document.getElementById('processModalBody');
@@ -185,7 +194,10 @@
                         <p><strong>Tipo:</strong> ${data.tipo_proceso}</p>
                         <p><strong>Demandante:</strong> ${data.demandante}</p>
                         <p><strong>Demandado:</strong> ${data.demandado}</p>
-                        <p><strong>Descripción:</strong> ${data.descripcion ?? 'Sin descripción'}</p>
+                        <p style="pre-wrap; word-wrap: break-word;">
+           <strong>Descripción:</strong> ${data.descripcion ?? 'Sin descripción'}
+</p>
+
                     `;
                 })
                 .catch(() => {

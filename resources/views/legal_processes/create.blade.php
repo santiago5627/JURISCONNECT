@@ -120,19 +120,19 @@
                         </div>
                     </div>
                 </div>
-                <!-- Descripción -->
+                <!--  -->
                 <div class="field-group">
                     <label for="descripcion" class="field-label">
                         <span class="label-content">
                             <svg class="label-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
-                            Descripción del caso
+                            del caso
                         </span>
                     </label>
                     <textarea name="descripcion" id="descripcion" class="form-textarea"
                         placeholder="Describa detalladamente el caso, los hechos relevantes y las pretensiones..."></textarea>
-                    <p class="help-text">Proporcione una descripción clara y detallada del proceso judicial</p>
+                    <p class="help-text">Proporcione una clara y detallada del proceso judicial</p>
                 </div>
                 <!-- Documentos -->
                 <div class="document-section">
@@ -154,21 +154,21 @@
                         <p class="file-help">Formatos permitidos: PDF, DOC, DOCX. Tamaño máximo: 10MB</p>
                     </div>
                 </div>
-                                <!-- Botones -->
-                    <div class="button-container">
-                        <a href="{{ route('dashboard.abogado') }}" class="btn btn-cancel">
-                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Botones -->
+                <div class="button-container">
+                    <a href="{{ route('dashboard.abogado') }}" class="btn btn-cancel">
+                        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                            </svg>
-                            Volver
-                        </a>
-                        <button type="submit" class="btn btn-primary">
-                            <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Crear Proceso Judicial
-                        </button>
-                    </div>
+                        </svg>
+                        Volver
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <svg class="btn-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>
+                        Crear Proceso Judicial
+                    </button>
+                </div>
                 </form>
 
             </div>
@@ -179,237 +179,239 @@
 </html>
 
 <script>
-// Envío del formulario con AJAX después de validación
-function submitFormularioAjax() {
-    const formData = new FormData(document.getElementById('formProceso'));
+    // Envío del formulario con AJAX después de validación
+    function submitFormularioAjax() {
+        const formData = new FormData(document.getElementById('formProceso'));
 
-    fetch('{{ route("procesos.store") }}', {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            showAlert('success', '¡Éxito!', 'Proceso creado exitosamente. Redirigiendo...');
-            setTimeout(() => {
-                window.location.href = '{{ route("dashboard.abogado") }}';
-            }, 1500);
-        } else {
-            if (result.errors) {
-                let errores = [];
-                for (let campo in result.errors) {
-                    errores.push(result.errors[campo].join(', '));
+        fetch('{{ route("procesos.store") }}', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    showAlert('success', '¡Éxito!', 'Proceso creado exitosamente. Redirigiendo...');
+                    setTimeout(() => {
+                        window.location.href = '{{ route("dashboard.abogado") }}';
+                    }, 1500);
+                } else {
+                    if (result.errors) {
+                        let errores = [];
+                        for (let campo in result.errors) {
+                            errores.push(result.errors[campo].join(', '));
+                        }
+                        showAlert('error', 'Errores de validación', errores.join('\n'));
+                    } else {
+                        showAlert('error', 'Error', result.message || 'Error desconocido');
+                    }
                 }
-                showAlert('error', 'Errores de validación', errores.join('\n'));
-            } else {
-                showAlert('error', 'Error', result.message || 'Error desconocido');
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showAlert('error', 'Error de conexión', 'No se pudo conectar con el servidor');
-    });
-}
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showAlert('error', 'Error de conexión', 'No se pudo conectar con el servidor');
+            });
+    }
 
     // Función para mostrar alertas personalizadas
-        function showAlert(type, title, message, buttons = null) {
-            const overlay = document.getElementById('alertOverlay');
-            const alert = document.getElementById('customAlert');
-            const icon = document.getElementById('alertIcon');
-            const alertTitle = document.getElementById('alertTitle');
-            const alertMessage = document.getElementById('alertMessage');
-            const alertButtons = document.getElementById('alertButtons');
+    function showAlert(type, title, message, buttons = null) {
+        const overlay = document.getElementById('alertOverlay');
+        const alert = document.getElementById('customAlert');
+        const icon = document.getElementById('alertIcon');
+        const alertTitle = document.getElementById('alertTitle');
+        const alertMessage = document.getElementById('alertMessage');
+        const alertButtons = document.getElementById('alertButtons');
 
-            // Remover clases anteriores
-            alert.className = 'custom-alert';
-            alert.classList.add(`alert-${type}`);
+        // Remover clases anteriores
+        alert.className = 'custom-alert';
+        alert.classList.add(`alert-${type}`);
 
-            // Configurar icono según el tipo
-            const icons = {
-                success: '✓',
-                error: '✕',
-                warning: '⚠',
-                info: 'ℹ'
-            };
-            icon.textContent = icons[type] || '✓';
+        // Configurar icono según el tipo
+        const icons = {
+            success: '✓',
+            error: '✕',
+            warning: '⚠',
+            info: 'ℹ'
+        };
+        icon.textContent = icons[type] || '✓';
 
-            // Configurar contenido
-            alertTitle.textContent = title;
-            alertMessage.textContent = message;
+        // Configurar contenido
+        alertTitle.textContent = title;
+        alertMessage.textContent = message;
 
-            // Configurar botones
-            if (buttons) {
-                alertButtons.innerHTML = buttons;
-            } else {
-                alertButtons.innerHTML = `<button class="alert-button ${type}" onclick="closeAlert()">Aceptar</button>`;
-            }
-
-            // Mostrar overlay
-            overlay.classList.add('show');
+        // Configurar botones
+        if (buttons) {
+            alertButtons.innerHTML = buttons;
+        } else {
+            alertButtons.innerHTML = `<button class="alert-button ${type}" onclick="closeAlert()">Aceptar</button>`;
         }
 
-        // Función para cerrar alerta
-        function closeAlert() {
-            const overlay = document.getElementById('alertOverlay');
-            overlay.classList.remove('show');
-        }
+        // Mostrar overlay
+        overlay.classList.add('show');
+    }
 
-        // Cerrar con ESC o click fuera
-        document.getElementById('alertOverlay').addEventListener('click', function(e) {
-            if (e.target === this) closeAlert();
+    // Función para cerrar alerta
+    function closeAlert() {
+        const overlay = document.getElementById('alertOverlay');
+        overlay.classList.remove('show');
+    }
+
+    // Cerrar con ESC o click fuera
+    document.getElementById('alertOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeAlert();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeAlert();
+    });
+
+    // Validación del formulario
+    function validarFormulario(e) {
+        e.preventDefault();
+
+        // Limpiar errores previos
+        document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
+        document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(el => {
+            el.classList.remove('error', 'success');
         });
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeAlert();
+        let errores = [];
+        let valido = true;
+
+        // Validar tipo de proceso
+        const tipoProceso = document.getElementById('tipo_proceso');
+        if (!tipoProceso.value) {
+            errores.push('Debe seleccionar un tipo de proceso');
+            tipoProceso.classList.add('error');
+            document.getElementById('error_tipo_proceso').textContent = 'Campo requerido';
+            valido = false;
+        } else {
+            tipoProceso.classList.add('success');
+        }
+
+        // Validar número de radicado
+        const numeroRadicado = document.getElementById('numero_radicado');
+        if (!numeroRadicado.value.trim()) {
+            errores.push('El número de radicado es obligatorio');
+            numeroRadicado.classList.add('error');
+            document.getElementById('error_numero_radicado').textContent = 'Campo requerido';
+            valido = false;
+        } else {
+            numeroRadicado.classList.add('success');
+        }
+
+        // Validar demandante
+        const demandante = document.getElementById('demandante');
+        if (!demandante.value.trim()) {
+            errores.push('El nombre del demandante es obligatorio');
+            demandante.classList.add('error');
+            document.getElementById('error_demandante').textContent = 'Campo requerido';
+            valido = false;
+        } else {
+            demandante.classList.add('success');
+        }
+
+        // Validar demandado
+        const demandado = document.getElementById('demandado');
+        if (!demandado.value.trim()) {
+            errores.push('El nombre del demandado es obligatorio');
+            demandado.classList.add('error');
+            document.getElementById('error_demandado').textContent = 'Campo requerido';
+            valido = false;
+        } else {
+            demandado.classList.add('success');
+        }
+
+        // Validar 
+        const descripcion = document.getElementById('descripcion');
+        if (!descripcion.value.trim()) {
+            errores.push('La  del caso es obligatoria');
+            descripcion.classList.add('error');
+            document.getElementById('error_descripcion').textContent = 'Campo requerido';
+            valido = false;
+        } else if (descripcion.value.trim().length < 20) {
+            errores.push('La  debe tener al menos 20 caracteres');
+            descripcion.classList.add('error');
+            document.getElementById('error_descripcion').textContent = 'Mínimo 20 caracteres';
+            valido = false;
+        } else {
+            descripcion.classList.add('success');
+        }
+
+        // Validar documento (opcional pero validar formato si existe)
+        const documento = document.getElementById('documento');
+        if (documento.files.length > 0) {
+            const file = documento.files[0];
+            const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            const maxSize = 10 * 1024 * 1024; // 10MB
+
+            if (!allowedTypes.includes(file.type)) {
+                errores.push('El documento debe ser PDF, DOC o DOCX');
+                documento.classList.add('error');
+                document.getElementById('error_documento').textContent = 'Formato no permitido';
+                valido = false;
+            } else if (file.size > maxSize) {
+                errores.push('El documento no debe superar 10MB');
+                documento.classList.add('error');
+                document.getElementById('error_documento').textContent = 'Archivo muy grande';
+                valido = false;
+            } else {
+                documento.classList.add('success');
+            }
+        }
+
+        // Mostrar resultado de la validación
+        if (!valido) {
+            let mensajeErrores = errores.length > 1 ?
+                `Se encontraron ${errores.length} errores:\n\n${errores.map((e, i) => `${i + 1}. ${e}`).join('\n')}` :
+                errores[0];
+
+            showAlert('error', '¡Error de Validación!', mensajeErrores);
+
+            // Scroll al primer error
+            const primerError = document.querySelector('.error');
+            if (primerError) {
+                primerError.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+        } else {
+            // Formulario válido - Enviar directamente
+            enviarFormulario();
+        }
+
+        return false;
+    }
+
+    // Función para enviar el formulario
+    function enviarFormulario() {
+        submitFormularioAjax();
+    }
+
+    // Asignar evento al formulario
+    document.getElementById('formProceso').addEventListener('submit', validarFormulario);
+
+    // Limpiar errores al escribir
+    document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(input => {
+        input.addEventListener('input', function() {
+            this.classList.remove('error');
+            const errorSpan = document.getElementById('error_' + this.id);
+            if (errorSpan) {
+                errorSpan.textContent = '';
+            }
         });
+    });
 
-        // Validación del formulario
-        function validarFormulario(e) {
-            e.preventDefault();
-            
-            // Limpiar errores previos
-            document.querySelectorAll('.field-error').forEach(el => el.textContent = '');
-            document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(el => {
-                el.classList.remove('error', 'success');
-            });
-
-            let errores = [];
-            let valido = true;
-
-            // Validar tipo de proceso
-            const tipoProceso = document.getElementById('tipo_proceso');
-            if (!tipoProceso.value) {
-                errores.push('Debe seleccionar un tipo de proceso');
-                tipoProceso.classList.add('error');
-                document.getElementById('error_tipo_proceso').textContent = 'Campo requerido';
-                valido = false;
-            } else {
-                tipoProceso.classList.add('success');
-            }
-
-            // Validar número de radicado
-            const numeroRadicado = document.getElementById('numero_radicado');
-            if (!numeroRadicado.value.trim()) {
-                errores.push('El número de radicado es obligatorio');
-                numeroRadicado.classList.add('error');
-                document.getElementById('error_numero_radicado').textContent = 'Campo requerido';
-                valido = false;
-            } else {
-                numeroRadicado.classList.add('success');
-            }
-
-            // Validar demandante
-            const demandante = document.getElementById('demandante');
-            if (!demandante.value.trim()) {
-                errores.push('El nombre del demandante es obligatorio');
-                demandante.classList.add('error');
-                document.getElementById('error_demandante').textContent = 'Campo requerido';
-                valido = false;
-            } else {
-                demandante.classList.add('success');
-            }
-
-            // Validar demandado
-            const demandado = document.getElementById('demandado');
-            if (!demandado.value.trim()) {
-                errores.push('El nombre del demandado es obligatorio');
-                demandado.classList.add('error');
-                document.getElementById('error_demandado').textContent = 'Campo requerido';
-                valido = false;
-            } else {
-                demandado.classList.add('success');
-            }
-
-            // Validar descripción
-            const descripcion = document.getElementById('descripcion');
-            if (!descripcion.value.trim()) {
-                errores.push('La descripción del caso es obligatoria');
-                descripcion.classList.add('error');
-                document.getElementById('error_descripcion').textContent = 'Campo requerido';
-                valido = false;
-            } else if (descripcion.value.trim().length < 20) {
-                errores.push('La descripción debe tener al menos 20 caracteres');
-                descripcion.classList.add('error');
-                document.getElementById('error_descripcion').textContent = 'Mínimo 20 caracteres';
-                valido = false;
-            } else {
-                descripcion.classList.add('success');
-            }
-
-            // Validar documento (opcional pero validar formato si existe)
-            const documento = document.getElementById('documento');
-            if (documento.files.length > 0) {
-                const file = documento.files[0];
-                const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-                const maxSize = 10 * 1024 * 1024; // 10MB
-
-                if (!allowedTypes.includes(file.type)) {
-                    errores.push('El documento debe ser PDF, DOC o DOCX');
-                    documento.classList.add('error');
-                    document.getElementById('error_documento').textContent = 'Formato no permitido';
-                    valido = false;
-                } else if (file.size > maxSize) {
-                    errores.push('El documento no debe superar 10MB');
-                    documento.classList.add('error');
-                    document.getElementById('error_documento').textContent = 'Archivo muy grande';
-                    valido = false;
-                } else {
-                    documento.classList.add('success');
-                }
-            }
-
-            // Mostrar resultado de la validación
-            if (!valido) {
-                let mensajeErrores = errores.length > 1 
-                    ? `Se encontraron ${errores.length} errores:\n\n${errores.map((e, i) => `${i + 1}. ${e}`).join('\n')}`
-                    : errores[0];
-
-                showAlert('error', '¡Error de Validación!', mensajeErrores);
-                
-                // Scroll al primer error
-                const primerError = document.querySelector('.error');
-                if (primerError) {
-                    primerError.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            } else {
-                // Formulario válido - Enviar directamente
-                enviarFormulario();
-            }
-
-            return false;
-        }
-
-        // Función para enviar el formulario
-        function enviarFormulario() {
-            submitFormularioAjax();
-        }
-
-        // Asignar evento al formulario
-        document.getElementById('formProceso').addEventListener('submit', validarFormulario);
-
-        // Limpiar errores al escribir
-        document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(input => {
-            input.addEventListener('input', function() {
-                this.classList.remove('error');
-                const errorSpan = document.getElementById('error_' + this.id);
-                if (errorSpan) {
-                    errorSpan.textContent = '';
-                }
-            });
-        });
-
-        // Demo: Botones para probar las alertas    
-        function testAlerts() {
-            console.log('Alertas disponibles:');
-            console.log('1. showAlert("success", "Éxito", "Operación completada")');
-            console.log('2. showAlert("error", "Error", "Algo salió mal")');
-            console.log('3. showAlert("warning", "Advertencia", "Tenga cuidado")');
-            console.log('4. showAlert("info", "Información", "Datos importantes")');
-        }
-        
+    // Demo: Botones para probar las alertas    
+    function testAlerts() {
+        console.log('Alertas disponibles:');
+        console.log('1. showAlert("success", "Éxito", "Operación completada")');
+        console.log('2. showAlert("error", "Error", "Algo salió mal")');
+        console.log('3. showAlert("warning", "Advertencia", "Tenga cuidado")');
+        console.log('4. showAlert("info", "Información", "Datos importantes")');
+    }
 </script>

@@ -98,46 +98,50 @@ class ConceptoController extends Controller
     /**
  * Show the form for creating a new resource
  */
-public function create(Request $request) 
+public function create(Request $request)
 {
-    $query = Proceso::whereIn('estado', [
-                'Radicado',
-                'Pendiente', 
-                'Primera instancia', 
-                'En curso', 
-                'Finalizado',
-                'En audiencia',
-                'Pendiente fallo', 
-                'Favorable primera', 
-                'Desfavorable primera', 
-                'En apelacion', 
-                'Conciliacion pendiente', 
-                'Conciliado',
-                'Sentencia ejecutoriada', 
-                'En proceso pago', 
-                'Terminado'
-            ]);
+    $query = Proceso::query();
 
-    // Búsqueda
+    // --- Si el usuario es abogado (role_id = 2) ---
+    if (Auth::user()->role_id == 2) {
+
+        // buscar lawyer por user_id
+        $lawyer = \App\Models\Lawyer::where('user_id', Auth::id())->first();
+
+        if ($lawyer) {
+            $query->where('lawyer_id', $lawyer->id);
+        }
+    }
+
+    // --- Si el usuario es asistente (role_id = 3) ---
+    if (Auth::user()->role_id == 3) {
+
+        $assistant = Auth::user()->assistant;
+
+        if ($assistant) {
+            $lawyerIds = $assistant->lawyers()->pluck('lawyer_id');
+            $query->whereIn('lawyer_id', $lawyerIds);
+        }
+    }
+
+    // --- BÚSQUEDA ---
     if ($request->has('search') && $request->get('search')) {
         $search = $request->get('search');
-        $query->where(function($q) use ($search) {
-            $q->where('id', 'LIKE', '%' . $search . '%')
-            ->orWhere('numero_radicado', 'LIKE', '%' . $search . '%')
-            ->orWhere('demandante', 'LIKE', '%' . $search . '%')
-            ->orWhere('demandado', 'LIKE', '%' . $search . '%')
-            ->orWhere('tipo_proceso', 'LIKE', '%' . $search . '%')
-            ->orWhere('created_at', 'LIKE', '%' . $search . '%');
+
+        $query->where(function ($q) use ($search) {
+            $q->where('numero_radicado', 'ILIKE', "%$search%")
+                ->orWhere('demandante', 'ILIKE', "%$search%")
+                ->orWhere('demandado', 'ILIKE', "%$search%")
+                ->orWhere('tipo_proceso', 'ILIKE', "%$search%")
+                ->orWhere('estado', 'ILIKE', "%$search%");
         });
     }
 
-    $procesos = Proceso::with('conceptos')
-    ->orderBy('created_at', 'desc')
-    ->get();
+    // Obtener procesos filtrados
+    $procesos = $query->orderBy('id', 'asc')->get();
 
-    // Respuesta AJAX
+    // --- AJAX ---
     if ($request->ajax() || $request->get('ajax')) {
-        $processes = $procesos; // Renombrar para la vista parcial
         $html = view('profile.partials.process-card', ['procesos' => $procesos])->render();
         return response()->json([
             'success' => true,
@@ -146,8 +150,9 @@ public function create(Request $request)
         ]);
     }
 
-    return view('legal_processes.showConceptos', compact('procesos')); 
+    return view('legal_processes.showConceptos', compact('procesos'));
 }
+
 
     /**
      * Guardar el concepto para un proceso específico

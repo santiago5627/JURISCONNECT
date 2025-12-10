@@ -38,28 +38,22 @@ class User extends Authenticatable
     }
 
     public function role()
-{
-    return $this->belongsTo(Role::class, 'role_id');
-}
-public function procesosAsignados()
-{
-    return $this->hasMany(Proceso::class, 'lawyer_id');
-}
-
-
-    // ⭐ Relación necesaria para que funcione el seeder
-    public function lawyers()
     {
-        return $this->belongsToMany(
-            \App\Models\Lawyer::class,
-            'assistant_lawyer',
-            'assistant_id',
-            'lawyer_id'
-        );
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+    public function procesosAsignados()
+    {
+        return $this->hasMany(Proceso::class, 'lawyer_id');
+    }
+
+
+    public function lawyer()
+    {
+        return $this->hasOne(Lawyer::class, 'user_id');
     }
 
     public function assistant()
     {
-        return $this->hasOne(Assistant::class);
+        return $this->hasOne(Assistant::class, 'user_id');
     }
 }

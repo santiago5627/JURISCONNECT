@@ -1,6 +1,5 @@
 <x-app-layout>
-    <x-slot name="header">
-    </x-slot>
+    <x-slot name="header"></x-slot>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -13,28 +12,31 @@
 
         <div class="overlay" id="overlay"></div>
 
+        <!-- ===== SIDEBAR ===== -->
         <aside class="sidebar" id="sidebar">
             <div class="profile">
-                <!-- Input file oculto para la foto de perfil -->
+
                 <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
 
-                <!-- Indicador de carga (oculto por defecto) -->
-                <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+                <div id="loadingIndicator" 
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                    background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
                     Subiendo...
                 </div>
 
-                <!-- Contenedor de la foto de perfil -->
-                <div class="profile-pic profile-pic-clickable" onclick="document.getElementById('fileInput').click();" title="Haz clic para cambiar tu foto">
+                <div class="profile-pic profile-pic-clickable"
+                    onclick="document.getElementById('fileInput').click();" 
+                    title="Haz clic para cambiar tu foto">
                     <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}"
                         id="profileImage"
                         alt="Foto de perfil">
                 </div>
+
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
             </div>
 
-            <nav class="nav-menu">
-            </nav>
+            <nav class="nav-menu"></nav>
 
             <div class="sidebar-footer">
                 <div class="sena-logo">
@@ -49,46 +51,83 @@
             </div>
         </aside>
 
+        <!-- ===== MAIN CONTENT ===== -->
         <main class="main-content" id="mainContent">
+
+            @php
+                $role = Auth::user()->role_id;
+                $isAbogado = $role == 2;
+                $isAsistente = $role == 3;
+            @endphp
+
             <header class="header">
                 <div class="header-left">
                     <button class="hamburger" id="hamburgerBtn">☰</button>
-                    <h1>Panel del Abogado</h1>
+
+                    <!-- TÍTULO CAMBIANTE -->
+                    <h1>
+                        @if($isAbogado)
+                            Panel del Abogado
+                        @elseif($isAsistente)
+                            Panel del Asistente Jurídico
+                        @else
+                            Panel del Usuario
+                        @endif
+                    </h1>
                 </div>
+
                 <img src="{{ asset('img/LogoSena_Verde.png') }}" alt="Logo Sena Verde">
             </header>
 
+            <!-- MENSAJE DE BIENVENIDA DINÁMICO -->
             <div class="w-full text-center px-4 mt-4 md:mt-10">
                 <p class="text-gray-700 text-lg md:text-xl font-medium leading-snug">
                     Bienvenido, <span class="font-semibold text-green-700">{{ auth()->user()->name }}</span>.
-                    Gestiona tus procesos y conceptos jurídicos desde aquí.
+                    @if($isAbogado)
+                        Gestiona tus procesos y conceptos jurídicos desde aquí.
+                    @elseif($isAsistente)
+                        Apoya la gestión de procesos y actividades jurídicas asignadas.
+                    @else
+                        Bienvenido al sistema jurídico.
+                    @endif
                 </p>
             </div>
 
-
+            <!-- ===== CARDS ===== -->
             <div class="cards-container">
+
+                <!-- Registrar Proceso (solo abogado) -->
                 <div class="dashboard-card">
                     <div class="card-icon">⚖️</div>
                     <h3>Registrar Proceso</h3>
-                    <p>Inicia un nuevo expediente jurídico y asígnale los detalles correspondientes en el sistema.</p>
-                    <a href="{{ route('legal_processes.create') }}">Registrar</a>
+                    <p>Inicia un nuevo expediente jurídico y asígnale los detalles correspondientes.</p>
+
+                    @if($isAbogado)
+                        <a href="{{ route('legal_processes.create') }}">Registrar</a>
+                    @else
+                        <span style="color: red; font-weight:bold;">No tienes permisos</span>
+                    @endif
                 </div>
 
+                <!-- Mis Procesos -->
                 <div class="dashboard-card">
                     <div class="card-icon">📂</div>
                     <h3>Mis Procesos</h3>
-                    <p>Consulta, actualiza y da seguimiento a todos los procesos jurídicos que tienes asignados.</p>
+                    <p>Consulta, actualiza y da seguimiento a los procesos asignados.</p>
                     <a href="{{ route('mis.procesos') }}">Ver Procesos</a>
                 </div>
 
+                <!-- Conceptos Jurídicos -->
                 <div class="dashboard-card">
                     <div class="card-icon">✍️</div>
                     <h3>Conceptos Jurídicos</h3>
-                    <p>Emite, clasifica y gestiona los conceptos jurídicos para mantener un registro organizado.</p>
+                    <p>Gestiona conceptos jurídicos de manera organizada.</p>
                     <a href="{{ route('conceptos.create') }}">Ver Conceptos</a>
                 </div>
+
             </div>
+        </main>
+
     </div>
-    </main>
-    </div>
+
 </x-app-layout>
