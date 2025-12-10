@@ -39,27 +39,47 @@ class AdminController extends Controller
             }
 
             // Obtener abogados paginados
-            $lawyers = $query->paginate(10);
+            $lawyers = $query->paginate(10, ['*'], 'lawyersPage');
 
             // TABLA PEQUEÑA (mostrar todos)
-            $lawyersSimple = Lawyer::paginate(10);
+            $lawyersSimple = Lawyer::paginate(10, ['*'], 'lawyersSimplePage');
+
+            $assistants = Assistant::with('lawyers')->paginate(10, ['*'], 'assistantsPage');
+            $assistantsSimple = Assistant::with('lawyers')->paginate(10, ['*'], 'assistantsSimplePage');
 
             $abogados = Lawyer::all();
 
-            // Mantener parámetros de búsqueda en la paginación
-            $lawyers->appends($request->query());
 
-            // Si es una petición AJAX, devolver solo la vista parcial
+            // Mantener parámetros de búsqueda en la paginación
+            $lawyers->appends(['search' => $searchTerm]);
+            $assistants->appends(['search' => $searchTerm]);
+            $lawyersSimple->appends(['search' => $searchTerm]);
+            $assistantsSimple->appends(['search' => $searchTerm]);
+
+            // Si es una petición AJAX, devolver solo la vista parcial que corresponda
             if ($request->ajax()) {
-                $html = view('profile.partials.lawyers-table', compact('lawyers'))->render();
+
+                if ($request->has('lawyersPage')) {
+                    $html = view('profile.partials.lawyers-table', [
+                        'lawyers' => $lawyers
+                    ])->render();
+                } elseif ($request->has('lawyersSimplePage')) {
+                    $html = view('profile.partials.lawyers-table-simple', [
+                        'lawyersSimple' => $lawyersSimple
+                    ])->render();
+                } elseif ($request->has('assistantsPage')) {
+                    $html = view('profile.partials.assistants-table', [
+                        'assistants' => $assistants
+                    ])->render();
+                } elseif ($request->has('assistantsSimplePage')) {
+                    $html = view('profile.partials.assistants-table-simple', [
+                        'assistantsSimple' => $assistantsSimple
+                    ])->render();
+                }
 
                 return response()->json([
                     'html' => $html,
-                    'success' => true,
-                    'total' => $lawyers->total(),
-                    'current_page' => $lawyers->currentPage(),
-                    'last_page' => $lawyers->lastPage(),
-                    'search_term' => $searchTerm
+                    'success' => true
                 ]);
             }
 
@@ -69,9 +89,6 @@ class AdminController extends Controller
             $cases_count = Proceso::count();
 
             $totalAsistentes = Assistant::count();
-
-            $assistants = Assistant::with('lawyers')->paginate(10); // tabla principal paginada
-            $assistantsSimple = Assistant::with('lawyers')->get(); // tabla pequeña (si la necesitas)
 
 
             // Para peticiones normales, devolver la vista completa

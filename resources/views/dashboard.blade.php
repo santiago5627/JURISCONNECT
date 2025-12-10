@@ -284,7 +284,6 @@
                             <label>Abogados asignados:</label>
                             <div id="assignedLawyersContainer"></div>
                             <button type="button" id="addLawyerBtn">+ Agregar abogado</button>
-                            <button type="button" class="btn-cancel">Eliminar</button>
                         </div>
                         
 
@@ -406,27 +405,6 @@
                         @include('profile.partials.assistants-table-simple', ['assistants' => $assistants])
                     </div>
                 </div>
-                
-                
-                
-                <!-- SECCIÓN GESTIÓN DE ASISTENTES JURÍDICOS -->
-                <div class="section-content" id="assistants-section">
-                    <div class="section-header">
-                        <h2>Gestión de Asistentes Jurídicos</h2>
-                        <p>Administrar el registro de asistentes jurídicos del sistema</p>
-                    </div>
-
-                    <div class="search-section">
-                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
-                    </div>
-
-                    <div class="action-buttons">
-                        <button class="btn-primary" id="btnOpenAsistente">CREAR NUEVO ASISTENTE</button>
-                        <a href="{{ route('asistente.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
-                        <a href="{{ route('asistente.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
-                    </div>
-                    @include('profile.partials.assistants-table', ['assistants' => $assistants])
-                </div>
 
             <!-- SECCIÓN GESTIÓN DE ASISTENTES JURÍDICOS -->
                         <div class="section-content" id="assistants-section">
@@ -441,8 +419,8 @@
 
                     <div class="action-buttons">
                         <button class="btn-primary" id="btnOpenAsistente">CREAR NUEVO ASISTENTE</button>
-                        <a class="btn-success">EXPORTAR EXCEL</a>
-                        <a class="btn-danger">EXPORTAR PDF</a>
+                        <a href="{{ route('asistente.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
+                        <a href="{{ route('asistente.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
                     @include('profile.partials.assistants-table', ['assistants' => $assistants])
                 </div>

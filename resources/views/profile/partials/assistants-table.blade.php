@@ -69,9 +69,11 @@
         </tbody>
     </table>
                         <!-- Incluir la paginación -->
-    <div id="assistantsPagination">
-        @include('profile.partials.pagination', ['items' => $lawyers])
-    </div>
+   @include('profile.partials.pagination', [
+    'items' => $assistants,
+    'pageKey' => 'assistantsPage'
+])
+
 </div>
 
 <!-- Mensajes de sesión para alertas -->
