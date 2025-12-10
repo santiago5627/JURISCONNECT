@@ -53,7 +53,7 @@
         </tbody>
     </table>
 
-    @include('profile.partials.pagination', ['items' => $lawyers])
+    @include('profile.partials.pagination', ['items' => $lawyers, 'pageKey' => 'page'])
 </div>
 
 
