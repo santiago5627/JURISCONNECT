@@ -1,4 +1,12 @@
-<div class="table-wrapper">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+<div class="table-container table-wrapper">
     <table class="lawyers-table">
         <thead>
             <tr>
@@ -53,7 +61,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="10" style="text-align: center; padding: 20px;">
+                <td colspan="8" style="text-align: center; padding: 20px;">
                     No hay asistentes jurídicos registrados
                 </td>
             </tr>
@@ -61,9 +69,14 @@
         </tbody>
     </table>
                         <!-- Incluir la paginación -->
-    @include('profile.partials.pagination', ['items' => $lawyers])
+   @include('profile.partials.pagination', [
+    'items' => $assistants,
+    'pageKey' => 'assistantsPage'
+])
+
 </div>
 
+<!-- Mensajes de sesión para alertas -->
 @if(session('success'))
     <div data-success-message="{{ session('success') }}" style="display: none;"></div>
 @endif
@@ -78,6 +91,9 @@
 
 @if(session('error'))
     <div data-error-message="{{ session('error') }}" style="display: none;"></div>
-@endif  
+@endif
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('js/asistentes.js') }}"></script>
+</body>
+</html>

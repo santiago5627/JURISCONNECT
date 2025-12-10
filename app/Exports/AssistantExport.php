@@ -17,7 +17,7 @@ class AssistantExport implements FromCollection, WithHeadings, WithTitle, WithSt
 {
     public function collection()
     {
-        $assistants = Assistant::select('id', 'nombre', 'apellido', 'correo', 'telefono')->get();
+        $assistants = Assistant::select('id', 'nombre', 'apellido', 'tipo_documento', 'correo', 'telefono')->get();
 
         $data = [];
         $contador = 1;
@@ -26,8 +26,10 @@ class AssistantExport implements FromCollection, WithHeadings, WithTitle, WithSt
                 'id' => $contador++,
                 'nombre' => $assistant->nombre,
                 'apellido' => $assistant->apellido,
+                'tipo_documento' => $assistant->tipo_documento,
                 'correo' => $assistant->correo,
                 'teléfono' => $assistant->telefono,
+
             ];
         }
 
@@ -36,7 +38,7 @@ class AssistantExport implements FromCollection, WithHeadings, WithTitle, WithSt
 
     public function headings(): array
     {
-        return ['id', 'nombre', 'apellido', 'correo', 'teléfono'];
+        return ['id', 'nombre', 'apellido', 'tipo_documento','correo', 'teléfono'];
     }
 
     public function title(): string

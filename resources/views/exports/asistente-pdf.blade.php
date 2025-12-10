@@ -49,6 +49,7 @@
                 <td>{{ $assistant->apellido }}</td>
                 <td>{{ $assistant->correo }}</td>
                 <td>{{ $assistant->telefono }}</td>
+                <td>{{ $assistant->tipo_documento }}</td>
             </tr>
             @endforeach
         </tbody>

@@ -1,15 +1,12 @@
 <!-- Paginación -->
 <div class="pagination-container">
-    <div class="pagination-content">
-    </div>
+    <div class="pagination-content"></div>
 </div>
 
 <!-- Paginación desktop -->
 <div class="pagination-desktop">
 
-    <!-- Mover este estilo a un archivo .css en tu proyecto -->
     <style>
-        /* Estilos de Paginación */
         .pagination-btn {
             padding: 0.5rem 1rem;
             border-radius: 8px;
@@ -52,11 +49,6 @@
             opacity: 0.6;
         }
 
-        .pagination-btn.ajax-page:active {
-            transform: scale(0.95);
-        }
-
-        /* Responsive */
         @media (max-width: 640px) {
             .pagination-btn {
                 padding: 0.4rem 0.75rem;
@@ -66,23 +58,27 @@
         }
     </style>
 
-    <!-- Botón Anterior -->
-    @if ($lawyers->onFirstPage())
+    <!-- Botón anterior -->
+    @if ($items->onFirstPage())
         <span class="pagination-btn disabled">Anterior</span>
     @else
-        <a href="{{ $lawyers->previousPageUrl() }}" class="pagination-btn ajax-page">Anterior</a>
+        <a href="{{ $items->previousPageUrl() . '&' . $pageKey . '=' . ($items->currentPage() - 1) }}"
+           class="pagination-btn ajax-page">
+           Anterior
+        </a>
     @endif
 
-    <!-- Números de página -->
     @php
-        $currentPage = $lawyers->currentPage();
-        $lastPage = $lawyers->lastPage();
+        $currentPage = $items->currentPage();
+        $lastPage = $items->lastPage();
         $start = max(1, $currentPage - 2);
         $end = min($lastPage, $currentPage + 2);
-    @endphp 
+    @endphp
 
     @if ($start > 1)
-        <a href="{{ $lawyers->url(1) }}" class="pagination-btn ajax-page">1</a>
+        <a href="{{ $items->url(1) . '&' . $pageKey . '=1' }}"
+           class="pagination-btn ajax-page">1</a>
+
         @if ($start > 2)
             <span class="pagination-btn disabled">...</span>
         @endif
@@ -92,7 +88,10 @@
         @if ($i == $currentPage)
             <span class="pagination-btn active">{{ $i }}</span>
         @else
-            <a href="{{ $lawyers->url($i) }}" class="pagination-btn ajax-page">{{ $i }}</a>
+            <a href="{{ $items->url($i) . '&' . $pageKey . '=' . $i }}"
+               class="pagination-btn ajax-page">
+               {{ $i }}
+            </a>
         @endif
     @endfor
 
@@ -100,12 +99,19 @@
         @if ($end < $lastPage - 1)
             <span class="pagination-btn disabled">...</span>
         @endif
-        <a href="{{ $lawyers->url($lastPage) }}" class="pagination-btn ajax-page">{{ $lastPage }}</a>
+
+        <a href="{{ $items->url($lastPage) . '&' . $pageKey . '=' . $lastPage }}"
+           class="pagination-btn ajax-page">
+           {{ $lastPage }}
+        </a>
     @endif
 
-    <!-- Botón Siguiente -->
-    @if ($lawyers->hasMorePages())
-        <a href="{{ $lawyers->nextPageUrl() }}" class="pagination-btn ajax-page">Siguiente</a>
+    <!-- Botón siguiente -->
+    @if ($items->hasMorePages())
+        <a href="{{ $items->nextPageUrl() . '&' . $pageKey . '=' . ($items->currentPage() + 1) }}"
+           class="pagination-btn ajax-page">
+           Siguiente
+        </a>
     @else
         <span class="pagination-btn disabled">Siguiente</span>
     @endif
