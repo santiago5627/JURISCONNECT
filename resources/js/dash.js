@@ -1197,10 +1197,12 @@ document.addEventListener("click", function (e) {
     }
 });
 
+
+
 /* ===========================================
    =   FUNCIÓN AGREGAR SELECT DE ABOGADO (EDITAR)     =
    =========================================== */
-function addLawyerSelectEdit(selectedId = null) {
+function addLawyerSelect(selectedId = null) {
     const baseSelect = document.querySelector(".lawyer-select");
     const container = document.getElementById("assignedLawyersContainer");
 
