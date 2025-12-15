@@ -52,11 +52,17 @@
                             data-lawyers='@json($assistant->lawyers->pluck("id"))'>
                             Editar
                         </button>
-                        <form action="{{ route('asistentes.destroy', $assistant->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-delete" onclick="return confirm('¿Está seguro de eliminar este asistente?')">Eliminar</button>
-                        </form>
+                      <form 
+    action="{{ route('asistentes.destroy', $assistant->id) }}" 
+    method="POST" 
+    class="delete-asistente-form" 
+    data-name="{{ $assistant->nombre }} {{ $assistant->apellido }}"
+    style="display: inline;"
+>
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn-delete">Eliminar</button>
+</form>
                 </td>
             </tr>
             @empty
@@ -94,6 +100,7 @@
 @endif
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('js/asistentes.js') }}"></script>
+@vite('resources/js/asistentes.js')
+
 </body>
 </html>

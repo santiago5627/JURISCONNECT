@@ -134,11 +134,6 @@
                                 + Agregar Abogado
                             </button>
                         </div>
-                        <div id="assignedLawyersContainer">
-                            <label>Abogados asignados:</label>
-                            <div id="assignedLawyersContainer"></div>
-                            <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">+ Agregar abogado</button>
-                        </div>
 
                         <!-- SELECT base oculto para clonar -->
                         <select class="lawyer-select" id=".lawyer-select" style="display:none;">
@@ -398,7 +393,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- 🔽🔽🔽 TABLA OCULTA INICIALMENTE 🔽🔽🔽 -->
+                    <!--  TABLA OCULTA INICIALMENTE -->
                     <div id="lawyersTableWrapper" style="display: none; margin-top: 30px;">
                         <h3>Listado de Abogados</h3>
                         @include('profile.partials.lawyers-table-simple', ['lawyers' => $lawyers])
@@ -418,7 +413,13 @@
                     </div>
 
                     <div class="search-section">
-                       <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
+                            <input type="text"
+                                name="search"
+                                class="search-input"
+                                placeholder="Buscar por nombre, apellido o número de documento"
+                                value="{{ request('search') }}">
+                        </form>
+
                     </div>
 
                     <div class="action-buttons">
@@ -438,7 +439,7 @@
                     </div>
 
                     <div class="search-section">
-                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
+                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchAbogados">
                     </div>
 
                     <div class="action-buttons">
@@ -458,6 +459,9 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/dash.js') }}"></script>
+    <!-- Cargar JS del dashboard del abogado -->
+    <script src="{{ asset('js/abogado.js') }}"></script>
+    <script src="{{ asset('js/asistentes.js') }}"></script>
+
 
 </x-app-layout>
