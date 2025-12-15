@@ -99,5 +99,4 @@
     @vite('resources/js/asistentes.js')
 
 </body>
-
 </html>

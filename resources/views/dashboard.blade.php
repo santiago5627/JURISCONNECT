@@ -130,7 +130,7 @@
                             <label>Abogados asignados:</label>
                             <div id="lawyerList"></div>
 
-                            <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">
+                            <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtnCreate">
                                 + Agregar Abogado
                             </button>
                         </div>
@@ -165,9 +165,8 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="editLawyerForm" method="POST">
+                    <form id="editLawyerForm" method="POST" action="#">
                         @csrf
-                        @method('PUT')
                         <div class="form-group">
                             <label for="editNombre">Nombre:</label>
                             <input type="text" id="editNombre" name="nombre" required>
@@ -222,6 +221,7 @@
                         </div>
                     </form>
                 </div>
+            
             </div>
         </div>
 
@@ -233,9 +233,8 @@
                     <button class="modal-close" id="closeEditAssistantModal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form id="editAssistantForm" method="POST">
+                    <form id="form-update" method="POST" action="#">
                         @csrf
-                        @method('PUT')
                         <div class="form-group">
                             <label for="editNombre">Nombre:</label>
                             <input type="text" id="editAssistantNombre" name="nombre" required>
@@ -284,8 +283,7 @@
                         <div class="form-group">
                             <label>Abogados asignados:</label>
                             <div id="assignedLawyersContainer"></div>
-                            <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">+
-                                Agregar abogado</button>
+                            <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">+ Agregar abogado</button>
                         </div>
 
                         <div class="form-actions">
@@ -350,7 +348,7 @@
         <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
-                <div class="title-logo-container">
+                <div class="title-logo-container"> 
                     <h1 class="title">JustConnect SENA</h1>
                 </div>
                 <div class="logo-container">
@@ -458,8 +456,6 @@
     </div>
 
     <!-- Scripts -->
-    <!-- Cargar JS del dashboard del abogado -->
-    <script src="{{ asset('js/abogado.js') }}"></script>
-
+    <script src="{{ asset('js/dash.js') }}"></script>
 
 </x-app-layout>

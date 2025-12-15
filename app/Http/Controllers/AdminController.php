@@ -22,12 +22,12 @@ class AdminController extends Controller
             if ($searchTerm) {
                 $query->where(function ($q) use ($searchTerm) {
                     $q->where('nombre', 'ILIKE', '%' . $searchTerm . '%')
-                        ->orWhere('apellido', 'ILIKE', '%' . $searchTerm . '%')
-                        ->orWhere('tipo_documento', 'ILIKE', '%' . $searchTerm . '%')
-                        ->orWhere('numero_documento', 'ILIKE', '%' . $searchTerm . '%')
-                        ->orWhere('correo', 'ILIKE', '%' . $searchTerm . '%')
-                        ->orWhere('telefono', 'ILIKE', '%' . $searchTerm . '%')
-                        ->orWhere('especialidad', 'ILIKE', '%' . $searchTerm . '%');
+                      ->orWhere('apellido', 'ILIKE', '%' . $searchTerm . '%')
+                      ->orWhere('tipo_documento', 'ILIKE', '%' . $searchTerm . '%')
+                      ->orWhere('numero_documento', 'ILIKE', '%' . $searchTerm . '%')
+                      ->orWhere('correo', 'ILIKE', '%' . $searchTerm . '%')
+                      ->orWhere('telefono', 'ILIKE', '%' . $searchTerm . '%')
+                      ->orWhere('especialidad', 'ILIKE', '%' . $searchTerm . '%');
                 });
             }
 
@@ -58,7 +58,6 @@ class AdminController extends Controller
 
             // Si es una petición AJAX, devolver solo la vista parcial que corresponda
             if ($request->ajax()) {
-
                 if ($request->has('lawyersPage')) {
                     $html = view('profile.partials.lawyers-table', [
                         'lawyers' => $lawyers
@@ -76,7 +75,6 @@ class AdminController extends Controller
                         'assistantsSimple' => $assistantsSimple
                     ])->render();
                 }
-
                 return response()->json([
                     'html' => $html,
                     'success' => true
