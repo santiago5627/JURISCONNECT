@@ -114,23 +114,26 @@ export function setupImageUpload() {
         return;
     }
 
+    // Guardar URL original por si hay error
     profileImage.dataset.originalSrc = profileImage.src;
 
     fileInput.addEventListener("change", async function (e) {
         const file = e.target.files[0];
         if (!file) return;
 
+        // Validar tipo de archivo
         const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
         if (!allowedTypes.includes(file.type)) {
             await showCustomAlert(
                 "error",
                 "Archivo no válido",
-                "Solo se permiten archivos JPG, JPEG y PNG."
+                "Solo se permiten archivos JPG, JPEG y PNG." 
             );
             fileInput.value = "";
             return;
         }
 
+        // Validar tamaño de archivo (máx 2MB)
         const maxSize = 2 * 1024 * 1024;
         if (file.size > maxSize) {
             await showCustomAlert(
@@ -142,16 +145,19 @@ export function setupImageUpload() {
             return;
         }
 
+        // Mostrar preview inmediato
         const reader = new FileReader();
         reader.onload = function (e) {
             profileImage.src = e.target.result;
         };
         reader.readAsDataURL(file);
 
+        // Mostrar indicador de carga
         if (loadingIndicator) {
             loadingIndicator.style.display = "block";
         }
 
+        // Obtener CSRF token
         const csrfToken = getCsrfToken();
         if (!csrfToken) {
             await showCustomAlert(
@@ -164,6 +170,7 @@ export function setupImageUpload() {
             return;
         }
 
+        // Preparar FormData
         const formData = new FormData();
         formData.append("profile_photo", file);
 
@@ -173,12 +180,14 @@ export function setupImageUpload() {
                 headers: {
                     "X-CSRF-TOKEN": csrfToken,
                     Accept: "application/json",
+                    // NO establecer Content-Type cuando se usa FormData
                 },
                 body: formData,
             });
 
             const data = await response.json();
 
+            // Verificar si fue exitoso
             if (response.ok && data.success) {
                 profileImage.src = data.url + "?t=" + new Date().getTime();
                 profileImage.dataset.originalSrc = data.url;

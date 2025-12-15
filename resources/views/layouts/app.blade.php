@@ -23,8 +23,9 @@
     'resources/css/app.css',
     'resources/css/dashboard.css',
     'resources/js/app.js',
-    'resources/js/dash.js'
+    'resources/js/main.js'
     ])
+    <!-- 'resources/js/main.js' -->
 
 </head>
 

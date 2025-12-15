@@ -191,33 +191,40 @@ function setupCreateLawyerForm() {
  * EDITAR ABOGADO: ENVÍO DE FORMULARIO
  */
 function setupEditLawyerForm() {
-    const editLawyerForm = document.getElementById("editLawyerForm");
-    if (!editLawyerForm) return;
+    const form = document.getElementById("editLawyerForm");
+    if (!form) return;
 
-    editLawyerForm.addEventListener("submit", async function (e) {
+    form.addEventListener("submit", async function (e) {
         e.preventDefault();
-        const form = e.target;
-        const data = new FormData(form);
-        const lawyerId = form.action.split("/").pop();
 
-        const validationErrors = Validation.validateEditForm(data);
-        if (validationErrors.length > 0) {
-            await Alerts.showCustomAlert(
-                "warning",
-                "Campos Incompletos",
-                validationErrors.join("\n")
-            );
+        // Asegurar action válido
+        if (!form.action || form.action === "#" || form.action.endsWith("/dashboard")) {
+            await Alerts.alertError("Formulario sin destino. Abre el modal de edición correctamente.", "Error");
             return;
         }
 
+        const data = new FormData(form);
+
+        // Añadir override method si no existe
+        if (!data.get("_method")) {
+            data.append("_method", "PUT");
+        }
+
+        const validationErrors = Validation.validateEditForm(data);
+        if (validationErrors.length > 0) {
+            await Alerts.showCustomAlert("warning", "Campos Incompletos", validationErrors.join("\n"));
+            return;
+        }
+
+        const lawyerId = form.action.split("/").pop();
         const hasDuplicates = await Validation.checkForDuplicates(data, lawyerId);
         if (hasDuplicates) return;
 
         try {
             const csrf = API.getCsrfToken();
             const response = await fetch(form.action, {
-                method: "POST",
-                headers: { "X-CSRF-TOKEN": csrf },
+                method: "POST", // Laravel recibirá PUT gracias al campo _method
+                headers: { "X-CSRF-TOKEN": csrf, Accept: "application/json" },
                 body: data,
             });
 
@@ -242,18 +249,12 @@ function setupEditLawyerForm() {
                 const error = await response.json();
                 const handled = await Validation.handleDuplicateError(error, response.status, "edit");
                 if (!handled) {
-                    await Alerts.alertError(
-                        "Error al actualizar: " + (error.message || "Verifica que todos los campos estén correctos."),
-                        "Error de Actualización"
-                    );
+                    await Alerts.alertError("Error al actualizar: " + (error.message || "Verifica que todos los campos estén correctos."), "Error de Actualización");
                 }
             }
         } catch (err) {
             console.error(err);
-            await Alerts.alertError(
-                "Ocurrió un error inesperado. Inténtalo de nuevo.",
-                "Error Inesperado"
-            );
+            await Alerts.alertError("Ocurrió un error inesperado. Inténtalo de nuevo.", "Error Inesperado");
         }
     });
 }
@@ -280,13 +281,71 @@ function setupRealTimeValidation() {
 /**
  * AGREGAR ABOGADO EN MODAL ASISTENTE
  */
-function setupAddLawyerButton() {
-    document.addEventListener("click", function (e) {
-        if (e.target.id === "addLawyerBtn") {
-            UI.addLawyerSelect();
-        }
-    });
-}
+document.addEventListener("DOMContentLoaded", function () {
+
+    const lawyerTemplate = document.querySelector(".lawyer-select"); // plantilla clonable
+    const lawyerList = document.getElementById("lawyerList"); // para crear asistente
+    const addLawyerBtnCreate = document.getElementById("addLawyerBtnCreate");
+    const addLawyerBtnEdit = document.getElementById("addLawyerBtnEdit");
+
+    function createSelectInstance() {
+        if (!lawyerTemplate) return null;
+        const newSelect = lawyerTemplate.cloneNode(true);
+        newSelect.style.display = "block";
+        newSelect.name = "lawyers[]";
+        return newSelect;
+    }
+
+    // Añadir select en modal "Crear Asistente"
+    if (addLawyerBtnCreate && lawyerList) {
+        addLawyerBtnCreate.addEventListener("click", function () {
+            const wrapper = document.createElement("div");
+            wrapper.style.display = "flex";
+            wrapper.style.gap = "10px";
+            wrapper.style.marginBottom = "8px";
+
+            const newSelect = createSelectInstance();
+            if (!newSelect) return;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.type = "button";
+            deleteBtn.textContent = "Eliminar";
+            deleteBtn.classList.add("btn-cancel");
+            deleteBtn.addEventListener("click", () => wrapper.remove());
+
+            wrapper.appendChild(newSelect);
+            wrapper.appendChild(deleteBtn);
+
+            lawyerList.appendChild(wrapper);
+        });
+    }
+
+    // Añadir select en modal "Editar Asistente"
+    if (addLawyerBtnEdit) {
+        addLawyerBtnEdit.addEventListener("click", function () {
+            const container = document.getElementById("assignedLawyersContainer");
+            if (!container) return;
+
+            const wrapper = document.createElement("div");
+            wrapper.style.display = "flex";
+            wrapper.style.gap = "10px";
+            wrapper.style.marginBottom = "8px";
+
+            const newSelect = createSelectInstance();
+            if (!newSelect) return;
+
+            const deleteBtn = document.createElement("button");
+            deleteBtn.type = "button";
+            deleteBtn.textContent = "Eliminar";
+            deleteBtn.classList.add("btn-cancel");
+            deleteBtn.addEventListener("click", () => wrapper.remove());
+
+            wrapper.appendChild(newSelect);
+            wrapper.appendChild(deleteBtn);
+            container.appendChild(wrapper);
+        });
+    }
+});
 
 /**
  * EDITAR ASISTENTE
@@ -297,12 +356,14 @@ function setupEditAssistantButton() {
             const btn = e.target;
             const id = btn.dataset.id;
 
+            // Llenar campos del formulario
             document.getElementById("editAssistantNombre").value = btn.dataset.nombre || "";
             document.getElementById("editAssistantApellido").value = btn.dataset.apellido || "";
             document.getElementById("editAssistantTipoDocumento").value = btn.dataset.tipo_documento || "";
             document.getElementById("editAssistantNumeroDocumento").value = btn.dataset.numero_documento || "";
             document.getElementById("editAssistantCorreo").value = btn.dataset.correo || "";
             document.getElementById("editAssistantTelefono").value = btn.dataset.telefono || "";
+            
 
             const editAssistantForm = document.getElementById("form-update");
             if (editAssistantForm) {
@@ -335,6 +396,7 @@ function setupEditAssistantButton() {
     });
 }
 
+
 /**
  * ACTUALIZAR ASISTENTE
  */
@@ -342,35 +404,71 @@ function setupUpdateAssistantForm() {
     const updateForm = document.querySelector("#form-update");
     if (!updateForm) return;
 
-    updateForm.addEventListener("submit", function (e) {
+    updateForm.addEventListener("submit", async function (e) {
         e.preventDefault();
-        const formData = new FormData(this);
+        const form = e.target;
 
-        fetch(this.action, {
-            method: "POST",
-            body: formData,
-            headers: {
-                "X-CSRF-TOKEN": API.getCsrfToken()
-            }
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.success) {
-                    const msg = document.createElement("div");
-                    msg.innerText = data.message;
-                    msg.classList.add("notification-success");
-                    document.body.appendChild(msg);
-                    setTimeout(() => msg.remove(), 2000);
-                } else {
-                    Alerts.alertError(data.message || "Error desconocido");
-                }
-            })
-            .catch((err) => {
-                console.error(err);
-                Alerts.alertError("Error al actualizar");
+        // Validar action
+        if (!form.action || form.action === "#" || form.action.endsWith("/dashboard")) {
+            await Alerts.alertError("Formulario sin destino. Abre el modal de edición correctamente.", "Error");
+            return;
+        }
+
+        const data = new FormData(form);
+
+        // Añadir spoof _method=PUT para Laravel si no existe
+        if (!data.get("_method")) {
+            data.append("_method", "PUT");
+        }
+
+        const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute("content");
+        if (!csrf) {
+            await Alerts.alertError("Token CSRF no encontrado.", "Error");
+            return;
+        }
+
+        try {
+            const response = await fetch(form.action, {
+                method: "POST", // Laravel interpretará PUT gracias a _method
+                headers: {
+                    "X-CSRF-TOKEN": csrf,
+                    "Accept": "application/json"
+                },
+                body: data
             });
+
+            const text = await response.text();
+
+            // Intentar parsear JSON de forma segura
+            let payload = null;
+            try {
+                payload = text ? JSON.parse(text) : null;
+            } catch (err) {
+                console.error("Respuesta no JSON:", text);
+            }
+
+            if (!response.ok) {
+                const msg = (payload && payload.message) ? payload.message : "Error del servidor al actualizar el asistente.";
+                await Alerts.alertError(msg, "Error");
+                return;
+            }
+
+            // Éxito: payload contiene la respuesta JSON (si el servidor la devuelve)
+            await Alerts.alertSuccess("Asistente actualizado correctamente.", "Hecho");
+            // Cerrar modal y/o actualizar UI según sea necesario
+            UI.closeEditModal();
+            // Actualizar fila en tabla si tienes datos:
+            if (payload && payload.assistant) {
+                UI.updateRowInTable(payload.assistant.id, payload.assistant);
+            }
+        } catch (err) {
+            console.error(err);
+            await Alerts.alertError("Ocurrió un error de red. Inténtalo de nuevo.", "Error de red");
+        }
     });
 }
+
+
 
 /**
  * INICIALIZADOR PRINCIPAL
@@ -390,7 +488,6 @@ function init() {
     setupEditLawyerButton();
     setupCreateLawyerForm();
     setupEditLawyerForm();
-    setupAddLawyerButton();
     setupEditAssistantButton();
     setupUpdateAssistantForm();
 
