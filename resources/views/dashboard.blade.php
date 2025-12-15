@@ -138,10 +138,10 @@
                         <!-- SELECT base oculto para clonar -->
                         <select class="lawyer-select" id=".lawyer-select" style="display:none;">
                             <option value="">Seleccione abogado...</option>
-                            @foreach($abogados as $lawyer)
-                            <option value="{{ $lawyer->id }}">
-                                {{ $lawyer->nombre }} {{ $lawyer->apellido }}
-                            </option>
+                            @foreach ($abogados as $lawyer)
+                                <option value="{{ $lawyer->id }}">
+                                    {{ $lawyer->nombre }} {{ $lawyer->apellido }}
+                                </option>
                             @endforeach
                         </select>
 
@@ -274,17 +274,18 @@
 
                         <select class="lawyer-select" style="display:none;">
                             <option value="">Seleccione abogado...</option>
-                            @foreach($abogados as $lawyer)
-                            <option value="{{ $lawyer->id }}">
-                                {{ $lawyer->nombre }} {{ $lawyer->apellido }}
-                            </option>
+                            @foreach ($abogados as $lawyer)
+                                <option value="{{ $lawyer->id }}">
+                                    {{ $lawyer->nombre }} {{ $lawyer->apellido }}
+                                </option>
                             @endforeach
                         </select>
 
                         <div class="form-group">
                             <label>Abogados asignados:</label>
                             <div id="assignedLawyersContainer"></div>
-                            <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">+ Agregar abogado</button>
+                            <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">+
+                                Agregar abogado</button>
                         </div>
 
                         <div class="form-actions">
@@ -303,17 +304,16 @@
                 <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
 
                 <!-- Indicador de carga (oculto por defecto) -->
-                <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+                <div id="loadingIndicator"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
                     Subiendo...
                 </div>
 
                 <!-- Contenedor de la foto de perfil -->
                 <div class="profile-pic" onclick="document.getElementById('fileInput').click();"
-                    style="cursor: pointer; position: relative;"
-                    title="Haz clic para cambiar tu foto">
+                    style="cursor: pointer; position: relative;" title="Haz clic para cambiar tu foto">
                     <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}"
-                        id="profileImage"
-                        alt="Foto de perfil">
+                        id="profileImage" alt="Foto de perfil">
                 </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
@@ -413,11 +413,9 @@
                     </div>
 
                     <div class="search-section">
-                            <input type="text"
-                                name="search"
-                                class="search-input"
-                                placeholder="Buscar por nombre, apellido o número de documento"
-                                value="{{ request('search') }}">
+                        <input type="text" name="search" class="search-input"
+                            placeholder="Buscar por nombre, apellido o número de documento"
+                            value="{{ request('search') }}">
                         </form>
 
                     </div>
@@ -439,7 +437,8 @@
                     </div>
 
                     <div class="search-section">
-                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchAbogados">
+                        <input type="text" class="search-input"
+                            placeholder="Buscar por nombre, apellido o número de documento" id="searchAbogados">
                     </div>
 
                     <div class="action-buttons">
@@ -461,7 +460,6 @@
     <!-- Scripts -->
     <!-- Cargar JS del dashboard del abogado -->
     <script src="{{ asset('js/abogado.js') }}"></script>
-    <script src="{{ asset('js/asistentes.js') }}"></script>
 
 
 </x-app-layout>

@@ -75,6 +75,8 @@ Route::middleware(['auth'])->group(function () {
             return Excel::download(new \App\Exports\LawyersExport, 'abogados.xlsx');
         })->name('export.excel');
     });
+    Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])
+        ->name('lawyers.update');
 
     // Resource lawyers
     Route::resource('lawyers', LawyerController::class);
@@ -162,13 +164,13 @@ Route::middleware(['auth'])->group(function () {
     // ===============================================================
     // Asistentes (LAWYERS)
     // ===============================================================
-Route::prefix('asistente')->name('asistente.')->group(function () {
+    Route::prefix('asistente')->name('asistente.')->group(function () {
         // Exportaciones
         Route::get('/export-pdf', [AssistantExport::class, 'exportPDF'])
             ->name('export.pdf');
 
-        Route::get('/export-excel', function () { 
-            return Excel::download(new AssistantExport, 'Asistentes.xlsx'); 
+        Route::get('/export-excel', function () {
+            return Excel::download(new AssistantExport, 'Asistentes.xlsx');
         })->name('export.excel');
-        });
+    });
 });

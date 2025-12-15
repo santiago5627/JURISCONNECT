@@ -1,3 +1,9 @@
+function getCsrfToken() {
+    return document
+        .querySelector('meta[name="csrf-token"]')
+        .getAttribute("content");
+}
+
 /* ========= ALERTAS PERSONALIZADAS (VERSIÓN MEJORADA) ========= */
 
 function showCustomAlert(
@@ -145,76 +151,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const message = successMessage.dataset.successMessage;
         Swal.fire({
             icon: "success",
-            title: "¡Accion Exitosa!", // Título unificado para creación
+            title: "¡ Exitosa!", // Título unificado para creación
             text: message,
             confirmButtonText: "OK",
             confirmButtonColor: "#28a745", // Botón verde
         });
     }
-
-    // ==========================================
-    // ALERTA DE ACTUALIZACIÓN EXITOSA (Modal Unificado)
-    // ==========================================
-    const updateMessage = document.querySelector("[data-update-message]");
-    if (updateMessage) {
-        const message = updateMessage.dataset.updateMessage;
-        Swal.fire({
-            icon: "success",
-            title: "¡Actualización Exitosa!", // Título para actualización
-            text: message,
-            confirmButtonText: "OK", // Botón "OK"
-            confirmButtonColor: "#28a745", // Botón verde
-        });
-    }
-
-    // ==========================================
-    // ALERTA DE ELIMINACIÓN EXITOSA (Toast)
-    // ==========================================
-    const deleteMessage = document.querySelector("[data-delete-message]");
-    if (deleteMessage) {
-        const message = deleteMessage.dataset.deleteMessage;
-        Toast.fire({
-            icon: "info", // Para indicar que la acción peligrosa terminó
-            title: message,
-            background: "#fff3cd",
-            color: "#856404",
-        });
-    }
-
-    // ==========================================
-    // ALERTA DE ERROR (Modal)
-    // ==========================================
-    const errorMessage = document.querySelector("[data-error-message]");
-    if (errorMessage) {
-        const message = errorMessage.dataset.errorMessage;
-        Swal.fire({
-            icon: "error",
-            title: "Error Inesperado",
-            text: message,
-            confirmButtonText: "Entendido",
-            confirmButtonColor: "#dc3545", // Botón rojo
-        });
-    }
-
-    // ==========================================
-    // BOTÓN EDITAR (Se mantiene)
-    // ==========================================
-    const editButtons = document.querySelectorAll(".btn-edit-asistente");
-    editButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-            const assistantId = this.dataset.id;
-            Swal.fire({
-                title: "Cargando...",
-                text: "Preparando formulario de edición",
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
-            });
-            window.location.href = `/asistentes/${assistantId}/edit`;
-        });
-    });
 
     // ==========================================
     // VALIDACIÓN DE FORMULARIO
@@ -285,27 +227,65 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Delegación: eliminar abogado con confirmación
     document.addEventListener("submit", async function (e) {
-        if (e.target.classList.contains("delete-asistente-form")) {
-            e.preventDefault();
+        if (!e.target.classList.contains("delete-asistente-form")) return;
 
-            const form = e.target;
+        e.preventDefault();
 
-            // Nombre real del asistente
-            const assistantName = form.dataset.name || "";
+        const form = e.target;
+        const assistantName = form.dataset.name || "este asistente";
+        const url = form.action;
 
-            const confirmed = await showCustomAlert(
-                "warning",
-                "Confirmar Eliminación",
-                `¿Estás seguro de eliminar al asistente ${assistantName}? Esta acción no se puede deshacer.`,
-                true,
-                "Eliminar",
-                "Cancelar"
+        const confirmed = await showCustomAlert(
+            "warning",
+            "Confirmar Eliminación",
+            `¿Estás seguro de eliminar a ${assistantName}? Esta acción no se puede deshacer.`,
+            true,
+            "Eliminar",
+            "Cancelar"
+        );
+
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": getCsrfToken(),
+                    "X-Requested-With": "XMLHttpRequest",
+                    Accept: "application/json",
+                },
+                body: new URLSearchParams({
+                    _method: "DELETE",
+                }),
+            });
+
+            const result = await response.json();
+
+            if (!result.success) {
+                await showCustomAlert(
+                    "error",
+                    "Error",
+                    result.message || "No se pudo eliminar."
+                );
+                return;
+            }
+
+            // 🧹 eliminar fila SIN recargar
+            const row = form.closest("tr");
+            if (row) row.remove();
+
+            await showCustomAlert(
+                "success",
+                "Eliminado",
+                result.message || "Asistente eliminado correctamente."
             );
-
-            if (confirmed) form.submit();
+        } catch (error) {
+            console.error(error);
+            await showCustomAlert(
+                "error",
+                "Error",
+                "Ocurrió un error al eliminar."
+            );
         }
     });
-
-    
-
 });

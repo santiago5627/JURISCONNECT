@@ -8,8 +8,6 @@
 
     <title>JurisConnect</title>
 
-
-
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -19,12 +17,7 @@
 
 
     <!-- Scripts -->
-    @vite([
-    'resources/css/app.css',
-    'resources/css/dashboard.css',
-    'resources/js/app.js',
-    'resources/js/dash.js'
-    ])
+    @vite(['resources/css/app.css', 'resources/css/dashboard.css', 'resources/js/app.js', 'resources/js/dash.js'])
 
 </head>
 
@@ -39,52 +32,52 @@
             {{ $slot }}
             <!-- SweetAlert2 Messages -->
             @if ($errors->any())
-            <script>
-                let errorMessages = `
+                <script>
+                    let errorMessages = `
             @foreach ($errors->all() as $error)
                 - {{ $error }}<br>
             @endforeach
         `;
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Errores de validación',
-                    html: errorMessages,
-                    confirmButtonColor: '#d33',
-                });
-            </script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Errores de validación',
+                        html: errorMessages,
+                        confirmButtonColor: '#d33',
+                    });
+                </script>
             @endif
 
             @if (session('error'))
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: "{{ session('error') }}",
-                    confirmButtonColor: '#d33',
-                });
-            </script>
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: "{{ session('error') }}",
+                        confirmButtonColor: '#d33',
+                    });
+                </script>
             @endif
 
             @if (session('success'))
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Éxito',
-                    text: "{{ session('success') }}",
-                    confirmButtonColor: '#3085d6',
-                });
-            </script>
+                <script>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: "{{ session('success') }}",
+                        confirmButtonColor: '#3085d6',
+                    });
+                </script>
             @endif
 
             @if (session('warning'))
-            <script>
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Atención',
-                    text: "{{ session('warning') }}",
-                    confirmButtonColor: '#f1c40f',
-                });
-            </script>
+                <script>
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Atención',
+                        text: "{{ session('warning') }}",
+                        confirmButtonColor: '#f1c40f',
+                    });
+                </script>
             @endif
 
         </main>

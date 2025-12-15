@@ -849,37 +849,58 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Delegación: eliminar abogado con confirmación
+    // Delegación: eliminar abogado con AJAX (SIN RECARGAR)
     document.addEventListener("submit", async function (e) {
-        if (e.target.classList.contains("delete-lawyer-form")) {
-            e.preventDefault();
-            const form = e.target;
-            const lawyerName = form.dataset.name || "";
-            const confirmed = await showCustomAlert(
-                "warning",
-                "Confirmar Eliminación",
-                `¿Estás seguro de eliminar al abogado ${lawyerName}? Esta acción no se puede deshacer.`,
-                true,
-                "Eliminar",
-                "Cancelar"
-            );
-            if (confirmed) form.submit();
-        }
-    });
+        if (!e.target.classList.contains("delete-lawyer-form")) return;
 
-    // Delegación: eliminar proceso con confirmación personalizada
-    document.addEventListener("submit", async function (e) {
-        if (e.target.classList.contains("delete-proceso-form")) {
-            e.preventDefault();
-            const confirmed = await showCustomAlert(
-                "warning",
-                "Confirmar Eliminación",
-                "¿Seguro que deseas eliminar este proceso?",
-                true,
-                "Eliminar",
-                "Cancelar"
+        e.preventDefault();
+
+        const form = e.target;
+        const lawyerName = form.dataset.name || "";
+
+        const confirmed = await showCustomAlert(
+            "warning",
+            "Confirmar Eliminación",
+            `¿Estás seguro de eliminar al abogado ${lawyerName}? Esta acción no se puede deshacer.`,
+            true,
+            "Eliminar",
+            "Cancelar"
+        );
+
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(form.action, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": getCsrfToken(),
+                    Accept: "application/json",
+                },
+                body: new FormData(form),
+            });
+
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.message || "Error al eliminar");
+            }
+
+            // 🔥 quitar fila de la tabla
+            const row = form.closest("tr");
+            if (row) row.remove();
+
+            await showCustomAlert(
+                "success",
+                "Eliminado",
+                `El abogado ${lawyerName} fue eliminado exitosamente.`
             );
-            if (confirmed) e.target.submit();
+        } catch (error) {
+            console.error(error);
+            await showCustomAlert(
+                "error",
+                "Error",
+                "Ocurrió un error al eliminar."
+            );
         }
     });
 
@@ -1350,7 +1371,8 @@ function updateAssistantRowInTable(assistant) {
     if (assistant.lawyers?.length) {
         assistant.lawyers.forEach((lawyer) => {
             const div = document.createElement("div");
-            div.textContent = lawyer.nombre;
+            div.textContent = `${lawyer.nombre} ${lawyer.apellido}`;
+            div.style.marginLeft = "20px"; // 👈 AQUÍ MISMO
             lawyersCell.appendChild(div);
         });
     } else {

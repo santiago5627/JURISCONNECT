@@ -430,6 +430,13 @@ class LawyerController extends Controller
                 'deleted_by' => auth()->email ?? 'unknown'
             ]);
 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Asistente eliminado exitosamente.',
+                ], 200);
+            }
+
             return $this->successResponse(
                 $request,
                 'Asistente eliminado exitosamente.',
