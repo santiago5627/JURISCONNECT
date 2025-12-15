@@ -286,8 +286,6 @@ class LawyerController extends Controller
             );
         }
     }
-
-
     /**
      * Actualizar abogado existente
      */
@@ -299,14 +297,11 @@ class LawyerController extends Controller
             $validated = $request->validate([
                 'nombre' => 'required|string|max:255',
                 'apellido' => 'required|string|max:255',
-                'tipoDocumento' => 'required|string|max:50',
-                'numeroDocumento' => 'required|string|max:50|unique:lawyers,numero_documento,' . $lawyer->id,
+                'tipo_documento' => 'required|string|max:50',
+                'numero_documento' => 'required|string|max:50|unique:lawyers,numero_documento,' . $lawyer->id,
                 'correo' => 'required|email|max:255|unique:lawyers,correo,' . $lawyer->id . '|unique:users,email,' . ($lawyer->user_id ?? 'NULL'),
                 'telefono' => 'nullable|string|max:20',
                 'especialidad' => 'nullable|string|max:255',
-            ], [
-                'numeroDocumento.unique' => 'El número de documento ya existe',
-                'correo.unique' => 'El correo electrónico ya existe',
             ]);
 
             // Actualizar abogado

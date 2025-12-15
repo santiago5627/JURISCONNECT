@@ -13,12 +13,14 @@ use App\Http\Controllers\ProcesoReportController;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AssistantExport;
 
+
 // ===================================================================
 // RUTA POR DEFECTO
 // ===================================================================
 Route::get('/', function () {
     return redirect()->route('login');
-});
+}); 
+
 
 // ===================================================================
 // RUTAS DE AUTENTICACIÓN
@@ -84,6 +86,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::put('/assistants/{assistant}', [LawyerController::class, 'updateAssistant'])
         ->name('assistants.update');
+
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+
 
     // ===============================================================
     // PROCESOS LEGALES
@@ -162,13 +167,13 @@ Route::middleware(['auth'])->group(function () {
     // ===============================================================
     // Asistentes (LAWYERS)
     // ===============================================================
-Route::prefix('asistente')->name('asistente.')->group(function () {
+    Route::prefix('asistente')->name('asistente.')->group(function () {
         // Exportaciones
         Route::get('/export-pdf', [AssistantExport::class, 'exportPDF'])
             ->name('export.pdf');
 
-        Route::get('/export-excel', function () { 
-            return Excel::download(new AssistantExport, 'Asistentes.xlsx'); 
+        Route::get('/export-excel', function () {
+            return Excel::download(new AssistantExport, 'Asistentes.xlsx');
         })->name('export.excel');
-        });
+    });
 });

@@ -393,7 +393,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- 🔽🔽🔽 TABLA OCULTA INICIALMENTE 🔽🔽🔽 -->
+                    <!--  TABLA OCULTA INICIALMENTE -->
                     <div id="lawyersTableWrapper" style="display: none; margin-top: 30px;">
                         <h3>Listado de Abogados</h3>
                         @include('profile.partials.lawyers-table-simple', ['lawyers' => $lawyers])
@@ -413,16 +413,18 @@
                     </div>
 
                     <div class="search-section">
-                       <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nombre, apellido o número de documento">
                     </div>
+
 
                     <div class="action-buttons">
                         <button class="btn-primary" id="btnOpenAsistente">CREAR NUEVO ASISTENTE</button>
                         <a href="{{ route('asistente.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
                         <a href="{{ route('asistente.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
-                    @include('profile.partials.assistants-table', ['assistants' => $assistants])
-
+                    <div id="assistantsTableContainer">
+                        @include('profile.partials.assistants-table', ['assistants' => $assistants])
+                    </div>
                 </div>
 
                 <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
@@ -433,7 +435,8 @@
                     </div>
 
                     <div class="search-section">
-                        <input type="text" class="search-input" placeholder="Buscar por nombre, apellido o número de documento" id="searchInput">
+                        <input type="text" id="searchAbogados" class="search-input"
+                            placeholder="Buscar por nombre, apellido o número de documento">
                     </div>
 
                     <div class="action-buttons">
@@ -442,7 +445,10 @@
                         <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
 
-                    @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
+                    <div id="AbogadosTableWrapper">
+                        @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
+                    </div>
+
 
                 </div>
 
@@ -453,6 +459,8 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/dash.js') }}"></script>
+    <!-- Cargar JS del dashboard del abogado -->
+    <script src="{{ asset('js/abogado.js') }}"></script>
+
 
 </x-app-layout>
