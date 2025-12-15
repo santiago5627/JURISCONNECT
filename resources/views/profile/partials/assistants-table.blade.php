@@ -1,99 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 </head>
+
 <body>
-<div class="table-container table-wrapper">
-    <table class="lawyers-table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Tipo Doc.</th>
-                <th>N° Documento</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Abogados Asignados</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody id="assistantsTableBody">
-            @forelse($assistants as $assistant)
-            <tr>
-                <td>{{ $assistant->nombre }}</td>
-                <td>{{ $assistant->apellido }}</td>
-                <td>{{ $assistant->tipo_documento }}</td>
-                <td>{{ $assistant->numero_documento }}</td>
-                <td>{{ $assistant->correo }}</td>
-                <td>{{ $assistant->telefono ?? 'N/A' }}</td>
-                <td>
-                    @if($assistant->lawyers && $assistant->lawyers->count() > 0)
-                        <ul style="margin: 0; padding-left: 20px;">
-                            @foreach($assistant->lawyers as $lawyer)
-                                <li>{{ $lawyer->nombre }} {{ $lawyer->apellido }}</li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <span style="color: #999;">Sin abogados asignados</span>
-                    @endif
-                </td>
-                <td>
-                        <button class="btn-edit-assistant"
-                            data-id="{{ $assistant->id }}"
-                            data-nombre="{{ $assistant->nombre }}"
-                            data-apellido="{{ $assistant->apellido }}"
-                            data-tipo_documento="{{ $assistant->tipo_documento }}"
-                            data-numero_documento="{{ $assistant->numero_documento }}"
-                            data-correo="{{ $assistant->correo }}"
-                            data-telefono="{{ $assistant->telefono }}"
-                            data-lawyers='@json($assistant->lawyers->pluck("id"))'>
-                            Editar
-                        </button>
-                        <form action="{{ route('asistentes.destroy', $assistant->id) }}" method="POST" style="display: inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn-delete" onclick="return confirm('¿Está seguro de eliminar este asistente?')">Eliminar</button>
-                        </form>
-                </td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="8" style="text-align: center; padding: 20px;">
-                    No hay asistentes jurídicos registrados
-                </td>
-            </tr>
-            @endforelse
-        </tbody>
-    </table>
-                        <!-- Incluir la paginación -->
-   @include('profile.partials.pagination', [
-    'items' => $assistants,
-    'pageKey' => 'assistantsPage'
-])
+    <div class="table-container table-wrapper">
+        <table class="lawyers-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Tipo Doc.</th>
+                    <th>N° Documento</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Abogados Asignados</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="assistantsTableBody">
+                @forelse($assistants as $assistant)
+                    <tr data-id="{{ $assistant->id }}">
+                        <td>{{ $assistant->nombre }}</td>
+                        <td>{{ $assistant->apellido }}</td>
+                        <td>{{ $assistant->tipo_documento }}</td>
+                        <td>{{ $assistant->numero_documento }}</td>
+                        <td>{{ $assistant->correo }}</td>
+                        <td>{{ $assistant->telefono ?? 'N/A' }}</td>
+                        <td>
+                            @if ($assistant->lawyers && $assistant->lawyers->count() > 0)
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    @foreach ($assistant->lawyers as $lawyer)
+                                        <li>{{ $lawyer->nombre }} {{ $lawyer->apellido }}</li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <span style="color: #999;">Sin abogados asignados</span>
+                            @endif
+                        </td>
+                        <td>
+                            <button class="btn-edit-assistant" data-id="{{ $assistant->id }}"
+                                data-nombre="{{ $assistant->nombre }}" data-apellido="{{ $assistant->apellido }}"
+                                data-tipo_documento="{{ $assistant->tipo_documento }}"
+                                data-numero_documento="{{ $assistant->numero_documento }}"
+                                data-correo="{{ $assistant->correo }}" data-telefono="{{ $assistant->telefono }}"
+                                data-lawyers='@json($assistant->lawyers->pluck('id'))'>
+                                Editar
+                            </button>
+                            <form action="{{ route('asistentes.destroy', $assistant->id) }}" method="POST"
+                                class="delete-asistente-form"
+                                data-name="{{ $assistant->nombre }} {{ $assistant->apellido }}"
+                                style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-delete">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 20px;">
+                            No hay asistentes jurídicos registrados
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+        <!-- Incluir la paginación -->
+        @include('profile.partials.pagination', [
+            'items' => $assistants,
+            'pageKey' => 'assistantsPage',
+        ])
 
-</div>
+    </div>
 
-<!-- Mensajes de sesión para alertas -->
-@if(session('success'))
-    <div data-success-message="{{ session('success') }}" style="display: none;"></div>
-@endif
+    <!-- Mensajes de sesión para alertas -->
+    @if (session('success'))
+        <div data-success-message="{{ session('success') }}" style="display: none;"></div>
+    @endif
 
-@if(session('update'))
-    <div data-update-message="{{ session('update') }}" style="display: none;"></div>
-@endif
+    @if (session('update'))
+        <div data-update-message="{{ session('update') }}" style="display: none;"></div>
+    @endif
 
-@if(session('delete'))
-    <div data-delete-message="{{ session('delete') }}" style="display: none;"></div>
-@endif
+    @if (session('delete'))
+        <div data-delete-message="{{ session('delete') }}" style="display: none;"></div>
+    @endif
 
-@if(session('error'))
-    <div data-error-message="{{ session('error') }}" style="display: none;"></div>
-@endif
+    @if (session('error'))
+        <div data-error-message="{{ session('error') }}" style="display: none;"></div>
+    @endif
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ asset('js/asistentes.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @vite('resources/js/asistentes.js')
+
 </body>
 </html>
