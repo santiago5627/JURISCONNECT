@@ -167,6 +167,8 @@
                 <div class="modal-body">
                     <form id="editLawyerForm" method="POST" action="#">
                         @csrf
+                        @method('PUT')
+
                         <div class="form-group">
                             <label for="editNombre">Nombre:</label>
                             <input type="text" id="editNombre" name="nombre" required>
@@ -247,7 +249,7 @@
 
                         <div class="form-group">
                             <label for="editTipoDocumento">Tipo de Documento:</label>
-                            <select id="editAssistantTipoDocumento" name="tipo_documento" required>
+                            <select id="editTipoDocumento" name="tipo_documento" required>
                                 <option value="">Seleccione...</option>
                                 <option value="CC">Cédula de Ciudadanía</option>
                                 <option value="CE">Cédula de Extranjería</option>
@@ -257,8 +259,12 @@
 
                         <div class="form-group">
                             <label for="editNumeroDocumento">Número de Documento:</label>
-                            <input type="text" id="editAssistantNumeroDocumento" name="numero_documento" required>
+                            <input type="text"
+                                id="editNumeroDocumento"
+                                name="numero_documento"
+                                required>
                         </div>
+
 
                         <div class="form-group">
                             <label for="editCorreo">Correo:</label>
@@ -411,20 +417,18 @@
                     </div>
 
                     <div class="search-section">
-                        <input type="text" name="search" class="search-input"
-                            placeholder="Buscar por nombre, apellido o número de documento"
-                            value="{{ request('search') }}">
-                        </form>
-
+                        <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nombre, apellido o número de documento">
                     </div>
+
 
                     <div class="action-buttons">
                         <button class="btn-primary" id="btnOpenAsistente">CREAR NUEVO ASISTENTE</button>
                         <a href="{{ route('asistente.export.excel') }}" class="btn-success">EXPORTAR EXCEL</a>
                         <a href="{{ route('asistente.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
-                    @include('profile.partials.assistants-table', ['assistants' => $assistants])
-
+                    <div id="assistantsTableContainer">
+                        @include('profile.partials.assistants-table', ['assistants' => $assistants])
+                    </div>
                 </div>
 
                 <!-- SECCIÓN GESTIÓN DE ABOGADOS -->
@@ -435,8 +439,8 @@
                     </div>
 
                     <div class="search-section">
-                        <input type="text" class="search-input"
-                            placeholder="Buscar por nombre, apellido o número de documento" id="searchAbogados">
+                        <input type="text" id="searchAbogados" class="search-input"
+                            placeholder="Buscar por nombre, apellido o número de documento">
                     </div>
 
                     <div class="action-buttons">
@@ -445,7 +449,10 @@
                         <a href="{{ route('lawyers.export.pdf') }}" class="btn-danger">EXPORTAR PDF</a>
                     </div>
 
-                    @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
+                    <div id="AbogadosTableWrapper">
+                        @include('profile.partials.lawyers-table', ['lawyers' => $lawyers])
+                    </div>
+
 
                 </div>
 
@@ -455,7 +462,6 @@
     </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/dash.js') }}"></script>
+
 
 </x-app-layout>
