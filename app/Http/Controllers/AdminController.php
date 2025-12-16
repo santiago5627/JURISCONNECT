@@ -22,12 +22,12 @@ class AdminController extends Controller
             if ($searchTerm) {
                 $query->where(function ($q) use ($searchTerm) {
                     $q->where('nombre', 'ILIKE', '%' . $searchTerm . '%')
-                      ->orWhere('apellido', 'ILIKE', '%' . $searchTerm . '%')
-                      ->orWhere('tipo_documento', 'ILIKE', '%' . $searchTerm . '%')
-                      ->orWhere('numero_documento', 'ILIKE', '%' . $searchTerm . '%')
-                      ->orWhere('correo', 'ILIKE', '%' . $searchTerm . '%')
-                      ->orWhere('telefono', 'ILIKE', '%' . $searchTerm . '%')
-                      ->orWhere('especialidad', 'ILIKE', '%' . $searchTerm . '%');
+                        ->orWhere('apellido', 'ILIKE', '%' . $searchTerm . '%')
+                        ->orWhere('tipo_documento', 'ILIKE', '%' . $searchTerm . '%')
+                        ->orWhere('numero_documento', 'ILIKE', '%' . $searchTerm . '%')
+                        ->orWhere('correo', 'ILIKE', '%' . $searchTerm . '%')
+                        ->orWhere('telefono', 'ILIKE', '%' . $searchTerm . '%')
+                        ->orWhere('especialidad', 'ILIKE', '%' . $searchTerm . '%');
                 });
             }
 
@@ -39,13 +39,23 @@ class AdminController extends Controller
             }
 
             // Obtener abogados paginados
-            $lawyers = $query->paginate(10, ['*'], 'lawyersPage');
+            $lawyers = $query
+                ->orderBy('id', 'desc') // o 'asc'
+                ->paginate(10, ['*'], 'lawyersPage');
+
 
             // TABLA PEQUEÑA (mostrar todos)
-            $lawyersSimple = Lawyer::paginate(10, ['*'], 'lawyersSimplePage');
+            $lawyersSimple = Lawyer::orderBy('id', 'desc')
+                ->paginate(10, ['*'], 'lawyersSimplePage');
 
-            $assistants = Assistant::with('lawyers')->paginate(10, ['*'], 'assistantsPage');
-            $assistantsSimple = Assistant::with('lawyers')->paginate(10, ['*'], 'assistantsSimplePage');
+
+            $assistants = Assistant::with('lawyers')
+                ->orderBy('id', 'asc')
+                ->paginate(10, ['*'], 'assistantsPage');
+
+            $assistantsSimple = Assistant::with('lawyers')
+                ->orderBy('id', 'asc')
+                ->paginate(10, ['*'], 'assistantsSimplePage');
 
             $abogados = Lawyer::all();
 
