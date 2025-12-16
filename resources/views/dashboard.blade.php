@@ -130,7 +130,7 @@
                             <label>Abogados asignados:</label>
                             <div id="lawyerList"></div>
 
-                            <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtn">
+                            <button type="button" class="btn-submit" style="margin-top:10px;" id="addLawyerBtnCreate">
                                 + Agregar Abogado
                             </button>
                         </div>
@@ -138,10 +138,10 @@
                         <!-- SELECT base oculto para clonar -->
                         <select class="lawyer-select" id=".lawyer-select" style="display:none;">
                             <option value="">Seleccione abogado...</option>
-                            @foreach($abogados as $lawyer)
-                            <option value="{{ $lawyer->id }}">
-                                {{ $lawyer->nombre }} {{ $lawyer->apellido }}
-                            </option>
+                            @foreach ($abogados as $lawyer)
+                                <option value="{{ $lawyer->id }}">
+                                    {{ $lawyer->nombre }} {{ $lawyer->apellido }}
+                                </option>
                             @endforeach
                         </select>
 
@@ -165,7 +165,7 @@
                 </div>
 
                 <div class="modal-body">
-                    <form id="editLawyerForm" method="POST">
+                    <form id="editLawyerForm" method="POST" action="#">
                         @csrf
                         @method('PUT')
 
@@ -223,6 +223,7 @@
                         </div>
                     </form>
                 </div>
+            
             </div>
         </div>
 
@@ -234,9 +235,8 @@
                     <button class="modal-close" id="closeEditAssistantModal">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <form id="editAssistantForm" method="POST">
+                    <form id="form-update" method="POST" action="#">
                         @csrf
-                        @method('PUT')
                         <div class="form-group">
                             <label for="editNombre">Nombre:</label>
                             <input type="text" id="editAssistantNombre" name="nombre" required>
@@ -279,10 +279,10 @@
 
                         <select class="lawyer-select" style="display:none;">
                             <option value="">Seleccione abogado...</option>
-                            @foreach($abogados as $lawyer)
-                            <option value="{{ $lawyer->id }}">
-                                {{ $lawyer->nombre }} {{ $lawyer->apellido }}
-                            </option>
+                            @foreach ($abogados as $lawyer)
+                                <option value="{{ $lawyer->id }}">
+                                    {{ $lawyer->nombre }} {{ $lawyer->apellido }}
+                                </option>
                             @endforeach
                         </select>
 
@@ -308,17 +308,16 @@
                 <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png" style="display: none;">
 
                 <!-- Indicador de carga (oculto por defecto) -->
-                <div id="loadingIndicator" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+                <div id="loadingIndicator"
+                    style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.7); color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
                     Subiendo...
                 </div>
 
                 <!-- Contenedor de la foto de perfil -->
                 <div class="profile-pic" onclick="document.getElementById('fileInput').click();"
-                    style="cursor: pointer; position: relative;"
-                    title="Haz clic para cambiar tu foto">
+                    style="cursor: pointer; position: relative;" title="Haz clic para cambiar tu foto">
                     <img src="{{ Auth::user()->foto_perfil ? asset('storage/' . Auth::user()->foto_perfil) : asset('img/silueta-atardecer-foto-perfil.webp') }}"
-                        id="profileImage"
-                        alt="Foto de perfil">
+                        id="profileImage" alt="Foto de perfil">
                 </div>
                 <h3>{{ Auth::user()->name }}</h3>
                 <p>{{ Auth::user()->email }}</p>
@@ -355,7 +354,7 @@
         <div class="main-content" id="mainContent">
             <div class="header">
                 <button class="hamburger" id="hamburgerBtn">☰</button>
-                <div class="title-logo-container">
+                <div class="title-logo-container"> 
                     <h1 class="title">JustConnect SENA</h1>
                 </div>
                 <div class="logo-container">

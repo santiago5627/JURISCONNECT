@@ -77,6 +77,8 @@ Route::middleware(['auth'])->group(function () {
             return Excel::download(new \App\Exports\LawyersExport, 'abogados.xlsx');
         })->name('export.excel');
     });
+    Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])
+        ->name('lawyers.update');
 
     // Resource lawyers
     Route::resource('lawyers', LawyerController::class);

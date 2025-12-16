@@ -3,24 +3,25 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("asistentes.js cargado");
 
     // ==========================================
-    // CONFIGURACIÓN DE SWEETALERT2
+    // CONFIGURACIÓN DE SWEETALERT2 (TOAST)
+    // Se usará para notificaciones de eliminación no críticas.
     // ==========================================
     const Toast = Swal.mixin({
         toast: true,
-        position: 'top-end',
+        position: "top-end",
         showConfirmButton: false,
-        timer: 3500,
+        timer: 4000,
         timerProgressBar: true,
         didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer);
-            toast.addEventListener('mouseleave', Swal.resumeTimer);
-        }
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
     });
 
     // ==========================================
     // ALERTAS (CREACIÓN / ACTUALIZACIÓN / ELIMINACIÓN / ERROR)
     // ==========================================
-    const successMessage = document.querySelector('[data-success-message]');
+    const successMessage = document.querySelector("[data-success-message]");
     if (successMessage) {
         const message = successMessage.dataset.successMessage;
         Toast.fire({
@@ -57,11 +58,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (errorMessage) {
         const message = errorMessage.dataset.errorMessage;
         Swal.fire({
-            icon: 'error',
-            title: 'Error',
+            icon: "success",
+            title: "¡ Exitosa!", // Título unificado para creación
             text: message,
-            confirmButtonText: 'Entendido',
-            confirmButtonColor: '#d33'
+            confirmButtonText: "OK",
+            confirmButtonColor: "#28a745", // Botón verde
         });
     }
 
@@ -161,10 +162,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     const label = document.querySelector(`label[for="${field.id}"]`);
                     if (label) {
-                        emptyFields.push(label.textContent.replace('*', '').trim());
+                        emptyFields.push(
+                            label.textContent.replace("*", "").trim()
+                        );
                     }
                 } else {
-                    field.classList.remove('error');
+                    field.classList.remove("error");
                 }
             });
 
@@ -172,14 +175,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.preventDefault();
 
                 Swal.fire({
-                    icon: 'warning',
-                    title: 'Campos incompletos',
-                    html: `<p>Por favor complete los siguientes campos:</p>
+                    icon: "warning",
+                    title: "🛑 ¡Atención! Campos Requeridos",
+                    html: `<p>Debe completar los siguientes campos obligatorios para continuar:</p>
                         <ul style="text-align: left; margin: 10px auto; display: inline-block;">
-                        ${emptyFields.map(field => `<li>${field}</li>`).join('')}
+                        ${emptyFields
+                            .map((field) => `<li>**${field}**</li>`)
+                            .join("")}
                         </ul>`,
-                    confirmButtonText: 'Entendido',
-                    confirmButtonColor: '#3085d6'
+                    confirmButtonText: "Corregir",
+                    confirmButtonColor: "#ffc107",
                 });
             }
         });

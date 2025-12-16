@@ -849,37 +849,58 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    // Delegación: eliminar abogado con confirmación
+    // Delegación: eliminar abogado con AJAX (SIN RECARGAR)
     document.addEventListener("submit", async function (e) {
-        if (e.target.classList.contains("delete-lawyer-form")) {
-            e.preventDefault();
-            const form = e.target;
-            const lawyerName = form.dataset.name || "";
-            const confirmed = await showCustomAlert(
-                "warning",
-                "Confirmar Eliminación",
-                `¿Estás seguro de eliminar al abogado ${lawyerName}? Esta acción no se puede deshacer.`,
-                true,
-                "Eliminar",
-                "Cancelar"
-            );
-            if (confirmed) form.submit();
-        }
-    });
+        if (!e.target.classList.contains("delete-lawyer-form")) return;
 
-    // Delegación: eliminar proceso con confirmación personalizada
-    document.addEventListener("submit", async function (e) {
-        if (e.target.classList.contains("delete-proceso-form")) {
-            e.preventDefault();
-            const confirmed = await showCustomAlert(
-                "warning",
-                "Confirmar Eliminación",
-                "¿Seguro que deseas eliminar este proceso?",
-                true,
-                "Eliminar",
-                "Cancelar"
+        e.preventDefault();
+
+        const form = e.target;
+        const lawyerName = form.dataset.name || "";
+
+        const confirmed = await showCustomAlert(
+            "warning",
+            "Confirmar Eliminación",
+            `¿Estás seguro de eliminar al abogado ${lawyerName}? Esta acción no se puede deshacer.`,
+            true,
+            "Eliminar",
+            "Cancelar"
+        );
+
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(form.action, {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": getCsrfToken(),
+                    Accept: "application/json",
+                },
+                body: new FormData(form),
+            });
+
+            const result = await response.json();
+
+            if (!result.success) {
+                throw new Error(result.message || "Error al eliminar");
+            }
+
+            // 🔥 quitar fila de la tabla
+            const row = form.closest("tr");
+            if (row) row.remove();
+
+            await showCustomAlert(
+                "success",
+                "Eliminado",
+                `El abogado ${lawyerName} fue eliminado exitosamente.`
             );
-            if (confirmed) e.target.submit();
+        } catch (error) {
+            console.error(error);
+            await showCustomAlert(
+                "error",
+                "Error",
+                "Ocurrió un error al eliminar."
+            );
         }
     });
 
@@ -1137,7 +1158,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-
     const lawyerContainer = document.getElementById("lawyerSelectContainer");
     const lawyerList = document.getElementById("lawyerList");
     const addLawyerBtn = document.getElementById("addLawyerBtn");
@@ -1196,136 +1216,137 @@ if (btnCloseAsistente) {
 if (btnCancelAsistente) {
     btnCancelAsistente.addEventListener("click", closeAssistantModal);
 }
-
+/* =============================
+   =    EDITAR ASISTENTE
+   ============================= */
 document.addEventListener("click", function (e) {
-
-    /* =============================
-       =    EDITAR ASISTENTE
-       ============================= */
     if (e.target.classList.contains("btn-edit-assistant")) {
         const btn = e.target;
         const id = btn.dataset.id;
 
-        // Llenar campos del formulario
-        editAssistantNombre.value = btn.dataset.nombre;
-        editAssistantApellido.value = btn.dataset.apellido;
-        editAssistantTipoDocumento.value = btn.dataset.tipo_documento;
-        editAssistantNumeroDocumento.value = btn.dataset.numero_documento;
-        editAssistantCorreo.value = btn.dataset.correo;
+        editAssistantNombre.value = btn.dataset.nombre || "";
+        editAssistantApellido.value = btn.dataset.apellido || "";
+        editAssistantTipoDocumento.value = btn.dataset.tipo_documento || "";
+        editAssistantNumeroDocumento.value = btn.dataset.numero_documento || "";
+        editAssistantCorreo.value = btn.dataset.correo || "";
         editAssistantTelefono.value = btn.dataset.telefono || "";
 
-        // Ruta del formulario
         editAssistantForm.action = `/assistants/${id}`;
 
-        // Contenedor de abogados
         const container = document.getElementById("assignedLawyersContainer");
-        container.innerHTML = '';
+        container.innerHTML = "";
 
-        // Cargar abogados asignados
-        let lawyers = JSON.parse(btn.dataset.lawyers || '[]');
-        lawyers.forEach(lawyerId => addLawyerSelect(lawyerId));
+        const lawyers = JSON.parse(btn.dataset.lawyers || "[]");
+        lawyers.forEach((lawyerId) => addLawyerSelect(lawyerId));
 
-        // Mostrar modal
         editAssistantModal.style.display = "flex";
     }
 
-    /* =============================
-       =       CERRAR MODAL
-       ============================= */
-    if (e.target.id === "closeEditAssistantModal" ||
-        e.target.id === "cancelEditBtn") {
+    if (
+        e.target.id === "closeEditAssistantModal" ||
+        e.target.id === "cancelEditBtn"
+    ) {
         editAssistantModal.style.display = "none";
     }
 
-    /* =============================
-       =   AGREGAR SELECT ABOGADO
-       ============================= */
     if (e.target.id === "addLawyerBtn") {
         addLawyerSelect();
     }
 
-    /* =============================
-       =   ELIMINAR ABOGADO
-       ============================= */
     if (e.target.classList.contains("remove-lawyer")) {
         e.target.parentElement.remove();
     }
 });
 
-
 /* ===========================================
-   =   FUNCIÓN AGREGAR SELECT DE ABOGADO
+   =   AGREGAR SELECT DE ABOGADO
    =========================================== */
 function addLawyerSelect(selectedId = null) {
-
     const baseSelect = document.querySelector(".lawyer-select");
     const container = document.getElementById("assignedLawyersContainer");
 
-    // Clonar select base
     const select = baseSelect.cloneNode(true);
     select.style.display = "block";
-    select.style.flex = "1";
     select.name = "lawyers[]";
 
-    if (selectedId) {
-        select.value = selectedId;
-    }
+    if (selectedId) select.value = selectedId;
 
-    // Contenedor fila
     const wrapper = document.createElement("div");
-    wrapper.classList.add("lawyer-wrapper");
+    wrapper.className = "lawyer-wrapper";
     wrapper.style.display = "flex";
-    wrapper.style.alignItems = "center";
     wrapper.style.gap = "10px";
     wrapper.style.marginBottom = "10px";
 
-    // Botón eliminar (MISMAS CLASES)
     const removeBtn = document.createElement("button");
     removeBtn.type = "button";
     removeBtn.textContent = "Eliminar";
-    removeBtn.classList.add("remove-lawyer", "btn-cancel");
+    removeBtn.className = "remove-lawyer btn-cancel";
 
-    // Insertar
     wrapper.appendChild(select);
     wrapper.appendChild(removeBtn);
     container.appendChild(wrapper);
 }
 
 /* ===========================================
-   =    ENVÍO AJAX DEL FORMULARIO UPDATE      =
+   =   SUBMIT EDITAR ASISTENTE (AJAX)
    =========================================== */
-document.querySelector("#form-update").addEventListener("submit", function (e) {
+editAssistantForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    let form = this;
-    let formData = new FormData(form);
+    const form = this;
+    const data = new FormData(form);
 
-    fetch(form.action, {
-        method: "POST",
-        body: formData, // No agregar headers de tipo JSON !
-        headers: {
-            "X-CSRF-TOKEN": document
-                .querySelector('meta[name="csrf-token"]')
-                .getAttribute("content"),
-        },
-    })
-        .then((res) => res.json())
-        .then((data) => {
-            if (data.success) {
-                const msg = document.createElement("div");
-                msg.innerText = data.message;
-                msg.classList.add("notification-success");
+    const errors = validateEditAssistantForm(data);
+    if (errors.length) {
+        await showCustomAlert(
+            "warning",
+            "Campos incompletos",
+            errors.join("\n")
+        );
+        return;
+    }
 
-                document.body.appendChild(msg);
+    try {
+        const response = await fetch(form.action, {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": getCsrfToken(),
+                Accept: "application/json",
+            },
+            body: data,
+        });
 
-                setTimeout(() => msg.remove(), 2000);
+        const result = await response.json();
 
-                editAssistantModal.style.display = "none";
-            } else {
-                alert("Error: " + data.message);
-            }
-        })
-        .catch((err) => console.error(err));
+        if (!result.success || !result.assistant) {
+            console.error("Respuesta inválida:", result);
+            await showCustomAlert(
+                "error",
+                "Error",
+                result.message || "No se pudo actualizar."
+            );
+            return;
+        }
+
+        const assistant = result.assistant;
+
+        updateAssistantRowInTable(assistant);
+
+        await showCustomAlert(
+            "success",
+            "¡Perfecto!",
+            `El asistente ${assistant.nombre} ${assistant.apellido} fue actualizado exitosamente.`
+        );
+
+        editAssistantModal.style.display = "none";
+    } catch (error) {
+        console.error(error);
+        await showCustomAlert(
+            "error",
+            "Error inesperado",
+            "Inténtalo nuevamente."
+        );
+    }
 });
 
 
