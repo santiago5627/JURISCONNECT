@@ -10,7 +10,7 @@ export default defineConfig({
 
                 // ✅ AGREGAR ESTOS JS
                 'resources/js/asistentes.js',
-                'resources/js/abogado.js',
+            
                 'resources/js/dash.js',
             ],
             refresh: true,
@@ -27,7 +27,7 @@ export default defineConfig({
 
                 // ✅ LOS MISMOS AQUÍ
                 'resources/js/asistentes.js',
-                'resources/js/abogado.js',
+               
                 'resources/js/dash.js',
             ],
         },

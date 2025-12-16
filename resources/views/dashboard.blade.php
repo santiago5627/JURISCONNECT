@@ -168,6 +168,7 @@
                     <form id="editLawyerForm" method="POST">
                         @csrf
                         @method('PUT')
+
                         <div class="form-group">
                             <label for="editNombre">Nombre:</label>
                             <input type="text" id="editNombre" name="nombre" required>
@@ -248,7 +249,7 @@
 
                         <div class="form-group">
                             <label for="editTipoDocumento">Tipo de Documento:</label>
-                            <select id="editAssistantTipoDocumento" name="tipo_documento" required>
+                            <select id="editTipoDocumento" name="tipo_documento" required>
                                 <option value="">Seleccione...</option>
                                 <option value="CC">Cédula de Ciudadanía</option>
                                 <option value="CE">Cédula de Extranjería</option>
@@ -258,8 +259,12 @@
 
                         <div class="form-group">
                             <label for="editNumeroDocumento">Número de Documento:</label>
-                            <input type="text" id="editAssistantNumeroDocumento" name="numero_documento" required>
+                            <input type="text"
+                                id="editNumeroDocumento"
+                                name="numero_documento"
+                                required>
                         </div>
+
 
                         <div class="form-group">
                             <label for="editCorreo">Correo:</label>
@@ -458,9 +463,6 @@
     </div>
     </div>
 
-    <!-- Scripts -->
-    <!-- Cargar JS del dashboard del abogado -->
-    <script src="{{ asset('js/abogado.js') }}"></script>
 
 
 </x-app-layout>

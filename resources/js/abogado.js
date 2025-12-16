@@ -48,31 +48,39 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // ============================
-    // LÓGICA PARA EDITAR ABOGADO (YA EXISTENTE)
-    // ============================
-    document.querySelectorAll('.edit-lawyer-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            const lawyerId = this.dataset.id;
-            const name = this.dataset.name;
-            const lastname = this.dataset.lastname;
-            const document = this.dataset.document;
+// ============================
+// LÓGICA PARA EDITAR ABOGADO (CORREGIDA)
+// ============================
+document.querySelectorAll('.edit-lawyer-btn').forEach(button => {
+    button.addEventListener('click', function () {
 
-            document.getElementById('edit_id').value = lawyerId;
-            document.getElementById('edit_nombre').value = name;
-            document.getElementById('edit_apellido').value = lastname;
-            document.getElementById('edit_documento').value = document;
+        const lawyerId = this.dataset.id;
 
-            document.getElementById('editLawyerModal').style.display = 'flex';
-        });
+        const form = document.getElementById('editLawyerForm');
+        form.action = `/lawyers/${lawyerId}`; // 👈 RUTA UPDATE
+
+        document.getElementById('editNombre').value = this.dataset.nombre;
+        document.getElementById('editApellido').value = this.dataset.apellido;
+        document.getElementById('editTipoDocumento').value = this.dataset.tipo_documento;
+        document.getElementById('editNumeroDocumento').value = this.dataset.numero_documento;
+        document.getElementById('editCorreo').value = this.dataset.correo;
+        document.getElementById('editTelefono').value = this.dataset.telefono || '';
+        document.getElementById('editEspecialidad').value = this.dataset.especialidad || '';
+        document.getElementById('editipodeusuario').value = this.dataset.tipodeusuario;
+
+        document.getElementById('editLawyerModal').style.display = 'flex';
     });
+});
 
-    const closeEdit = document.getElementById('closeEditModal');
-    if (closeEdit) {
-        closeEdit.addEventListener('click', function () {
-            document.getElementById('editLawyerModal').style.display = 'none';
-        });
-    }
+// Cerrar modal editar
+const closeEdit = document.getElementById('closeEditModal');
+if (closeEdit) {
+    closeEdit.addEventListener('click', function () {
+        document.getElementById('editLawyerModal').style.display = 'none';
+    });
+}
+
+
 
 });
  
