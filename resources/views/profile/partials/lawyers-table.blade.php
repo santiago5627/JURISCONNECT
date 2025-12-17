@@ -48,48 +48,33 @@
     @include('profile.partials.pagination', ['items' => $lawyers, 'pageKey' => 'page'])
 </div>
 
-
-<style>
-    .abogado-nombre {
-        font-size: inherit;
-        color: inherit;
-        font-weight: normal;
-        margin-left: 6px;
-    }
-</style>
 <script>
-    document.getElementById('searchInput')?.addEventListener('input', function() {
-        let valor = this.value.trim().toLowerCase();
-        let cards = document.querySelectorAll('.process-card');
+    // ==========================================
+    // BUSCADOR REAL AJAX PARA ABOGADOS
+    // ==========================================
+    const searchInputLawyers = document.getElementById("searchAbogados");
+    if (searchInputLawyers) {
+        let typingTimer;
 
-        cards.forEach(card => {
-            let titulo = card.querySelector('.titulo-proceso');
-            let numero = titulo?.getAttribute('data-numero') ?? '';
-            let contenido = card.innerText.toLowerCase();
+        searchInputLawyers.addEventListener("input", function() {
+            clearTimeout(typingTimer);
 
-            // Nombre abogado
-            let abogado = card.querySelector('.abogado-nombre')?.innerText.toLowerCase() ?? '';
+            typingTimer = setTimeout(() => {
+                const search = this.value;
 
-            // Especialidad abogado
-            let especialidad = card.querySelector('.abogado-especialidad')?.innerText.toLowerCase() ??
-                '';
-
-            if (valor === '') {
-                card.style.display = 'block';
-                return;
-            }
-
-            // Lógica de búsqueda
-            if (
-                numero.includes(valor) ||
-                contenido.includes(valor) ||
-                abogado.includes(valor) ||
-                especialidad.includes(valor)
-            ) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
+                fetch(`/dashboard?search=${encodeURIComponent(search)}&section=lawyers`, {
+                        headers: {
+                            "X-Requested-With": "XMLHttpRequest"
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success && data.html) {
+                            document.getElementById("AbogadosTableWrapper").innerHTML = data.html;
+                        }
+                    })
+                    .catch(err => console.error("Error AJAX búsqueda abogados:", err));
+            }, 250); // retraso para no saturar el servidor
         });
-    });
+    }
 </script>
