@@ -241,7 +241,7 @@
 
                         <div class="form-group">
                             <label for="editTipoDocumento">Tipo de Documento:</label>
-                            <select id="editAssistantTipoDocumento" name="tipo_documento" required>
+                            <select id="editTipoDocumento" name="tipo_documento" required>
                                 <option value="">Seleccione...</option>
                                 <option value="CC">Cédula de Ciudadanía</option>
                                 <option value="CE">Cédula de Extranjería</option>
@@ -251,8 +251,12 @@
 
                         <div class="form-group">
                             <label for="editNumeroDocumento">Número de Documento:</label>
-                            <input type="text" id="editAssistantNumeroDocumento" name="numero_documento" required>
+                            <input type="text"
+                                id="editNumeroDocumento"
+                                name="numero_documento"
+                                required>
                         </div>
+
 
                         <div class="form-group">
                             <label for="editCorreo">Correo:</label>
@@ -406,8 +410,7 @@
                     </div>
 
                     <div class="search-section">
-                        <input type="text" id="searchInput" class="search-input"
-                            placeholder="Buscar por nombre, apellido o número de documento">
+                        <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nombre, apellido o número de documento">
                     </div>
 
 
@@ -452,8 +455,6 @@
     </div>
     </div>
 
-    <!-- Scripts -->
-    <!-- Cargar JS del dashboard del abogado -->
-    <script src="{{ asset('js/abogado.js') }}"></script>
+
 
 </x-app-layout>
