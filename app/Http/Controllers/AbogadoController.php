@@ -76,9 +76,10 @@ class AbogadoController extends Controller
                 ->with('success', 'Concepto jurídico guardado exitosamente. El proceso ha sido marcado como "en curso".');
 
         } catch (\Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Error al guardar el concepto: ' . $e->getMessage())
-                ->withInput();
+            return redirect()
+    ->route('conceptos.create', $id)
+    ->with('success', 'Concepto jurídico creado correctamente.');
+
         }
     }
 

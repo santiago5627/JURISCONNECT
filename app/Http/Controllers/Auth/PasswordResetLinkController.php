@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
 use App\Models\User;
 
-
-class PasswordResetLinkController
+class PasswordResetLinkController extends Controller
 {
     /**
      * Display the password reset link request view.
@@ -32,8 +31,10 @@ class PasswordResetLinkController
         // Verificar si el correo existe en la BD
         $exists = User::where('email', $request->email)->exists();
 
-        if (! $exists) {
-            return back()->with('error_email', 'El correo ingresado no está registrado.');
+        if (!$exists) {
+            return back()->withErrors([
+                'email' => 'No podemos encontrar un usuario con esa dirección de correo electrónico.'
+            ]);
         }
 
         // Enviar correo

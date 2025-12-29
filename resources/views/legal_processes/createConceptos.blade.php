@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es"><!-- pagina para redactar un concepto juridico para un proceso especifico -->
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -9,6 +9,146 @@
 
     <!-- Enlace a CSS -->
     <link rel="stylesheet" href="{{ asset('css/createCon.css') }}">
+    
+    <style>
+        /* ESTILOS DEL MODAL DE CONFIRMACIÓN */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-confirm {
+            background: white;
+            border-radius: 16px;
+            padding: 0;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease-out;
+            overflow: hidden;
+        }
+
+        .modal-content {
+            padding: 40px 32px 32px;
+            text-align: center;
+        }
+
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            background: #10b981;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            animation: scaleIn 0.4s ease-out 0.1s both;
+        }
+
+        .modal-icon i {
+            color: white;
+            font-size: 36px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0 0 12px;
+        }
+
+        .modal-message {
+            font-size: 15px;
+            color: #6b7280;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            padding: 0 32px 32px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .modal-btn-cancel {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .modal-btn-confirm {
+            background: #10b981;
+            color: white;
+        }
+
+        .modal-btn-confirm:hover {
+            background: #059669;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        .modal-overlay.hiding {
+            animation: fadeOut 0.2s ease-in forwards;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,8 +157,8 @@
         <div class="header">
             <h2>Redactar Concepto Jurídico</h2>
             <a href="{{ route('conceptos.create') }}" class="btn-back">
-                <i class="fas fa-arrow-left"></i>
-                Volver a la Lista
+            <i class="fas fa-chevron-left" style="margin-right: 15px"></i>
+            Volver a la Lista
             </a>
         </div>
 
@@ -227,19 +367,84 @@
         </div>
     </div>
 
+    <!-- MODAL DE CONFIRMACIÓN -->
+    <div id="confirmModal" class="modal-overlay">
+        <div class="modal-confirm">
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h3 class="modal-title">¡Perfecto!</h3>
+                <p class="modal-message">
+                    Una vez enviado, no podrás modificar este concepto jurídico. 
+                    Asegúrate de que toda la información esté correcta.
+                </p>
+            </div>
+            <div class="modal-buttons">
+                <button type="button" class="modal-btn modal-btn-cancel" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                    Cancelar
+                </button>
+                <button type="button" class="modal-btn modal-btn-confirm" onclick="confirmSubmit()">
+                    <i class="fas fa-check"></i>
+                    Aceptar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // VARIABLES GLOBALES
+        let formToSubmit = null;
+
+        // FUNCIONES DEL MODAL
+        function showModal(form) {
+            formToSubmit = form;
+            const modal = document.getElementById('confirmModal');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('confirmModal');
+            modal.classList.add('hiding');
+            
+            setTimeout(() => {
+                modal.classList.remove('show', 'hiding');
+                document.body.style.overflow = '';
+                formToSubmit = null;
+            }, 200);
+        }
+
+function confirmSubmit() {
+    if (formToSubmit) {
+        formToSubmit.removeEventListener('submit', handleFormSubmit);
+        formToSubmit.submit();
+    }
+    closeModal();
+
+    window.location.href = previousUrl;
+}
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            showModal(this);
+        }
+
+        // CÓDIGO PRINCIPAL
         document.addEventListener('DOMContentLoaded', function() {
             const conceptoTextarea = document.getElementById('concepto');
             const counter = document.getElementById('conceptoCounter');
             const submitBtn = document.getElementById('submitBtn');
             const errorDiv = document.getElementById('conceptoError');
+            const form = document.getElementById('conceptoForm');
+            const modal = document.getElementById('confirmModal');
 
             // Contador de caracteres
             conceptoTextarea.addEventListener('input', function() {
                 const length = this.value.length;
                 counter.textContent = length + ' caracteres';
 
-                // Cambiar color según la longitud
                 if (length < 50) {
                     counter.className = 'char-counter error';
                     submitBtn.disabled = true;
@@ -256,10 +461,22 @@
             // Trigger inicial
             conceptoTextarea.dispatchEvent(new Event('input'));
 
-            // Confirmación antes de enviar
-            document.getElementById('conceptoForm').addEventListener('submit', function(e) {
-                if (!confirm('¿Estás seguro de que deseas finalizar este concepto? Una vez enviado, no podrás modificarlo.')) {
-                    e.preventDefault();
+            // Evento del formulario
+            if (form) {
+                form.addEventListener('submit', handleFormSubmit);
+            }
+
+            // Cerrar modal al hacer clic fuera
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+
+            // Cerrar con tecla ESC
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
                 }
             });
         });

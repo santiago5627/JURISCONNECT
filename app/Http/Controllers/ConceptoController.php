@@ -16,23 +16,23 @@ class ConceptoController extends Controller
     // ===============================
 
     public function storeProceso(Request $request, $id)
-{
-    // Validación
-    $validated = $request->validate([
-        'titulo' => 'required|string|max:120',
-        'concepto' => 'required|string|min:50',
-    ]);
+    {
+        // Validación
+        $validated = $request->validate([
+            'titulo' => 'required|string|max:120',
+            'concepto' => 'required|string|min:50',
+        ]);
 
-    // Crear concepto relacionado al proceso
-    $concepto = new ConceptoJuridico();
-    $concepto->proceso_id = $id;
-    $concepto->abogado_id = Auth::id();
-    $concepto->titulo = $validated['titulo'];
-    $concepto->descripcion = $validated['concepto'];
-    $concepto->save();
+        // Crear concepto relacionado al proceso
+        $concepto = new ConceptoJuridico();
+        $concepto->proceso_id = $id;
+        $concepto->abogado_id = Auth::id();
+        $concepto->titulo = $validated['titulo'];
+        $concepto->descripcion = $validated['concepto'];
+        $concepto->save();
 
-    return back()->with('success', 'Concepto jurídico creado correctamente.');
-}
+        return back()->with('success', 'Concepto jurídico creado correctamente.');
+    }
 
 
     public function index(Request $request)
@@ -44,15 +44,15 @@ class ConceptoController extends Controller
 
             // Aplicar búsqueda si existe el término de búsqueda
             if ($searchTerm) {
-                $query->where(function($q) use ($searchTerm) {
+                $query->where(function ($q) use ($searchTerm) {
                     $q->where('id', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('estado', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('tipo_proceso', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('created_at', 'LIKE', '%' . $searchTerm . '%');
-                      // Agrega más campos según tu modelo Lawyer 
+                        ->orWhere('estado', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('tipo_proceso', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
+                        ->orWhere('created_at', 'LIKE', '%' . $searchTerm . '%');
+                    // Agrega más campos según tu modelo Lawyer 
                 });
             }
 
@@ -75,8 +75,6 @@ class ConceptoController extends Controller
                     'search_term' => $searchTerm
                 ]);
             }
-
-
         } catch (\Exception $e) {
             Log::error('Error en ConceptoController@index', [
                 'message' => $e->getMessage(),
@@ -96,77 +94,77 @@ class ConceptoController extends Controller
     }
 
     /**
- * Show the form for creating a new resource
- */
-public function create(Request $request)
-{
-    $query = Proceso::query();
+     * Show the form for creating a new resource
+     */
+    public function create(Request $request)
+    {
+        $query = Proceso::query();
 
-    // --- Si el usuario es abogado (role_id = 2) ---
-    if (Auth::user()->role_id == 2) {
+        // --- Si el usuario es abogado (role_id = 2) ---
+        if (Auth::user()->role_id == 2) {
 
-        // buscar lawyer por user_id
-        $lawyer = \App\Models\Lawyer::where('user_id', Auth::id())->first();
+            // buscar lawyer por user_id
+            $lawyer = \App\Models\Lawyer::where('user_id', Auth::id())->first();
 
-        if ($lawyer) {
-            $query->where('lawyer_id', $lawyer->id);
+            if ($lawyer) {
+                $query->where('lawyer_id', $lawyer->id);
+            }
         }
-    }
 
-    // --- Si el usuario es asistente (role_id = 3) ---
-    if (Auth::user()->role_id == 3) {
+        // --- Si el usuario es asistente (role_id = 3) ---
+        if (Auth::user()->role_id == 3) {
 
-        $assistant = Auth::user()->assistant;
+            $assistant = Auth::user()->assistant;
 
-        if ($assistant) {
-            $lawyerIds = $assistant->lawyers()->pluck('lawyer_id');
-            $query->whereIn('lawyer_id', $lawyerIds);
+            if ($assistant) {
+                $lawyerIds = $assistant->lawyers()->pluck('lawyer_id');
+                $query->whereIn('lawyer_id', $lawyerIds);
+            }
         }
+
+        // --- BÚSQUEDA ---
+        if ($request->has('search') && $request->get('search')) {
+            $search = $request->get('search');
+
+            $query->where(function ($q) use ($search) {
+                $q->where('numero_radicado', 'ILIKE', "%$search%")
+                    ->orWhere('demandante', 'ILIKE', "%$search%")
+                    ->orWhere('demandado', 'ILIKE', "%$search%")
+                    ->orWhere('tipo_proceso', 'ILIKE', "%$search%")
+                    ->orWhere('estado', 'ILIKE', "%$search%");
+            });
+        }
+
+        // Obtener procesos filtrados
+        $procesos = $query->orderBy('id', 'asc')->get();
+
+        // --- AJAX ---
+        if ($request->ajax() || $request->get('ajax')) {
+            $html = view('profile.partials.process-card', ['procesos' => $procesos])->render();
+            return response()->json([
+                'success' => true,
+                'html' => $html,
+                'total' => $procesos->count()
+            ]);
+        }
+
+        return view('legal_processes.showConceptos', compact('procesos'));
     }
-
-    // --- BÚSQUEDA ---
-    if ($request->has('search') && $request->get('search')) {
-        $search = $request->get('search');
-
-        $query->where(function ($q) use ($search) {
-            $q->where('numero_radicado', 'ILIKE', "%$search%")
-                ->orWhere('demandante', 'ILIKE', "%$search%")
-                ->orWhere('demandado', 'ILIKE', "%$search%")
-                ->orWhere('tipo_proceso', 'ILIKE', "%$search%")
-                ->orWhere('estado', 'ILIKE', "%$search%");
-        });
-    }
-
-    // Obtener procesos filtrados
-    $procesos = $query->orderBy('id', 'asc')->get();
-
-    // --- AJAX ---
-    if ($request->ajax() || $request->get('ajax')) {
-        $html = view('profile.partials.process-card', ['procesos' => $procesos])->render();
-        return response()->json([
-            'success' => true,
-            'html' => $html,
-            'total' => $procesos->count()
-        ]);
-    }
-
-    return view('legal_processes.showConceptos', compact('procesos'));
-}
 
 
     /**
      * Guardar el concepto para un proceso específico
      */
     public function store(Request $request, Proceso $proceso)
-{
-    $this->validateConceptoData($request);
-    
-    $this->createConceptoForProceso($request, $proceso);
-    $this->updateProcesoEstado($proceso);
+    {
+        $this->validateConceptoData($request);
 
-    return redirect()->route('abogado.dashboard')
-                    ->with('success', 'Concepto jurídico creado exitosamente.');
-}
+        $this->createConceptoForProceso($request, $proceso);
+        $this->updateProcesoEstado($proceso);
+
+        return redirect()->route('abogado.dashboard')
+            ->with('success', 'Concepto jurídico creado exitosamente.');
+    }
 
     /**
      * Mostrar el formulario para crear un concepto para un proceso específico
@@ -175,11 +173,10 @@ public function create(Request $request)
     {
         try {
             $proceso = $this->getProcesoWithRelations($procesoId);
-            
-            $this->checkExistingConcepto($procesoId);
-            
-            return view('legal_processes.showConceptos', compact('proceso'));
 
+            $this->checkExistingConcepto($procesoId);
+
+            return view('legal_processes.showConceptos', compact('proceso'));
         } catch (\Exception $e) {
             Log::error('Error al cargar formulario de concepto', [
                 'proceso_id' => $procesoId,
@@ -198,7 +195,37 @@ public function create(Request $request)
         // Traer concepto con proceso y abogado (ajusta relaciones según tu modelo)
         $concepto = \App\Models\ConceptoJuridico::with(['proceso', 'abogado'])->findOrFail($id);
 
+        return view('legal_processes.conceptos', compact('concepto'));
+
         return response()->json($concepto);
+    }
+
+    /**
+     * Eliminar concepto específico
+     */
+    public function destroy($id)
+    {
+        $concepto = ConceptoJuridico::findOrFail($id);
+
+        // Verificar que el usuario sea el propietario o un admin
+        if ($concepto->abogado_id !== Auth::id() && Auth::user()->role_id != 1) {
+            abort(403, 'No tienes permiso para eliminar este concepto.');
+        }
+
+        $concepto->delete();
+        return redirect()->back()->with('success', 'Concepto jurídico eliminado correctamente.');
+    }
+
+    /**
+     * Listar todos los conceptos asociados a un proceso
+     */
+    public function listByProceso($procesoId)
+    {
+        $proceso = Proceso::findOrFail($procesoId);
+
+        $conceptos = ConceptoJuridico::with(['abogado'])->where('proceso_id', $procesoId)->get();
+
+        return view('legal_processes.conceptos', compact('proceso', 'conceptos'));
     }
 
     // ===============================
@@ -209,13 +236,13 @@ public function create(Request $request)
      * Validar datos del concepto
      */
     private function validateConceptoData(Request $request)
-{
-    $request->validate([
-        'titulo' => 'required|string|max:255',
-        'categoria' => 'required|string|max:255',
-        'descripcion' => 'required|min:50'
-    ]);
-}
+    {
+        $request->validate([
+            'titulo' => 'required|string|max:255',
+            'categoria' => 'required|string|max:255',
+            'descripcion' => 'required|min:50'
+        ]);
+    }
 
     /**
      * Obtener proceso con sus relaciones
@@ -231,7 +258,7 @@ public function create(Request $request)
     private function checkExistingConcepto($procesoId)
     {
         $conceptoExistente = ConceptoJuridico::where('proceso_id', $procesoId)->first();
-        
+
         if ($conceptoExistente) {
             abort(403, 'Ya existe un concepto para este proceso.');
         }
@@ -273,22 +300,21 @@ public function create(Request $request)
                 ]);
             }
 
-            $procesos = Proceso::where(function($q) use ($searchTerm) {
+            $procesos = Proceso::where(function ($q) use ($searchTerm) {
                 $q->where('id', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
-                ->orWhere('tipo_proceso', 'LIKE', '%' . $searchTerm . '%');
+                    ->orWhere('numero_radicado', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('demandante', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('demandado', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('tipo_proceso', 'LIKE', '%' . $searchTerm . '%');
             })
-            ->limit(20)
-            ->get(['id', 'numero_radicado', 'demandante', 'demandado', 'estado']);
+                ->limit(20)
+                ->get(['id', 'numero_radicado', 'demandante', 'demandado', 'estado']);
 
             return response()->json([
                 'success' => true,
                 'data' => $procesos,
                 'count' => $procesos->count()
             ]);
-            
         } catch (\Exception $e) {
             Log::error('Error en búsqueda de procesos', [
                 'term' => $searchTerm ?? 'N/A',

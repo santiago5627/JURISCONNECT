@@ -1,99 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <title>JurisConnect SENA - Recuperar Contraseña</title>
     <link rel="stylesheet" href="{{ asset('/css/recuperar.css') }}">
-    <style>
-        /* Estilos para las alertas personalizadas */
-        .custom-alert-overlay {
-            position: fixed;
-            inset: 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 9999;
-            backdrop-filter: blur(2px);
-        }
-        
-        .custom-alert-box {
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 420px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s ease-out;
-        }
-        
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        
-        .custom-alert-icon-circle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-            background: #2ecc71;
-            color: #fff;
-            font-weight: 700;
-            font-size: 28px;
-        }
-        
-        .custom-alert-icon-circle.error {
-            background: #e74c3c;
-        }
-        
-        .custom-alert-title {
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #2c3e50;
-        }
-        
-        .custom-alert-message {
-            font-size: 15px;
-            line-height: 1.6;
-            color: #555;
-            margin-bottom: 20px;
-        }
-        
-        .custom-alert-btn {
-            margin-top: 12px;
-            padding: 10px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            background: #16a085;
-            color: white;
-            border: none;
-            font-size: 15px;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-        
-        .custom-alert-btn:hover {
-            background: #138f75;
-        }
-        
-        .input-error {
-            color: #e74c3c;
-            margin-top: 6px;
-            font-size: 14px;
-        }
-    </style>
 </head>
 
 <body>
@@ -107,18 +17,25 @@
         // Obtenemos el primer error de 'email' si existe
         $emailError = $errors->first('email') ?? null;
         $showThrottle = false;
+        $showNotRegistered = false;
         $throttleSeconds = null;
 
         if ($emailError) {
             // Normalizamos a minúsculas para comparaciones
             $lower = mb_strtolower($emailError);
 
-            // Caso 1: mensajes que contienen la palabra "segundo(s)" o "second(s)" y un número
-            if (preg_match('/(\d+)\s*(segundo|segundos|second|seconds)/i', $emailError, $m)) {
+            // Caso 1: Email no registrado
+            // Laravel por defecto usa: "We can't find a user with that email address."
+            // O en español: "No podemos encontrar un usuario con esa dirección de correo."
+            if (preg_match('/no podemos encontrar|can\'t find|not find|no encontrado|no existe|no registrado|not registered|doesn\'t exist/i', $lower)) {
+                $showNotRegistered = true;
+            }
+            // Caso 2: mensajes que contienen la palabra "segundo(s)" o "second(s)" y un número
+            elseif (preg_match('/(\d+)\s*(segundo|segundos|second|seconds)/i', $emailError, $m)) {
                 $throttleSeconds = (int)$m[1];
                 $showThrottle = true;
             }
-            // Caso 2: mensajes con palabras clave comunes (incluye "wait", "retry", "retrying")
+            // Caso 3: mensajes con palabras clave comunes (incluye "wait", "retry", "retrying")
             elseif (preg_match('/wait|espera|inténtalo|demasiad|too many|throttl|esperar|retry|retrying/i', $lower)) {
                 $showThrottle = true;
             }
@@ -126,7 +43,7 @@
 
         // Laravel a veces pone el estado en session('status')
         $status = session('status') ?? null;
-        if (!$showThrottle && $status) {
+        if (!$showThrottle && !$showNotRegistered && $status) {
             $lowerStatus = mb_strtolower($status);
             if (preg_match('/throttl|espera|segundo|seconds|too many|wait|retry/i', $lowerStatus)) {
                 $showThrottle = true;
@@ -150,12 +67,12 @@
             <h2 class="form-title">Recuperar Acceso</h2>
             <p class="form-description">Ingresa tu correo electrónico</p>
 
-            <form method="POST" action="{{ route('password.email') }}">
+            <form method="POST" action="{{ route('password.email') }}" id="recoveryForm">
                 @csrf
                 <div class="form-group">
                     <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus placeholder="Correo Electrónico" class="form-input">
-                    {{-- Solo mostramos el error debajo del input si NO es un error de throttle --}}
-                    @if ($errors->has('email') && !$showThrottle)
+                    {{-- Solo mostramos el error debajo del input si NO es un error de throttle ni de no registrado --}}
+                    @if ($errors->has('email') && !$showThrottle && !$showNotRegistered)
                         <div class="input-error">{{ $errors->first('email') }}</div>
                     @endif
                 </div>
@@ -186,7 +103,7 @@
         </div>
     </div>
 
-    <!-- Alerta Error (throttle) -->
+    <!-- Alerta Error Throttle -->
     <div class="custom-alert-overlay" id="alertErrorOverlay">
         <div class="custom-alert-box">
             <div class="custom-alert-icon-circle error">✖</div>
@@ -195,6 +112,19 @@
                 Debes esperar 30 segundos antes de solicitar un nuevo enlace. Inténtalo nuevamente en un momento.
             </p>
             <button class="custom-alert-btn" onclick="closeErrorAlert()">Entendido</button>
+        </div>
+    </div>
+
+    <!-- Alerta Email No Registrado -->
+    <div class="custom-alert-overlay" id="alertNotRegisteredOverlay">
+        <div class="custom-alert-box">
+            <div class="custom-alert-icon-circle warning">⚠</div>
+            <h3 class="custom-alert-title">Correo No Registrado</h3>
+            <p class="custom-alert-message">
+                El correo electrónico ingresado no está registrado en nuestro sistema. 
+                Por favor verifica que hayas escrito correctamente tu correo o contacta al administrador.
+            </p>
+            <button class="custom-alert-btn" onclick="closeNotRegisteredAlert()">Entendido</button>
         </div>
     </div>
 
@@ -224,21 +154,45 @@
         if (overlay) overlay.style.display = 'none';
     }
 
-    // Cierre al click fuera o Escape (aplica para ambas)
+    // Email No Registrado
+    function showNotRegisteredAlert() {
+        const overlay = document.getElementById('alertNotRegisteredOverlay');
+        if (overlay) overlay.style.display = 'flex';
+    }
+    
+    function closeNotRegisteredAlert() {
+        const overlay = document.getElementById('alertNotRegisteredOverlay');
+        if (overlay) overlay.style.display = 'none';
+    }
+
+    // Cierre al click fuera o Escape (aplica para todas)
     document.addEventListener('click', function(e) {
         const overlay = document.getElementById('alertOverlay');
         const overlayError = document.getElementById('alertErrorOverlay');
+        const overlayNotRegistered = document.getElementById('alertNotRegisteredOverlay');
+        
         if (overlay && e.target === overlay) closeAlert();
         if (overlayError && e.target === overlayError) closeErrorAlert();
+        if (overlayNotRegistered && e.target === overlayNotRegistered) closeNotRegisteredAlert();
     });
     
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closeAlert();
             closeErrorAlert();
+            closeNotRegisteredAlert();
         }
     });
     </script>
+
+    {{-- Mostrar alerta de email no registrado --}}
+    @if ($showNotRegistered)
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                showNotRegisteredAlert();
+            });
+        </script>
+    @endif
 
     {{-- Mostrar alerta error si detectamos throttle --}}
     @if ($showThrottle)
@@ -258,7 +212,7 @@
     @endif
 
     {{-- Mostrar alerta de éxito si Laravel puso session('status') indicando envío --}}
-    @if (session('status') && !$showThrottle)
+    @if (session('status') && !$showThrottle && !$showNotRegistered)
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 showAlert();

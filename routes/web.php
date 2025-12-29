@@ -12,19 +12,18 @@ use App\Http\Controllers\ConceptoController;
 use App\Http\Controllers\ProcesoReportController;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AssistantExport;
-
+use App\Exports\LawyersExport;
 
 // ===================================================================
 // RUTA POR DEFECTO
 // ===================================================================
 Route::get('/', function () {
     return redirect()->route('login');
-}); 
-
+});
 
 // ===================================================================
 // RUTAS DE AUTENTICACIÓN
-// =================================================================== 
+// ===================================================================
 require __DIR__ . '/auth.php';
 
 // ===================================================================
@@ -59,52 +58,71 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // ===============================================================
-    // ABOGADOS (LAWYERS)
+    // ABOGADOS (LAWYERS) - VALIDACIONES Y RUTAS ESPECÍFICAS
     // ===============================================================
     Route::prefix('lawyers')->name('lawyers.')->group(function () {
-
+        
+        // VALIDACIONES (DEBEN IR PRIMERO)
         Route::post('/check-duplicates', [LawyerController::class, 'checkDuplicates'])
             ->name('check-duplicates');
 
         Route::post('/check-field', [LawyerController::class, 'checkField'])
             ->name('check-field');
 
-        // EXPORTACIÓN ABOGADOS
+        // EXPORTACIONES
         Route::get('/export-pdf', [LawyerController::class, 'exportPDF'])
             ->name('export.pdf');
 
         Route::get('/export-excel', function () {
-            return Excel::download(new \App\Exports\LawyersExport, 'abogados.xlsx');
+            return Excel::download(new LawyersExport, 'abogados.xlsx');
         })->name('export.excel');
     });
+
+    // RUTAS DE ACTUALIZACIÓN Y ELIMINACIÓN DE LAWYERS
     Route::put('/lawyers/{lawyer}', [LawyerController::class, 'update'])
         ->name('lawyers.update');
 
-    // Resource lawyers
-    Route::resource('lawyers', LawyerController::class);
+    // RESOURCE DE LAWYERS (DEBE IR DESPUÉS DE LAS RUTAS ESPECÍFICAS)
+    Route::resource('lawyers', LawyerController::class)->except(['update']);
 
+    // ===============================================================
+    // ASISTENTES - RUTAS ESPECÍFICAS
+    // ===============================================================
+    Route::prefix('assistants')->name('assistants.')->group(function () {
+        Route::put('/{assistant}', [LawyerController::class, 'updateAssistant'])
+            ->name('update');
+        
+        Route::delete('/{assistant}', [LawyerController::class, 'destroyAsist'])
+            ->name('destroy');
+    });
+
+    // ALIAS PARA COMPATIBILIDAD
     Route::delete('/asistentes/{assistant}', [LawyerController::class, 'destroyAsist'])
         ->name('asistentes.destroy');
 
-    Route::put('/assistants/{assistant}', [LawyerController::class, 'updateAssistant'])
-        ->name('assistants.update');
+    // EXPORTACIONES DE ASISTENTES
+    Route::prefix('asistente')->name('asistente.')->group(function () {
+        Route::get('/export-pdf', [AssistantExport::class, 'exportPDF'])
+            ->name('export.pdf');
 
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-
+        Route::get('/export-excel', function () {
+            return Excel::download(new AssistantExport, 'Asistentes.xlsx');
+        })->name('export.excel');
+    });
 
     // ===============================================================
     // PROCESOS LEGALES
     // ===============================================================
     Route::prefix('procesos')->name('procesos.')->group(function () {
 
-        // EXPORTACIONES — CONTROLADOR NUEVO Y CORRECTO
+        // EXPORTACIONES
         Route::get('/export-pdf', [ProcesoReportController::class, 'exportPdf'])
             ->name('export.pdf');
 
         Route::get('/export-excel', [ProcesoReportController::class, 'exportExcel'])
             ->name('export.excel');
 
-        // CRUD
+        // CRUD DE PROCESOS
         Route::get('/', [LegalProcessController::class, 'index'])->name('index');
         Route::get('/create', [LegalProcessController::class, 'create'])->name('create');
         Route::post('/', [LegalProcessController::class, 'store'])->name('store');
@@ -113,7 +131,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{proceso}', [LegalProcessController::class, 'update'])->name('update');
         Route::delete('/{proceso}', [LegalProcessController::class, 'destroy'])->name('destroy');
 
-        // Conceptos
+        // CONCEPTOS DENTRO DE PROCESOS
         Route::get('/{proceso}/concepto', [AbogadoController::class, 'mostrarFormularioConcepto'])
             ->name('concepto.create');
 
@@ -122,9 +140,13 @@ Route::middleware(['auth'])->group(function () {
 
         Route::put('/{proceso}/conceptos/{concepto}', [AbogadoController::class, 'updateConcepto'])
             ->name('conceptos.update');
+
+        // LISTAR CONCEPTOS POR PROCESO
+        Route::get('/{proceso}/conceptos', [ConceptoController::class, 'listByProceso'])
+            ->name('conceptos');
     });
 
-    // Rutas alternativas
+    // RUTAS ALTERNATIVAS DE PROCESOS
     Route::get('/mis-procesos', [LegalProcessController::class, 'index'])
         ->name('mis.procesos');
 
@@ -155,27 +177,23 @@ Route::middleware(['auth'])->group(function () {
             ->name('conceptos.storeProceso');
     });
 
-    Route::get('/concepto_juridicos/{id}', [ConceptoController::class, 'show'])
-        ->name('concepto.show');
-
     // ===============================================================
     // CONCEPTOS (GENERALES)
     // ===============================================================
     Route::prefix('conceptos')->name('conceptos.')->group(function () {
         Route::get('/create', [ConceptoController::class, 'create'])->name('create');
+        
         Route::post('/procesos/{proceso}/conceptos', [ConceptoController::class, 'store'])
             ->name('store');
+        
+        Route::delete('/{id}', [ConceptoController::class, 'destroy'])
+            ->name('destroy');
     });
-    // ===============================================================
-    // Asistentes (LAWYERS)
-    // ===============================================================
-    Route::prefix('asistente')->name('asistente.')->group(function () {
-        // Exportaciones
-        Route::get('/export-pdf', [AssistantExport::class, 'exportPDF'])
-            ->name('export.pdf');
 
-        Route::get('/export-excel', function () {
-            return Excel::download(new AssistantExport, 'Asistentes.xlsx');
-        })->name('export.excel');
-    });
+    // MOSTRAR CONCEPTO ESPECÍFICO
+    Route::get('/concepto_juridicos/{id}', [ConceptoController::class, 'show'])
+        ->name('concepto.show');
 });
+
+//Validar asistente por admin
+Route::post('/validar-asistente', [LawyerController::class, 'validarAsistente'])->name('validar.asistente');

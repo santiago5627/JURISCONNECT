@@ -31,7 +31,7 @@ class RegisteredUserController extends Controller
             'password' => [
                 'required',
                 'string',
-                'min:8',              // mínimo 8 caracteres
+                'min:11',              // mínimo 11 caracteres
                 'regex:/[A-Z]/',      // al menos una mayúscula
                 'regex:/[a-z]/',      // al menos una minúscula
                 'regex:/[0-9]/',      // al menos un número

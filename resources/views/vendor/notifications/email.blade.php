@@ -28,7 +28,7 @@
             <p>Haz clic en el siguiente botón para continuar:</p>
 
             <div class="button-container">
-               <a href="{{ $actionUrl }}" class="button">Cambiar mi contraseña</a>
+                <a href="{{ $actionUrl }}" class="button">Cambiar mi contraseña</a>
 
             </div>
 

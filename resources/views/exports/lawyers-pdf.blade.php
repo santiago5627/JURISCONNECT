@@ -9,6 +9,21 @@
             font-family: sans-serif;
         }
 
+        /* ===== MARCA DE AGUA ===== */
+        .watermark {
+            position: fixed;
+            top: 45%;
+            /* baja un poco */
+            left: 45%;
+            width: 400px;
+            /* tamaño controlado */
+            opacity: 0.07;
+            /* bien clarita */
+            transform: translate(-50%, -50%);
+            z-index: -1;
+        }
+
+
         h2 {
             text-align: center;
             margin-bottom: 20px;
@@ -30,6 +45,10 @@
 </head>
 
 <body>
+
+    <!-- MARCA DE AGUA -->
+    <img src="{{ public_path('img/LogoInsti.png') }}" class="watermark">
+
     <h2>Listado de Abogados</h2>
     <table>
         <thead>
@@ -37,23 +56,23 @@
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Tipo Doc</th>
-                <th>Documento</th>
+                <th>N° Documento</th>
                 <th>Correo</th>
                 <th>Teléfono</th>
                 <th>Especialidad</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($lawyers as $lawyer)
-            <tr>
-                <td>{{ $lawyer->nombre }}</td>
-                <td>{{ $lawyer->apellido }}</td>
-                <td>{{ $lawyer->tipo_documento }}</td>
-                <td>{{ $lawyer->numero_documento }}</td>
-                <td>{{ $lawyer->correo }}</td>
-                <td>{{ $lawyer->telefono }}</td>
-                <td>{{ $lawyer->especialidad }}</td>
-            </tr>
+            @foreach ($lawyers as $lawyer)
+                <tr>
+                    <td>{{ $lawyer->nombre }}</td>
+                    <td>{{ $lawyer->apellido }}</td>
+                    <td>{{ $lawyer->tipo_documento }}</td>
+                    <td>{{ $lawyer->numero_documento }}</td>
+                    <td>{{ $lawyer->correo }}</td>
+                    <td>{{ $lawyer->telefono }}</td>
+                    <td>{{ $lawyer->especialidad }}</td>
+                </tr>
             @endforeach
         </tbody>
     </table>

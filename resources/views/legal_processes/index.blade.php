@@ -74,7 +74,7 @@
 
                         @if(Auth::user()->role_id == 2)
                         <a href="{{ route('procesos.create') }}" class="btn btn-primary">
-                            <svg class="btn-icon" ...></svg>
+                        <i class="fas fa-save"></i>
                             Nuevo Proceso
                         </a>
                         @else

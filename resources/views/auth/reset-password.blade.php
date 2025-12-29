@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>JurisConnect SENA - Restablecer Contraseña</title>
     <link rel="stylesheet" href="{{ asset('/css/register.css') }}">
-
 </head>
+
 <body>
     <!-- Fondo -->
     <div class="background-image">
@@ -21,36 +22,63 @@
     <div class="login-box">
         <h2>Actualizar Contraseña</h2>
 
+        <!-- Contenedor de alertas -->
+        <div id="alert-container"></div>
 
         <!-- Formulario -->
-        <form method="POST" action="{{ route('password.store') }}">
+        <form method="POST" action="{{ route('password.store') }}" id="resetPasswordForm">
             @csrf
             <input type="hidden" name="token" value="{{ request()->route('token') }}">
 
             <!-- Email -->
             <label for="email">Correo Electrónico</label>
-            <input id="email" type="email" name="email" value="{{ old('email', request('email')) }}" required autofocus>
+            <input id="email" type="email" name="email" value="{{ old('email', request('email')) }}" readonly
+                class="readonly-input">
             <!-- Password -->
             <label for="password">Nueva Contraseña</label>
             <div class="password-wrapper">
                 <input id="password" type="password" name="password" required>
                 <span class="toggle-password" onclick="togglePassword('password')">
                     <!-- Ojo cerrado -->
-                    <svg xmlns="http://www.w3.org/2000/svg" id="eyeClosed-password"
-                        viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="eyeClosed-password" viewBox="0 0 24 24" fill="none"
+                        stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17.94 17.94A10.12 10.12 0 0 1 12 20c-7 0-11-8-11-8
                                 a19.44 19.44 0 0 1 4.24-5.94M9.9 4.24A9.77 9.77 0 0 1 12 4
-                                c7 0 11 8 11 8a19.44 19.44 0 0 1-4.24 5.94M1 1l22 22"/>
+                                c7 0 11 8 11 8a19.44 19.44 0 0 1-4.24 5.94M1 1l22 22" />
                     </svg>
                     <!-- Ojo abierto -->
-                    <svg xmlns="http://www.w3.org/2000/svg" id="eyeOpen-password"
-                        viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" id="eyeOpen-password" viewBox="0 0 24 24" fill="none"
+                        stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="display:none;">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
                     </svg>
                 </span>
+            </div>
+
+            <!-- Requisitos de contraseña -->
+            <div class="password-requirements">
+                <h4>La contraseña debe contener:</h4>
+                <div class="requirement" id="req-length">
+                    <span class="requirement-icon">○</span>
+                    <span>Mínimo 11 caracteres</span>
+                </div>
+                <div class="requirement" id="req-uppercase">
+                    <span class="requirement-icon">○</span>
+                    <span>Al menos una letra mayúscula (A-Z)</span>
+                </div>
+                <div class="requirement" id="req-lowercase">
+                    <span class="requirement-icon">○</span>
+                    <span>Al menos una letra minúscula (a-z)</span>
+                </div>
+                <div class="requirement" id="req-number">
+                    <span class="requirement-icon">○</span>
+                    <span>Al menos un número (0-9)</span>
+                </div>
+                <div class="requirement" id="req-special">
+                    <span class="requirement-icon">○</span>
+                    <span>Al menos un carácter especial (!@#$%^&*)</span>
+                </div>
             </div>
 
             <!-- Confirm Password -->
@@ -58,19 +86,18 @@
             <div class="password-wrapper">
                 <input id="password_confirmation" type="password" name="password_confirmation" required>
                 <span class="toggle-password" onclick="togglePassword('password_confirmation')">
-                    <svg xmlns="http://www.w3.org/2000/svg" id="eyeClosed-password"
-                        viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" id="eyeClosed-password_confirmation" viewBox="0 0 24 24"
+                        fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17.94 17.94A10.12 10.12 0 0 1 12 20c-7 0-11-8-11-8
                                 a19.44 19.44 0 0 1 4.24-5.94M9.9 4.24A9.77 9.77 0 0 1 12 4
-                                c7 0 11 8 11 8a19.44 19.44 0 0 1-4.24 5.94M1 1l22 22"/>
+                                c7 0 11 8 11 8a19.44 19.44 0 0 1-4.24 5.94M1 1l22 22" />
                     </svg>
                     <!-- Ojo abierto -->
-                    <svg xmlns="http://www.w3.org/2000/svg" id="eyeOpen-password"
-                        viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                        <circle cx="12" cy="12" r="3"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" id="eyeOpen-password_confirmation" viewBox="0 0 24 24"
+                        fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        style="display:none;">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
                     </svg>
                 </span>
             </div>
@@ -88,350 +115,287 @@
         </form>
         <img src="{{ asset('img/Sena.png') }}" alt="Logo SENA" class="sena-logo">
     </div>
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-    // Elementos del DOM
-    const emailInput = document.getElementById('email');
-    const form = document.querySelector('form');
-    const nextButton = document.querySelector('.btn-next');
-    const backButton = document.querySelector('.btn-back');
-    
-    // Configuración de placeholders dinámicos
-    let placeholderIndex = 0;
-    const placeholders = [
-        'xxxxxxxxxxxx',
-        'tu.email@sena.edu.co',
-        'correo@ejemplo.com',
-        'usuario@dominio.com'
-    ];
+        // ========== CONFIGURACIÓN DE TIEMPO DE EXPIRACIÓN ==========
+        const TOKEN_EXPIRATION_TIME = 15 * 60 * 1000; // 15 minutos
+        let tokenExpirationTimer;
 
-    // Función para cambiar placeholder
-    function changePlaceholder() {
-        if (emailInput && !emailInput.value && document.activeElement !== emailInput) {
-            placeholderIndex = (placeholderIndex + 1) % placeholders.length;
-            emailInput.placeholder = placeholders[placeholderIndex];
-        }
-    }
+        // ========== FUNCIÓN PARA MOSTRAR ALERTAS ==========
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alert-container');
 
-    // Cambiar placeholder cada 3 segundos
-    setInterval(changePlaceholder, 3000);
+            // Remover alertas anteriores
+            alertContainer.innerHTML = '';
 
-    // Eventos del campo email
-    if (emailInput) {
-        emailInput.addEventListener('focus', function() {
-            this.placeholder = 'Ingresa tu correo electrónico';
-            this.style.textAlign = 'left';
-        });
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
 
-        emailInput.addEventListener('blur', function() {
-            if (!this.value) {
-                this.placeholder = 'xxxxxxxxxxxx';
-                this.style.textAlign = 'center';
-            }
-        });
+            const icon = type === 'error' ? '✕' : '⚠';
+            alertDiv.innerHTML = `
+                <span class="alert-icon">${icon}</span>
+                <span>${message}</span>
+            `;
 
-        emailInput.addEventListener('input', function() {
-            // Remover clase de error al escribir
-            this.classList.remove('is-invalid');
-            
-            // Validación en tiempo real
-            if (this.value && !isValidEmail(this.value)) {
-                this.style.borderColor = '#ffc107';
-            } else if (this.value && isValidEmail(this.value)) {
-                this.style.borderColor = '#28a745';
-            } else {
-                this.style.borderColor = '#e9ecef';
-            }
-        });
-    }
+            alertContainer.appendChild(alertDiv);
 
-    // Event listener para el botón siguiente
-    if (nextButton) {
-        nextButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            const email = emailInput.value.trim();
-            
-            if (!email) {
-                showValidationError('Por favor, ingresa tu correo electrónico.');
-                emailInput.focus();
-                return;
-            }
-
-            if (!isValidEmail(email)) {
-                showValidationError('Por favor, ingresa un correo electrónico válido.');
-                emailInput.focus();
-                return;
-            }
-
-            // Si hay un formulario con action de Laravel, enviarlo
-            if (form && form.action) {
-                showLoadingState();
-                form.submit();
-            } else {
-                // Simular envío exitoso (para pruebas)
-                showSuccessMessage('Hemos enviado un enlace de restablecimiento de contraseña a tu correo electrónico.');
-                // Limpiar formulario después del envío exitoso
-                setTimeout(() => {
-                    emailInput.value = '';
-                }, 2000);
-            }
-        });
-    }
-
-    // Event listener para el botón volver
-    if (backButton) {
-        backButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            goBack();
-        });
-    }
-
-    // Función de validación de email
-    function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
-
-    // Mostrar error de validación
-    function showValidationError(message) {
-        // Remover alertas existentes
-        removeExistingAlerts();
-        
-        // Crear nueva alerta de error
-        const alertDiv = document.createElement('div');
-        alertDiv.className = 'alert alert-danger';
-        
-        const messageP = document.createElement('p');
-        messageP.textContent = message;
-        alertDiv.appendChild(messageP);
-
-        // Insertar antes del formulario
-        const formContainer = document.querySelector('.form-container');
-        const form = document.querySelector('form');
-        formContainer.insertBefore(alertDiv, form);
-
-        // Agregar clase de error al input
-        emailInput.classList.add('is-invalid');
-
-        // Auto-remover después de 5 segundos
-        setTimeout(() => {
-            if (alertDiv.parentNode) {
-                alertDiv.remove();
-            }
-        }, 5000);
-    }
-
-    // Mostrar estado de carga
-    function showLoadingState() {
-        const submitBtn = document.querySelector('.btn-next');
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Enviando...';
-            submitBtn.style.opacity = '0.7';
-        }
-    }
-
-    // Remover alertas existentes
-    function removeExistingAlerts() {
-        const existingAlerts = document.querySelectorAll('.alert');
-        existingAlerts.forEach(alert => {
-            if (!alert.querySelector('p').textContent.includes('Hemos enviado')) {
-                alert.remove();
-            }
-        });
-    }
-
-    // Animaciones de entrada
-    function animateElements() {
-        const leftSection = document.querySelector('.left-section');
-        const formContainer = document.querySelector('.form-container');
-        
-        if (leftSection) {
-            leftSection.style.opacity = '0';
-            leftSection.style.transform = 'translateX(-50px)';
-            
+            // Auto-remover después de 5 segundos
             setTimeout(() => {
-                leftSection.style.transition = 'all 1s ease-out';
-                leftSection.style.opacity = '1';
-                leftSection.style.transform = 'translateX(0)';
-            }, 100);
-        }
-        
-        if (formContainer) {
-            formContainer.style.opacity = '0';
-            formContainer.style.transform = 'translateX(50px)';
-            
-            setTimeout(() => {
-                formContainer.style.transition = 'all 1s ease-out';
-                formContainer.style.opacity = '1';
-                formContainer.style.transform = 'translateX(0)';
-            }, 300);
-        }
-    }
-
-    // Efectos de hover para botones
-    function addButtonEffects() {
-        const buttons = document.querySelectorAll('.btn');
-        
-        buttons.forEach(btn => {
-            btn.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-2px)';
-            });
-            
-            btn.addEventListener('mouseleave', function() {
-                if (!this.disabled) {
-                    this.style.transform = 'translateY(0)';
-                }
-            });
-        });
-    }
-
-    // Auto-dismiss de alertas de éxito
-    function setupAlertAutoDismiss() {
-        const successAlerts = document.querySelectorAll('.alert-success');
-        
-        successAlerts.forEach(alert => {
-            setTimeout(() => {
-                if (alert.parentNode) {
-                    alert.style.transition = 'opacity 0.5s ease-out, transform 0.5s ease-out';
-                    alert.style.opacity = '0';
-                    alert.style.transform = 'translateX(-20px)';
-                    
-                    setTimeout(() => {
-                        alert.remove();
-                    }, 500);
-                }
-            }, 5000);
-        });
-    }
-
-    // Función para el botón volver
-    function goBack() {
-        // Intentar ir hacia atrás en el historial
-        if (window.history.length > 1) {
-            window.history.back();
-        } else {
-            // Si no hay historial, ir a la página de login
-            window.location.href = '/login';
-        }
-    }
-
-    // Función para mostrar mensaje de éxito
-    function showSuccessMessage(message) {
-        // Remover alertas existentes
-        removeExistingAlerts();
-        
-        // Crear nueva alerta de éxito
-        const alertDiv = document.createElement('div');
-        alertDiv.className = 'alert alert-success';
-        
-        const messageP = document.createElement('p');
-        messageP.textContent = message;
-        alertDiv.appendChild(messageP);
-
-        // Insertar antes del formulario
-        const formContainer = document.querySelector('.form-container');
-        const form = document.querySelector('form');
-        formContainer.insertBefore(alertDiv, form);
-
-        // Auto-remover después de 5 segundos
-        setTimeout(() => {
-            if (alertDiv.parentNode) {
-                alertDiv.style.transition = 'opacity 0.5s ease-out';
                 alertDiv.style.opacity = '0';
-                setTimeout(() => alertDiv.remove(), 500);
-            }
-        }, 5000);
-    }
+                setTimeout(() => alertDiv.remove(), 300);
+            }, 5000);
+        }
 
-    // Efecto de typing para el placeholder
-    function typingEffect() {
-        if (emailInput && !emailInput.value && document.activeElement !== emailInput) {
-            const currentPlaceholder = placeholders[placeholderIndex];
-            let currentText = '';
-            let charIndex = 0;
-            
-            const typeInterval = setInterval(() => {
-                if (charIndex < currentPlaceholder.length) {
-                    currentText += currentPlaceholder[charIndex];
-                    emailInput.placeholder = currentText;
-                    charIndex++;
-                } else {
-                    clearInterval(typeInterval);
+        // ========== VALIDAR REQUISITOS DE CONTRASEÑA ==========
+        function validatePasswordRequirements(password) {
+            const requirements = {
+                length: password.length >= 11,
+                uppercase: /[A-Z]/.test(password),
+                lowercase: /[a-z]/.test(password),
+                number: /[0-9]/.test(password),
+                special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+            };
+
+            // Actualizar UI de requisitos
+            updateRequirement('req-length', requirements.length);
+            updateRequirement('req-uppercase', requirements.uppercase);
+            updateRequirement('req-lowercase', requirements.lowercase);
+            updateRequirement('req-number', requirements.number);
+            updateRequirement('req-special', requirements.special);
+
+            // Retornar si todos los requisitos se cumplen
+            return Object.values(requirements).every(req => req === true);
+        }
+
+        // ========== ACTUALIZAR UI DE REQUISITO ==========
+        function updateRequirement(elementId, isValid) {
+            const element = document.getElementById(elementId);
+            const icon = element.querySelector('.requirement-icon');
+
+            if (isValid) {
+                element.classList.add('valid');
+                element.classList.remove('invalid');
+                icon.textContent = '✓';
+            } else {
+                element.classList.remove('valid');
+                element.classList.add('invalid');
+                icon.textContent = '○';
+            }
+        }
+
+        // ========== INICIAR TEMPORIZADOR DE EXPIRACIÓN ==========
+        function startTokenExpirationTimer() {
+            tokenExpirationTimer = setTimeout(() => {
+                showAlert('El enlace de restablecimiento ha expirado. Por favor, solicita uno nuevo.', 'warning');
+
+                // Deshabilitar el formulario
+                const form = document.getElementById('resetPasswordForm');
+                const inputs = form.querySelectorAll('input');
+                const submitBtn = form.querySelector('button[type="submit"]');
+
+                inputs.forEach(input => input.disabled = true);
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Enlace Expirado';
+
+                // Redirigir después de 3 segundos
+                setTimeout(() => {
+                    window.location.href = '/forgot-password';
+                }, 3000);
+            }, TOKEN_EXPIRATION_TIME);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // ========== CÓDIGO ORIGINAL (Placeholder, efectos, etc.) ==========
+            const emailInput = document.getElementById('email');
+            const form = document.querySelector('form');
+            const nextButton = document.querySelector('.btn-next');
+            const backButton = document.querySelector('.btn-back');
+
+            // Configuración de placeholders dinámicos
+            let placeholderIndex = 0;
+            const placeholders = [
+                'xxxxxxxxxxxx',
+                'tu.email@sena.edu.co',
+                'correo@ejemplo.com',
+                'usuario@dominio.com'
+            ];
+
+            // Función para cambiar placeholder
+            function changePlaceholder() {
+                if (emailInput && !emailInput.value && document.activeElement !== emailInput) {
+                    placeholderIndex = (placeholderIndex + 1) % placeholders.length;
+                    emailInput.placeholder = placeholders[placeholderIndex];
                 }
-            }, 100);
-        }
-    }
-
-    // Inicializar funciones
-    animateElements();
-    addButtonEffects();
-    setupAlertAutoDismiss();
-
-    // Efectos adicionales para mejor UX
-    document.addEventListener('keydown', function(e) {
-        // Enter en el campo email envía el formulario
-        if (e.key === 'Enter' && document.activeElement === emailInput) {
-            form.dispatchEvent(new Event('submit'));
-        }
-        
-        // Escape limpia el campo
-        if (e.key === 'Escape' && document.activeElement === emailInput) {
-            emailInput.value = '';
-            emailInput.blur();
-        }
-    });
-
-    // Prevenir doble envío y configurar botones
-    let formSubmitted = false;
-    
-    // Configurar eventos de los botones al cargar
-    function setupButtonEvents() {
-        if (nextButton) {
-            nextButton.type = 'button'; // Prevenir envío automático del form
-        }
-        
-        if (backButton) {
-            // Si es un enlace, prevenir comportamiento por defecto
-            if (backButton.tagName === 'A') {
-                backButton.href = '#';
             }
-            backButton.type = 'button';
+
+            // Cambiar placeholder cada 3 segundos
+            setInterval(changePlaceholder, 3000);
+
+            // Eventos del campo email
+            if (emailInput) {
+                emailInput.addEventListener('focus', function() {
+                    this.placeholder = 'Ingresa tu correo electrónico';
+                    this.style.textAlign = 'left';
+                });
+
+                emailInput.addEventListener('blur', function() {
+                    if (!this.value) {
+                        this.placeholder = 'xxxxxxxxxxxx';
+                        this.style.textAlign = 'center';
+                    }
+                });
+
+                emailInput.addEventListener('input', function() {
+                    this.classList.remove('is-invalid');
+
+                    if (this.value && !isValidEmail(this.value)) {
+                        this.style.borderColor = '#ffc107';
+                    } else if (this.value && isValidEmail(this.value)) {
+                        this.style.borderColor = '#28a745';
+                    } else {
+                        this.style.borderColor = '#e9ecef';
+                    }
+                });
+            }
+
+            function isValidEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            function removeExistingAlerts() {
+                const existingAlerts = document.querySelectorAll('.alert');
+                existingAlerts.forEach(alert => {
+                    if (!alert.querySelector('p')?.textContent.includes('Hemos enviado')) {
+                        alert.remove();
+                    }
+                });
+            }
+
+            function animateElements() {
+                const leftSection = document.querySelector('.left-section');
+                const formContainer = document.querySelector('.form-container');
+
+                if (leftSection) {
+                    leftSection.style.opacity = '0';
+                    leftSection.style.transform = 'translateX(-50px)';
+
+                    setTimeout(() => {
+                        leftSection.style.transition = 'all 1s ease-out';
+                        leftSection.style.opacity = '1';
+                        leftSection.style.transform = 'translateX(0)';
+                    }, 100);
+                }
+
+                if (formContainer) {
+                    formContainer.style.opacity = '0';
+                    formContainer.style.transform = 'translateX(50px)';
+
+                    setTimeout(() => {
+                        formContainer.style.transition = 'all 1s ease-out';
+                        formContainer.style.opacity = '1';
+                        formContainer.style.transform = 'translateX(0)';
+                    }, 300);
+                }
+            }
+
+            function addButtonEffects() {
+                const buttons = document.querySelectorAll('.btn');
+
+                buttons.forEach(btn => {
+                    btn.addEventListener('mouseenter', function() {
+                        this.style.transform = 'translateY(-2px)';
+                    });
+
+                    btn.addEventListener('mouseleave', function() {
+                        if (!this.disabled) {
+                            this.style.transform = 'translateY(0)';
+                        }
+                    });
+                });
+            }
+
+            animateElements();
+            addButtonEffects();
+
+            // ========== NUEVAS FUNCIONALIDADES ==========
+            const passwordInput = document.getElementById('password');
+            const confirmPasswordInput = document.getElementById('password_confirmation');
+            const resetForm = document.getElementById('resetPasswordForm');
+
+            // Iniciar temporizador de expiración
+            startTokenExpirationTimer();
+
+            // Validar contraseña en tiempo real
+            passwordInput.addEventListener('input', function() {
+                validatePasswordRequirements(this.value);
+            });
+
+            // Validar coincidencia de contraseñas
+            confirmPasswordInput.addEventListener('input', function() {
+                if (passwordInput.value && this.value) {
+                    if (passwordInput.value !== this.value) {
+                        this.style.borderColor = '#dc3545';
+                    } else {
+                        this.style.borderColor = '#28a745';
+                    }
+                }
+            });
+
+            // Manejar envío del formulario
+            resetForm.addEventListener('submit', function(e) {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                // Validar que las contraseñas coincidan
+                if (password !== confirmPassword) {
+                    e.preventDefault();
+                    showAlert(
+                        'Las contraseñas no coinciden. Por favor, verifica que ambas contraseñas sean iguales.',
+                        'error');
+                    confirmPasswordInput.focus();
+                    return;
+                }
+
+                // Validar requisitos de contraseña
+                if (!validatePasswordRequirements(password)) {
+                    e.preventDefault();
+                    showAlert('La contraseña no cumple con todos los requisitos de seguridad.', 'error');
+                    passwordInput.focus();
+                    return;
+                }
+
+                // Si todo está bien, el formulario se enviará normalmente
+            });
+
+            console.log('JurisConnect - Recuperar Contraseña inicializado correctamente');
+        });
+
+        // ========== FUNCIÓN TOGGLE PASSWORD (ORIGINAL) ==========
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const eyeClosed = document.getElementById(`eyeClosed-${inputId}`);
+            const eyeOpen = document.getElementById(`eyeOpen-${inputId}`);
+
+            if (input.type === "password") {
+                input.type = "text";
+                eyeClosed.style.display = "none";
+                eyeOpen.style.display = "inline";
+            } else {
+                input.type = "password";
+                eyeClosed.style.display = "inline";
+                eyeOpen.style.display = "none";
+            }
         }
-    }
+        window.togglePassword = togglePassword;
 
-    // Función global para el botón volver (accesible desde HTML)
-    window.goBack = function() {
-        if (window.history.length > 1) {
-            window.history.back();
-        } else {
-            window.location.href = "/";
-        }
-    };
-
-    function togglePassword(inputId) {
-    const input = document.getElementById(inputId);
-    const eyeClosed = document.getElementById(`eyeClosed-${inputId}`);
-    const eyeOpen = document.getElementById(`eyeOpen-${inputId}`);
-
-    if (input.type === "password") {
-        input.type = "text";
-        eyeClosed.style.display = "none";
-        eyeOpen.style.display = "inline";
-    } else {
-        input.type = "password";
-        eyeClosed.style.display = "inline";
-        eyeOpen.style.display = "none";
-    }
-}
-    window.togglePassword = togglePassword; 
-
-    // Inicializar todo
-    setupButtonEvents();
-
-    console.log('JurisConnect - Recuperar Contraseña inicializado correctamente');
-});
+        // Limpiar temporizador al salir
+        window.addEventListener('beforeunload', function() {
+            if (tokenExpirationTimer) {
+                clearTimeout(tokenExpirationTimer);
+            }
+        });
     </script>
 </body>
+
 </html>
